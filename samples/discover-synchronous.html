@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Xml4js: Synchronous Discovery</title>
+        <style type="text/css">
+            #url {
+                width: 100%;
+            }
+            #tree {
+                border-style:outset;
+                border-width: 2px;
+            }            
+            .node {
+                font-family: sans;
+                font-size: 12pt;
+            }
+            .switch {
+                font-family: monospace;
+                font-size: 14pt;
+                cursor: pointer;
+            }
+            .body {
+                padding-left:1em;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Xml4js: Synchronous Discovery</h1>
+        <p>
+            This file illustrates how to make synchronous calls to the 
+            <a href="http://msdn.microsoft.com/en-us/library/ms186653(SQL.105).aspx" target="_ms">XML/A Discover method</a> 
+            using the xmla4js library.
+            In the XML/A protocol, the discover method allows clients to retrieve metadata from the XML/A server. 
+        </p>
+        <p>
+            The metadata describes the available data sources, catalogs, cubes and their structure through a collection of relational (tabular) datasets called 
+            <a href="http://msdn.microsoft.com/en-us/library/ms126233.aspx" target="_ms">schema rowsets</a>.
+            For 
+        </p>
+        <div>
+            URL:
+            <input type="text" id="url" name="url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="discover">Discover...</button>
+            <div>Tree:</div>
+            <div id="tree"></div>
+        </div>
+        <script type="text/javascript" src="../js/Xmla.js"></script>
+        
+        <script type="text/javascript">
+            function getTree(){
+                var tree = document.getElementById("tree");
+                return tree;
+            }
+            
+            function getNodeBody(node){
+                var body = node.getElementsByTagName("DIV").item(1);
+                return body;
+            }
+        
+            function toggleNode(toggle){
+                var display;
+                var node = toggle.parentNode.parentNode;
+                var loader = node.getAttribute("loader");
+                var body = getNodeBody(node);
+                var state = toggle.innerHTML;
+                switch (state){
+                    case "+":
+                        display = "";
+                        state = "-";
+                        if (loader!="loaded"){
+                            eval(loader);
+                            node.setAttribute("loader", "loaded")
+                        }
+                        break;
+                    case "-":
+                        display = "none";
+                        state = "+";
+                        break;
+                    default:
+                        return;
+                }
+                body.style.display = display;
+                toggle.innerHTML = state;
+            }
+        
+            function createTreeNode(config){
+                var parent = document.getElementById(config.parent);
+                if (config.parent!="tree"){
+                    parent = getNodeBody(parent);
+                }
+                
+                var node = document.createElement("DIV");
+                node.setAttribute("id", config.id);
+                node.setAttribute("class", "node");
+                var toggle;
+                if (config.loader) {
+                    node.setAttribute("loader", config.loader);                
+                    toggle = "+";
+                }
+                else {
+                    toggle = "&#160;"; 
+                }
+                parent.appendChild(node);
+
+                node.innerHTML = 
+                    "<div class=\"head\" title=\"" + config.title + "\">"
+                +     "<span class=\"switch\" onclick=\"toggleNode(this)\">" + toggle + "<\/span>"
+                +     "&#160;"
+                +     "<span class=\"label\">" + config.label + "<\/span>"
+                +   "<\/div>"
+                +   "<div class=\"body\"><\/div>"
+                ;
+            }
+            
+        </script>
+        
+        <script type="text/javascript">
+            var xmla = new Xmla({
+                async: false
+            });
+                        
+            var discover = document.getElementById("discover");
+            discover.onclick = function(){
+                var tree = getTree();
+                tree.innerHTML = ""; 
+                var url = document.getElementById("url").value;
+                discoverDataSources(url);
+            }
+            
+            function discoverDataSources(
+                url
+            ){
+                var parent = "tree";
+                var rowset = xmla.discoverDataSources({
+                    url: url
+                });
+
+                var loader, id, dataSourceInfo, dataSourceName, url;
+                while (rowset.hasMoreRows()) {
+                    dataSourceInfo = rowset.fieldVal("DataSourceInfo");
+                    dataSourceName = rowset.fieldVal("DataSourceName");
+                    id = dataSourceInfo;
+                    url = rowset.fieldVal("URL");
+                    loader = "discoverCatalogs("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: dataSourceName + " (DataSource)"
+                    ,   title: dataSourceInfo
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }                
+            }
+            
+            function discoverCatalogs(
+                url
+            ,   dataSourceInfo
+            ){
+                var parent = dataSourceInfo;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var rowset = xmla.discoverDBCatalogs({
+                    url: url
+                ,   properties: properties
+                });                
+                var loader, id, catalogName;
+                while (rowset.hasMoreRows()){                     
+                    catalogName = rowset.fieldVal("CATALOG_NAME");
+                    id = parent
+                    + "#" + catalogName
+                    ;
+                    loader = "discoverCubes("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + catalogName + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: catalogName + " (Catalog)"
+                    ,   title: catalogName
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }
+            }
+            
+            function discoverCubes(
+                url
+            ,   dataSourceInfo
+            ,   catalogName
+            ){  
+                var parent = dataSourceInfo
+                + "#" + catalogName
+                ;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = catalogName;
+
+                var rowset = xmla.discoverMDCubes({
+                    url: url
+                ,   properties: properties
+                ,   restrictions: restrictions
+                });
+       
+                var loader, id, cubeName;
+                while (rowset.hasMoreRows()){
+                    cubeName = rowset.fieldVal("CUBE_NAME");
+                    id = parent
+                    + "#" + cubeName
+                    ;
+                    loader = "discoverDimensions("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + catalogName + "\""
+                    + ", \"" + cubeName + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: cubeName + " (Cube)"
+                    ,   title: cubeName
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }
+            }
+            
+            function discoverDimensions(
+                url
+            ,   dataSourceInfo
+            ,   catalogName
+            ,   cubeName
+            ){
+                var parent = dataSourceInfo
+                + "#" + catalogName
+                + "#" + cubeName
+                ;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = catalogName;
+                restrictions["CUBE_NAME"] = cubeName;
+
+                var rowset = xmla.discoverMDDimensions({
+                    url: url
+                ,   properties: properties
+                ,   restrictions: restrictions
+                });
+       
+                var loader, id, dimensionName, dimensionUniqueName;
+                while (rowset.hasMoreRows()){
+                    dimensionName = rowset.fieldVal("DIMENSION_NAME");
+                    dimensionUniqueName = rowset.fieldVal("DIMENSION_UNIQUE_NAME");
+                    id = parent
+                    + "#" + dimensionUniqueName
+                    ;
+                    loader = "discoverHierarchies("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + catalogName + "\""
+                    + ", \"" + cubeName + "\""
+                    + ", \"" + dimensionUniqueName + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: dimensionName + " (Dimension)"
+                    ,   title: dimensionName
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }
+            }
+            
+            function discoverHierarchies(
+                url
+            ,   dataSourceInfo
+            ,   catalogName
+            ,   cubeName
+            ,   dimensionUniqueName
+            ){
+                var parent = dataSourceInfo
+                + "#" + catalogName
+                + "#" + cubeName
+                + "#" + dimensionUniqueName
+                ;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = catalogName;
+                restrictions["CUBE_NAME"] = cubeName;
+                restrictions["DIMENSION_UNIQUE_NAME"] = dimensionUniqueName;
+
+                var rowset = xmla.discoverMDHierarchies({
+                    url: url
+                ,   properties: properties
+                ,   restrictions: restrictions
+                });
+       
+                var loader, id, hierarchyName, hierarchyUniqueName;
+                while (rowset.hasMoreRows()){
+                    hierarchyName = rowset.fieldVal("HIERARCHY_NAME");
+                    hierarchyUniqueName = rowset.fieldVal("HIERARCHY_UNIQUE_NAME");
+                    id = parent
+                    + "#" + hierarchyUniqueName
+                    ;
+                    loader = "discoverLevels("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + catalogName + "\""
+                    + ", \"" + cubeName + "\""
+                    + ", \"" + dimensionUniqueName + "\""
+                    + ", \"" + hierarchyUniqueName + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: hierarchyName + " (Hierarchy)"
+                    ,   title: hierarchyName
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }
+            }
+
+            function discoverLevels(
+                url
+            ,   dataSourceInfo
+            ,   catalogName
+            ,   cubeName
+            ,   dimensionUniqueName
+            ,   hierarchyUniqueName
+            ){
+                var parent = dataSourceInfo
+                + "#" + catalogName
+                + "#" + cubeName
+                + "#" + dimensionUniqueName
+                + "#" + hierarchyUniqueName
+                ;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = catalogName;
+                restrictions["CUBE_NAME"] = cubeName;
+                restrictions["DIMENSION_UNIQUE_NAME"] = dimensionUniqueName;
+                restrictions["HIERARCHY_UNIQUE_NAME"] = hierarchyUniqueName;
+
+                var rowset = xmla.discoverMDLevels({
+                    url: url
+                ,   properties: properties
+                ,   restrictions: restrictions
+                });
+       
+                var loader, id, levelName, levelNumber;
+                while (rowset.hasMoreRows()){
+                    levelName = rowset.fieldVal("LEVEL_NAME");
+                    levelNumber = rowset.fieldVal("LEVEL_NUMBER");
+                    id = parent
+                    + "#" + levelNumber
+                    ;
+                    loader = "discoverMembers("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + catalogName + "\""
+                    + ", \"" + cubeName + "\""
+                    + ", \"" + dimensionUniqueName + "\""
+                    + ", \"" + hierarchyUniqueName + "\""
+                    + ", \"" + levelNumber + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: levelName + " (Level)"
+                    ,   title: levelName
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }
+            }
+            
+            function discoverMembers(
+                url
+            ,   dataSourceInfo
+            ,   catalogName
+            ,   cubeName
+            ,   dimensionUniqueName
+            ,   hierarchyUniqueName
+            ,   levelNumber
+            ){
+                var parent = dataSourceInfo
+                + "#" + catalogName
+                + "#" + cubeName
+                + "#" + dimensionUniqueName
+                + "#" + hierarchyUniqueName
+                + "#" + levelNumber
+                ;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = catalogName;
+                restrictions["CUBE_NAME"] = cubeName;
+                restrictions["DIMENSION_UNIQUE_NAME"] = dimensionUniqueName;
+                restrictions["HIERARCHY_UNIQUE_NAME"] = hierarchyUniqueName;
+                restrictions["LEVEL_NUMBER"] = levelNumber;
+
+                var rowset = xmla.discoverMDMembers({
+                    url: url
+                ,   properties: properties
+                ,   restrictions: restrictions
+                });
+       
+                var loader, id, memberName, memberUniqueName;
+                while (rowset.hasMoreRows()){
+                    memberName = rowset.fieldVal("MEMBER_NAME");
+                    memberUniqueName = rowset.fieldVal("MEMBER_NAME");
+                    id = parent
+                    + "#" + memberUniqueName
+                    ;
+                    loader = "discoverProperties("
+                    +   "\"" + url + "\""
+                    + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + catalogName + "\""
+                    + ", \"" + cubeName + "\""
+                    + ", \"" + dimensionUniqueName + "\""
+                    + ", \"" + hierarchyUniqueName + "\""
+                    + ", \"" + levelNumber + "\""
+                    + ", \"" + memberUniqueName + "\""
+                    + ")"
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: memberName + " (Member)"
+                    ,   title: memberName
+                    ,   loader: loader
+                    });
+                    rowset.next();
+                }
+            }
+            
+            function discoverProperties(
+                url
+            ,   dataSourceInfo
+            ,   catalogName
+            ,   cubeName
+            ,   dimensionUniqueName
+            ,   hierarchyUniqueName
+            ,   levelNumber
+            ,   memberUniqueName
+            ){
+                var parent = dataSourceInfo
+                + "#" + catalogName
+                + "#" + cubeName
+                + "#" + dimensionUniqueName
+                + "#" + hierarchyUniqueName
+                + "#" + levelNumber
+                + "#" + memberUniqueName
+                ;
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = catalogName;
+                restrictions["CUBE_NAME"] = cubeName;
+                restrictions["DIMENSION_UNIQUE_NAME"] = dimensionUniqueName;
+                restrictions["HIERARCHY_UNIQUE_NAME"] = hierarchyUniqueName;
+                restrictions["MEMBER_UNIQUE_NAME"] = memberUniqueName;
+
+                var rowset = xmla.discoverMDProperties({
+                    url: url
+                ,   properties: properties
+                ,   restrictions: restrictions
+                });
+
+                var id, propertyName;
+                while (rowset.hasMoreRows()){
+                    propertyName = rowset.fieldVal("PROPERTY_NAME");
+                    id = parent
+                    + "#" + propertyName
+                    ;
+                    createTreeNode({
+                        parent: parent
+                    ,   id: id
+                    ,   label: propertyName + " (Property)"
+                    ,   title: propertyName
+                    });
+                    rowset.next();
+                }
+            }
+            
+        </script>
+    </body>
+</html>
