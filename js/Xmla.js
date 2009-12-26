@@ -34,40 +34,36 @@ var _ajax = function(options){
     type: (GET, POST)
 */
     var xhr;
-    try {
-        if (_useAX) {
-            xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
-        } 
-        else {
-            xhr = new XMLHttpRequest();
-        }
-        xhr.open("POST", options.url, options.async);
-        var handlerCalled = false;
-        var handler = function(){
-            handlerCalled = true;
-            switch (xhr.readyState){
-                case 0:
-                    options.aborted(xhr);                    
-                    break;
-                case 4:
-                    if (xhr.status==200){
-                        options.complete(xhr, "success");
-                    }
-                    else {
-                        options.error(xhr, xhr.status, null);
-                    }
-                break;
-            }
-        }
-        xhr.onreadystatechange = handler;
-        xhr.setRequestHeader("Content-Type", "text/xml");
-        xhr.send(options.data);
-        if (!options.async && !handlerCalled){
-            handler.call(xhr);
-        }        
-    } catch(e) {
-        options.error(xhr, "General XMLHttpRequest failure.", e);
+    if (_useAX) {
+        xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    } 
+    else {
+        xhr = new XMLHttpRequest();
     }
+    xhr.open("POST", options.url, options.async);
+    var handlerCalled = false;
+    var handler = function(){
+        handlerCalled = true;
+        switch (xhr.readyState){
+            case 0:
+                options.aborted(xhr);                    
+                break;
+            case 4:
+                if (xhr.status==200){
+                    options.complete(xhr, "success");
+                }
+                else {
+                    options.error(xhr, xhr.status, null);
+                }
+            break;
+        }
+    }
+    xhr.onreadystatechange = handler;
+    xhr.setRequestHeader("Content-Type", "text/xml");
+    xhr.send(options.data);
+    if (!options.async && !handlerCalled){
+        handler.call(xhr);
+    }        
     return xhr;
 }
 
@@ -371,7 +367,7 @@ Xmla.prototype = {
         }
         else 
         if (eventName=="error") {
-//            throw eventData;
+            throw eventData;
         }
         return outcome;
     }
@@ -446,7 +442,6 @@ Xmla.prototype = {
         }
         if (soapFault.length) {
             //TODO: extract error info
-            debugger;
             soapFault = soapFault.item(0);
             var faultCode = soapFault.getElementsByTagName("faultcode").item(0).childNodes.item(0).data;
             var faultString = soapFault.getElementsByTagName("faultstring").item(0).childNodes.item(0).data;
@@ -893,6 +888,13 @@ Xmla.Rowset.FETCH_OBJECT = 2;
 
 Xmla.Rowset.prototype = {
     node: null
+,   _getElementsByTagNameFromRow: _getElementsByTagNameNS 
+    ?   function(tagName){
+            return this.row.getElementsByTagNameNS(_xmlnsRowset, tagName);
+        }
+    :   function(tagName){
+            return this.row.getElementsByTagName(tagName);
+        }
 ,   getFields: function(){
         var f = [];
         var fieldCount = this._fieldCount;

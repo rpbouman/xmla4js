@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Xmla4js</title>
+        <link rel="stylesheet" type="text/css" href="css/default.css"/>
     </head>
     <body>
         <h1>Xmla4js - OLAP for web applications</h1>
@@ -24,8 +25,12 @@
         <ul>
             <li>
                 <a href="samples/discover-synchronous.html">discover-synchronous.html</a> - Illustrates how to use Xmla.js to do synchronous retrieval of OLAP metadata.
-                The sample lets you enter a URL for a XML/A webservice, and then allows you to explore what datasources it provides, what catalogs and cubes it contains, 
-                and how these are organized, all the way down to the members and their properties.
+                The sample lets you enter a URL for a XML/A webservice, and then visualizes the metadata in a dynamic treeview.
+                This allows you to hierarchically explore datasources, catalogs, cubes, dimensions, hierarchies, levels, members and properties.
+            </li>
+            <li>
+                <a href="samples/discover-schema-rowsets.html">discover-schema-rowsets.html</a> - Another example of how to use Xmla.js to do synchronous retrieval of OLAP metadata.
+                This sample uses the XML/A Discover method to obtain the names of all schema rowsets supported by the provider, and then obtains each individual rowset, displaying them as HTML tables.                
             </li>
         </ul>
     </body>
