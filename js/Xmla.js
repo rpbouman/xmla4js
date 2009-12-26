@@ -798,74 +798,10 @@ Xmla.Rowset = function(node){
                 fieldLabel = node.getAttribute("sql:field");
             }
             fieldName = node.getAttribute("name");
+            type = node.getAttribute("type");
             minOccurs = node.getAttribute("minOccurs");
             maxOccurs = node.getAttribute("maxOccurs");
-            type = node.getAttribute("type");
 
-            if (this.numRows){
-                if (_getElementsByTagNameNS) {
-                    gtr = "var val = this.row.getElementsByTagNameNS(\"" + _xmlnsRowset + "\", \"" + fieldName + "\");";
-                }
-                else {
-                    //fuck you IE. I hate you
-                    gtr = "var val = this.row.getElementsByTagName(\"" + fieldName + "\");";
-                }
-                if(minOccurs==0){
-                    gtr += "\nif(val.length==0) return null;";
-                }
-                switch (type){
-                    case "xsd:boolean":
-                        converter = "strVal==\"true\"? true: false";
-                        break;
-                    case "xsd:decimal":
-                    case "xsd:double":
-                    case "xsd:float":
-                        converter = "parseFloat(strVal)";
-                        break;
-                    case "xsd:int":
-                    case "xsd:integer":
-                    case "xsd:nonPositiveInteger":
-                    case "xsd:negativeInteger":
-                    case "xsd:nonNegativeInteger":
-                    case "xsd:positiveInteger":
-                    case "xsd:short":
-                    case "xsd:byte":
-                    case "xsd:long":
-                    case "xsd:unsignedLong":
-                    case "xsd:unsignedInt":
-                    case "xsd:unsignedShort":
-                    case "xsd:unsignedByte":
-                        converter = "parseInt(strVal)";
-                        break;
-                    case "xsd:string":
-                    default:
-                        converter = "strVal";
-                        break;
-                        //throw "Unexpected column type \"" + type + "\"";
-                }
-                if(maxOccurs=="unbounded" || maxOccurs > 1){
-                    gtr +=  "\nvar array = [];"
-                    +   "\nfor(var valLength = val.length, i=0; i<valLength; i++){"
-                    +   "\n    var text = \"\";"
-                    +   "\n    var itemNodes = val.item(i).childNodes;"
-                    +   "\n    var numItemNodes=itemNodes.length;"
-                    +   "\n    for(var j=0; j<numItemNodes; j++){"
-                    +   "\n        text += itemNodes.item(j).data;"
-                    +   "\n    }"                        
-                    +   "\n    array.push(" + converter.replace(/strVal/g, "text") + ");"
-                    +   "\n}"
-                    +   "\nreturn array;"
-                    ;
-                } else {
-                    gtr +=  "var text =\"\";"
-                    +   "\nvar itemNodes = val.item(0).childNodes;"
-                    +   "\nvar numItemNodes=itemNodes.length;"
-                    +   "\nfor(var i=0; i<numItemNodes; i++){"
-                    +   "\n    text += itemNodes.item(i).data;"
-                    +   "\n}"
-                    +   "\nreturn " + converter.replace(/strVal/g, "text") + ";";
-                }
-            }
             this.fields[fieldLabel] = {
                 name: fieldName
             ,   label: fieldLabel
@@ -873,7 +809,7 @@ Xmla.Rowset = function(node){
             ,   type: type
             ,   minOccurs: _isUndefined(minOccurs)? 1: minOccurs
             ,   maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs=="unbounded"?Infinity:maxOccurs)
-            ,   getter: new Function(gtr)
+            ,   getter: this._createFieldGetter(fieldName, type, minOccurs, maxOccurs)
             };            
             this.fieldOrder.push(fieldLabel);
         }        
@@ -895,6 +831,110 @@ Xmla.Rowset.prototype = {
     :   function(tagName){
             return this.row.getElementsByTagName(tagName);
         }
+,   _boolConverter: function(val){
+        return val=="true"?true:false;
+    }
+,   _intConverter: function(val){
+        return parseInt(val, 10);
+    }
+,   _floatConverter: function(val){
+        return parseFloat(val, 10);
+    }
+,   _textConverter: function(val){
+        return val;
+    }
+,   _arrayConverter: function(nodes, valueConverter){
+        var array = [];
+        var numNodes = nodes.length;
+        var node;
+        for (var i=0; i<numNodes; i++){
+            array.push(
+                valueConverter(
+                    this._elementText(nodes.item(0))
+                )
+            )
+        }
+        return array;
+    }
+,   _elementText: function(el){
+        var text = "";
+        var childNodes = el.childNodes
+        var numChildNodes = childNodes.length;
+        for (var i=0; i<numChildNodes; i++){
+            text += childNodes.item(i).data;
+        }
+        return text;
+    }
+,   _createFieldGetter: function(fieldName, type, minOccurs, maxOccurs){
+        if (minOccurs==null){
+            minOccurs = "1" ;
+        }
+        if (maxOccurs==null){
+            maxOccurs = "1";
+        }
+        var me = this;
+        var valueConverter = null;        
+        switch (type){
+            case "xsd:boolean":
+                valueConverter = me._boolConverter;
+                break;
+            case "xsd:decimal": //FIXME: not sure if you can use parseFloat for this.
+            case "xsd:double":
+            case "xsd:float":
+                valueConverter = me._floatConverter;
+                break;
+            case "xsd:int":
+            case "xsd:integer":
+            case "xsd:nonPositiveInteger":
+            case "xsd:negativeInteger":
+            case "xsd:nonNegativeInteger":
+            case "xsd:positiveInteger":
+            case "xsd:short":
+            case "xsd:byte":
+            case "xsd:long":
+            case "xsd:unsignedLong":
+            case "xsd:unsignedInt":
+            case "xsd:unsignedShort":
+            case "xsd:unsignedByte":
+                valueConverter = me._intConverter;
+                break;
+            case "xsd:string":
+            default:
+                valueConverter = me._textConverter;
+                break;
+        }
+        var getter;
+        if(minOccurs=="1" && maxOccurs=="1") {
+            getter = function(){
+                var els = me._getElementsByTagNameFromRow(fieldName);
+                return valueConverter(me._elementText(els.item(0)))
+            }
+        }
+        else 
+        if(minOccurs=="0" && maxOccurs=="1") {
+            getter = function(){
+                var els = me._getElementsByTagNameFromRow(fieldName);
+                if (!els.length) return null;
+                return valueConverter(me._elementText(els.item(0)))
+            }
+        }
+        else 
+        if(minOccurs=="1" && (maxOccurs=="unbounded" || parseInt(maxOccurs, 10)>1)) {
+            getter = function(){
+                var els = me._getElementsByTagNameFromRow(fieldName);
+                return me._arrayConverter(els, valueConverter);
+            }
+        }
+        else 
+        if(minOccurs=="0" && (maxOccurs=="unbounded" || parseInt(maxOccurs, 10)>1)) {
+            getter = function(){
+                var els = me._getElementsByTagNameFromRow(fieldName);
+                if (!els.length) return null;
+                return me._arrayConverter(els, valueConverter);
+            }
+        }
+        return getter;
+    }
 ,   getFields: function(){
         var f = [];
         var fieldCount = this._fieldCount;
