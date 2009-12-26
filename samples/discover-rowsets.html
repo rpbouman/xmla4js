@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Xml4js: Discover Schema Rowsets</title>
+        <style type="text/css">
+            #url {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Xml4js: Schema Rowsets</h1>
+        <p>
+        </p>
+        <div>
+            URL:
+            <input type="text" id="url" name="url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="discover">Discover...</button>            
+        </div>
+
+        <div id="schemaRowsets">
+        </div>
+
+
+        <script type="text/javascript" src="../js/Xmla.js"></script>
+                
+        <script type="text/javascript">
+            var discover = document.getElementById("discover");
+            discover.onclick = function(){                
+                var schemaRowsetsEl = document.getElementById("schemaRowsets");
+                schemaRowsetsEl.innerHTML = "";
+                var url = document.getElementById("url").value;
+                var xmla = new Xmla({
+                    async: false
+                ,   url: url
+                });
+                var rowset = xmla.discoverSchemaRowsets();
+                var rows = rowset.fetchAllAsObject();
+                rowset.close();
+                
+                for (var schemaName, numRows = rows.length, i=0; i<numRows; i++){
+                    try {
+                        schemaName = rows[i]["SchemaName"];
+                        debugger;
+                        rowset = xmla.discover({
+                            async: false
+                        ,   url: url
+                        ,   requestType: schemaName
+                        });
+                        fillTable(schemaName, rowset);
+                        rowset.close();
+                    } catch (e){
+                        debugger;
+                    }
+                }
+            }
+
+            function fillTable(name, rowset){ 
+                var tab = document.createElement("table");
+                tab.setAttribute("border", "1");
+                tab.createCaption().innerHTML = name;
+                var schemaRowsetsEl = document.getElementById("schemaRowsets");
+                schemaRowsetsEl.appendChild(tab);
+                var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
+                for (i=0; i<fieldCount; i++){
+                    c = r.insertCell(i);
+                    c.innerHTML = rowset.fieldName(i);
+                }
+                var rows = rowset.fetchAllAsArray();                
+                for (var rowCount = rows.length, j=0; j<rowCount; j++){
+                    r = tab.insertRow(j+1);
+                    for (i=0; i<fieldCount; i++){
+                        c = r.insertCell(i);
+                        c.innerHTML = rows[j][i];
+                    }
+                }
+            }
+            
+        </script>
+    </body>
+</html>

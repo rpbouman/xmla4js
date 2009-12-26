@@ -10,6 +10,8 @@ var _xmlnsSQL = _ms + "xml-sql";
 var _xmlnsSchema = "http://www.w3.org/2001/XMLSchema";                    
 var _xmlnsRowset = _xmlnsXmla + ":rowset";
 
+var _getElementsByTagNameNS = document.getElementsByTagNameNS;
+
 var _useAX = window.ActiveXObject? true : false;
 var _ajax = function(options){
 /*
@@ -369,7 +371,7 @@ Xmla.prototype = {
         }
         else 
         if (eventName=="error") {
-            throw eventData;
+//            throw eventData;
         }
         return outcome;
     }
@@ -437,7 +439,7 @@ Xmla.prototype = {
         var method = request.method;
         
         var soapFault;
-        if (this.responseXML.getElementsByTagNameNS){
+        if (_getElementsByTagNameNS){
             soapFault = this.responseXML.getElementsByTagNameNS(_xmlnsSOAPenvelope, "Fault"); 
         } else {
             soapFault = this.responseXML.getElementsByTagName("Fault");
@@ -445,10 +447,13 @@ Xmla.prototype = {
         if (soapFault.length) {
             //TODO: extract error info
             debugger;
+            soapFault = soapFault.item(0);
+            var faultCode = soapFault.getElementsByTagName("faultcode").item(0).childNodes.item(0).data;
+            var faultString = soapFault.getElementsByTagName("faultstring").item(0).childNodes.item(0).data;
             var soapFaultObject = {
                 errorCategory: "soapFault"
-            ,   errorString: "" 
-            ,   errorObject: {}
+            ,   faultCode: faultCode
+            ,   faultString: faultString 
             };
             obj.error = soapFaultObject;
             switch(method){
@@ -738,7 +743,7 @@ Xmla.prototype = {
 }
 
 function _getRows(xmlDoc){
-    if (xmlDoc.getElementsByTagNameNS) {
+    if (_getElementsByTagNameNS) {
         return xmlDoc.getElementsByTagNameNS(_xmlnsRowset, "row");
     }
     else {
@@ -749,7 +754,7 @@ function _getRows(xmlDoc){
 
 function _getRowSchema(xmlDoc){
     var types;
-    if (xmlDoc.getElementsByTagNameNS) {
+    if (_getElementsByTagNameNS) {
         types = xmlDoc.getElementsByTagNameNS(_xmlnsSchema, "complexType");
     }
     else {
@@ -774,11 +779,11 @@ Xmla.Rowset = function(node){
     this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
     this.fieldOrder = [];
     this.fields = {};
-    this.fieldCount = 0;
+    this._fieldCount = 0;
     var rowSchema = _getRowSchema(node);
     if (rowSchema){    
         var seq;
-        if (rowSchema.getElementsByTagNameNS) {
+        if (_getElementsByTagNameNS) {
             seq = rowSchema.getElementsByTagNameNS(_xmlnsSchema, "sequence").item(0);
         }
         else {
@@ -803,7 +808,7 @@ Xmla.Rowset = function(node){
             type = node.getAttribute("type");
 
             if (this.numRows){
-                if (this.row.getElementsByTagNameNS) {
+                if (_getElementsByTagNameNS) {
                     gtr = "var val = this.row.getElementsByTagNameNS(\"" + _xmlnsRowset + "\", \"" + fieldName + "\");";
                 }
                 else {
@@ -844,17 +849,32 @@ Xmla.Rowset = function(node){
                         //throw "Unexpected column type \"" + type + "\"";
                 }
                 if(maxOccurs=="unbounded" || maxOccurs > 1){
-                    gtr += "\nvar array = [];";
-                    gtr += "for (var i=0; i<val.length; i++){array.push(" + converter.replace(/strVal/g, "val.item(i).childNodes.item(0).data") + ");}"                    
-                    gtr += "\nreturn array";
+                    gtr +=  "\nvar array = [];"
+                    +   "\nfor(var valLength = val.length, i=0; i<valLength; i++){"
+                    +   "\n    var text = \"\";"
+                    +   "\n    var itemNodes = val.item(i).childNodes;"
+                    +   "\n    var numItemNodes=itemNodes.length;"
+                    +   "\n    for(var j=0; j<numItemNodes; j++){"
+                    +   "\n        text += itemNodes.item(j).data;"
+                    +   "\n    }"                        
+                    +   "\n    array.push(" + converter.replace(/strVal/g, "text") + ");"
+                    +   "\n}"
+                    +   "\nreturn array;"
+                    ;
                 } else {
-                    gtr += "\nreturn " + converter.replace(/strVal/g, "val.item(0).childNodes.item(0).data") + ";";
+                    gtr +=  "var text =\"\";"
+                    +   "\nvar itemNodes = val.item(0).childNodes;"
+                    +   "\nvar numItemNodes=itemNodes.length;"
+                    +   "\nfor(var i=0; i<numItemNodes; i++){"
+                    +   "\n    text += itemNodes.item(i).data;"
+                    +   "\n}"
+                    +   "\nreturn " + converter.replace(/strVal/g, "text") + ";";
                 }
             }
             this.fields[fieldLabel] = {
                 name: fieldName
             ,   label: fieldLabel
-            ,   index: this.fieldCount++
+            ,   index: this._fieldCount++
             ,   type: type
             ,   minOccurs: _isUndefined(minOccurs)? 1: minOccurs
             ,   maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs=="unbounded"?Infinity:maxOccurs)
@@ -875,7 +895,7 @@ Xmla.Rowset.prototype = {
     node: null
 ,   getFields: function(){
         var f = [];
-        var fieldCount = this.fieldCount;
+        var fieldCount = this._fieldCount;
         var fieldOrder = this.fieldOrder;
         for (var i=0; i<fieldCount; i++){
             f[i] = this.fieldDef(fieldOrder[i]);
@@ -900,7 +920,7 @@ Xmla.Rowset.prototype = {
         return fieldDef.index;
     }
 ,   fieldName: function(index){
-        return this.fieldOrder[name];
+        return this.fieldOrder[index];
     }    
 ,   fieldVal: function(name){
         if (_isNumber(name)){
@@ -910,7 +930,7 @@ Xmla.Rowset.prototype = {
         return field.getter.call(this);
     }   
 ,   fieldCount: function(){
-        return this.fieldCount;
+        return this._fieldCount;
     }
 ,   close: function(){
         this.row = null;
@@ -941,6 +961,7 @@ Xmla.Rowset.prototype = {
                 fieldDef = fields[fieldName];
                 object[fieldName] = fieldDef.getter.call(this);
             }
+            this.next();
         } else {
             object = false;
         }
