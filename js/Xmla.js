@@ -1,19 +1,19 @@
-(function(){
-var _soap = "http://schemas.xmlsoap.org/soap/"
-var _xmlnsSOAPenvelope = _soap + "envelope/";
-var _xmlnsIsSOAPenvelope = "xmlns:SOAP-ENV=\"" + _xmlnsSOAPenvelope + "\"";
-var _SOAPencodingStyle = "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"";
-var _ms = "urn:schemas-microsoft-com:"
-var _xmlnsXmla = _ms + "xml-analysis";
-var _xmlnsIsXmla = "xmlns=\"" + _xmlnsXmla + "\"";
-var _xmlnsSQL = _ms + "xml-sql";
-var _xmlnsSchema = "http://www.w3.org/2001/XMLSchema";                    
-var _xmlnsRowset = _xmlnsXmla + ":rowset";
+(function (){
 
-var _getElementsByTagNameNS = document.getElementsByTagNameNS;
+var _soap = "http://schemas.xmlsoap.org/soap/",
+    _xmlnsSOAPenvelope = _soap + "envelope/",
+    _xmlnsIsSOAPenvelope = "xmlns:SOAP-ENV=\"" + _xmlnsSOAPenvelope + "\"",
+    _SOAPencodingStyle = "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"",
+    _ms = "urn:schemas-microsoft-com:",
+    _xmlnsXmla = _ms + "xml-analysis",
+    _xmlnsIsXmla = "xmlns=\"" + _xmlnsXmla + "\"",
+    _xmlnsSQL = _ms + "xml-sql",
+    _xmlnsSchema = "http://www.w3.org/2001/XMLSchema",
+    _xmlnsRowset = _xmlnsXmla + ":rowset",
+    _useAX = window.ActiveXObject? true : false
+;    
 
-var _useAX = window.ActiveXObject? true : false;
-var _ajax = function(options){
+function _ajax(options){
 /*
     This is not a general ajax function, 
     just something that is good enough for Xmla.
@@ -49,7 +49,7 @@ var _ajax = function(options){
                 options.aborted(xhr);                    
                 break;
             case 4:
-                if (xhr.status==200){
+                if (xhr.status===200){
                     options.complete(xhr, "success");
                 }
                 else {
@@ -57,7 +57,7 @@ var _ajax = function(options){
                 }
             break;
         }
-    }
+    };
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send(options.data);
@@ -67,29 +67,44 @@ var _ajax = function(options){
     return xhr;
 }
 
-function _isType(arg, type){
-    return typeof(arg)==type;
-}
-
 function _isUndefined(arg){
-    return _isType(arg, "undefined");
+    return typeof(arg)==="undefined";
 }
 function _isFunction(arg){
-    return _isType(arg, "function");
+    return typeof(arg)==="function";
 }
 function _isString(arg){
-    return _isType(arg, "string");
+    return typeof(arg)==="string";
 }
 function _isNumber(arg){
-    return _isType(arg, "number");
+    return typeof(arg)==="number";
 }
 function _isObject(arg){
-    return _isType(arg, "object");
+    return typeof(arg)==="object";
 }
 
 function _xmlEncodeListEntry(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
+
+var _getElementsByTagNameNS = function(node, ns, tagName){
+    if (_isFunction(node.getElementsByTagNameNS)){
+        return node.getElementsByTagNameNS(ns, tagName);
+    }
+    else {
+        return node.getElementsByTagName(tagName);
+    }
+};
+
+var _getAttributeNS = function(element, ns, attributeName){
+    if (_isFunction(element.getAttributeNS)){
+        return element.getAttributeNS(ns, attributeName);
+    }
+    else {
+        return element.getAttribute(attributeName);
+    }
+};
+
 
 function _getXmlaSoapList(container, listType, items){
     var msg = "<" + container + ">";
@@ -97,19 +112,19 @@ function _getXmlaSoapList(container, listType, items){
         var item;
         msg += "<" + listType + ">";
         for (var property in items){
-            item = items[property];
-            msg += "<" + property + ">";
-            switch (typeof(item)){
-                case "array":
+            if (items.hasOwnProperty(property)) {
+                item = items[property];
+                msg += "<" + property + ">";
+                if (typeof(item)==="array"){
                     for (var entry, i=0, numItems = item.length; i<numItems; i++){
                         entry = item[i];
                         msg += "<Value>" + _xmlEncodeListEntry(entry) + "</Value>";
                     }
-                    break;
-                default:
+                } else {
                     msg += _xmlEncodeListEntry(item);
+                }
+                msg += "</" + property + ">";
             }
-            msg += "</" + property + ">";
         }
         msg += "</" + listType + ">";
     }
@@ -122,60 +137,64 @@ function _getXmlaSoapMessage(
 ){
     var msg = "";
     var method = options.method;
-    msg += "<SOAP-ENV:Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">"
-    +   "<SOAP-ENV:Body>"
-    +   "<" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"    
+    msg += "<SOAP-ENV:Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
+    "<SOAP-ENV:Body>" + 
+    "<" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
     var exception = null;
     switch(method){
         case Xmla.METHOD_DISCOVER:
             if (_isUndefined(options.requestType)) {
                 exception = {
-                    name: "Missing request type"
-                ,   description: "Requests of the \"Discover\" method must specify a requestType."
+                    name: "Missing request type",
+                    description: "Requests of the \"Discover\" method must specify a requestType."
                 };
             }
             else {
-                msg += "<" + Xmla.REQUESTTYPE + ">" + options.requestType + "</" + Xmla.REQUESTTYPE + ">"
-                + _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions)
-                + _getXmlaSoapList("Properties", "PropertyList", options.properties)
+                msg += "<" + Xmla.REQUESTTYPE + ">" + options.requestType + "</" + Xmla.REQUESTTYPE + ">" + 
+                _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions) + 
+                _getXmlaSoapList("Properties", "PropertyList", options.properties)
                 ;
             }
             break;
         case Xmla.METHOD_EXECUTE:
             if (_isUndefined(options.statement)){
                 exception = {
-                    name: "Missing statement"
-                ,   description: "Requests of the \"Execute\" method must specify an MDX statement."
+                    name: "Missing statement",
+                    description: "Requests of the \"Execute\" method must specify an MDX statement."
                 };
             }
             else {
-                msg += "<Command><Statement>" + options.statement + "</Statement></Command>"
-                + _getXmlaSoapList("Properties", "PropertyList", options.properties)
+                msg += "<Command><Statement>" + options.statement + "</Statement></Command>" + 
+                _getXmlaSoapList("Properties", "PropertyList", options.properties)
                 ;
             }
             break;
         default:
             exception = {
-                name: "Invalid XMLA method"
-            ,   description: "The method must be either \"Discover\" or \"Execute\"."
+                name: "Invalid XMLA method",
+                description: "The method must be either \"Discover\" or \"Execute\"."
             };
     }
-    if (exception!=null){
+    if (exception!==null){
         throw exception;
     }
-    msg += "   </" + method + ">"
-    +   "</SOAP-ENV:Body>"
-    +   "</SOAP-ENV:Envelope>"
+    msg += "   </" + method + ">" + 
+        "</SOAP-ENV:Body>" + 
+        "</SOAP-ENV:Envelope>"
     ;
     return msg;
 }
 
 function _applyProperties(object, properties, overwrite){
-    if (properties && (!object)) object = {};
+    if (properties && (!object)) {
+        object = {};
+    }
     for (var property in properties){
-        if (overwrite || _isUndefined(object[property])) {
-            object[property] = properties[property];
+        if (properties.hasOwnProperty(property)){
+            if (overwrite || _isUndefined(object[property])) {
+                object[property] = properties[property];
+            }
         }
     }
     return object;
@@ -198,19 +217,19 @@ Xmla = function(options){
     
     this.options = _applyProperties(
         _applyProperties(
-            {}
-        ,   Xmla.defaultOptions
-        ,   true
-        )
-    ,   options
-    ,   true
+            {},
+            Xmla.defaultOptions,
+            true
+        ),
+        options,
+        true
     );
-}
+};
 
 Xmla.defaultOptions = {
-    requestTimeout: 30000   //by default, we bail out after 30 seconds
-,   async: false            //by default, we do a synchronous request
-}
+    requestTimeout: 30000,   //by default, we bail out after 30 seconds
+    async: false            //by default, we do a synchronous request
+};
 
 Xmla.METHOD_DISCOVER = "Discover";
 Xmla.METHOD_EXECUTE = "Execute";
@@ -258,28 +277,28 @@ Xmla.EVENT_DISCOVER_SUCCESS = "discoversuccess";
 Xmla.EVENT_DISCOVER_ERROR = "discovererror";
 
 Xmla.EVENT_GENERAL = [
-    Xmla.EVENT_REQUEST
-,   Xmla.EVENT_SUCCESS
-,   Xmla.EVENT_ERROR
+    Xmla.EVENT_REQUEST,
+    Xmla.EVENT_SUCCESS,
+    Xmla.EVENT_ERROR
 ];
 
 Xmla.EVENT_DISCOVER_ALL = [
-    Xmla.EVENT_DISCOVER
-,   Xmla.EVENT_DISCOVER_SUCCESS
-,   Xmla.EVENT_DISCOVER_ERROR
+    Xmla.EVENT_DISCOVER,
+    Xmla.EVENT_DISCOVER_SUCCESS,
+    Xmla.EVENT_DISCOVER_ERROR
 ];
 
 Xmla.EVENT_EXECUTE_ALL = [
-    Xmla.EVENT_EXECUTE
-,   Xmla.EVENT_EXECUTE_SUCCESS
-,   Xmla.EVENT_EXECUTE_ERROR
+    Xmla.EVENT_EXECUTE,
+    Xmla.EVENT_EXECUTE_SUCCESS,
+    Xmla.EVENT_EXECUTE_ERROR
 ];
 
 Xmla.EVENT_ALL = [].concat(
-    Xmla.EVENT_GENERAL
-,   Xmla.EVENT_DISCOVER_ALL
-,   Xmla.EVENT_EXECUTE_ALL
-)
+    Xmla.EVENT_GENERAL,
+    Xmla.EVENT_DISCOVER_ALL,
+    Xmla.EVENT_EXECUTE_ALL
+);
 
 Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
 Xmla.PROP_CATALOG = "Catalog";
@@ -300,21 +319,21 @@ Xmla.PROP_AXISFORMAT_CLUSTER = "ClusterFormat";
 Xmla.PROP_AXISFORMAT_CUSTOM = "CustomFormat";
 
 Xmla.prototype = {
-    listeners: null
-,   setOptions: function(options){
+    listeners: null,
+    setOptions: function(options){
         _applyProperties(
-            this.options
-        ,   options
-        ,   true
+            this.options,
+            options,
+            true
         );
-    }    
-,   addListener: function(listener){
+    },
+    addListener: function(listener){
         var events = listener.events;
         if (_isUndefined(events)){
             throw "No events specified"; 
         }
         if (_isString(events)){
-            if (events=="all"){
+            if (events==="all"){
                 events = Xmla.EVENT_ALL;
             } else {
                 events = events.split(",");
@@ -324,25 +343,25 @@ Xmla.prototype = {
             throw "Property \"events\" must be comma separated list string or array."; 
         }
         var numEvents = events.length;
-        var eventName, listeners;
+        var eventName, myListeners;
         for (var i=0; i<numEvents; i++){
             eventName = events[i].replace(/\s+/g,"");
-            var listeners = this.listeners[eventName];
-            if (!listeners) {
+            myListeners = this.listeners[eventName];
+            if (!myListeners) {
                 throw "Event \"" + eventName + "\" is not defined."; 
             }
             if (_isFunction(listener.handler)){
                 if (!_isObject(listener.scope)) {
                     listener.scope = window;
                 }
-                listeners.push(listener);
+                myListeners.push(listener);
             }
             else {
                 throw "Invalid listener: handler is not a function"; 
             }
         }
-    }    
-,   _fireEvent: function(eventName, eventData, cancelable){
+    },    
+    _fireEvent: function(eventName, eventData, cancelable){
         var listeners = this.listeners[eventName];
         if (!listeners) {
             throw "Event \"" + eventName + "\" is not defined."; 
@@ -354,10 +373,10 @@ Xmla.prototype = {
             for (var i=0; i<numListeners; i++){
                 listener = listeners[i];
                 listenerResult = listener.handler.call(
-                    listener.scope
-                ,   eventName
-                ,   eventData
-                ,   this
+                    listener.scope,
+                    eventName,
+                    eventData,
+                    this
                 );
                 if (cancelable && listenerResult===false){
                     outcome = false;
@@ -366,67 +385,72 @@ Xmla.prototype = {
             }
         }
         else 
-        if (eventName=="error") {
+        if (eventName==="error") {
             throw eventData;
         }
         return outcome;
-    }
-,   request: function(options){
+    },
+    request: function(options){
         var xmla = this;
         
         var soapMessage = _getXmlaSoapMessage(options);
         options.soapMessage = soapMessage;
         var myXhr;
         var ajaxOptions = {
-            async: _isUndefined(options.async) ? this.options.async : options.async
-        ,   timeout: this.options.requestTimeout
-        ,   contentType: "text/xml"
-        ,   data: soapMessage
-        ,   dataType: "xml"
-        ,   error: function(xhr, errorString, errorObject){
+            async: _isUndefined(options.async) ? this.options.async : options.async,
+            timeout: this.options.requestTimeout,
+            contentType: "text/xml",
+            data: soapMessage,
+            dataType: "xml",
+            error: function(xhr, errorString, errorObject){
                 xmla._requestError({
-                    xmla: xmla
-                ,   request: options
-                ,   xhr: xhr
-                ,   error: {
-                        errorCategory: "xhrError"
-                    ,   errorString: errorString
-                    ,   errorObject: errorObject
+                    xmla: xmla,
+                    request: options,
+                    xhr: xhr,
+                    error: {
+                        errorCategory: "xhrError",
+                        errorString: errorString,
+                        errorObject: errorObject
                     }
                 });
-            }
-        ,   complete: function(xhr, textStatus){    //using complete rather than success f
-                if (textStatus=="success"){
+            },
+            complete: function(xhr, textStatus){    //using complete rather than success f
+                if (textStatus==="success"){
                     xmla._requestSuccess({
-                        xmla: xmla
-                    ,   request: options
-                    ,   xhr: xhr
-                    ,   status: status
+                        xmla: xmla,
+                        request: options,
+                        xhr: xhr,
+                        status: status
                     });
                 }
-            }
-        ,   url: _isUndefined(options.url)? this.options.url : options.url
-        ,   type: "POST"
+            },
+            url: _isUndefined(options.url)? this.options.url : options.url,
+            type: "POST"
         };
         
-        if (options.username) ajaxOptions.username = options.username;
-        if (options.password) ajaxOptions.password = options.password;
+        if (options.username){
+            ajaxOptions.username = options.username;
+        }
+        if (options.password){
+            ajaxOptions.password = options.password;
+        }
 
         this.response = null;
-        if (this._fireEvent(Xmla.EVENT_REQUEST, options, true)
-        && (   (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options))
-            || (options.method == Xmla.METHOD_EXECUTE  && this._fireEvent(Xmla.EVENT_EXECUTE, options))
-           ) 
+        if  (this._fireEvent(Xmla.EVENT_REQUEST, options, true) &&
+                (
+                    (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) || 
+                    (options.method == Xmla.METHOD_EXECUTE  && this._fireEvent(Xmla.EVENT_EXECUTE, options))
+                ) 
         ) {
             myXhr = _ajax(ajaxOptions);
         }
         return this.response;
-    }
-,   _requestError: function(obj) {
+    },
+    _requestError: function(obj) {
         obj.xmla = this;
         this._fireEvent("error", obj);
-    }
-,   _requestSuccess: function(obj) {
+    },
+    _requestSuccess: function(obj) {
         var xhr = obj.xhr;
         this.responseXML = xhr.responseXML;
         this.responseText = xhr.responseText;
@@ -434,21 +458,16 @@ Xmla.prototype = {
         var request = obj.request; 
         var method = request.method;
         
-        var soapFault;
-        if (_getElementsByTagNameNS){
-            soapFault = this.responseXML.getElementsByTagNameNS(_xmlnsSOAPenvelope, "Fault"); 
-        } else {
-            soapFault = this.responseXML.getElementsByTagName("Fault");
-        }
+        var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, "Fault");
         if (soapFault.length) {
             //TODO: extract error info
             soapFault = soapFault.item(0);
             var faultCode = soapFault.getElementsByTagName("faultcode").item(0).childNodes.item(0).data;
             var faultString = soapFault.getElementsByTagName("faultstring").item(0).childNodes.item(0).data;
             var soapFaultObject = {
-                errorCategory: "soapFault"
-            ,   faultCode: faultCode
-            ,   faultString: faultString 
+                errorCategory: "soapFault",
+                faultCode: faultCode,
+                faultString: faultString
             };
             obj.error = soapFaultObject;
             switch(method){
@@ -486,8 +505,8 @@ Xmla.prototype = {
             }
             this._fireEvent(Xmla.EVENT_SUCCESS, obj);
         }
-    }
-,   execute: function(options) {
+    },
+    execute: function(options) {
         var properties = options.properties;
         if (_isUndefined(properties)){
             properties = {};
@@ -497,270 +516,254 @@ Xmla.prototype = {
             options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
         }
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 method: Xmla.METHOD_EXECUTE
-            }
-        ,   true
+            },
+            true
         );
         return this.request(request);         
-    }
-,   discover: function(options) {        
+    },
+    discover: function(options) {        
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 method: Xmla.METHOD_DISCOVER
-            }
-        ,   true
+            },
+            true
         );
         return this.request(request);         
-    }
-,   discoverDataSources: function(options){
+    },
+    discoverDataSources: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DISCOVER_DATASOURCES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverProperties: function(options){
+    },
+    discoverProperties: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DISCOVER_PROPERTIES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverSchemaRowsets: function(options){
+    },
+    discoverSchemaRowsets: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+           options,
+            {
                 requestType: Xmla.DISCOVER_SCHEMA_ROWSETS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverEnumerators: function(options){
+    },
+    discoverEnumerators: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DISCOVER_ENUMERATORS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverKeywords: function(options){
+    },
+    discoverKeywords: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DISCOVER_KEYWORDS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverLiterals: function(options){
+    },
+    discoverLiterals: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DISCOVER_LITERALS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverDBCatalogs: function(options){
+    }, 
+    discoverDBCatalogs: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DBSCHEMA_CATALOGS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverDBColumns: function(options){
+    },
+    discoverDBColumns: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DBSCHEMA_COLUMNS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverDBProviderTypes: function(options){
+    },
+    discoverDBProviderTypes: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DBSCHEMA_PROVIDER_TYPES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverDBSchemata: function(options){
+    },
+    discoverDBSchemata: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DBSCHEMA_SCHEMATA
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverDBTables: function(options){
+    },
+    discoverDBTables: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DBSCHEMA_TABLES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverDBTablesInfo: function(options){
+    },
+    discoverDBTablesInfo: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.DBSCHEMA_TABLES_INFO
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDActions: function(options){
+    },
+    discoverMDActions: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_ACTIONS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDCubes: function(options){
+    },
+    discoverMDCubes: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_CUBES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDDimensions: function(options){
+    },
+    discoverMDDimensions: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_DIMENSIONS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDFunctions: function(options){
+    },
+    discoverMDFunctions: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_FUNCTIONS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDHierarchies: function(options){
+    },
+    discoverMDHierarchies: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_HIERARCHIES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDLevels: function(options){
+    },
+    discoverMDLevels: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_LEVELS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDMeasures: function(options){
+    },
+    discoverMDMeasures: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_MEASURES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDMembers: function(options){
+    },
+    discoverMDMembers: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_MEMBERS
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDProperties: function(options){
+    },
+    discoverMDProperties: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_PROPERTIES
-            }
-        ,   true
+            },
+            true
         );
         return this.discover(request);
-    }
-,   discoverMDSets: function(options){
+    },
+    discoverMDSets: function(options){
         var request = _applyProperties(
-            options
-        ,   {
+            options,
+            {
                 requestType: Xmla.MDSCHEMA_SETS
-            }
-        ,   true    
+            },
+            true    
         );
         return this.discover(request);
     }
-}
-
-function _getRows(xmlDoc){
-    if (_getElementsByTagNameNS) {
-        return xmlDoc.getElementsByTagNameNS(_xmlnsRowset, "row");
-    }
-    else {
-        // fuck you ie. I hat you.
-        return xmlDoc.getElementsByTagName("row");
-    }
-}
+};
 
 function _getRowSchema(xmlDoc){
-    var types;
-    if (_getElementsByTagNameNS) {
-        types = xmlDoc.getElementsByTagNameNS(_xmlnsSchema, "complexType");
-    }
-    else {
-        //fuck you ie. I hate you.
-        types = xmlDoc.getElementsByTagName("xsd:complexType");
-    }
-    var numTypes = types.length;
-    var type;
-    for (var i=0; i<numTypes; i++){
+    var types = _getElementsByTagNameNS(xmlDoc, _xmlnsSchema, "complexType"), 
+        numTypes = types.length,
+        type,
+        i;
+    for (i=0; i<numTypes; i++){
         type = types.item(i);
-        if (type.getAttribute("name")=="row"){
+        if (type.getAttribute("name")==="row"){
             return type;
         }
     }
@@ -768,7 +771,7 @@ function _getRowSchema(xmlDoc){
 }
 
 Xmla.Rowset = function(node){
-    this.rows = _getRows(node);
+    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, "row");
     this.numRows = this.rows? this.rows.length : 0;
     this.rowIndex = 0;
     this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
@@ -777,39 +780,29 @@ Xmla.Rowset = function(node){
     this._fieldCount = 0;
     var rowSchema = _getRowSchema(node);
     if (rowSchema){    
-        var seq;
-        if (_getElementsByTagNameNS) {
-            seq = rowSchema.getElementsByTagNameNS(_xmlnsSchema, "sequence").item(0);
-        }
-        else {
-            //fuck you ie. I hate you.
-            seq = rowSchema.getElementsByTagName("xsd:sequence").item(0);
-        }
+        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, "sequence").item(0);
         var seqChildren = seq.childNodes;
         var numChildren = seqChildren.length;
-        var node, field, fieldLabel, fieldName, minOccurs, maxOccurs, type, gtr, converter;
+        var seqChild, fieldLabel, fieldName, minOccurs, maxOccurs, type;
         for (var i=0; i<numChildren; i++){
-            node = seqChildren.item(i);
-            if (node.nodeType!=1) continue;
-            if (node.getAttributeNS){
-                fieldLabel = node.getAttributeNS(_xmlnsSQL, "field");
+            seqChild = seqChildren.item(i);
+            if (seqChild.nodeType!=1) {
+                continue;
             }
-            else {
-                fieldLabel = node.getAttribute("sql:field");
-            }
-            fieldName = node.getAttribute("name");
-            type = node.getAttribute("type");
-            minOccurs = node.getAttribute("minOccurs");
-            maxOccurs = node.getAttribute("maxOccurs");
+            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, "field");
+            fieldName = seqChild.getAttribute("name");
+            type = seqChild.getAttribute("type");
+            minOccurs = seqChild.getAttribute("minOccurs");
+            maxOccurs = seqChild.getAttribute("maxOccurs");
 
             this.fields[fieldLabel] = {
-                name: fieldName
-            ,   label: fieldLabel
-            ,   index: this._fieldCount++
-            ,   type: type
-            ,   minOccurs: _isUndefined(minOccurs)? 1: minOccurs
-            ,   maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs=="unbounded"?Infinity:maxOccurs)
-            ,   getter: this._createFieldGetter(fieldName, type, minOccurs, maxOccurs)
+                name: fieldName,
+                label: fieldLabel,
+                index: this._fieldCount++,
+                type: type,
+                minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
+                maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs==="unbounded"?Infinity:maxOccurs),
+                getter: this._createFieldGetter(fieldName, type, minOccurs, maxOccurs)
             };            
             this.fieldOrder.push(fieldLabel);
         }        
@@ -817,59 +810,52 @@ Xmla.Rowset = function(node){
     else {
         throw "Couldn't parse XML schema while constructing resultset";
     }
-}
+};
 
 Xmla.Rowset.FETCH_ARRAY = 1;
 Xmla.Rowset.FETCH_OBJECT = 2;
 
 Xmla.Rowset.prototype = {
-    node: null
-,   _getElementsByTagNameFromRow: _getElementsByTagNameNS 
-    ?   function(tagName){
-            return this.row.getElementsByTagNameNS(_xmlnsRowset, tagName);
-        }
-    :   function(tagName){
-            return this.row.getElementsByTagName(tagName);
-        }
-,   _boolConverter: function(val){
-        return val=="true"?true:false;
-    }
-,   _intConverter: function(val){
+    node: null,
+    _boolConverter: function(val){
+        return val==="true"?true:false;
+    },
+    _intConverter: function(val){
         return parseInt(val, 10);
-    }
-,   _floatConverter: function(val){
+    },
+    _floatConverter: function(val){
         return parseFloat(val, 10);
-    }
-,   _textConverter: function(val){
+    },
+    _textConverter: function(val){
         return val;
-    }
-,   _arrayConverter: function(nodes, valueConverter){
-        var array = [];
-        var numNodes = nodes.length;
-        var node;
+    },
+    _arrayConverter: function(nodes, valueConverter){
+// debugger;
+        var arr = [],
+            numNodes = nodes.length,
+            node
+        ;
         for (var i=0; i<numNodes; i++){
-            array.push(
-                valueConverter(
-                    this._elementText(nodes.item(0))
-                )
-            )
+            node = nodes.item(i);
+            arr.push(node.tagName);
         }
-        return array;
-    }
-,   _elementText: function(el){
-        var text = "";
-        var childNodes = el.childNodes
-        var numChildNodes = childNodes.length;
+        return arr;
+    },
+    _elementText: function(el){
+        var text = "",
+            childNodes = el.childNodes,
+            numChildNodes = childNodes.length
+        ;
         for (var i=0; i<numChildNodes; i++){
             text += childNodes.item(i).data;
         }
         return text;
-    }
-,   _createFieldGetter: function(fieldName, type, minOccurs, maxOccurs){
-        if (minOccurs==null){
+    },
+    _createFieldGetter: function(fieldName, type, minOccurs, maxOccurs){
+        if (minOccurs === null){
             minOccurs = "1" ;
         }
-        if (maxOccurs==null){
+        if (maxOccurs === null){
             maxOccurs = "1";
         }
         var me = this;
@@ -899,132 +885,143 @@ Xmla.Rowset.prototype = {
                 valueConverter = me._intConverter;
                 break;
             case "xsd:string":
+                valueConverter = me._textConverter;
+                break;
             default:
                 valueConverter = me._textConverter;
                 break;
         }
         var getter;
-        if(minOccurs=="1" && maxOccurs=="1") {
+        if(minOccurs==="1" && maxOccurs==="1") {
             getter = function(){
-                var els = me._getElementsByTagNameFromRow(fieldName);
-                return valueConverter(me._elementText(els.item(0)))
-            }
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                return valueConverter(me._elementText(els.item(0)));
+            };
         }
         else 
-        if(minOccurs=="0" && maxOccurs=="1") {
+        if(minOccurs==="0" && maxOccurs==="1") {
             getter = function(){
-                var els = me._getElementsByTagNameFromRow(fieldName);
-                if (!els.length) return null;
-                return valueConverter(me._elementText(els.item(0)))
-            }
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                if (!els.length) {
+                    return null;
+                }
+                else {
+                    return valueConverter(me._elementText(els.item(0)));
+                }
+            };
         }
         else 
-        if(minOccurs=="1" && (maxOccurs=="unbounded" || parseInt(maxOccurs, 10)>1)) {
+        if(minOccurs==="1" && (maxOccurs==="unbounded" || parseInt(maxOccurs, 10)>1)) {
             getter = function(){
-                var els = me._getElementsByTagNameFromRow(fieldName);
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
                 return me._arrayConverter(els, valueConverter);
-            }
+            };
         }
         else 
-        if(minOccurs=="0" && (maxOccurs=="unbounded" || parseInt(maxOccurs, 10)>1)) {
+        if(minOccurs==="0" && (maxOccurs==="unbounded" || parseInt(maxOccurs, 10)>1)) {
             getter = function(){
-                var els = me._getElementsByTagNameFromRow(fieldName);
-                if (!els.length) return null;
-                return me._arrayConverter(els, valueConverter);
-            }
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                if (!els.length) {
+                    return null;
+                }
+                else {
+                    return me._arrayConverter(els, valueConverter);
+                }
+            };
         }
         return getter;
-    }
-,   getFields: function(){
-        var f = [];
-        var fieldCount = this._fieldCount;
-        var fieldOrder = this.fieldOrder;
+    },
+    getFields: function(){
+        var f = [], 
+            fieldCount = this._fieldCount,
+            fieldOrder = this.fieldOrder
+        ;
         for (var i=0; i<fieldCount; i++){
             f[i] = this.fieldDef(fieldOrder[i]);
         }
         return f;
-    }
-,   hasMoreRows: function(){
+    },
+    hasMoreRows: function(){
         return this.numRows > this.rowIndex;
-    }
-,   next: function(){
+    },
+    next: function(){
         this.row = this.rows.item(++this.rowIndex);
-    }
-,   fieldDef: function(name){
+    },
+    fieldDef: function(name){
         var field = this.fields[name];
         if (_isUndefined(field)){
             throw "No such field: \"" + name + "\"";
         }
         return field;
-    }
-,   fieldIndex: function(name){
+    },
+    fieldIndex: function(name){
         var fieldDef = this.fieldDef(name);
         return fieldDef.index;
-    }
-,   fieldName: function(index){
+    },
+    fieldName: function(index){
         return this.fieldOrder[index];
-    }    
-,   fieldVal: function(name){
+    },
+    fieldVal: function(name){
         if (_isNumber(name)){
             name = this.fieldName(name);
         }
         var field = this.fieldDef(name);
         return field.getter.call(this);
-    }   
-,   fieldCount: function(){
+    },
+    fieldCount: function(){
         return this._fieldCount;
-    }
-,   close: function(){
+    },
+    close: function(){
         this.row = null;
-    }
-,   fetchAsArray: function(){
-        var array;
+    },
+    fetchAsArray: function(){
+        var array, fields, fieldName, fieldDef;
         if (this.hasMoreRows()) {
-            var fields = this.fields; 
+            fields = this.fields; 
             array = [];
-            var fieldName, fieldDef;
             for (fieldName in fields){
-                fieldDef = fields[fieldName];
-                array[fieldDef.index] = fieldDef.getter.call(this);
+                if (fields.hasOwnProperty(fieldName)){
+                    fieldDef = fields[fieldName];
+                    array[fieldDef.index] = fieldDef.getter.call(this);
+                }
             }
             this.next();
         } else {
             array = false;
         }
         return array;
-    } 
-,   fetchAsObject: function(){
-        var object;
+    },
+    fetchAsObject: function(){
+        var object, fields, fieldName, fieldDef;
         if (this.hasMoreRows()){
-            var fields = this.fields; 
-            var fieldName, fieldDef;
+            fields = this.fields; 
             object = {};
             for (fieldName in fields){
-                fieldDef = fields[fieldName];
-                object[fieldName] = fieldDef.getter.call(this);
+                if (fields.hasOwnProperty(fieldName)) {
+                    fieldDef = fields[fieldName];
+                    object[fieldName] = fieldDef.getter.call(this);
+                }
             }
             this.next();
         } else {
             object = false;
         }
         return object;
-    } 
-,   fetchAllAsArray: function(){
-        var rows = [];
-        var row;
-        while(row = this.fetchAsArray()){
+    },
+    fetchAllAsArray: function(){
+        var row, rows = [];
+        while((row = this.fetchAsArray())){
+            rows.push(row);
+        }
+        return rows;
+    },
+    fetchAllAsObject: function(){
+        var row, rows = [];
+        while((row = this.fetchAsObject())){
             rows.push(row);
         }
         return rows;
     }    
-,   fetchAllAsObject: function(){
-        var rows = [];
-        var row;
-        while(row = this.fetchAsObject()){
-            rows.push(row);
-        }
-        return rows;
-    }    
-}
+};
 
 }());
