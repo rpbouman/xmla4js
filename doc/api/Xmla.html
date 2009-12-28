@@ -1,0 +1,319 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: xmla  Xmla   (YUI Library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1261967995.13" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1261967995.13" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1261967995.13"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1261967995.13"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
+        <h3>Xmla utility&nbsp; <span class="subtitle">r12</span></h3>
+        <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
+            &gt; <a href="./module_xmla.html" title="xmla">xmla</a>
+                 &gt; Xmla 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">Xmla</b>
+                        <span class="extends">
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        The Xmla class provides a javascript API to communicate XML for Analysis (XML/A) over HTTP.
+XML/A is an industry standard protocol that allows webclients to work with OLAP servers.
+To fully understand the scope and purpose of this utility, it is highly recommended
+to read <a href="http://xmla.org/xmla1.1.doc">the XML/A specification</a>.
+                    </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">Xmla</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                options
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl rel="yui:parameters">
+                                            <dt>Parameters:</dt>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">options</span>
+                                                    &lt;<span property="yui:type">object</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"></span>
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_DATASOURCES">
+                                    <h4><a name="property_DISCOVER_DATASOURCES" property="yui:name">DISCOVER_DATASOURCES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the requestType option in the options object passed to the to Xmla.request() method to invoke the XML/A Discover method on the server to return the DISCOVER_DATASOURCES schema rowset.
+The requestType option applies only to Discover requests.
+Instead of passing this requestType yourself, consider calling the Xmla.DiscoverDatasources() method. 
+The Xmla.DiscoverDatasources() method passes DISCOVER_DATASOURCES automatically as requestType for Discover requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_DATASOURCES
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_ENUMERATORS">
+                                    <h4><a name="property_DISCOVER_ENUMERATORS" property="yui:name">DISCOVER_ENUMERATORS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the requestType option in the options object passed to the to Xmla.request() method to invoke the XML/A Discover method on the server to return the DISCOVER_ENUMERATORS schema rowset.
+The requestType option applies only to Discover requests.
+Instead of passing this requestType yourself, consider calling the Xmla.DiscoverEnumerators() method. 
+The Xmla.DiscoverSchemaRowsets() method isses a request to invoke the Discover method using DISCOVER_SCHEMA_ROWSETS as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_ENUMERATORS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_KEYWORDS">
+                                    <h4><a name="property_DISCOVER_KEYWORDS" property="yui:name">DISCOVER_KEYWORDS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the requestType option in the options object passed to the to Xmla.request() method to invoke the XML/A Discover method on the server to return the DISCOVER_KEYWORDS schema rowset.
+The requestType option applies only to Discover requests.
+Instead of passing this requestType yourself, consider calling the Xmla.DiscoverKeywords() method. 
+The Xmla.DiscoverKeywords() method isses a request to invoke the Discover method using DISCOVER_KEYWORDS as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_KEYWORDS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_PROPERTIES">
+                                    <h4><a name="property_DISCOVER_PROPERTIES" property="yui:name">DISCOVER_PROPERTIES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the requestType option in the options object passed to the to Xmla.request() method to invoke the XML/A Discover method on the server to return the DISCOVER_PROPERTIES schema rowset.
+The requestType option applies only to Discover requests.
+Instead of passing this requestType yourself, consider calling the Xmla.DiscoverProperties() method. 
+The Xmla.DiscoverDProperties() method passes DISCOVER_PROPERTIES automatically as requestType for Discover requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_PROPERTIES
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_SCHEMA_ROWSETS">
+                                    <h4><a name="property_DISCOVER_SCHEMA_ROWSETS" property="yui:name">DISCOVER_SCHEMA_ROWSETS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the requestType option in the options object passed to the to Xmla.request() method to invoke the XML/A Discover method on the server to return the DISCOVER_SCHEMA_ROWSETS schema rowset.
+The requestType option applies only to Discover requests.
+Instead of passing this requestType yourself, consider calling the Xmla.DiscoverSchemaRowsets() method. 
+The Xmla.DiscoverDProperties() method passes DISCOVER_PROPERTIES automatically as requestType for Discover requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_SCHEMA_ROWSETS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_METHOD_DISCOVER">
+                                    <h4><a name="property_METHOD_DISCOVER" property="yui:name">METHOD_DISCOVER</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the method option in the options object passed to the <code>Xmla.request()</code> method to invoke the XML/A Discover method on the server. 
+Instead of explicitly setting the method yourself, consider using the <code>Xmla.discover()</code> method.
+The <code>Xmla.discover()</code> method automatically sets the method option to <code>METHOD_DISCOVER</code>.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Discover
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_METHOD_EXECUTE">
+                                    <h4><a name="property_METHOD_EXECUTE" property="yui:name">METHOD_EXECUTE</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the method option property in the options objecct passed to the <code>Xmla.request()</code> method to invoke the XML/A Execute method on the server. 
+Instead of explicitly setting the method yourself, consider using the Xmla.execute() method.
+The Xmla.execute() method automatically sets the method option to <code>METHOD_EXECUTE</code>.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Discover
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_xmla.html" title="xmla">xmla</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="Xmla.html" title="Xmla">Xmla</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Xmla.js.html" title="Xmla.js">Xmla.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_DISCOVER_DATASOURCES" title="DISCOVER_DATASOURCES">DISCOVER_DATASOURCES</a></li>
+                                <li class=""><a href="#property_DISCOVER_ENUMERATORS" title="DISCOVER_ENUMERATORS">DISCOVER_ENUMERATORS</a></li>
+                                <li class=""><a href="#property_DISCOVER_KEYWORDS" title="DISCOVER_KEYWORDS">DISCOVER_KEYWORDS</a></li>
+                                <li class=""><a href="#property_DISCOVER_PROPERTIES" title="DISCOVER_PROPERTIES">DISCOVER_PROPERTIES</a></li>
+                                <li class=""><a href="#property_DISCOVER_SCHEMA_ROWSETS" title="DISCOVER_SCHEMA_ROWSETS">DISCOVER_SCHEMA_ROWSETS</a></li>
+                                <li class=""><a href="#property_METHOD_DISCOVER" title="METHOD_DISCOVER">METHOD_DISCOVER</a></li>
+                                <li class=""><a href="#property_METHOD_EXECUTE" title="METHOD_EXECUTE">METHOD_EXECUTE</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}];
+</script>
+</body>
+</html>
