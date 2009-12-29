@@ -1,5 +1,10 @@
 /*
     Copyright 2009, Roland Bouman (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/)
+    
+    Note: some portions of the API documentation were adopted from the original XML/A specification. 
+    I believe that this constitutes fair use, 
+    but if you have reason to believe that the documentation violates any copyright, 
+    or is otherwise incompatible with the LGPL license please contact me.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,12 +24,15 @@
 
 var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSOAPenvelope = _soap + "envelope/",
-    _xmlnsIsSOAPenvelope = "xmlns:SOAP-ENV=\"" + _xmlnsSOAPenvelope + "\"",
-    _SOAPencodingStyle = "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"",
+    _xmlnsSOAPenvelopePrefix = "SOAP-ENV",
+    _xmlnsIsSOAPenvelope = "xmlns:" + _xmlnsSOAPenvelopePrefix + "=\"" + _xmlnsSOAPenvelope + "\"",
+    _SOAPencodingStyle = _xmlnsSOAPenvelopePrefix + ":encodingStyle=\"" + _soap + "encoding/\"",
     _ms = "urn:schemas-microsoft-com:",
     _xmlnsXmla = _ms + "xml-analysis",
     _xmlnsIsXmla = "xmlns=\"" + _xmlnsXmla + "\"",
+    _xmlnsSQLPrefix = "sql",
     _xmlnsSQL = _ms + "xml-sql",
+    _xmlnsSchemaPrefix = "xsd", 
     _xmlnsSchema = "http://www.w3.org/2001/XMLSchema",
     _xmlnsRowset = _xmlnsXmla + ":rowset",
     _useAX = window.ActiveXObject? true : false
@@ -116,18 +124,27 @@ function _xmlEncodeListEntry(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-var _getElementsByTagNameNS = function(node, ns, tagName){
+var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
     if (_isFunction(node.getElementsByTagNameNS)){
         return node.getElementsByTagNameNS(ns, tagName);
+    }
+    else    
+    //the clusterfuck below tries to avoid failing fatally due to IE lack of getElementsByTagNameNS
+    if (prefix){        
+        return node.getElementsByTagName(prefix + ":" + tagName);
     }
     else {
         return node.getElementsByTagName(tagName);
     }
 };
 
-var _getAttributeNS = function(element, ns, attributeName){
+var _getAttributeNS = function(element, ns, prefix, attributeName){
     if (_isFunction(element.getAttributeNS)){
         return element.getAttributeNS(ns, attributeName);
+    }
+    else
+    if (prefix) {
+        return element.getAttribute(prefix + ":" + attributeName);
     }
     else {
         return element.getAttribute(attributeName);
@@ -166,8 +183,8 @@ function _getXmlaSoapMessage(
 ){
     var msg = "";
     var method = options.method;
-    msg += "<SOAP-ENV:Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
-    "<SOAP-ENV:Body>" + 
+    msg += "<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
+    "<" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
     "<" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
     var exception = null;
@@ -209,8 +226,8 @@ function _getXmlaSoapMessage(
         throw exception;
     }
     msg += "   </" + method + ">" + 
-        "</SOAP-ENV:Body>" + 
-        "</SOAP-ENV:Envelope>"
+        "</" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+        "</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
     ;
     return msg;
 }
@@ -230,11 +247,14 @@ function _applyProperties(object, properties, overwrite){
 }
 
 /**
+*   <p>
 *   The Xmla class provides a javascript API to communicate XML for Analysis (XML/A) over HTTP.
 *   XML/A is an industry standard protocol that allows webclients to work with OLAP servers.
 *   To fully understand the scope and purpose of this utility, it is highly recommended
 *   to read <a href="http://xmla.org/xmla1.1.doc">the XML/A specification</a> 
-*   (MS Word format. For other formats, see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>). 
+*   (MS Word format. For other formats, 
+*   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>). 
+*   </p>
 *   @class Xmla
 *   @constructor
 *   @param options
@@ -1024,7 +1044,7 @@ Xmla.prototype = {
         var request = obj.request; 
         var method = request.method;
         
-        var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, "Fault");
+        var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, "Fault");
         if (soapFault.length) {
             //TODO: extract error info
             soapFault = soapFault.item(0);
@@ -1049,7 +1069,7 @@ Xmla.prototype = {
         else {        
             switch(method){
                 case Xmla.METHOD_DISCOVER:
-                    var rowset = new Xmla.Rowset(this.responseXML);
+                    var rowset = new Xmla.Rowset(this.responseXML, request.requestType);
                     obj.rowset = rowset;
                     this.response = rowset;
                     this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, obj);
@@ -1234,10 +1254,10 @@ Xmla.prototype = {
 *               A name that identifies this data source.
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *           <td>
-                No
+*               No
 *           </td>
 *       </tr>
 *       <tr>
@@ -1251,10 +1271,10 @@ Xmla.prototype = {
 *               Human readable description of the datasource 
 *           </td>
 *           <td>
-                No
+*               No
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *       </tr>
 *       <tr>
@@ -1268,10 +1288,10 @@ Xmla.prototype = {
 *               URL to use to submit requests to this provider.
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *       </tr>
 *       <tr>
@@ -1285,10 +1305,10 @@ Xmla.prototype = {
 *               Connectstring
 *           </td>
 *           <td>
-                No
+*               No
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *       </tr>
 *       <tr>
@@ -1302,10 +1322,10 @@ Xmla.prototype = {
 *               A name indicating the product providing the XML/A implementation
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *       </tr>
 *       <tr>
@@ -1316,13 +1336,20 @@ Xmla.prototype = {
 *               string[]
 *           </td>
 *           <td>
-*               The kind of data sets supported by this provider.
+*               The kind of data sets supported by this provider. 
+*               The following values are defined by the XML/A specification:
+*               <dl>
+*                   <dt>TDP</dt><dd>tabular data provider.</dd>
+*                   <dt>MDP</dt><dd>multidimensiona data provider.</dd>
+*                   <dt>DMP</dt><dd>data mining provider.</dd>
+*               </dl>
+*               Note: multiple values are possible.
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *           <td>
-                No
+*               No
 *           </td>
 *       </tr>
 *       <tr>
@@ -1333,13 +1360,19 @@ Xmla.prototype = {
 *               string
 *           </td>
 *           <td>
-*               
+*               Type of security offered by the provider
+*               The following values are defined by the XML/A specification:
+*               <dl>
+*                   <dt>Unauthenticated</dt><dd>no user ID or password needs to be sent.</dd>
+*                   <dt>Authenticated</dt><dd>User ID and password must be included in the information required for the connection.</dd>
+*                   <dt>Integrated</dt><dd> the data source uses the underlying security to determine authorization</dd>
+*               </dl>
 *           </td>
 *           <td>
-                Yes
+*               Yes
 *           </td>
 *           <td>
-                No
+*               No
 *           </td>
 *       </tr>
 *   </table>
@@ -1359,10 +1392,74 @@ Xmla.prototype = {
         return this.discover(request);
     },
 /**
+*   Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_PROPERTIES"></a></code> as value for the <code>requestType</code>, 
+*   and retrieves the <code>DISCOVER_PROPERTIES</code> schema rowset. 
+*   This rowset provides information on the properties that are supported by the XML/A provider.
+*   The rowset has the following columns:
+*   <table border="1" class="schema-rowset">
+*       <tr>
+*           <th>Column Name</th>
+*           <th>Type</th>
+*           <th>Description</th>
+*           <th>Restriction</th>
+*           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>
+*               PropertyName
+*           </td>
+*           <td>
+*               string
+*           </td>
+*           <td>
+*               The name of the property
+*           </td>
+*           <td>
+*               Yes (array)
+*           </td>
+*           <td>
+*               No
+*           </td>
+*       </tr>
+*       <tr>
+*           <td>
+*               PropertyDescription
+*           </td>
+*           <td>
+*               string
+*           </td>
+*           <td>
+*               Human readable description of the property
+*           </td>
+*           <td>
+*               No
+*           </td>
+*           <td>
+*               Yes
+*           </td>
+*       </tr>
+*       <tr>
+*           <td>
+*               PropertyType
+*           </td>
+*           <td>
+*               string
+*           </td>
+*           <td>
+*               The property's datatype
+*           </td>
+*           <td>
+*               No
+*           </td>
+*           <td>
+*               Yes
+*           </td>
+*       </tr>
+*   </table>
 *   
-*   @method discoverProperties
-*   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_PROPERTIES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset.
+*   @method discoverDataSources
+*   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. 
 */    
     discoverProperties: function(options){
         var request = _applyProperties(
@@ -1577,7 +1674,7 @@ Xmla.prototype = {
 };
 
 function _getRowSchema(xmlDoc){
-    var types = _getElementsByTagNameNS(xmlDoc, _xmlnsSchema, "complexType"), 
+    var types = _getElementsByTagNameNS(xmlDoc, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"), 
         numTypes = types.length,
         type,
         i;
@@ -1590,8 +1687,17 @@ function _getRowSchema(xmlDoc){
     return null;
 }
 
-Xmla.Rowset = function(node){
-    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, "row");
+/**
+*   This class implements an XML/A Rowset object, which is the result of performing the <code>Discover</code> method (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
+*   
+*   @class Xmla.Rowset
+*   @for Xmla
+*   @constructor
+*   @param node {DOMDocument} The responseXML result returned by server in response to a <code>Discover</code> request. 
+*   @param requestTtype {string} The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.
+*/
+Xmla.Rowset = function (node, requestType){
+    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
     this.numRows = this.rows? this.rows.length : 0;
     this.rowIndex = 0;
     this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
@@ -1600,18 +1706,20 @@ Xmla.Rowset = function(node){
     this._fieldCount = 0;
     var rowSchema = _getRowSchema(node);
     if (rowSchema){    
-        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, "sequence").item(0);
-        var seqChildren = seq.childNodes;
-        var numChildren = seqChildren.length;
-        var seqChild, fieldLabel, fieldName, minOccurs, maxOccurs, type;
+        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
+            seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
+            fieldLabel, fieldName, minOccurs, maxOccurs, type;
         for (var i=0; i<numChildren; i++){
             seqChild = seqChildren.item(i);
             if (seqChild.nodeType!=1) {
                 continue;
             }
-            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, "field");
+            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
             fieldName = seqChild.getAttribute("name");
             type = seqChild.getAttribute("type");
+            if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
+                type = "Restrictions";
+            }
             minOccurs = seqChild.getAttribute("minOccurs");
             maxOccurs = seqChild.getAttribute("maxOccurs");
 
@@ -1639,10 +1747,9 @@ Xmla.Rowset.FETCH_OBJECT = 2;
 *   This class implements an XML/A Rowset object, which is the result of performing the <code>Discover</code> method (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
 *   
 *   @class Xmla.Rowset
-*   @for ClassName
+*   @for Xmla
 */
 Xmla.Rowset.prototype = {
-    node: null,
     _boolConverter: function(val){
         return val==="true"?true:false;
     },
@@ -1655,34 +1762,45 @@ Xmla.Rowset.prototype = {
     _textConverter: function(val){
         return val;
     },
+    _restrictionsConverter: function(val){
+        return val;
+    },
     _arrayConverter: function(nodes, valueConverter){
-// debugger;
         var arr = [],
             numNodes = nodes.length,
             node
         ;
         for (var i=0; i<numNodes; i++){
             node = nodes.item(i);
-            arr.push(node.tagName);
+            arr.push(valueConverter(this._elementText(node)));
         }
         return arr;
     },
     _elementText: function(el){
-        var text = "",
-            childNodes = el.childNodes,
-            numChildNodes = childNodes.length
-        ;
-        for (var i=0; i<numChildNodes; i++){
-            text += childNodes.item(i).data;
+        if (el.innerText) {         //ie
+            return el.innerText;
         }
-        return text;
+        else 
+        if (el.textContent) {       //ff
+            return el.textContent;
+        }
+        else {                      //generic
+            var text = "",
+                childNodes = el.childNodes,
+                numChildNodes = childNodes.length
+            ;
+            for (var i=0; i<numChildNodes; i++){
+                text += childNodes.item(i).data;
+            }
+            return text;
+        }
     },
     _createFieldGetter: function(fieldName, type, minOccurs, maxOccurs){
         if (minOccurs === null){
             minOccurs = "1" ;
         }
         if (maxOccurs === null){
-            maxOccurs = "1";
+            maxOccurs = "1";    
         }
         var me = this;
         var valueConverter = null;        
@@ -1713,40 +1831,45 @@ Xmla.Rowset.prototype = {
             case "xsd:string":
                 valueConverter = me._textConverter;
                 break;
+            case "Restrictions":
+                valueConverter = me._restrictionsConverter;
+                break;
             default:
                 valueConverter = me._textConverter;
                 break;
         }
         var getter;
-        if(minOccurs==="1" && maxOccurs==="1") {
-            getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
-                return valueConverter(me._elementText(els.item(0)));
-            };
-        }
-        else 
-        if(minOccurs==="0" && maxOccurs==="1") {
-            getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
-                if (!els.length) {
-                    return null;
-                }
-                else {
+        if (maxOccurs==="1") {
+            if(minOccurs==="1") {
+                getter = function(){
+                    var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
                     return valueConverter(me._elementText(els.item(0)));
-                }
-            };
+                };
+            }
+            else 
+            if(minOccurs==="0") {
+                getter = function(){
+                    var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
+                    if (!els.length) {
+                        return null;
+                    }
+                    else {
+                        return valueConverter(me._elementText(els.item(0)));
+                    }
+                };
+            }
         }
         else 
-        if(minOccurs==="1" && (maxOccurs==="unbounded" || parseInt(maxOccurs, 10)>1)) {
+        if(minOccurs==="1") {
             getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
                 return me._arrayConverter(els, valueConverter);
             };
         }
         else 
-        if(minOccurs==="0" && (maxOccurs==="unbounded" || parseInt(maxOccurs, 10)>1)) {
+        if(minOccurs==="0") {
             getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
                 if (!els.length) {
                     return null;
                 }
@@ -1757,6 +1880,22 @@ Xmla.Rowset.prototype = {
         }
         return getter;
     },
+/**
+*   Retrieve the collection of fieldDef objects for this rowset.
+*   A fieldDef describes a field (column). It has the following properties:
+*   <dl>
+*       <dt>name</dt><dd>string. This is the (possibly escaped) name of the field as it appears in the XML document</dd>
+*       <dt>label</dt><dd>string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions</dd>
+*       <dt>index</dt><dd>int. The ordinal position of this field. Fields are numbered starting from 0.</dd>
+*       <dt>type</dt><dd>string. The name of the XML data type for the values that appear in this column</dd>
+*       <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. "0" means the field is optional.</dd>
+*       <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. "unbounded" means there is no declared limit.</dd>
+*       <dt>getter</dt><dd>function. This function is used to extract a value from the XML document for this field.</dd>
+*   </dl>
+*
+*   @method getFields
+*   @return {fieldDef[]} An (ordered) array of field definition objects. 
+*/    
     getFields: function(){
         var f = [], 
             fieldCount = this._fieldCount,
@@ -1767,6 +1906,20 @@ Xmla.Rowset.prototype = {
         }
         return f;
     },
+/**
+*   Indicates wheter the rowset that can be traversed.
+*   You can use this method together with the 
+*   <code><a href="#method_next">next()</a></code> method
+*   to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
+    <pre>
+&nbsp;while(rowset.hasMoreRows()){
+&nbsp;    ...process row...
+&nbsp;    rowsete.next();
+&nbsp;}
+    </pre>
+*   @method hasMoreRows
+*   @return {bool} true in case there are more rows to traverse. false if all rows have been traversed.
+*/    
     hasMoreRows: function(){
         return this.numRows > this.rowIndex;
     },
@@ -1799,6 +1952,7 @@ Xmla.Rowset.prototype = {
     },
     close: function(){
         this.row = null;
+        this.rows = null;
     },
     fetchAsArray: function(){
         var array, fields, fieldName, fieldDef;
