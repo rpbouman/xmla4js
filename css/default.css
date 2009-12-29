@@ -1,3 +1,10 @@
 body {
     font-family: Arial, sans;
 }
+
+h1 {
+    background-image: url(xmla4js_logo80x58.png);
+    background-repeat:no-repeat;
+    padding-left: 90px;
+    height: 70px;
+}

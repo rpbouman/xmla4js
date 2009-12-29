@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla   Xmla.js  (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262099886.77" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262099886.77" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262129882.47" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262129882.47" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262099886.77"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262099886.77"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262129882.47"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262129882.47"></script>
 </head>
 
 <body id="yahoo-com">
@@ -1086,7 +1086,13 @@
             <span class="nx">ajaxOptions</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">password</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+        <span class="p">}</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">response</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">responseText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">responseXml</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        
         <span class="k">if</span>  <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_REQUEST</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
                 <span class="p">(</span>
                     <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">method</span> <span class="o">==</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER</span><span class="p">,</span> <span class="nx">options</span><span class="p">))</span> <span class="o">||</span> 
@@ -1170,18 +1176,23 @@
 <span class="cm">*           &lt;code&gt;properties&lt;/code&gt; {Object} XML/A properties. </span>
 <span class="cm">*           The list of all valid properties can be obtained from the &lt;code&gt;DISCOVER_PROPERTIES&lt;/code&gt; schema rowset </span>
 <span class="cm">*           (see &lt;code&gt;&lt;a href=&quot;#method_discoverProperties()&quot;&gt;discoverProperties()&lt;/a&gt;&lt;/code&gt;). </span>
-<span class="cm">*           The &lt;code&gt;execute()&lt;/code&gt; requires two properties:&lt;dl&gt;</span>
+<span class="cm">*           Typically, &lt;code&gt;execute()&lt;/code&gt; requires these properties:&lt;dl&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;DataSourceInfo&lt;/code&gt; property&lt;/dt&gt;</span>
 <span class="cm">*               &lt;dd&gt;Identifies a data source managed by the XML/A server.</span>
+<span class="cm">*                   To specify this property, you can use the static final constant</span>
+<span class="cm">*                   &lt;code&gt;&lt;a href=&quot;#property_PROP_DATASOURCEINFO&quot;&gt;PROP_DATASOURCEINFO&lt;/a&gt;&lt;/code&gt;</span>
+<span class="cm">*                   as key in the &lt;code&gt;properties&lt;/code&gt; object of the &lt;code&gt;options&lt;/code&gt; object passed to the &lt;code&gt;execute()&lt;/code&gt; method.</span>
 <span class="cm">*                   Valid values for this property should be obtained from the &lt;code&gt;DataSourceInfo&lt;/code&gt; column </span>
 <span class="cm">*                   of the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset (see: &lt;code&gt;&lt;a href=&quot;#method_discoverDataSources&quot;&gt;discoverDataSources()&lt;/a&gt;&lt;/code&gt;).</span>
 <span class="cm">*                   Note that the values for the &lt;code&gt;DataSourceInfo&lt;/code&gt; property and the &lt;code&gt;url&lt;/code&gt; must both be taken from the same row of the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset.</span>
 <span class="cm">*               &lt;/dd&gt;</span>
-<span class="cm">*               &lt;dt&gt;&lt;code&gt;DataSourceInfo&lt;/code&gt; property&lt;/dt&gt;</span>
-<span class="cm">*               &lt;dd&gt;Identifies a data source managed by the XML/A server.</span>
-<span class="cm">*                   Valid values for this property should be obtained from the &lt;code&gt;DataSourceInfo&lt;/code&gt; column </span>
-<span class="cm">*                   of the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset (see: &lt;code&gt;&lt;a href=&quot;#method_discoverDataSources&quot;&gt;discoverDataSources()&lt;/a&gt;&lt;/code&gt;).</span>
-<span class="cm">*                   Note that the values for the &lt;code&gt;DataSourceInfo&lt;/code&gt; property and the &lt;code&gt;url&lt;/code&gt; must both be taken from the same row of the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset.</span>
+<span class="cm">*               &lt;dt&gt;&lt;code&gt;Catalog&lt;/code&gt; property&lt;/dt&gt;</span>
+<span class="cm">*               &lt;dd&gt;Identifies a catalog applicable for the datasource.</span>
+<span class="cm">*                   To specify this property, you can use the static final constant</span>
+<span class="cm">*                   &lt;code&gt;&lt;a href=&quot;#property_PROP_CATALOG&quot;&gt;PROP_CATALOG&lt;/a&gt;&lt;/code&gt;</span>
+<span class="cm">*                   as key in the &lt;code&gt;properties&lt;/code&gt; object of the &lt;code&gt;options&lt;/code&gt; object passed to the &lt;code&gt;execute()&lt;/code&gt; method.</span>
+<span class="cm">*                   Valid values for this property should be obtained from the &lt;code&gt;CATALOG_NAME&lt;/code&gt; column </span>
+<span class="cm">*                   of the &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; schema rowset (see: &lt;code&gt;&lt;a href=&quot;#method_discoverDBCatalogs&quot;&gt;discoverDBCatalogs()&lt;/a&gt;&lt;/code&gt;).</span>
 <span class="cm">*               &lt;/dd&gt;</span>
 <span class="cm">*           &lt;/dl&gt;</span>
 <span class="cm">*       &lt;/li&gt;</span>
@@ -1284,7 +1295,7 @@
 <span class="cm">*   or one of the specialized &lt;code&gt;discoverXXX()&lt;/code&gt; methods to obtain a particular schema rowset.</span>
 <span class="cm">*   @method discover</span>
 <span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A &lt;code&gt;Discover&lt;/code&gt; request. </span>
-<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the requested schema rowset.</span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discover</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>        
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
@@ -1444,7 +1455,7 @@
 <span class="cm">*   </span>
 <span class="cm">*   @method discoverDataSources</span>
 <span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
-<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverDataSources</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
@@ -1511,7 +1522,63 @@
 <span class="cm">*               string</span>
 <span class="cm">*           &lt;/td&gt;</span>
 <span class="cm">*           &lt;td&gt;</span>
-<span class="cm">*               The property&#39;s datatype</span>
+<span class="cm">*               The property&#39;s datatype (as an XML Schema data type)</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               No</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               Yes</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               PropertyAccessType</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               string</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               How the property may be accessed. Values defined by the XML/A spec are:</span>
+<span class="cm">*               &lt;ul&gt;</span>
+<span class="cm">*                   &lt;li&gt;Read&lt;/li&gt;</span>
+<span class="cm">*                   &lt;li&gt;Write&lt;/li&gt;</span>
+<span class="cm">*                   &lt;li&gt;ReadWrite&lt;/li&gt;</span>
+<span class="cm">*               &lt;/ul&gt;</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               No</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               No</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               IsRequired</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               boolean</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               &lt;code&gt;true&lt;/code&gt; if the property is required, &lt;code&gt;false&lt;/code&gt; if not.</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               No</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               Yes</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               Value</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               string</span>
+<span class="cm">*           &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*               The property&#39;s current value.</span>
 <span class="cm">*           &lt;/td&gt;</span>
 <span class="cm">*           &lt;td&gt;</span>
 <span class="cm">*               No</span>
@@ -1524,7 +1591,7 @@
 <span class="cm">*   </span>
 <span class="cm">*   @method discoverProperties</span>
 <span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
-<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverProperties</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
@@ -1536,6 +1603,46 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using &lt;code&gt;&lt;a href=&quot;#property_DISCOVER_SCHEMA_ROWSETS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   This rowset lists all possible request types supported by this provider.</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;SchemaName&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The requestType. &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;Restrictions&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;array&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;A list of columns that may be used to filter the schema rowset.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;Description&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;A human readable description of the schema rowset that is returned when using this requestType&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*</span>
+<span class="cm">*   @method discoverSchemaRowsets</span>
+<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>    
     <span class="nx">discoverSchemaRowsets</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
            <span class="nx">options</span><span class="p">,</span>
@@ -1546,6 +1653,67 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using &lt;code&gt;&lt;a href=&quot;#property_DISCOVER_ENUMERATORS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   This rowset lists the names, data types, and enumeration values of enumerators supported by the XMLA Provider for a specific data source.</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;EnumName&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the enumerator. &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes (array)&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;EnumDescription&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;A human readable description of the enumerator&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;EnumType&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The XML Schema data type of this enumerator&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;ElementName&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The name of the enumerator entry&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;ElementDescription&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;A human readable description of this enumerator entry&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;ElementValue&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The value of this enumerator entry&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*</span>
+<span class="cm">*   @method discoverEnumerators</span>
+<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>    
     <span class="nx">discoverEnumerators</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1556,6 +1724,32 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using &lt;code&gt;&lt;a href=&quot;#property_DISCOVER_KEYWORDS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DISCOVER_KEYWORDS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   This rowset is a list of reserved words for this XML/A provider.</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;Keyword&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the enumerator. &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes (array)&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*</span>
+<span class="cm">*   @method discoverKeywords</span>
+<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_KEYWORDS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>    
     <span class="nx">discoverKeywords</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1566,6 +1760,60 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using &lt;code&gt;&lt;a href=&quot;#property_DISCOVER_LITERALS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   This rowset is a list of reserved words for this XML/A provider.</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LiteralName&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the literal. &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes (array)&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LiteralValue&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The actual literal value. &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LiteralInvalidChars&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Characters that may not appear in the literal &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LiteralInvalidStartingChars&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Characters that may not appear as first character in the literal &lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LiteralMaxLength&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;int&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;maximum number of characters for this literal, or -1 in case there is no maximum, or the maximum is unknown&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*</span>
+<span class="cm">*   @method discoverLiterals</span>
+<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>    
     <span class="nx">discoverLiterals</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1753,7 +2001,19 @@
 <span class="p">}</span>
 
 <span class="cm">/**</span>
-<span class="cm">*   This class implements an XML/A Rowset object, which is the result of performing the &lt;code&gt;Discover&lt;/code&gt; method (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   &lt;p&gt;</span>
+<span class="cm">*   This class implements an XML/A Rowset object.</span>
+<span class="cm">*   &lt;/p&gt;</span>
+<span class="cm">*   &lt;p&gt;</span>
+<span class="cm">*   You do not need to instantiate objects of this class yourself. </span>
+<span class="cm">*   Rather, the &lt;code&gt;&lt;a href=&quot;Xmla.html#class_Xmla&quot;&gt;Xmla&lt;/a&gt;&lt;/code&gt; class will instantiate this class to convey the result of any of the various &lt;code&gt;discoverXXX()&lt;/code&gt; methods</span>
+<span class="cm">*   (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   &lt;/p&gt;</span>
+<span class="cm">*   &lt;p&gt;</span>
+<span class="cm">*   The &lt;code&gt;discoverXXX()&lt;/code&gt; methods return the &lt;code&gt;Xmla.Rowset&lt;/code&gt; instance when doing a synchronous request. </span>
+<span class="cm">*   In addition, the rowset is available in the eventdata passed to any registered listeners</span>
+<span class="cm">*   (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   &lt;/p&gt;</span>
 <span class="cm">*   </span>
 <span class="cm">*   @class Xmla.Rowset</span>
 <span class="cm">*   @constructor</span>
@@ -1803,9 +2063,6 @@
         <span class="k">throw</span> <span class="s2">&quot;Couldn&#39;t parse XML schema while constructing resultset&quot;</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">};</span>
-
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">FETCH_ARRAY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">FETCH_OBJECT</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">_boolConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
@@ -1939,20 +2196,12 @@
         <span class="k">return</span> <span class="nx">getter</span><span class="p">;</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
-<span class="cm">*   Retrieve the collection of fieldDef objects for this rowset.</span>
-<span class="cm">*   A fieldDef describes a field (column). It has the following properties:</span>
-<span class="cm">*   &lt;dl&gt;</span>
-<span class="cm">*       &lt;dt&gt;name&lt;/dt&gt;&lt;dd&gt;string. This is the (possibly escaped) name of the field as it appears in the XML document&lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;label&lt;/dt&gt;&lt;dd&gt;string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions&lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;index&lt;/dt&gt;&lt;dd&gt;int. The ordinal position of this field. Fields are numbered starting from 0.&lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;type&lt;/dt&gt;&lt;dd&gt;string. The name of the XML data type for the values that appear in this column&lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;minOccurs&lt;/dt&gt;&lt;dd&gt;string. The minimal number of occurrences of a value. &quot;0&quot; means the field is optional.&lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;maxOccurs&lt;/dt&gt;&lt;dd&gt;string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. &quot;unbounded&quot; means there is no declared limit.&lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;getter&lt;/dt&gt;&lt;dd&gt;function. This function is used to extract a value from the XML document for this field.&lt;/dd&gt;</span>
-<span class="cm">*   &lt;/dl&gt;</span>
+<span class="cm">*   Retrieve an array of &lt;code&gt;fieldDef&lt;/code&gt; objects that describes the fields of the rows in this rowset.</span>
+<span class="cm">*   For a description of the &lt;code&gt;fieldDef&lt;/code&gt; object, see the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fieldDef&quot;&gt;fieldDef()&lt;/a&gt;&lt;/code&gt; method.</span>
 <span class="cm">*</span>
 <span class="cm">*   @method getFields</span>
-<span class="cm">*   @return {fieldDef[]} An (ordered) array of field definition objects. </span>
+<span class="cm">*   @return fieldDef[] An (ordered) array of field definition objects. </span>
 <span class="cm">*/</span>    
     <span class="nx">getFields</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">[],</span> 
@@ -1981,9 +2230,33 @@
     <span class="nx">hasMoreRows</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Moves the internal row index to the next row.</span>
+<span class="cm">*   You can use this method together with the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_next&quot;&gt;hasMoreRows()&lt;/a&gt;&lt;/code&gt; method</span>
+<span class="cm">*   to drive a &lt;code&gt;while&lt;/code&gt; loop to traverse all rows in the rowset.</span>
+<span class="cm">*</span>
+<span class="cm">*   @method next</span>
+<span class="cm">*/</span>    
     <span class="nx">next</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="o">++</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Retrieves a &lt;code&gt;fieldDef&lt;/code&gt; object by name.</span>
+<span class="cm">*   A fieldDef describes a field (column). It has the following properties:</span>
+<span class="cm">*   &lt;dl&gt;</span>
+<span class="cm">*       &lt;dt&gt;label&lt;/dt&gt;&lt;dd&gt;string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions. This is also the name used for matching againstt the &lt;code&gt;name&lt;/code&gt; argument passed to the &lt;code&gt;fieldDef()&lt;/code&gt; method.&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;name&lt;/dt&gt;&lt;dd&gt;string. This is the (possibly escaped) name of the field as it appears in the XML document&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;index&lt;/dt&gt;&lt;dd&gt;int. The ordinal position of this field. Fields are numbered starting from 0.&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;type&lt;/dt&gt;&lt;dd&gt;string. The name of the XML data type for the values that appear in this column&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;minOccurs&lt;/dt&gt;&lt;dd&gt;string. The minimal number of occurrences of a value. &quot;0&quot; means the field is optional.&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;maxOccurs&lt;/dt&gt;&lt;dd&gt;string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. &quot;unbounded&quot; means there is no declared limit.&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;getter&lt;/dt&gt;&lt;dd&gt;function. This function is used to extract a value from the XML document for this field.&lt;/dd&gt;</span>
+<span class="cm">*   &lt;/dl&gt;</span>
+<span class="cm">*   @method fieldDef</span>
+<span class="cm">*   @param {string} name The name of the field to retrieve.</span>
+<span class="cm">*   @return {fieldDef} The &lt;code&gt;fieldDef&lt;/code&gt; object that matches the argument.</span>
+<span class="cm">*/</span>    
     <span class="nx">fieldDef</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">field</span><span class="p">)){</span>
@@ -1991,13 +2264,33 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">field</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Retrieves the index of a field by name.</span>
+<span class="cm">*   Field indexes start at 0.</span>
+<span class="cm">*   @method fieldIndex</span>
+<span class="cm">*   @param {string} name The name of the field for which you want to retrieve the index.</span>
+<span class="cm">*   @return {int} The ordinal position (starting at 0) of the field that matches the argument.</span>
+<span class="cm">*/</span>    
     <span class="nx">fieldIndex</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">fieldDef</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldDef</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
         <span class="k">return</span> <span class="nx">fieldDef</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Retrieves the name of a field by field Index.</span>
+<span class="cm">*   Field indexes start at 0.</span>
+<span class="cm">*   @method fieldName</span>
+<span class="cm">*   @param {string} name The name of the field for which you want to retrieve the index.</span>
+<span class="cm">*   @return {int} The ordinal position (starting at 0) of the field that matches the argument.</span>
+<span class="cm">*/</span>    
     <span class="nx">fieldName</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">){</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Retrieves a value from the current row for the field having the name specified by the argument.</span>
+<span class="cm">*   @method fieldVal</span>
+<span class="cm">*   @param {string} name The name of the field for which you want to retrieve the value.</span>
+<span class="cm">*   @return {array|boolean|float|int|string} From the current row, the value of the field that matches the argument.</span>
+<span class="cm">*/</span>    
     <span class="nx">fieldVal</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isNumber</span><span class="p">(</span><span class="nx">name</span><span class="p">)){</span>
             <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldName</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
@@ -2005,13 +2298,28 @@
         <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldDef</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
         <span class="k">return</span> <span class="nx">field</span><span class="p">.</span><span class="nx">getter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Returns the number of fields in this rowset.</span>
+<span class="cm">*   @method fieldCount</span>
+<span class="cm">*   @return {int} The number of fields in this rowset.</span>
+<span class="cm">*/</span>    
     <span class="nx">fieldCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Releases references to the DomDocument passed to the Rowset constructor.</span>
+<span class="cm">*   This should facilitate automatic garbage collection by the browser.</span>
+<span class="cm">*   @method close</span>
+<span class="cm">*/</span>    
     <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch all values from all fields from the current row, and return it in an array.</span>
+<span class="cm">*   @method fetchAsArray </span>
+<span class="cm">*   @return {array}</span>
+<span class="cm">*/</span>    
     <span class="nx">fetchAsArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">array</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">fieldDef</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="p">{</span>
@@ -2029,6 +2337,12 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">array</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch all values from all fields from the current row, and return it in an Object literal.</span>
+<span class="cm">*   The property names of the returned object correspond to the fieldName (actually the fieldLabel), and the field value is assigned to its respective property.</span>
+<span class="cm">*   @method fetchAsObject </span>
+<span class="cm">*   @return {Object}</span>
+<span class="cm">*/</span>    
     <span class="nx">fetchAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">object</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">fieldDef</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">()){</span>
@@ -2046,6 +2360,12 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch all values from all fields from all rows, and return it as an array of arrays.</span>
+<span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchAsArray&quot;&gt;fetchAsArray()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method fetchAllAsArray </span>
+<span class="cm">*   @return array[]</span>
+<span class="cm">*/</span>    
     <span class="nx">fetchAllAsArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsArray</span><span class="p">())){</span>
@@ -2053,6 +2373,12 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">rows</span><span class="p">;</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch all values from all fields from all rows, and return it as an array of objects.</span>
+<span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchAsObject&quot;&gt;fetchAsObject()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method fetchAllAsObject </span>
+<span class="cm">*   @return array[]</span>
+<span class="cm">*/</span>    
     <span class="nx">fetchAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsObject</span><span class="p">())){</span>
@@ -2106,7 +2432,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.Rowset.html#method_close", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "close"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_fetchAllAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAllAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsObject"}, {"url": "Xmla.Rowset.html#method_fetchAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsObject"}, {"url": "Xmla.Rowset.html#method_fieldCount", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldCount"}, {"url": "Xmla.Rowset.html#method_fieldDef", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldDef"}, {"url": "Xmla.Rowset.html#method_fieldIndex", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldIndex"}, {"url": "Xmla.Rowset.html#method_fieldName", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldName"}, {"url": "Xmla.Rowset.html#method_fieldVal", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldVal"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.Rowset.html#method_next", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "next"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
 </script>
 </body>
 </html>

@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262099886.77" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262099886.77" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262129882.47" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262129882.47" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262099886.77"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262099886.77"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262129882.47"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262129882.47"></script>
 </head>
 
 <body id="yahoo-com">
@@ -1005,7 +1005,7 @@ or one of the specialized <code>discoverXXX()</code> methods to obtain a particu
                                                     <code property="yui:return">
                                                         Xmla.Rowset
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset.</dd>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
                                                 </dl>
 
 
@@ -1199,7 +1199,280 @@ No
                                                     <code property="yui:return">
                                                         Xmla.Rowset
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset.</dd>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverEnumerators">
+                                    <h4>
+                                        <a name="method_discoverEnumerators">discoverEnumerators</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverEnumerators</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_ENUMERATORS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DISCOVER_ENUMERATORS</code> schema rowset. 
+This rowset lists the names, data types, and enumeration values of enumerators supported by the XMLA Provider for a specific data source.
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+<tr>
+<td>EnumName</td>
+<td>string</td>
+<td>Name of the enumerator. </td>
+<td>Yes (array)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>EnumDescription</td>
+<td>string</td>
+<td>A human readable description of the enumerator</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>EnumType</td>
+<td>string</td>
+<td>The XML Schema data type of this enumerator</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ElementName</td>
+<td>string</td>
+<td>The name of the enumerator entry</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ElementDescription</td>
+<td>string</td>
+<td>A human readable description of this enumerator entry</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>ElementValue</td>
+<td>string</td>
+<td>The value of this enumerator entry</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_ENUMERATORS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverKeywords">
+                                    <h4>
+                                        <a name="method_discoverKeywords">discoverKeywords</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverKeywords</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_KEYWORDS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DISCOVER_KEYWORDS</code> schema rowset. 
+This rowset is a list of reserved words for this XML/A provider.
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+<tr>
+<td>Keyword</td>
+<td>string</td>
+<td>Name of the enumerator. </td>
+<td>Yes (array)</td>
+<td>No</td>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_KEYWORDS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverLiterals">
+                                    <h4>
+                                        <a name="method_discoverLiterals">discoverLiterals</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverLiterals</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_LITERALS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DISCOVER_LITERALS</code> schema rowset. 
+This rowset is a list of reserved words for this XML/A provider.
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+<tr>
+<td>LiteralName</td>
+<td>string</td>
+<td>Name of the literal. </td>
+<td>Yes (array)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>LiteralValue</td>
+<td>string</td>
+<td>The actual literal value. </td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LiteralInvalidChars</td>
+<td>string</td>
+<td>Characters that may not appear in the literal </td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LiteralInvalidStartingChars</td>
+<td>string</td>
+<td>Characters that may not appear as first character in the literal </td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LiteralMaxLength</td>
+<td>int</td>
+<td>maximum number of characters for this literal, or -1 in case there is no maximum, or the maximum is unknown</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_LITERALS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
                                                 </dl>
 
 
@@ -1284,7 +1557,63 @@ PropertyType
 string
 </td>
 <td>
-The property's datatype
+The property's datatype (as an XML Schema data type)
+</td>
+<td>
+No
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+PropertyAccessType
+</td>
+<td>
+string
+</td>
+<td>
+How the property may be accessed. Values defined by the XML/A spec are:
+<ul>
+<li>Read</li>
+<li>Write</li>
+<li>ReadWrite</li>
+</ul>
+</td>
+<td>
+No
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>
+IsRequired
+</td>
+<td>
+boolean
+</td>
+<td>
+<code>true</code> if the property is required, <code>false</code> if not.
+</td>
+<td>
+No
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+Value
+</td>
+<td>
+string
+</td>
+<td>
+The property's current value.
 </td>
 <td>
 No
@@ -1313,7 +1642,91 @@ Yes
                                                     <code property="yui:return">
                                                         Xmla.Rowset
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset.</dd>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverSchemaRowsets">
+                                    <h4>
+                                        <a name="method_discoverSchemaRowsets">discoverSchemaRowsets</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverSchemaRowsets</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_SCHEMA_ROWSETS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset. 
+This rowset lists all possible request types supported by this provider.
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+<tr>
+<td>SchemaName</td>
+<td>string</td>
+<td>The requestType. </td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Restrictions</td>
+<td>array</td>
+<td>A list of columns that may be used to filter the schema rowset.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>string</td>
+<td>A human readable description of the schema rowset that is returned when using this requestType</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_SCHEMA_ROWSETS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
                                                 </dl>
 
 
@@ -1356,18 +1769,23 @@ This should be a value obtained from the <code>URL</code> column of the <code>DI
 <code>properties</code> {Object} XML/A properties. 
 The list of all valid properties can be obtained from the <code>DISCOVER_PROPERTIES</code> schema rowset 
 (see <code><a href="#method_discoverProperties()">discoverProperties()</a></code>). 
-The <code>execute()</code> requires two properties:<dl>
+Typically, <code>execute()</code> requires these properties:<dl>
 <dt><code>DataSourceInfo</code> property</dt>
 <dd>Identifies a data source managed by the XML/A server.
+To specify this property, you can use the static final constant
+<code><a href="#property_PROP_DATASOURCEINFO">PROP_DATASOURCEINFO</a></code>
+as key in the <code>properties</code> object of the <code>options</code> object passed to the <code>execute()</code> method.
 Valid values for this property should be obtained from the <code>DataSourceInfo</code> column 
 of the <code>DISCOVER_DATASOURCES</code> schema rowset (see: <code><a href="#method_discoverDataSources">discoverDataSources()</a></code>).
 Note that the values for the <code>DataSourceInfo</code> property and the <code>url</code> must both be taken from the same row of the <code>DISCOVER_DATASOURCES</code> schema rowset.
 </dd>
-<dt><code>DataSourceInfo</code> property</dt>
-<dd>Identifies a data source managed by the XML/A server.
-Valid values for this property should be obtained from the <code>DataSourceInfo</code> column 
-of the <code>DISCOVER_DATASOURCES</code> schema rowset (see: <code><a href="#method_discoverDataSources">discoverDataSources()</a></code>).
-Note that the values for the <code>DataSourceInfo</code> property and the <code>url</code> must both be taken from the same row of the <code>DISCOVER_DATASOURCES</code> schema rowset.
+<dt><code>Catalog</code> property</dt>
+<dd>Identifies a catalog applicable for the datasource.
+To specify this property, you can use the static final constant
+<code><a href="#property_PROP_CATALOG">PROP_CATALOG</a></code>
+as key in the <code>properties</code> object of the <code>options</code> object passed to the <code>execute()</code> method.
+Valid values for this property should be obtained from the <code>CATALOG_NAME</code> column 
+of the <code>DBSCHEMA_CATALOGS</code> schema rowset (see: <code><a href="#method_discoverDBCatalogs">discoverDBCatalogs()</a></code>).
 </dd>
 </dl>
 </li>
@@ -1611,7 +2029,11 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
                                 <li class=""><a href="#method_discover" title="discover">discover</a></li>
                                 <li class=""><a href="#method_discoverDataSources" title="discoverDataSources">discoverDataSources</a></li>
+                                <li class=""><a href="#method_discoverEnumerators" title="discoverEnumerators">discoverEnumerators</a></li>
+                                <li class=""><a href="#method_discoverKeywords" title="discoverKeywords">discoverKeywords</a></li>
+                                <li class=""><a href="#method_discoverLiterals" title="discoverLiterals">discoverLiterals</a></li>
                                 <li class=""><a href="#method_discoverProperties" title="discoverProperties">discoverProperties</a></li>
+                                <li class=""><a href="#method_discoverSchemaRowsets" title="discoverSchemaRowsets">discoverSchemaRowsets</a></li>
                                 <li class=""><a href="#method_execute" title="execute">execute</a></li>
                                 <li class=""><a href="#method_request" title="request">request</a></li>
                         </ul>
@@ -1629,7 +2051,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
 </script>
 </body>
 </html>

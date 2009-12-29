@@ -24,12 +24,15 @@
 
 var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSOAPenvelope = _soap + "envelope/",
-    _xmlnsIsSOAPenvelope = "xmlns:SOAP-ENV=\"" + _xmlnsSOAPenvelope + "\"",
-    _SOAPencodingStyle = "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"",
+    _xmlnsSOAPenvelopePrefix = "SOAP-ENV",
+    _xmlnsIsSOAPenvelope = "xmlns:" + _xmlnsSOAPenvelopePrefix + "=\"" + _xmlnsSOAPenvelope + "\"",
+    _SOAPencodingStyle = _xmlnsSOAPenvelopePrefix + ":encodingStyle=\"" + _soap + "encoding/\"",
     _ms = "urn:schemas-microsoft-com:",
     _xmlnsXmla = _ms + "xml-analysis",
     _xmlnsIsXmla = "xmlns=\"" + _xmlnsXmla + "\"",
+    _xmlnsSQLPrefix = "sql",
     _xmlnsSQL = _ms + "xml-sql",
+    _xmlnsSchemaPrefix = "xsd", 
     _xmlnsSchema = "http://www.w3.org/2001/XMLSchema",
     _xmlnsRowset = _xmlnsXmla + ":rowset",
     _useAX = window.ActiveXObject? true : false
@@ -121,18 +124,27 @@ function _xmlEncodeListEntry(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-var _getElementsByTagNameNS = function(node, ns, tagName){
+var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
     if (_isFunction(node.getElementsByTagNameNS)){
         return node.getElementsByTagNameNS(ns, tagName);
+    }
+    else    
+    //the clusterfuck below tries to avoid failing fatally due to IE lack of getElementsByTagNameNS
+    if (prefix){        
+        return node.getElementsByTagName(prefix + ":" + tagName);
     }
     else {
         return node.getElementsByTagName(tagName);
     }
 };
 
-var _getAttributeNS = function(element, ns, attributeName){
+var _getAttributeNS = function(element, ns, prefix, attributeName){
     if (_isFunction(element.getAttributeNS)){
         return element.getAttributeNS(ns, attributeName);
+    }
+    else
+    if (prefix) {
+        return element.getAttribute(prefix + ":" + attributeName);
     }
     else {
         return element.getAttribute(attributeName);
@@ -171,8 +183,8 @@ function _getXmlaSoapMessage(
 ){
     var msg = "";
     var method = options.method;
-    msg += "<SOAP-ENV:Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
-    "<SOAP-ENV:Body>" + 
+    msg += "<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
+    "<" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
     "<" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
     var exception = null;
@@ -214,8 +226,8 @@ function _getXmlaSoapMessage(
         throw exception;
     }
     msg += "   </" + method + ">" + 
-        "</SOAP-ENV:Body>" + 
-        "</SOAP-ENV:Envelope>"
+        "</" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+        "</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
     ;
     return msg;
 }
@@ -1009,7 +1021,13 @@ Xmla.prototype = {
             ajaxOptions.password = options.password;
         }
 
+        if (this.response){
+            this.response.close();
+        }
         this.response = null;
+        this.responseText = null;
+        this.responseXml = null;
+        
         if  (this._fireEvent(Xmla.EVENT_REQUEST, options, true) &&
                 (
                     (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) || 
@@ -1032,7 +1050,7 @@ Xmla.prototype = {
         var request = obj.request; 
         var method = request.method;
         
-        var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, "Fault");
+        var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, "Fault");
         if (soapFault.length) {
             //TODO: extract error info
             soapFault = soapFault.item(0);
@@ -1057,7 +1075,7 @@ Xmla.prototype = {
         else {        
             switch(method){
                 case Xmla.METHOD_DISCOVER:
-                    var rowset = new Xmla.Rowset(this.responseXML);
+                    var rowset = new Xmla.Rowset(this.responseXML, request.requestType);
                     obj.rowset = rowset;
                     this.response = rowset;
                     this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, obj);
@@ -1093,18 +1111,23 @@ Xmla.prototype = {
 *           <code>properties</code> {Object} XML/A properties. 
 *           The list of all valid properties can be obtained from the <code>DISCOVER_PROPERTIES</code> schema rowset 
 *           (see <code><a href="#method_discoverProperties()">discoverProperties()</a></code>). 
-*           The <code>execute()</code> requires two properties:<dl>
+*           Typically, <code>execute()</code> requires these properties:<dl>
 *               <dt><code>DataSourceInfo</code> property</dt>
 *               <dd>Identifies a data source managed by the XML/A server.
+*                   To specify this property, you can use the static final constant
+*                   <code><a href="#property_PROP_DATASOURCEINFO">PROP_DATASOURCEINFO</a></code>
+*                   as key in the <code>properties</code> object of the <code>options</code> object passed to the <code>execute()</code> method.
 *                   Valid values for this property should be obtained from the <code>DataSourceInfo</code> column 
 *                   of the <code>DISCOVER_DATASOURCES</code> schema rowset (see: <code><a href="#method_discoverDataSources">discoverDataSources()</a></code>).
 *                   Note that the values for the <code>DataSourceInfo</code> property and the <code>url</code> must both be taken from the same row of the <code>DISCOVER_DATASOURCES</code> schema rowset.
 *               </dd>
-*               <dt><code>DataSourceInfo</code> property</dt>
-*               <dd>Identifies a data source managed by the XML/A server.
-*                   Valid values for this property should be obtained from the <code>DataSourceInfo</code> column 
-*                   of the <code>DISCOVER_DATASOURCES</code> schema rowset (see: <code><a href="#method_discoverDataSources">discoverDataSources()</a></code>).
-*                   Note that the values for the <code>DataSourceInfo</code> property and the <code>url</code> must both be taken from the same row of the <code>DISCOVER_DATASOURCES</code> schema rowset.
+*               <dt><code>Catalog</code> property</dt>
+*               <dd>Identifies a catalog applicable for the datasource.
+*                   To specify this property, you can use the static final constant
+*                   <code><a href="#property_PROP_CATALOG">PROP_CATALOG</a></code>
+*                   as key in the <code>properties</code> object of the <code>options</code> object passed to the <code>execute()</code> method.
+*                   Valid values for this property should be obtained from the <code>CATALOG_NAME</code> column 
+*                   of the <code>DBSCHEMA_CATALOGS</code> schema rowset (see: <code><a href="#method_discoverDBCatalogs">discoverDBCatalogs()</a></code>).
 *               </dd>
 *           </dl>
 *       </li>
@@ -1207,7 +1230,7 @@ Xmla.prototype = {
 *   or one of the specialized <code>discoverXXX()</code> methods to obtain a particular schema rowset.
 *   @method discover
 *   @param options {Object} An object whose properties convey the options for the XML/A <code>Discover</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset.
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
 */    
     discover: function(options) {        
         var request = _applyProperties(
@@ -1367,7 +1390,7 @@ Xmla.prototype = {
 *   
 *   @method discoverDataSources
 *   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
 */    
     discoverDataSources: function(options){
         var request = _applyProperties(
@@ -1434,7 +1457,63 @@ Xmla.prototype = {
 *               string
 *           </td>
 *           <td>
-*               The property's datatype
+*               The property's datatype (as an XML Schema data type)
+*           </td>
+*           <td>
+*               No
+*           </td>
+*           <td>
+*               Yes
+*           </td>
+*       </tr>
+*       <tr>
+*           <td>
+*               PropertyAccessType
+*           </td>
+*           <td>
+*               string
+*           </td>
+*           <td>
+*               How the property may be accessed. Values defined by the XML/A spec are:
+*               <ul>
+*                   <li>Read</li>
+*                   <li>Write</li>
+*                   <li>ReadWrite</li>
+*               </ul>
+*           </td>
+*           <td>
+*               No
+*           </td>
+*           <td>
+*               No
+*           </td>
+*       </tr>
+*       <tr>
+*           <td>
+*               IsRequired
+*           </td>
+*           <td>
+*               boolean
+*           </td>
+*           <td>
+*               <code>true</code> if the property is required, <code>false</code> if not.
+*           </td>
+*           <td>
+*               No
+*           </td>
+*           <td>
+*               Yes
+*           </td>
+*       </tr>
+*       <tr>
+*           <td>
+*               Value
+*           </td>
+*           <td>
+*               string
+*           </td>
+*           <td>
+*               The property's current value.
 *           </td>
 *           <td>
 *               No
@@ -1445,9 +1524,9 @@ Xmla.prototype = {
 *       </tr>
 *   </table>
 *   
-*   @method discoverDataSources
+*   @method discoverProperties
 *   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
 */    
     discoverProperties: function(options){
         var request = _applyProperties(
@@ -1459,6 +1538,46 @@ Xmla.prototype = {
         );
         return this.discover(request);
     },
+/**
+*   Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_SCHEMA_ROWSETS"></a></code> as value for the <code>requestType</code>, 
+*   and retrieves the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset. 
+*   This rowset lists all possible request types supported by this provider.
+*   The rowset has the following columns:
+*   <table border="1" class="schema-rowset">
+*       <tr>
+*           <th>Column Name</th>
+*           <th>Type</th>
+*           <th>Description</th>
+*           <th>Restriction</th>
+*           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>SchemaName</td>
+*           <td>string</td>
+*           <td>The requestType. </td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>Restrictions</td>
+*           <td>array</td>
+*           <td>A list of columns that may be used to filter the schema rowset.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>Description</td>
+*           <td>string</td>
+*           <td>A human readable description of the schema rowset that is returned when using this requestType</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*   </table>
+*
+*   @method discoverSchemaRowsets
+*   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_SCHEMA_ROWSETS</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*/    
     discoverSchemaRowsets: function(options){
         var request = _applyProperties(
            options,
@@ -1469,6 +1588,67 @@ Xmla.prototype = {
         );
         return this.discover(request);
     },
+/**
+*   Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_ENUMERATORS"></a></code> as value for the <code>requestType</code>, 
+*   and retrieves the <code>DISCOVER_ENUMERATORS</code> schema rowset. 
+*   This rowset lists the names, data types, and enumeration values of enumerators supported by the XMLA Provider for a specific data source.
+*   The rowset has the following columns:
+*   <table border="1" class="schema-rowset">
+*       <tr>
+*           <th>Column Name</th>
+*           <th>Type</th>
+*           <th>Description</th>
+*           <th>Restriction</th>
+*           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>EnumName</td>
+*           <td>string</td>
+*           <td>Name of the enumerator. </td>
+*           <td>Yes (array)</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>EnumDescription</td>
+*           <td>string</td>
+*           <td>A human readable description of the enumerator</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>EnumType</td>
+*           <td>string</td>
+*           <td>The XML Schema data type of this enumerator</td>
+*           <td>No</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>ElementName</td>
+*           <td>string</td>
+*           <td>The name of the enumerator entry</td>
+*           <td>No</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>ElementDescription</td>
+*           <td>string</td>
+*           <td>A human readable description of this enumerator entry</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>ElementValue</td>
+*           <td>string</td>
+*           <td>The value of this enumerator entry</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*   </table>
+*
+*   @method discoverEnumerators
+*   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_ENUMERATORS</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*/    
     discoverEnumerators: function(options){
         var request = _applyProperties(
             options,
@@ -1479,6 +1659,32 @@ Xmla.prototype = {
         );
         return this.discover(request);
     },
+/**
+*   Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_KEYWORDS"></a></code> as value for the <code>requestType</code>, 
+*   and retrieves the <code>DISCOVER_KEYWORDS</code> schema rowset. 
+*   This rowset is a list of reserved words for this XML/A provider.
+*   The rowset has the following columns:
+*   <table border="1" class="schema-rowset">
+*       <tr>
+*           <th>Column Name</th>
+*           <th>Type</th>
+*           <th>Description</th>
+*           <th>Restriction</th>
+*           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>Keyword</td>
+*           <td>string</td>
+*           <td>Name of the enumerator. </td>
+*           <td>Yes (array)</td>
+*           <td>No</td>
+*       </tr>
+*   </table>
+*
+*   @method discoverKeywords
+*   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_KEYWORDS</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*/    
     discoverKeywords: function(options){
         var request = _applyProperties(
             options,
@@ -1489,6 +1695,60 @@ Xmla.prototype = {
         );
         return this.discover(request);
     },
+/**
+*   Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_LITERALS"></a></code> as value for the <code>requestType</code>, 
+*   and retrieves the <code>DISCOVER_LITERALS</code> schema rowset. 
+*   This rowset is a list of reserved words for this XML/A provider.
+*   The rowset has the following columns:
+*   <table border="1" class="schema-rowset">
+*       <tr>
+*           <th>Column Name</th>
+*           <th>Type</th>
+*           <th>Description</th>
+*           <th>Restriction</th>
+*           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>LiteralName</td>
+*           <td>string</td>
+*           <td>Name of the literal. </td>
+*           <td>Yes (array)</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LiteralValue</td>
+*           <td>string</td>
+*           <td>The actual literal value. </td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>LiteralInvalidChars</td>
+*           <td>string</td>
+*           <td>Characters that may not appear in the literal </td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>LiteralInvalidStartingChars</td>
+*           <td>string</td>
+*           <td>Characters that may not appear as first character in the literal </td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>LiteralMaxLength</td>
+*           <td>int</td>
+*           <td>maximum number of characters for this literal, or -1 in case there is no maximum, or the maximum is unknown</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*   </table>
+*
+*   @method discoverLiterals
+*   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_LITERALS</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*/    
     discoverLiterals: function(options){
         var request = _applyProperties(
             options,
@@ -1662,7 +1922,7 @@ Xmla.prototype = {
 };
 
 function _getRowSchema(xmlDoc){
-    var types = _getElementsByTagNameNS(xmlDoc, _xmlnsSchema, "complexType"), 
+    var types = _getElementsByTagNameNS(xmlDoc, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"), 
         numTypes = types.length,
         type,
         i;
@@ -1675,8 +1935,28 @@ function _getRowSchema(xmlDoc){
     return null;
 }
 
-Xmla.Rowset = function(node){
-    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, "row");
+/**
+*   <p>
+*   This class implements an XML/A Rowset object.
+*   </p>
+*   <p>
+*   You do not need to instantiate objects of this class yourself. 
+*   Rather, the <code><a href="Xmla.html#class_Xmla">Xmla</a></code> class will instantiate this class to convey the result of any of the various <code>discoverXXX()</code> methods
+*   (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
+*   </p>
+*   <p>
+*   The <code>discoverXXX()</code> methods return the <code>Xmla.Rowset</code> instance when doing a synchronous request. 
+*   In addition, the rowset is available in the eventdata passed to any registered listeners
+*   (see <code><a href="Xmla.html#method_addListener">addListener()</a></code>).
+*   </p>
+*   
+*   @class Xmla.Rowset
+*   @constructor
+*   @param node {DOMDocument} The responseXML result returned by server in response to a <code>Discover</code> request. 
+*   @param requestTtype {string} The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.
+*/
+Xmla.Rowset = function (node, requestType){
+    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
     this.numRows = this.rows? this.rows.length : 0;
     this.rowIndex = 0;
     this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
@@ -1685,18 +1965,20 @@ Xmla.Rowset = function(node){
     this._fieldCount = 0;
     var rowSchema = _getRowSchema(node);
     if (rowSchema){    
-        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, "sequence").item(0);
-        var seqChildren = seq.childNodes;
-        var numChildren = seqChildren.length;
-        var seqChild, fieldLabel, fieldName, minOccurs, maxOccurs, type;
+        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
+            seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
+            fieldLabel, fieldName, minOccurs, maxOccurs, type;
         for (var i=0; i<numChildren; i++){
             seqChild = seqChildren.item(i);
             if (seqChild.nodeType!=1) {
                 continue;
             }
-            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, "field");
+            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
             fieldName = seqChild.getAttribute("name");
             type = seqChild.getAttribute("type");
+            if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
+                type = "Restrictions";
+            }
             minOccurs = seqChild.getAttribute("minOccurs");
             maxOccurs = seqChild.getAttribute("maxOccurs");
 
@@ -1717,17 +1999,7 @@ Xmla.Rowset = function(node){
     }
 };
 
-Xmla.Rowset.FETCH_ARRAY = 1;
-Xmla.Rowset.FETCH_OBJECT = 2;
-
-/**
-*   This class implements an XML/A Rowset object, which is the result of performing the <code>Discover</code> method (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
-*   
-*   @class Xmla.Rowset
-*   @for ClassName
-*/
 Xmla.Rowset.prototype = {
-    node: null,
     _boolConverter: function(val){
         return val==="true"?true:false;
     },
@@ -1740,34 +2012,45 @@ Xmla.Rowset.prototype = {
     _textConverter: function(val){
         return val;
     },
+    _restrictionsConverter: function(val){
+        return val;
+    },
     _arrayConverter: function(nodes, valueConverter){
-// debugger;
         var arr = [],
             numNodes = nodes.length,
             node
         ;
         for (var i=0; i<numNodes; i++){
             node = nodes.item(i);
-            arr.push(node.tagName);
+            arr.push(valueConverter(this._elementText(node)));
         }
         return arr;
     },
     _elementText: function(el){
-        var text = "",
-            childNodes = el.childNodes,
-            numChildNodes = childNodes.length
-        ;
-        for (var i=0; i<numChildNodes; i++){
-            text += childNodes.item(i).data;
+        if (el.innerText) {         //ie
+            return el.innerText;
         }
-        return text;
+        else 
+        if (el.textContent) {       //ff
+            return el.textContent;
+        }
+        else {                      //generic
+            var text = "",
+                childNodes = el.childNodes,
+                numChildNodes = childNodes.length
+            ;
+            for (var i=0; i<numChildNodes; i++){
+                text += childNodes.item(i).data;
+            }
+            return text;
+        }
     },
     _createFieldGetter: function(fieldName, type, minOccurs, maxOccurs){
         if (minOccurs === null){
             minOccurs = "1" ;
         }
         if (maxOccurs === null){
-            maxOccurs = "1";
+            maxOccurs = "1";    
         }
         var me = this;
         var valueConverter = null;        
@@ -1798,40 +2081,45 @@ Xmla.Rowset.prototype = {
             case "xsd:string":
                 valueConverter = me._textConverter;
                 break;
+            case "Restrictions":
+                valueConverter = me._restrictionsConverter;
+                break;
             default:
                 valueConverter = me._textConverter;
                 break;
         }
         var getter;
-        if(minOccurs==="1" && maxOccurs==="1") {
-            getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
-                return valueConverter(me._elementText(els.item(0)));
-            };
-        }
-        else 
-        if(minOccurs==="0" && maxOccurs==="1") {
-            getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
-                if (!els.length) {
-                    return null;
-                }
-                else {
+        if (maxOccurs==="1") {
+            if(minOccurs==="1") {
+                getter = function(){
+                    var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
                     return valueConverter(me._elementText(els.item(0)));
-                }
-            };
+                };
+            }
+            else 
+            if(minOccurs==="0") {
+                getter = function(){
+                    var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
+                    if (!els.length) {
+                        return null;
+                    }
+                    else {
+                        return valueConverter(me._elementText(els.item(0)));
+                    }
+                };
+            }
         }
         else 
-        if(minOccurs==="1" && (maxOccurs==="unbounded" || parseInt(maxOccurs, 10)>1)) {
+        if(minOccurs==="1") {
             getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
                 return me._arrayConverter(els, valueConverter);
             };
         }
         else 
-        if(minOccurs==="0" && (maxOccurs==="unbounded" || parseInt(maxOccurs, 10)>1)) {
+        if(minOccurs==="0") {
             getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, fieldName);
+                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
                 if (!els.length) {
                     return null;
                 }
@@ -1842,6 +2130,14 @@ Xmla.Rowset.prototype = {
         }
         return getter;
     },
+/**
+*   Retrieve an array of <code>fieldDef</code> objects that describes the fields of the rows in this rowset.
+*   For a description of the <code>fieldDef</code> object, see the 
+*   <code><a href="#method_fieldDef">fieldDef()</a></code> method.
+*
+*   @method getFields
+*   @return fieldDef[] An (ordered) array of field definition objects. 
+*/    
     getFields: function(){
         var f = [], 
             fieldCount = this._fieldCount,
@@ -1852,12 +2148,50 @@ Xmla.Rowset.prototype = {
         }
         return f;
     },
+/**
+*   Indicates wheter the rowset that can be traversed.
+*   You can use this method together with the 
+*   <code><a href="#method_next">next()</a></code> method
+*   to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
+    <pre>
+&nbsp;while(rowset.hasMoreRows()){
+&nbsp;    ...process row...
+&nbsp;    rowsete.next();
+&nbsp;}
+    </pre>
+*   @method hasMoreRows
+*   @return {bool} true in case there are more rows to traverse. false if all rows have been traversed.
+*/    
     hasMoreRows: function(){
         return this.numRows > this.rowIndex;
     },
+/**
+*   Moves the internal row index to the next row.
+*   You can use this method together with the 
+*   <code><a href="#method_next">hasMoreRows()</a></code> method
+*   to drive a <code>while</code> loop to traverse all rows in the rowset.
+*
+*   @method next
+*/    
     next: function(){
         this.row = this.rows.item(++this.rowIndex);
     },
+/**
+*   Retrieves a <code>fieldDef</code> object by name.
+*   A fieldDef describes a field (column). It has the following properties:
+*   <dl>
+*       <dt>label</dt><dd>string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions. This is also the name used for matching againstt the <code>name</code> argument passed to the <code>fieldDef()</code> method.</dd>
+*       <dt>name</dt><dd>string. This is the (possibly escaped) name of the field as it appears in the XML document</dd>
+*       <dt>index</dt><dd>int. The ordinal position of this field. Fields are numbered starting from 0.</dd>
+*       <dt>type</dt><dd>string. The name of the XML data type for the values that appear in this column</dd>
+*       <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. "0" means the field is optional.</dd>
+*       <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. "unbounded" means there is no declared limit.</dd>
+*       <dt>getter</dt><dd>function. This function is used to extract a value from the XML document for this field.</dd>
+*   </dl>
+*   @method fieldDef
+*   @param {string} name The name of the field to retrieve.
+*   @return {fieldDef} The <code>fieldDef</code> object that matches the argument.
+*/    
     fieldDef: function(name){
         var field = this.fields[name];
         if (_isUndefined(field)){
@@ -1865,13 +2199,33 @@ Xmla.Rowset.prototype = {
         }
         return field;
     },
+/**
+*   Retrieves the index of a field by name.
+*   Field indexes start at 0.
+*   @method fieldIndex
+*   @param {string} name The name of the field for which you want to retrieve the index.
+*   @return {int} The ordinal position (starting at 0) of the field that matches the argument.
+*/    
     fieldIndex: function(name){
         var fieldDef = this.fieldDef(name);
         return fieldDef.index;
     },
+/**
+*   Retrieves the name of a field by field Index.
+*   Field indexes start at 0.
+*   @method fieldName
+*   @param {string} name The name of the field for which you want to retrieve the index.
+*   @return {int} The ordinal position (starting at 0) of the field that matches the argument.
+*/    
     fieldName: function(index){
         return this.fieldOrder[index];
     },
+/**
+*   Retrieves a value from the current row for the field having the name specified by the argument.
+*   @method fieldVal
+*   @param {string} name The name of the field for which you want to retrieve the value.
+*   @return {array|boolean|float|int|string} From the current row, the value of the field that matches the argument.
+*/    
     fieldVal: function(name){
         if (_isNumber(name)){
             name = this.fieldName(name);
@@ -1879,12 +2233,28 @@ Xmla.Rowset.prototype = {
         var field = this.fieldDef(name);
         return field.getter.call(this);
     },
+/**
+*   Returns the number of fields in this rowset.
+*   @method fieldCount
+*   @return {int} The number of fields in this rowset.
+*/    
     fieldCount: function(){
         return this._fieldCount;
     },
+/**
+*   Releases references to the DomDocument passed to the Rowset constructor.
+*   This should facilitate automatic garbage collection by the browser.
+*   @method close
+*/    
     close: function(){
         this.row = null;
+        this.rows = null;
     },
+/**
+*   Fetch all values from all fields from the current row, and return it in an array.
+*   @method fetchAsArray 
+*   @return {array}
+*/    
     fetchAsArray: function(){
         var array, fields, fieldName, fieldDef;
         if (this.hasMoreRows()) {
@@ -1902,6 +2272,12 @@ Xmla.Rowset.prototype = {
         }
         return array;
     },
+/**
+*   Fetch all values from all fields from the current row, and return it in an Object literal.
+*   The property names of the returned object correspond to the fieldName (actually the fieldLabel), and the field value is assigned to its respective property.
+*   @method fetchAsObject 
+*   @return {Object}
+*/    
     fetchAsObject: function(){
         var object, fields, fieldName, fieldDef;
         if (this.hasMoreRows()){
@@ -1919,6 +2295,12 @@ Xmla.Rowset.prototype = {
         }
         return object;
     },
+/**
+*   Fetch all values from all fields from all rows, and return it as an array of arrays.
+*   See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.
+*   @method fetchAllAsArray 
+*   @return array[]
+*/    
     fetchAllAsArray: function(){
         var row, rows = [];
         while((row = this.fetchAsArray())){
@@ -1926,6 +2308,12 @@ Xmla.Rowset.prototype = {
         }
         return rows;
     },
+/**
+*   Fetch all values from all fields from all rows, and return it as an array of objects.
+*   See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.
+*   @method fetchAllAsObject 
+*   @return array[]
+*/    
     fetchAllAsObject: function(){
         var row, rows = [];
         while((row = this.fetchAsObject())){

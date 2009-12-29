@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla.Rowset   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262099886.77" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262099886.77" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262129882.47" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262129882.47" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262099886.77"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262099886.77"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262129882.47"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262129882.47"></script>
 </head>
 
 <body id="yahoo-com">
@@ -75,7 +75,19 @@
   
 
                     <div class="summary description" property="yui:description">
-                        This class implements an XML/A Rowset object, which is the result of performing the <code>Discover</code> method (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
+                        <p>
+This class implements an XML/A Rowset object.
+</p>
+<p>
+You do not need to instantiate objects of this class yourself. 
+Rather, the <code><a href="Xmla.html#class_Xmla">Xmla</a></code> class will instantiate this class to convey the result of any of the various <code>discoverXXX()</code> methods
+(see <code><a href="Xmla.html#method_discover">discover()</a></code>).
+</p>
+<p>
+The <code>discoverXXX()</code> methods return the <code>Xmla.Rowset</code> instance when doing a synchronous request. 
+In addition, the rowset is available in the eventdata passed to any registered listeners
+(see <code><a href="Xmla.html#method_addListener">addListener()</a></code>).
+</p>
                     </div>
 
                         <div class="section constructor details" rel="yui:constructor" resource="#constructor">
@@ -125,26 +137,243 @@
                         <div class="section method details">
                             <h3 id="methods">Methods</h3>
                             <div class="content">
-                                    <div class="" rel="yui:method" resource="#method_getFields">
+                                    <div class="" rel="yui:method" resource="#method_close">
                                     <h4>
-                                        <a name="method_getFields">getFields</a></h4>
+                                        <a name="method_close">close</a></h4>
                                     <div class="detail" >
                                         <code>
                                         
                                         
                                         
-                                        fieldDef[]
-                                            <strong property="yui:name">getFields</strong>
+                                        void
+                                            <strong property="yui:name">close</strong>
                                            (
                                             )
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Retrieve the collection of fieldDef objects for this rowset.
+                                            Releases references to the DomDocument passed to the Rowset constructor.
+This should facilitate automatic garbage collection by the browser.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fetchAllAsArray">
+                                    <h4>
+                                        <a name="method_fetchAllAsArray">fetchAllAsArray</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">fetchAllAsArray</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fetch all values from all fields from all rows, and return it as an array of arrays.
+See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fetchAllAsObject">
+                                    <h4>
+                                        <a name="method_fetchAllAsObject">fetchAllAsObject</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">fetchAllAsObject</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fetch all values from all fields from all rows, and return it as an array of objects.
+See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.
+                                        </div>
+
+                                        <div class="description">
+
+
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fetchAsArray">
+                                    <h4>
+                                        <a name="method_fetchAsArray">fetchAsArray</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        array
+                                            <strong property="yui:name">fetchAsArray</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fetch all values from all fields from the current row, and return it in an array.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        array
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fetchAsObject">
+                                    <h4>
+                                        <a name="method_fetchAsObject">fetchAsObject</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Object
+                                            <strong property="yui:name">fetchAsObject</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Fetch all values from all fields from the current row, and return it in an Object literal.
+The property names of the returned object correspond to the fieldName (actually the fieldLabel), and the field value is assigned to its respective property.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Object
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fieldCount">
+                                    <h4>
+                                        <a name="method_fieldCount">fieldCount</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        int
+                                            <strong property="yui:name">fieldCount</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Returns the number of fields in this rowset.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        int
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The number of fields in this rowset.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fieldDef">
+                                    <h4>
+                                        <a name="method_fieldDef">fieldDef</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        fieldDef
+                                            <strong property="yui:name">fieldDef</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieves a <code>fieldDef</code> object by name.
 A fieldDef describes a field (column). It has the following properties:
 <dl>
+<dt>label</dt><dd>string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions. This is also the name used for matching againstt the <code>name</code> argument passed to the <code>fieldDef()</code> method.</dd>
 <dt>name</dt><dd>string. This is the (possibly escaped) name of the field as it appears in the XML document</dd>
-<dt>label</dt><dd>string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions</dd>
 <dt>index</dt><dd>int. The ordinal position of this field. Fields are numbered starting from 0.</dd>
 <dt>type</dt><dd>string. The name of the XML data type for the values that appear in this column</dd>
 <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. "0" means the field is optional.</dd>
@@ -155,14 +384,210 @@ A fieldDef describes a field (column). It has the following properties:
 
                                         <div class="description">
 
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the field to retrieve.</span>
+                                                        </dd>
+                                                </dl>
 
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        fieldDef[]
+                                                        fieldDef
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">An (ordered) array of field definition objects.</dd>
+                                                    <dd property="yui:returnInfo">The <code>fieldDef</code> object that matches the argument.</dd>
                                                 </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fieldIndex">
+                                    <h4>
+                                        <a name="method_fieldIndex">fieldIndex</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        int
+                                            <strong property="yui:name">fieldIndex</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieves the index of a field by name.
+Field indexes start at 0.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the field for which you want to retrieve the index.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        int
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The ordinal position (starting at 0) of the field that matches the argument.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fieldName">
+                                    <h4>
+                                        <a name="method_fieldName">fieldName</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        int
+                                            <strong property="yui:name">fieldName</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieves the name of a field by field Index.
+Field indexes start at 0.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the field for which you want to retrieve the index.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        int
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The ordinal position (starting at 0) of the field that matches the argument.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_fieldVal">
+                                    <h4>
+                                        <a name="method_fieldVal">fieldVal</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        array|boolean|float|int|string
+                                            <strong property="yui:name">fieldVal</strong>
+                                           (
+                                                
+                                                        
+                                                         name
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieves a value from the current row for the field having the name specified by the argument.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">name</span>
+                                                        &lt;<span property="yui:type">string</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> The name of the field for which you want to retrieve the value.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        array|boolean|float|int|string
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">From the current row, the value of the field that matches the argument.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_getFields">
+                                    <h4>
+                                        <a name="method_getFields">getFields</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        
+                                            <strong property="yui:name">getFields</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Retrieve an array of <code>fieldDef</code> objects that describes the fields of the rows in this rowset.
+For a description of the <code>fieldDef</code> object, see the 
+<code><a href="#method_fieldDef">fieldDef()</a></code> method.
+                                        </div>
+
+                                        <div class="description">
+
+
 
 
              
@@ -218,6 +643,46 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_next">
+                                    <h4>
+                                        <a name="method_next">next</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">next</strong>
+                                           (
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Moves the internal row index to the next row.
+You can use this method together with the 
+<code><a href="#method_next">hasMoreRows()</a></code> method
+to drive a <code>while</code> loop to traverse all rows in the rowset.
+                                        </div>
+
+                                        <div class="description">
+
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -263,8 +728,19 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
                     <div id="methodsList" class="module">
                         <h4>Methods</h4>
                         <ul class="content">        
+                                <li class=""><a href="#method_close" title="close">close</a></li>
+                                <li class=""><a href="#method_fetchAllAsArray" title="fetchAllAsArray">fetchAllAsArray</a></li>
+                                <li class=""><a href="#method_fetchAllAsObject" title="fetchAllAsObject">fetchAllAsObject</a></li>
+                                <li class=""><a href="#method_fetchAsArray" title="fetchAsArray">fetchAsArray</a></li>
+                                <li class=""><a href="#method_fetchAsObject" title="fetchAsObject">fetchAsObject</a></li>
+                                <li class=""><a href="#method_fieldCount" title="fieldCount">fieldCount</a></li>
+                                <li class=""><a href="#method_fieldDef" title="fieldDef">fieldDef</a></li>
+                                <li class=""><a href="#method_fieldIndex" title="fieldIndex">fieldIndex</a></li>
+                                <li class=""><a href="#method_fieldName" title="fieldName">fieldName</a></li>
+                                <li class=""><a href="#method_fieldVal" title="fieldVal">fieldVal</a></li>
                                 <li class=""><a href="#method_getFields" title="getFields">getFields</a></li>
                                 <li class=""><a href="#method_hasMoreRows" title="hasMoreRows">hasMoreRows</a></li>
+                                <li class=""><a href="#method_next" title="next">next</a></li>
                         </ul>
                     </div>
 
@@ -280,7 +756,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.Rowset.html#method_close", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "close"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_fetchAllAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAllAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsObject"}, {"url": "Xmla.Rowset.html#method_fetchAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsObject"}, {"url": "Xmla.Rowset.html#method_fieldCount", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldCount"}, {"url": "Xmla.Rowset.html#method_fieldDef", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldDef"}, {"url": "Xmla.Rowset.html#method_fieldIndex", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldIndex"}, {"url": "Xmla.Rowset.html#method_fieldName", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldName"}, {"url": "Xmla.Rowset.html#method_fieldVal", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldVal"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.Rowset.html#method_next", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "next"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
 </script>
 </body>
 </html>
