@@ -39,6 +39,5 @@ SET version="r12"
 REM The version of YUI the project uses.
 SET yuiversion="2"
 
-rmdir %parser_out%
 %yuidoc_home%\bin\yuidoc.py %parser_in% -p %parser_out% -o %generator_out% -t %template% -v %version% -m %projectname% -u %projecturl%
 
