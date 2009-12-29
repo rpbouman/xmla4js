@@ -23,7 +23,7 @@
                 border-style: outset;
                 border-width:2px;
             }
-            tr.th {
+            td.th {
                 font-weight: bold;
                 text-align: center;
                 background-color: ThreeDFace;
@@ -48,41 +48,27 @@
         </div>
 
 
-        <script type="text/javascript" src="../js/Xmla.js"></script>
+        <script type="text/javascript" src="../src/Xmla.js"></script>
                 
         <script type="text/javascript">
             var discover = document.getElementById("discover");
-            discover.onclick = function(){                
+            var xmla = new Xmla({});
+
+            discover.onclick = function(){
                 var schemaRowsetsEl = document.getElementById("schemaRowsets");
                 schemaRowsetsEl.innerHTML = "";
+
                 var url = document.getElementById("url").value;
-                var xmla = new Xmla({
-                    async: false
-                ,   url: url
+                xmla.setOptions({
+                    async: false,
+                    url: url
                 });
-                var rowset = xmla.discoverSchemaRowsets();
-                var rows = rowset.fetchAllAsObject();
-                rowset.close();
-                
-                for (var schemaName, numRows = rows.length, i=0; i<numRows; i++){
-                    try {
-                        schemaName = rows[i]["SchemaName"];
-                        rowset = xmla.discover({
-                            async: false
-                        ,   url: url
-                        ,   requestType: schemaName
-                        });
-                        fillTable(schemaName, rowset);
-                        rowset.close();
-                    } catch (e){
-                        schemaRowsetsEl.innerHTML += "<div class=\"error\">"
-                        +   "<div>Error occurred retrieving the \"" + schemaName + "\" rowset.<\/div>"
-                        +   "<div>faultCode: " + e.error.faultCode + "<\/div>"
-                        +   "<div>faultString: " + e.error.faultString + "<\/div>"
-                        +   "<\/div>"
-                        ;
-                    }
-                }
+                fillTable(Xmla.DISCOVER_DATASOURCES, xmla.discoverDataSources());
+                fillTable(Xmla.DISCOVER_ENUMERATORS, xmla.discoverEnumerators());
+                fillTable(Xmla.DISCOVER_KEYWORDS, xmla.discoverKeywords());
+                fillTable(Xmla.DISCOVER_LITERALS, xmla.discoverLiterals());
+                fillTable(Xmla.DISCOVER_PROPERTIES, xmla.discoverProperties());
+                fillTable(Xmla.DISCOVER_SCHEMA_ROWSETS, xmla.discoverSchemaRowsets());
             }
 
             function fillTable(name, rowset){ 
@@ -92,10 +78,10 @@
                 var schemaRowsetsEl = document.getElementById("schemaRowsets");
                 schemaRowsetsEl.appendChild(tab);
                 var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
-                r.setAttribute("class", "th");
                 for (i=0; i<fieldCount; i++){
                     c = r.insertCell(i);
                     c.innerHTML = rowset.fieldName(i);
+                    c.setAttribute("class", "th");
                 }
                 var rows = rowset.fetchAllAsArray();                
                 for (var rowCount = rows.length, j=0; j<rowCount; j++){
