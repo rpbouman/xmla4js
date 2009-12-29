@@ -1,0 +1,16 @@
+<div class="highlight"><pre><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">classMap</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Xmla.Rowset&quot;</span><span class="o">:</span> <span class="s2">&quot;xmla&quot;</span><span class="p">,</span> <span class="s2">&quot;Xmla&quot;</span><span class="o">:</span> <span class="s2">&quot;xmla&quot;</span><span class="p">};</span>
+
+<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">resolveClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">className</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">a</span><span class="o">=</span><span class="nx">className</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="nx">ns</span><span class="o">=</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">classMap</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">ns</span><span class="p">[</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]])</span> <span class="p">{</span>
+            <span class="nx">ns</span> <span class="o">=</span> <span class="nx">ns</span><span class="p">[</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">ns</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>

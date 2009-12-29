@@ -1,0 +1,1521 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<!--
+    Copyright 2009, Roland Bouman (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: xmla  Xmla   (xmla4js library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262098330.64" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262098330.64" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1262098330.64"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262098330.64"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://code.google.com/p/xmla4js/" title="xmla4js">xmla4js</a></h1>
+        <h3>Xmla utility&nbsp; <span class="subtitle">r12</span></h3>
+        <a href="./index.html" title="xmla4js">xmla4js</a> 
+            &gt; <a href="./module_xmla.html" title="xmla">xmla</a>
+                 &gt; Xmla 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">Xmla</b>
+                        <span class="extends">
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        <p>
+The Xmla class provides a javascript API to communicate XML for Analysis (XML/A) over HTTP.
+XML/A is an industry standard protocol that allows webclients to work with OLAP servers.
+To fully understand the scope and purpose of this utility, it is highly recommended
+to read <a href="http://xmla.org/xmla1.1.doc">the XML/A specification</a> 
+(MS Word format. For other formats, 
+see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>). 
+</p>
+                    </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">Xmla</strong>
+                                <code>
+                                    (
+  
+                                        
+                                                
+                                                options
+                                    )
+                                </code>
+                                <div class="description">
+                                        <dl rel="yui:parameters">
+                                            <dt>Parameters:</dt>
+                                                <dd rel="yui:parameter">
+                                                    <code><span property="yui:name">options</span>
+                                                    &lt;<span property="yui:type">object</span>&gt;
+                                                    </code>
+                                                    <span property="yui:description"></span>
+                                                </dd>
+                                        </dl>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_DBSCHEMA_CATALOGS">
+                                    <h4><a name="property_DBSCHEMA_CATALOGS" property="yui:name">DBSCHEMA_CATALOGS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_CATALOGS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBCatalogs">discoverDBCatalogs()</a></code> method. 
+The <code>discoverDBCatalogs()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_CATALOGS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DBSCHEMA_CATALOGS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_DATASOURCES">
+                                    <h4><a name="property_DISCOVER_DATASOURCES" property="yui:name">DISCOVER_DATASOURCES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_DATASOURCES</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this constant as requestType yourself, consider calling the <code><a href="#method_discoverDataSources">discoverDataSources()</a></code> method. 
+The <code>discoverDataSources()</code> method passes <code>DISCOVER_DATASOURCES</code> automatically as requestType for Discover requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_DATASOURCES
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_ENUMERATORS">
+                                    <h4><a name="property_DISCOVER_ENUMERATORS" property="yui:name">DISCOVER_ENUMERATORS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_ENUMERATORS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverEnumerators">discoverEnumerators()</a></code> method. 
+The <code>discoverSchemaRowsets()</code> method issues a request to invoke the Discover method using <code>DISCOVER_SCHEMA_ROWSETS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_ENUMERATORS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_KEYWORDS">
+                                    <h4><a name="property_DISCOVER_KEYWORDS" property="yui:name">DISCOVER_KEYWORDS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_KEYWORDS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this requestType yourself, consider calling the <code><a href="#method_discoverLiterals">discoverKeywords()</a></code> method. 
+The <code>discoverKeywords()</code> method issues a request to invoke the Discover method using DISCOVER_KEYWORDS as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_KEYWORDS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_LITERALS">
+                                    <h4><a name="property_DISCOVER_LITERALS" property="yui:name">DISCOVER_LITERALS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_LITERALS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverLiterals">discoverLiterals()</a></code> method. 
+The <code>discoverLiterals()</code> method issues a request to invoke the Discover method using DISCOVER_LITERALS as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_LITERALS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_PROPERTIES">
+                                    <h4><a name="property_DISCOVER_PROPERTIES" property="yui:name">DISCOVER_PROPERTIES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_PROPERTIES</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverProperties">discoverProperties()</a></code> method. 
+The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</code> automatically as requestType for Discover requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_PROPERTIES
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_DISCOVER_SCHEMA_ROWSETS">
+                                    <h4><a name="property_DISCOVER_SCHEMA_ROWSETS" property="yui:name">DISCOVER_SCHEMA_ROWSETS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverSchemaRowsets">discoverSchemaRowsets()</a></code> method. 
+The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</code> automatically as requestType for Discover requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: DISCOVER_SCHEMA_ROWSETS
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_DISCOVER">
+                                    <h4><a name="property_EVENT_DISCOVER" property="yui:name">EVENT_DISCOVER</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>discover</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>discover</code> event is method-specific, and is fired before submitting a <code>Discover</code> request
+(see: <code><a href="#method_discover">discover()</a></code>)
+to the server, but after firing the <code>request</code> event
+(see: <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: discover
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_DISCOVER_ERROR">
+                                    <h4><a name="property_EVENT_DISCOVER_ERROR" property="yui:name">EVENT_DISCOVER_ERROR</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>discovererror</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>discovererror</code> is method-specific and fired when an error occurs while sending an <code>Discover</code> request, 
+or receiving a response to an <code>Discover</code method.
+(see: <code><a href="#method_discover">discover()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: discovererror
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_DISCOVER_SUCCESS">
+                                    <h4><a name="property_EVENT_DISCOVER_SUCCESS" property="yui:name">EVENT_DISCOVER_SUCCESS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>discoversuccess</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>discoversuccess</code> event is method-specific and fired only after receiving and processing a normal response 
+(that is, a response that does not contain a <code>SoapFault</code>)
+to an incovation of the XML/A <code>Discover</code> method
+(see: <code><a href="#method_discover">discover()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: discoversuccess
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_ERROR">
+                                    <h4><a name="property_EVENT_ERROR" property="yui:name">EVENT_ERROR</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>error</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>error</code> is fired when an error occurs while sending a request or receiving a response.
+The <code>error</code> event is not method-specific, and fires for errors encountered during both <code>Execute</code> as well as <code>Discover</code> method invocations.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: error
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_EXECUTE">
+                                    <h4><a name="property_EVENT_EXECUTE" property="yui:name">EVENT_EXECUTE</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>execute</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>execute</code> event is method-specific, and is fired before submitting an <code>Execute</code> request
+(see: <code><a href="#method_execute">execute()</a></code>)
+to the server, but after firing the <code>request</code> event
+(see: <code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: execute
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_EXECUTE_ERROR">
+                                    <h4><a name="property_EVENT_EXECUTE_ERROR" property="yui:name">EVENT_EXECUTE_ERROR</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>executeerror</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>executeerror</code> event is method-specific and fired when an error occurs while sending an <code>Execute</code> request, or receiving a response to an <code>Execute</code method.
+(see: <code><a href="#method_execute">execute()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: executeerror
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_EXECUTE_SUCCESS">
+                                    <h4><a name="property_EVENT_EXECUTE_SUCCESS" property="yui:name">EVENT_EXECUTE_SUCCESS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>executesuccess</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>executesuccess</code> event is method-specific and fired only after receiving and processing a normal response 
+(that is, a response that does not contain a <code>SoapFault</code>)
+to an incovation of the XML/A <code>Execute</code> method
+(see: <code><a href="#method_execute">execute()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: executesuccess
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_REQUEST">
+                                    <h4><a name="property_EVENT_REQUEST" property="yui:name">EVENT_REQUEST</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>request</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>request</code> event is the first event that is fired before submitting a request 
+(see: <code><a href="#method_request">request()</a></code>)
+to the server, and before firing the method-specific request events 
+(see <code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code> 
+and <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>). 
+The <code>request</code> event itself is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> requests.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: request
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_EVENT_SUCCESS">
+                                    <h4><a name="property_EVENT_SUCCESS" property="yui:name">EVENT_SUCCESS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Indicates the <code>success</code> event. 
+This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+The <code>success</code> event  is the last event that is fired after receiving and processing a normal response 
+(that is, a response that does not contain an XML/A <code>SoapFault</code>),
+after firing the method-specific success events 
+(see <code><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a></code> 
+and <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>). 
+The <code>success</code> event is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> responses.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: success
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="protected" rel="yui:property" resource="#property_listeners">
+                                    <h4><a name="property_listeners" property="yui:name">listeners</a>
+                                        - <code>protected <span property="yui:type">Object</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            This object stores listeners.
+Each key is a listener type (see the static final <code>EVENT_XXX</code> constants), 
+each value is an array of listener objects that are subscribed to that particular event.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {
+"request": []
+,   "succss": []
+,   "error": []
+,   "discover": []
+,   "discoversuccss": []
+,   "discovererror": []
+,   "execute": []
+,   "executesuccss": []
+,   "executeerror": []
+}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_METHOD_DISCOVER">
+                                    <h4><a name="property_METHOD_DISCOVER" property="yui:name">METHOD_DISCOVER</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the method option in the options object passed to the 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server. 
+Instead of explicitly setting the method yourself, consider using the <code><a href="#method_request">discover()</a></code> method.
+The <code>discover()</code> method automatically sets the method option to <code>METHOD_DISCOVER</code>.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Discover
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_METHOD_EXECUTE">
+                                    <h4><a name="property_METHOD_EXECUTE" property="yui:name">METHOD_EXECUTE</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the method option property in the options objecct passed to the 
+<code><a href="#method_request">request()</code></a> method to invoke the XML/A Execute method on the server. 
+Instead of explicitly setting the method yourself, consider using the <code><a href="#method_execute">execute()</a></code> method.
+The <code>execute()</code> method automatically sets the method option to <code>METHOD_EXECUTE</code>.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Discover
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_AXISFORMAT">
+                                    <h4><a name="property_PROP_AXISFORMAT" property="yui:name">PROP_AXISFORMAT</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as key in the <code>properties</code> member of the <code>options</code> object 
+passed to the <code><a href="#method_request">execute()</a></code> method 
+to specify the XML/A <code>AxisFormat</code> property.
+The XML/A <code>AxisFormat</code> property specifies how the client wants to receive the multi-dimensional resultset of a MDX query.
+Valid values for the <code>AxisFormat</code> property are available as the static final properties 
+<code><a href="#property_PROP_AXISFORMAT_TUPLE">PROP_AXISFORMAT_TUPLE</a></code>, 
+<code><a href="#property_PROP_AXISFORMAT_CLUSTER">PROP_AXISFORMAT_CLUSTER</a></code>,
+<code><a href="#property_PROP_AXISFORMAT_CUSTOM">PROP_AXISFORMAT_CUSTOM</a></code>.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: AxisFormat
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_AXISFORMAT_CLUSTER">
+                                    <h4><a name="property_PROP_AXISFORMAT_CLUSTER" property="yui:name">PROP_AXISFORMAT_CLUSTER</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>AxisFormat</code> XML/A property 
+(see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>) 
+in invocations of the <code>Execute</code> method 
+(see: <code><a href="#method_request">execute()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: ClusterFormat
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_AXISFORMAT_CUSTOM">
+                                    <h4><a name="property_PROP_AXISFORMAT_CUSTOM" property="yui:name">PROP_AXISFORMAT_CUSTOM</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>AxisFormat</code> XML/A property 
+(see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>) 
+in invocations of the <code>Execute</code> method 
+(see: <code><a href="#method_request">execute()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: CustomFormat
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_AXISFORMAT_TUPLE">
+                                    <h4><a name="property_PROP_AXISFORMAT_TUPLE" property="yui:name">PROP_AXISFORMAT_TUPLE</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>AxisFormat</code> XML/A property 
+(see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>) 
+in invocations of the <code>Execute</code> method 
+(see: <code><a href="#method_request">execute()</a></code>).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: TupleFormat
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_CONTENT">
+                                    <h4><a name="property_PROP_CONTENT" property="yui:name">PROP_CONTENT</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as key in the <code>properties</code> member of the <code>options</code> object 
+passed to the <code><a href="#method_request">request()</a></code> method 
+to specify the XML/A <code>Content</code> property.
+The XML/A <code>Content</code> property specifies whether to return data and/or XML Schema metadata by the <code>Discover</code> and <code>Execute</code> invocations.
+Valid values for the <code>Content</code> property are available as the static final properties 
+<code><a href="#property_PROP_CONTENT_DATA">PROP_CONTENT_DATA</a></code>, 
+<code><a href="#property_PROP_CONTENT_NONE">PROP_CONTENT_NONE</a></code>, 
+<code><a href="#property_PROP_CONTENT_SCHEMA">PROP_CONTENT_SCHEMA</a></code>, 
+<code><a href="#property_PROP_CONTENT_SCHEMADATA">PROP_CONTENT_SCHEMADATA</a></code>.
+Note: This key is primarily intended for clients that use the low-level <code><a href="#method_request">request()</a></code> method.
+You should not set this property when calling the <code><a href="#method_request">discover()</a></code> method, 
+the <code><a href="#method_execute">execute()</a></code> method, 
+or any of the <code>discoverXXX()</code> methods.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Content
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_CONTENT_DATA">
+                                    <h4><a name="property_PROP_CONTENT_DATA" property="yui:name">PROP_CONTENT_DATA</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the XML/A <code>Content</code> property 
+(see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
+This value specifies that the response should contain only data, but no XML Schema metadata.
+As the <code>Xmla</code> class relies on the XML Schema metadata to construct Rowset and Resultset instances,
+this option is primarily useful if you know how to process the XML response directly.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Data
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_CONTENT_NONE">
+                                    <h4><a name="property_PROP_CONTENT_NONE" property="yui:name">PROP_CONTENT_NONE</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the XML/A <code>Content</code> property 
+(see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
+This value specifies that the response should contain neither data nor XML Schema metadata.
+This is useful to check the validity of the request.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: None
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_CONTENT_SCHEMA">
+                                    <h4><a name="property_PROP_CONTENT_SCHEMA" property="yui:name">PROP_CONTENT_SCHEMA</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the XML/A <code>Content</code> property 
+(see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
+This value specifies that the response should only return XML Schema metadata, but no data.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: Schema
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_PROP_CONTENT_SCHEMADATA">
+                                    <h4><a name="property_PROP_CONTENT_SCHEMADATA" property="yui:name">PROP_CONTENT_SCHEMADATA</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the XML/A <code>Content</code> property 
+(see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
+This value specifies that the response should return both data as well as XML Schema metadata.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: SchemaData
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_response">
+                                    <h4><a name="property_response" property="yui:name">response</a>
+                                        - <code><span property="yui:type">Xmla.Rowset|Xmla.Resultset</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            This property is set to <code>null</code> right before sending an XML/A request.
+When a successfull response is received, it is processed and the response object is assigned to this property.
+The response object is either a 
+<code><a href="Rowset.html#class_Rowset">Rowset</a></code> (after a successful invocation of XML/A <code>Discover</code> method, see: <code><a href="method_discover">discover()</a></code>) or a
+<code><a href="Resultset.html#class_Resultset">Resultset</a></code> (after a successful invocation of the XML/A <code>Execute</code> method, see: <code><a href="method_execute">executte()</a></code>) 
+instance. 
+If you are interested in processing the raw response XML, see 
+<code><a href="#property_responseXML">responseXML</a></code> and 
+<code><a href="#property_responseText">responseText</a></code>.
+Note that it is not safe to read this property immediately after doing an asynchronous request.
+For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_responseText">
+                                    <h4><a name="property_responseText" property="yui:name">responseText</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            This property is set to <code>null</code> right before sending an XML/A request.
+When a successfull response is received, the XML response is stored to this property as plain text.
+If you are interested in processing a DOM document rather than the raw XML text, see the 
+<code><a href="#property_responseXML">responseXML</a></code> property.
+If you are interested in traversing the dataset returned in the XML/A response, see the
+<code><a href="#property_response">response</a></code> property.
+Note that it is not safe to read this property immediately after doing an asynchronous request.
+For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_responseXml">
+                                    <h4><a name="property_responseXml" property="yui:name">responseXml</a>
+                                        - <code><span property="yui:type">{DOMDocument}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            This property is set to <code>null</code> right before sending an XML/A request.
+When a successfull response is received, the XML response is stored to this property as a DOM Document.
+If you are interested in processing the raw XML text rather than a DOM document, see the 
+<code><a href="#property_responseText">responseText</a></code> property.
+If you are interested in traversing the dataset returned in the XML/A response, see the
+<code><a href="#property_response">response</a></code> property.
+Note that it is not safe to read this property immediately after doing an asynchronous request.
+For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: null
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+                        <div class="section method details">
+                            <h3 id="methods">Methods</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:method" resource="#method_addListener">
+                                    <h4>
+                                        <a name="method_addListener">addListener</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">addListener</strong>
+                                           (
+                                                
+                                                        
+                                                         listener
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            This method can be used to register a listener to one or more events.
+The <code>listener</code> argument should have the following structure: <pre>{
+events: [...event names...],
+handler: function() {...code to run upon notification...},
+scope: object
+}</pre>
+<dl>
+<dt><code>events</code></dt>
+<dd>string[] REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
+You can also use one of the predefined <code>EVENT_XXX</code> array constant values, 
+or use array concatenation and compose a custom list of event names.
+</dd>
+<dt><code>handler</code></dt>
+<dd>function REQUIRED. This function will be called and notified whenever one of the specified events occurs.
+The function is called in scope of the <code>scope</code> property, otherwise a global function (= <code>window</code> scope) is assumed.
+</dd>
+<dt><code>scope</code></dt>
+<dd>Object. When specified, this object is used as the <code>this</code> object when calling the handler.
+When not specified, the global <code>window</code> is used.
+</dd>
+</dl>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">listener</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object that defines the events and the notification function to be called.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discover">
+                                    <h4>
+                                        <a name="method_discover">discover</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discover</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Sends a request to invoke the XML/A <code>Discover</code> method and returns a schema rowset specified by the <code>requestType</code> option.
+Options are passed using a generic <code>options</code> object.
+Applicable properties of the <code>options</code> object are:
+<ul>
+<li><code>requestType</code> - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.
+You can use one of the following predefined constants: <ul>
+<li><code><a href="#property_DISCOVER_DATASOURCES">DISCOVER_DATASOURCES</a></code></li>
+<li><code><a href="#property_DISCOVER_ENUMERATORS">DISCOVER_ENUMERATORS</a></code></li>
+<li><code><a href="#property_DISCOVER_KEYWORDS">DISCOVER_KEYWORDS</a></code></li>
+<li><code><a href="#property_DISCOVER_LITERALS">DISCOVER_LITERALS</a></code></li>
+<li><code><a href="#property_DISCOVER_PROPERTIES">DISCOVER_PROPERTIES</a></code></li>
+<li><code><a href="#property_DISCOVER_SCHEMA_ROWSETS">DISCOVER_SCHEMA_ROWSETS</a></code></li>
+</ul>
+You can also use any Schema Rowset Constant returned in the <code>SchemaName</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> rowset
+(see: <code><a href="method_discoverMDSchemaRowsets">discoverMDSchemaRowsets()</a></code>).
+</li>
+<li><code>url</code> {string} REQUIRED the url of the XML/A service or XML/A datasource.        
+If the value for the <code>requestType</code> option is one of the predefined XML/A <code><a href="">DISCOVER_XXX</a></code> constants, 
+then this should be the url of the XML/A service.
+</li>
+<li>
+<code>properties</code> {Object} XML/A properties. 
+The appropriate types and values of XML/A properties are dependent upon the value passed as <code>requestType</code>.
+The XML/A standard defines a set of pre-defined properties. 
+The <code>Xmla</code> class defines a static final property for each of these (see the <code>PROP_XXX</code> constants).
+The list of all valid properties can be obtained from the <code>DISCOVER_PROPERTIES</code> schema rowset 
+(see <code><a href="#method_discoverProperties()">discoverProperties()</a></code>). 
+Each javascript property of the <code>properties</code> object is mapped literally to a XML/A property.
+</li>
+<li>
+<code>restrictions</code> {Object} XML/A restrictions.
+These are used to specify a filter that will be applied to the data in the schema rowset.
+Each javascript property of the <code>restrictions</code> object is mapped to a column of the requested schema rowset.
+The value for the restriction is sent with the request, and processed by the XML/A server to only return matching rows from the requested schema dataset.
+The name, types and values of the restrictions are dependent upon which schema rowset is requested.
+The available restrictions are specified by the <code>Restrictions</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
+For a number of schema rowsets, the avaialale restrictions are pre-defined. 
+These are documented together with each particular <code>discoverXXX()</code> method.
+</li>
+<li><code>async</code> {boolean} 
+Determines how the request is performed:<ul>
+<li><code>true</code>: The request is performed asynchronously: the call to <code>request()</code> will not block and return immediately.
+In this case, the return value of the <code>request()</code> method is not defined, 
+and the response must be received by registering a listener 
+(see <code><a href="#method_addListener">addListener()</a></code>).
+</li>
+<li><code>false</code>: The request is performed synchronously: the call to <code>execute()</code> will block until it receives a response from the XML/A server or times out.
+In this case, a <code>Resultset</code> is returned that represents the multi-dimensional data set.
+If you registered any <code>REQUEST_XXX</code> and/or <code>EXECUTE_XXX</code> listeners (see <code><a href="#method_addListener">addListener()</a></code>), 
+then these will still be notified.
+</li>
+</ul>
+</li>
+</ul>
+Instead of calling this method directly, consider calling 
+or one of the specialized <code>discoverXXX()</code> methods to obtain a particular schema rowset.
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A <code>Discover</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDataSources">
+                                    <h4>
+                                        <a name="method_discoverDataSources">discoverDataSources</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDataSources</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_DATASOURCES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DISCOVER_DATASOURCES</code> schema rowset. 
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+<tr>
+<td>
+DataSourceName
+</td>
+<td>
+string
+</td>
+<td>
+A name that identifies this data source.
+</td>
+<td>
+Yes
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>
+DataSourceDescription
+</td>
+<td>
+string
+</td>
+<td>
+Human readable description of the datasource 
+</td>
+<td>
+No
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+URL
+</td>
+<td>
+string
+</td>
+<td>
+URL to use to submit requests to this provider.
+</td>
+<td>
+Yes
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+DataSourceInfo
+</td>
+<td>
+string
+</td>
+<td>
+Connectstring
+</td>
+<td>
+No
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+ProviderName
+</td>
+<td>
+string
+</td>
+<td>
+A name indicating the product providing the XML/A implementation
+</td>
+<td>
+Yes
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+ProviderType
+</td>
+<td>
+string[]
+</td>
+<td>
+The kind of data sets supported by this provider. 
+The following values are defined by the XML/A specification:
+<dl>
+<dt>TDP</dt><dd>tabular data provider.</dd>
+<dt>MDP</dt><dd>multidimensiona data provider.</dd>
+<dt>DMP</dt><dd>data mining provider.</dd>
+</dl>
+Note: multiple values are possible.
+</td>
+<td>
+Yes
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>
+AuthenticationMode
+</td>
+<td>
+string
+</td>
+<td>
+Type of security offered by the provider
+The following values are defined by the XML/A specification:
+<dl>
+<dt>Unauthenticated</dt><dd>no user ID or password needs to be sent.</dd>
+<dt>Authenticated</dt><dd>User ID and password must be included in the information required for the connection.</dd>
+<dt>Integrated</dt><dd> the data source uses the underlying security to determine authorization</dd>
+</dl>
+</td>
+<td>
+Yes
+</td>
+<td>
+No
+</td>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_execute">
+                                    <h4>
+                                        <a name="method_execute">execute</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Resultset
+                                            <strong property="yui:name">execute</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Sends an MDX query to a XML/A DataSource to invoke the XML/A <code>Execute</code> method and obtain the multi-dimensional resultset.
+Options are passed using a generic <code>options</code> object.
+Applicable properties of the <code>options</code> object are:
+<ul>
+<li><code>url</code> {string} REQUIRED the URL of a XML/A datasource. 
+This should be a value obtained from the <code>URL</code> column of the <code>DISCOVER_DATASOURCES</code> rowset
+(see: <code><a href="method_discoverDataSources">discoverDataSources()</a></code>).
+</li>
+<li>
+<code>properties</code> {Object} XML/A properties. 
+The list of all valid properties can be obtained from the <code>DISCOVER_PROPERTIES</code> schema rowset 
+(see <code><a href="#method_discoverProperties()">discoverProperties()</a></code>). 
+The <code>execute()</code> requires two properties:<dl>
+<dt><code>DataSourceInfo</code> property</dt>
+<dd>Identifies a data source managed by the XML/A server.
+Valid values for this property should be obtained from the <code>DataSourceInfo</code> column 
+of the <code>DISCOVER_DATASOURCES</code> schema rowset (see: <code><a href="#method_discoverDataSources">discoverDataSources()</a></code>).
+Note that the values for the <code>DataSourceInfo</code> property and the <code>url</code> must both be taken from the same row of the <code>DISCOVER_DATASOURCES</code> schema rowset.
+</dd>
+<dt><code>DataSourceInfo</code> property</dt>
+<dd>Identifies a data source managed by the XML/A server.
+Valid values for this property should be obtained from the <code>DataSourceInfo</code> column 
+of the <code>DISCOVER_DATASOURCES</code> schema rowset (see: <code><a href="#method_discoverDataSources">discoverDataSources()</a></code>).
+Note that the values for the <code>DataSourceInfo</code> property and the <code>url</code> must both be taken from the same row of the <code>DISCOVER_DATASOURCES</code> schema rowset.
+</dd>
+</dl>
+</li>
+<li><code>async</code> {boolean} 
+Determines how the request is performed:<ul>
+<li><code>true</code>: The request is performed asynchronously: the call to <code>request()</code> will not block and return immediately.
+In this case, the return value of the <code>request()</code> method is not defined, 
+and the response must be received by registering a listener 
+(see <code><a href="#method_addListener">addListener()</a></code>).
+</li>
+<li><code>false</code>: The request is performed synchronously: the call to <code>execute()</code> will block until it receives a response from the XML/A server or times out.
+In this case, a <code>Resultset</code> is returned that represents the multi-dimensional data set.
+If you registered any <code>REQUEST_XXX</code> and/or <code>EXECUTE_XXX</code> listeners (see <code><a href="#method_addListener">addListener()</a></code>), 
+then these will still be notified.
+</li>
+</ul>
+</li>
+</ul>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A <code>Execute</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Resultset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_request">
+                                    <h4>
+                                        <a name="method_request">request</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset|Xmla.Resultset
+                                            <strong property="yui:name">request</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Sends a request to the XML/A server.
+This method is rather low-level and allows full control over the request 
+by passing an options object. General properties of the options object are:
+<ul>
+<li><code>method</code> {string} REQUIRED the XML/A method to invoke (<code>Discover</code> or <code>Execute</code>, 
+or use the constants <code><a href="#property_METHOD_DISCOVER">METHOD_DISCOVER</a></code> and <code><a href="#property_METHOD_EXECUTE">METHOD_EXECUTE</a></code>).</li>
+<li><code>url</code> {string} REQUIRED the URL of XML/A service, or of a XML/A datasource. 
+Typically, you first use the URL of a XML/A service (like <code>http://your.pentaho.server:8080/pentaho/Xmla?userid=joe&amp;password=password</code>) 
+and use that to retrieve the <code>DISCOVER_DATASOURCES</code> rowset. 
+Then, you can connect to a XML/A datasource using the value returned by the <code>URL</code> column of the <code>DISCOVER_DATASOURCES</code> rowset 
+(typically, you also have to set a <code>DataSourceInfo</code> property using the value found in the <code>DataSourceInfo</code> column of the <code>DISCOVER_DATASOURCES</code> rowset).
+</li>
+<li>
+<code>properties</code> {Object} XML/A properties. 
+The appropriate types and values of XML/A properties are dependent upon the specific method and requestType.
+The XML/A standard defines a set of pre-defined properties. 
+The <code>Xmla</code> class defines a static final property for each of these (see the <code>PROP_XXX</code> constants).
+The list of all valid properties can be obtained from the <code>DISCOVER_PROPERTIES</code> schema rowset 
+(see <code><a href="#method_discoverProperties()">discoverProperties()</a></code>). 
+Each javascript property of the <code>properties</code> object is mapped literally to a XML/A property.
+</li>
+<li><code>requestType</code> - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.
+You can use one of the following predefined constants: <ul>
+<li><code><a href="#property_DISCOVER_DATASOURCES">DISCOVER_DATASOURCES</a></code></li>
+<li><code><a href="#property_DISCOVER_ENUMERATORS">DISCOVER_ENUMERATORS</a></code></li>
+<li><code><a href="#property_DISCOVER_KEYWORDS">DISCOVER_KEYWORDS</a></code></li>
+<li><code><a href="#property_DISCOVER_LITERALS">DISCOVER_LITERALS</a></code></li>
+<li><code><a href="#property_DISCOVER_PROPERTIES">DISCOVER_PROPERTIES</a></code></li>
+<li><code><a href="#property_DISCOVER_SCHEMA_ROWSETS">DISCOVER_SCHEMA_ROWSETS</a></code></li>
+</ul>
+You can also use any Schema Rowset Constant returned in the <code>SchemaName</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> rowset
+(see: <code><a href="method_discoverMDSchemaRowsets">discoverMDSchemaRowsets()</a></code>).
+</li>
+<li>
+<code>restrictions</code> {Object} XML/A restrictions.
+Restrictions apply only to the XML/A Discover method, and is used to filter the requested schema rowset. 
+Each javascript property of the <code>restrictions</code> object is mapped to a column of the requested schema rowset.
+The types and values of the restrictions are dependent upon which schema rowset is requested.
+The available restrictions are specified by the <code>Restrictions</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
+</li>
+<li><code>async</code> {boolean} 
+Determines how the request is performed:<ul>
+<li><code>true</code>: The request is performed asynchronously: the call to <code>request()</code> will not block and return immediately.
+In this case, the return value of the <code>request()</code> method is not defined, 
+and the response must be received by registering a listener 
+(see <code><a href="#method_addListener">addListener()</a></code>).
+</li>
+<li><code>false</code>: The request is performed synchronously: the call to <code>request()</code> will block until it receives a response from the XML/A server or times out.
+In this case, the <code>request()</code> method returns 
+a <code>Rowset</code> (for <code>Discover</code> requests) or 
+a <code>Resultset</code> (for <code>Execute</code> requests).
+If you registered any listeners (see <code><a href="#method_addListener">addListener()</a></code>), 
+then these will still be notified of any events (such as receiving the response).
+</li>
+</ul>
+</li>
+</ul>
+Instead of calling this method directly, consider calling 
+<code><a href="#method_discover">discover()</a></code> (to obtain a schema rowset),
+<code><a href="#method_execute">execute()</a></code> (to issue a MDX query), 
+or one of the specialized <code>discoverXXX()</code> methods (to obtain a particular schema rowset).
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset|Xmla.Resultset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Resultset</code>.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_xmla.html" title="xmla">xmla</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="Xmla.html" title="Xmla">Xmla</a></li>
+                                <li class=""><a href="Xmla.Rowset.html" title="Xmla.Rowset">Xmla.Rowset</a></li>
+                                <li class=""><a href="Xmla.Rowset.html" title="Xmla.Rowset">Xmla.Rowset</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Xmla.js.html" title="Xmla.js">Xmla.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_DBSCHEMA_CATALOGS" title="DBSCHEMA_CATALOGS">DBSCHEMA_CATALOGS</a></li>
+                                <li class=""><a href="#property_DISCOVER_DATASOURCES" title="DISCOVER_DATASOURCES">DISCOVER_DATASOURCES</a></li>
+                                <li class=""><a href="#property_DISCOVER_ENUMERATORS" title="DISCOVER_ENUMERATORS">DISCOVER_ENUMERATORS</a></li>
+                                <li class=""><a href="#property_DISCOVER_KEYWORDS" title="DISCOVER_KEYWORDS">DISCOVER_KEYWORDS</a></li>
+                                <li class=""><a href="#property_DISCOVER_LITERALS" title="DISCOVER_LITERALS">DISCOVER_LITERALS</a></li>
+                                <li class=""><a href="#property_DISCOVER_PROPERTIES" title="DISCOVER_PROPERTIES">DISCOVER_PROPERTIES</a></li>
+                                <li class=""><a href="#property_DISCOVER_SCHEMA_ROWSETS" title="DISCOVER_SCHEMA_ROWSETS">DISCOVER_SCHEMA_ROWSETS</a></li>
+                                <li class=""><a href="#property_EVENT_DISCOVER" title="EVENT_DISCOVER">EVENT_DISCOVER</a></li>
+                                <li class=""><a href="#property_EVENT_DISCOVER_ERROR" title="EVENT_DISCOVER_ERROR">EVENT_DISCOVER_ERROR</a></li>
+                                <li class=""><a href="#property_EVENT_DISCOVER_SUCCESS" title="EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></li>
+                                <li class=""><a href="#property_EVENT_ERROR" title="EVENT_ERROR">EVENT_ERROR</a></li>
+                                <li class=""><a href="#property_EVENT_EXECUTE" title="EVENT_EXECUTE">EVENT_EXECUTE</a></li>
+                                <li class=""><a href="#property_EVENT_EXECUTE_ERROR" title="EVENT_EXECUTE_ERROR">EVENT_EXECUTE_ERROR</a></li>
+                                <li class=""><a href="#property_EVENT_EXECUTE_SUCCESS" title="EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a></li>
+                                <li class=""><a href="#property_EVENT_REQUEST" title="EVENT_REQUEST">EVENT_REQUEST</a></li>
+                                <li class=""><a href="#property_EVENT_SUCCESS" title="EVENT_SUCCESS">EVENT_SUCCESS</a></li>
+                                <li class="protected"><a href="#property_listeners" title="listeners">listeners</a></li>
+                                <li class=""><a href="#property_METHOD_DISCOVER" title="METHOD_DISCOVER">METHOD_DISCOVER</a></li>
+                                <li class=""><a href="#property_METHOD_EXECUTE" title="METHOD_EXECUTE">METHOD_EXECUTE</a></li>
+                                <li class=""><a href="#property_PROP_AXISFORMAT" title="PROP_AXISFORMAT">PROP_AXISFORMAT</a></li>
+                                <li class=""><a href="#property_PROP_AXISFORMAT_CLUSTER" title="PROP_AXISFORMAT_CLUSTER">PROP_AXISFORMAT_CLUSTER</a></li>
+                                <li class=""><a href="#property_PROP_AXISFORMAT_CUSTOM" title="PROP_AXISFORMAT_CUSTOM">PROP_AXISFORMAT_CUSTOM</a></li>
+                                <li class=""><a href="#property_PROP_AXISFORMAT_TUPLE" title="PROP_AXISFORMAT_TUPLE">PROP_AXISFORMAT_TUPLE</a></li>
+                                <li class=""><a href="#property_PROP_CONTENT" title="PROP_CONTENT">PROP_CONTENT</a></li>
+                                <li class=""><a href="#property_PROP_CONTENT_DATA" title="PROP_CONTENT_DATA">PROP_CONTENT_DATA</a></li>
+                                <li class=""><a href="#property_PROP_CONTENT_NONE" title="PROP_CONTENT_NONE">PROP_CONTENT_NONE</a></li>
+                                <li class=""><a href="#property_PROP_CONTENT_SCHEMA" title="PROP_CONTENT_SCHEMA">PROP_CONTENT_SCHEMA</a></li>
+                                <li class=""><a href="#property_PROP_CONTENT_SCHEMADATA" title="PROP_CONTENT_SCHEMADATA">PROP_CONTENT_SCHEMADATA</a></li>
+                                <li class=""><a href="#property_response" title="response">response</a></li>
+                                <li class=""><a href="#property_responseText" title="responseText">responseText</a></li>
+                                <li class=""><a href="#property_responseXml" title="responseXml">responseXml</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="methodsList" class="module">
+                        <h4>Methods</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
+                                <li class=""><a href="#method_discover" title="discover">discover</a></li>
+                                <li class=""><a href="#method_discoverDataSources" title="discoverDataSources">discoverDataSources</a></li>
+                                <li class=""><a href="#method_execute" title="execute">execute</a></li>
+                                <li class=""><a href="#method_request" title="request">request</a></li>
+                        </ul>
+                    </div>
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 <a href="http://rpbouman.blogspot.com/">Roland Bouman</a>. 
+        (This documentation is part of the <a href="http://code.google.com/p/xmla4js/">xmla4js</a> project.)
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+</script>
+</body>
+</html>

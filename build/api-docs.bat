@@ -24,10 +24,12 @@ SET parser_in="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xm
 
 REM The location to output the parser data.  This output is a file containing a 
 REM json string, and copies of the parsed files.
-SET parser_out="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
+#SET parser_out="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
+SET parser_out="D:\tmp\xmla4js_apidoc"
 
 REM The directory to put the html file outputted by the generator
-SET generator_out="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
+#SET generator_out="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
+SET generator_out="D:\tmp\xmla4js_apidoc"
 
 REM The location of the template files.  Any subdirectories here will be copied
 REM verbatim to the destination directory.
@@ -39,5 +41,9 @@ SET version="r12"
 REM The version of YUI the project uses.
 SET yuiversion="2"
 
+rmdir /S /Q %parser_out%
+mkdir %parser_out%
+
 %yuidoc_home%\bin\yuidoc.py %parser_in% -p %parser_out% -o %generator_out% -t %template% -v %version% -m %projectname% -u %projecturl%
 
+copy D:\tmp\xmla4js_apidoc\* "D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
