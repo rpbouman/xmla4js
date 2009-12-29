@@ -1,5 +1,17 @@
+REM
+REM script: api-docs.bat
+REM purpose: generates API documentation using YUI Doc
+REM see: http://developer.yahoo.com/yui/yuidoc/
+REM
+
 REM Set the XMLA_HOME variable to the directory to which you checked out the xmla4js project directory 
 SET XMLA_HOME="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js"
+
+REM Set the projectname variable 
+SET projectname=xmla4js
+
+REM Set the project url variable
+SET projecturl=http://code.google.com/p/xmla4js/
 
 REM The location of your yuidoc install
 SET yuidoc_home="D:\Applications\yui\yuidoc_1.0.0b1"
@@ -19,7 +31,7 @@ SET generator_out="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapp
 
 REM The location of the template files.  Any subdirectories here will be copied
 REM verbatim to the destination directory.
-SET template="%yuidoc_home%\template"
+SET template="%XMLA_HOME%\build\yuidoc-template"
 
 REM The project version that will be displayed in the documentation.
 SET version="r12"
@@ -27,5 +39,6 @@ SET version="r12"
 REM The version of YUI the project uses.
 SET yuiversion="2"
 
-%yuidoc_home%\bin\yuidoc.py %parser_in% -p %parser_out% -o %generator_out% -t %template% -v %version%
+rmdir %parser_out%
+%yuidoc_home%\bin\yuidoc.py %parser_in% -p %parser_out% -o %generator_out% -t %template% -v %version% -m %projectname% -u %projecturl%
 
