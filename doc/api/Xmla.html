@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262098330.64" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262098330.64" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262099681.31" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262099681.31" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262098330.64"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262098330.64"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262099681.31"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262099681.31"></script>
 </head>
 
 <body id="yahoo-com">
@@ -1210,6 +1210,120 @@ No
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverProperties">
+                                    <h4>
+                                        <a name="method_discoverProperties">discoverProperties</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverProperties</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_PROPERTIES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DISCOVER_PROPERTIES</code> schema rowset. 
+This rowset provides information on the properties that are supported by the XML/A provider.
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+<tr>
+<td>
+PropertyName
+</td>
+<td>
+string
+</td>
+<td>
+The name of the property
+</td>
+<td>
+Yes (array)
+</td>
+<td>
+No
+</td>
+</tr>
+<tr>
+<td>
+PropertyDescription
+</td>
+<td>
+string
+</td>
+<td>
+Human readable description of the property
+</td>
+<td>
+No
+</td>
+<td>
+Yes
+</td>
+</tr>
+<tr>
+<td>
+PropertyType
+</td>
+<td>
+string
+</td>
+<td>
+The property's datatype
+</td>
+<td>
+No
+</td>
+<td>
+Yes
+</td>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                                     <div class="" rel="yui:method" resource="#method_execute">
                                     <h4>
                                         <a name="method_execute">execute</a></h4>
@@ -1444,7 +1558,6 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                         <ul class="content">
                                 <li class="selected"><a href="Xmla.html" title="Xmla">Xmla</a></li>
                                 <li class=""><a href="Xmla.Rowset.html" title="Xmla.Rowset">Xmla.Rowset</a></li>
-                                <li class=""><a href="Xmla.Rowset.html" title="Xmla.Rowset">Xmla.Rowset</a></li>
                         </ul>
                     </div>
 
@@ -1498,6 +1611,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
                                 <li class=""><a href="#method_discover" title="discover">discover</a></li>
                                 <li class=""><a href="#method_discoverDataSources" title="discoverDataSources">discoverDataSources</a></li>
+                                <li class=""><a href="#method_discoverProperties" title="discoverProperties">discoverProperties</a></li>
                                 <li class=""><a href="#method_execute" title="execute">execute</a></li>
                                 <li class=""><a href="#method_request" title="request">request</a></li>
                         </ul>
@@ -1515,7 +1629,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
 </script>
 </body>
 </html>

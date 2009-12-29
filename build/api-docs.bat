@@ -46,4 +46,5 @@ mkdir %parser_out%
 
 %yuidoc_home%\bin\yuidoc.py %parser_in% -p %parser_out% -o %generator_out% -t %template% -v %version% -m %projectname% -u %projecturl%
 
-copy D:\tmp\xmla4js_apidoc\* "D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
+copy /Y D:\tmp\xmla4js_apidoc\* "D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api"
+copy /Y D:\tmp\xmla4js_apidoc\assets\* "D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js\doc\api\assets"

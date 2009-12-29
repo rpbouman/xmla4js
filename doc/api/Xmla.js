@@ -1457,7 +1457,7 @@ Xmla.prototype = {
 *       </tr>
 *   </table>
 *   
-*   @method discoverDataSources
+*   @method discoverProperties
 *   @param options {Object} An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request. 
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. 
 */    
@@ -1691,7 +1691,6 @@ function _getRowSchema(xmlDoc){
 *   This class implements an XML/A Rowset object, which is the result of performing the <code>Discover</code> method (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
 *   
 *   @class Xmla.Rowset
-*   @for Xmla
 *   @constructor
 *   @param node {DOMDocument} The responseXML result returned by server in response to a <code>Discover</code> request. 
 *   @param requestTtype {string} The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.
@@ -1743,12 +1742,6 @@ Xmla.Rowset = function (node, requestType){
 Xmla.Rowset.FETCH_ARRAY = 1;
 Xmla.Rowset.FETCH_OBJECT = 2;
 
-/**
-*   This class implements an XML/A Rowset object, which is the result of performing the <code>Discover</code> method (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
-*   
-*   @class Xmla.Rowset
-*   @for Xmla
-*/
 Xmla.Rowset.prototype = {
     _boolConverter: function(val){
         return val==="true"?true:false;

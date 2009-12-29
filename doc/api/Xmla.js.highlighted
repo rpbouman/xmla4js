@@ -1457,7 +1457,7 @@
 <span class="cm">*       &lt;/tr&gt;</span>
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   </span>
-<span class="cm">*   @method discoverDataSources</span>
+<span class="cm">*   @method discoverProperties</span>
 <span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. </span>
 <span class="cm">*/</span>    
@@ -1691,7 +1691,6 @@
 <span class="cm">*   This class implements an XML/A Rowset object, which is the result of performing the &lt;code&gt;Discover&lt;/code&gt; method (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
 <span class="cm">*   </span>
 <span class="cm">*   @class Xmla.Rowset</span>
-<span class="cm">*   @for Xmla</span>
 <span class="cm">*   @constructor</span>
 <span class="cm">*   @param node {DOMDocument} The responseXML result returned by server in response to a &lt;code&gt;Discover&lt;/code&gt; request. </span>
 <span class="cm">*   @param requestTtype {string} The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</span>
@@ -1743,12 +1742,6 @@
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">FETCH_ARRAY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">FETCH_OBJECT</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
 
-<span class="cm">/**</span>
-<span class="cm">*   This class implements an XML/A Rowset object, which is the result of performing the &lt;code&gt;Discover&lt;/code&gt; method (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
-<span class="cm">*   </span>
-<span class="cm">*   @class Xmla.Rowset</span>
-<span class="cm">*   @for Xmla</span>
-<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">_boolConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
         <span class="k">return</span> <span class="nx">val</span><span class="o">===</span><span class="s2">&quot;true&quot;</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">;</span>
