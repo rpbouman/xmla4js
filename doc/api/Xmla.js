@@ -418,10 +418,75 @@ Xmla.DISCOVER_LITERALS =        _xmlaDISCOVER + "LITERALS";
 *   @default DBSCHEMA_CATALOGS
 */
 Xmla.DBSCHEMA_CATALOGS =       _xmlaDBSCHEMA + "CATALOGS";
+/**
+*   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+*   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_COLUMNS</code> schema rowset.
+*   The <code>requestType</code> option applies only to Discover requests.
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBColumns">discoverDBColumns()</a></code> method. 
+*   The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_COLUMNS</code> as requestType.
+*
+*   @property DBSCHEMA_COLUMNS
+*   @static
+*   @final
+*   @type string
+*   @default DBSCHEMA_COLUMNS
+*/
 Xmla.DBSCHEMA_COLUMNS =        _xmlaDBSCHEMA + "COLUMNS";
+/**
+*   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+*   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset.
+*   The <code>requestType</code> option applies only to Discover requests.
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBProviderTypes">discoverDBProviderTypes()</a></code> method. 
+*   The <code>discoverDBProviderTypes()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_PROVIDER_TYPES</code> as requestType.
+*
+*   @property DBSCHEMA_PROVIDER_TYPES
+*   @static
+*   @final
+*   @type string
+*   @default DBSCHEMA_PROVIDER_TYPES
+*/
 Xmla.DBSCHEMA_PROVIDER_TYPES = _xmlaDBSCHEMA + "PROVIDER_TYPES";
+/**
+*   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+*   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_SCHEMATA</code> schema rowset.
+*   The <code>requestType</code> option applies only to Discover requests.
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBProviderTypes">discoverDBColumns()</a></code> method. 
+*   The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_SCHEMATA</code> as requestType.
+*
+*   @property DBSCHEMA_SCHEMATA
+*   @static
+*   @final
+*   @type string
+*   @default DBSCHEMA_SCHEMATA
+*/
 Xmla.DBSCHEMA_SCHEMATA =       _xmlaDBSCHEMA + "SCHEMATA";
+/**
+*   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+*   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES</code> schema rowset.
+*   The <code>requestType</code> option applies only to Discover requests.
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBPTables">discoverDBColumns()</a></code> method. 
+*   The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES</code> as requestType.
+*
+*   @property DBSCHEMA_TABLES
+*   @static
+*   @final
+*   @type string
+*   @default DBSCHEMA_TABLES
+*/
 Xmla.DBSCHEMA_TABLES =         _xmlaDBSCHEMA + "TABLES";
+/**
+*   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+*   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES_INFO</code> schema rowset.
+*   The <code>requestType</code> option applies only to Discover requests.
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#discoverDBTablesInfo">discoverDBTablesInfo()</a></code> method. 
+*   The <code>discoverDBTablesInfo()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES_INFO</code> as requestType.
+*
+*   @property DBSCHEMA_TABLES_INFO
+*   @static
+*   @final
+*   @type string
+*   @default DBSCHEMA_TABLES_INFO
+*/
 Xmla.DBSCHEMA_TABLES_INFO =    _xmlaDBSCHEMA + "TABLES_INFO";
 
 Xmla.MDSCHEMA_ACTIONS =        _xmlaMDSCHEMA + "ACTIONS";
@@ -572,24 +637,68 @@ Xmla.EVENT_DISCOVER_SUCCESS = "discoversuccess";
 */
 Xmla.EVENT_DISCOVER_ERROR = "discovererror";
 
+/**
+*   Unifies all general events, that is, all events that are not method-specific.
+*   This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method,
+*   or you can use array concatenation to combine it with other arrays of <code>EVENT_XXX</code> constants.
+*   This constant is especially intended for asyncronous handling of Schema rowset data.
+*
+*   @property EVENT_GENERAL
+*   @static
+*   @final
+*   @type string[]
+*   @default [EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]
+*/
 Xmla.EVENT_GENERAL = [
     Xmla.EVENT_REQUEST,
     Xmla.EVENT_SUCCESS,
     Xmla.EVENT_ERROR
 ];
 
+/**
+*   Unifies all events specific for the <code>Discover</code> method.
+*   This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method,
+*   or you can use array concatenation to combine it with other arrays of <code>EVENT_XXX</code> constants.
+*
+*   @property EVENT_DISCOVER_ALL
+*   @static
+*   @final
+*   @type string[]
+*   @default [EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]
+*/
 Xmla.EVENT_DISCOVER_ALL = [
     Xmla.EVENT_DISCOVER,
     Xmla.EVENT_DISCOVER_SUCCESS,
     Xmla.EVENT_DISCOVER_ERROR
 ];
 
+/**
+*   Unifies all events specific for the <code>Execute</code> method.
+*   This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method,
+*   or you can use array concatenation to combine it with other arrays of <code>EVENT_XXX</code> constants.
+*
+*   @property EVENT_EXECUTE_ALL
+*   @static
+*   @final
+*   @type string[]
+*   @default [EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]
+*/
 Xmla.EVENT_EXECUTE_ALL = [
     Xmla.EVENT_EXECUTE,
     Xmla.EVENT_EXECUTE_SUCCESS,
     Xmla.EVENT_EXECUTE_ERROR
 ];
 
+/**
+*   Unifies all method-specific and non method-specific events.
+*   This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
+*
+*   @property EVENT_ALL
+*   @static
+*   @final
+*   @type string[]
+*   @default [].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)
+*/
 Xmla.EVENT_ALL = [].concat(
     Xmla.EVENT_GENERAL,
     Xmla.EVENT_DISCOVER_ALL,
@@ -944,6 +1053,8 @@ Xmla.prototype = {
 *       You can also use any Schema Rowset Constant returned in the <code>SchemaName</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> rowset
 *       (see: <code><a href="method_discoverMDSchemaRowsets">discoverMDSchemaRowsets()</a></code>).
 *       </li>
+*       <li><code>statement</code> - {string} Applies to the Execute method and specifies the MDX query to send to the server.
+*       </li>
 *       <li>
 *           <code>restrictions</code> {Object} XML/A restrictions.
 *           Restrictions apply only to the XML/A Discover method, and is used to filter the requested schema rowset. 
@@ -978,6 +1089,13 @@ Xmla.prototype = {
 */
     request: function(options){
         var xmla = this;
+
+        if (this.response){
+            this.response.close();
+        }
+        this.response = null;
+        this.responseText = null;
+        this.responseXml = null;
         
         var soapMessage = _getXmlaSoapMessage(options);
         options.soapMessage = soapMessage;
@@ -1000,7 +1118,7 @@ Xmla.prototype = {
                     }
                 });
             },
-            complete: function(xhr, textStatus){    //using complete rather than success f
+            complete: function(xhr, textStatus){
                 if (textStatus==="success"){
                     xmla._requestSuccess({
                         xmla: xmla,
@@ -1020,13 +1138,6 @@ Xmla.prototype = {
         if (options.password){
             ajaxOptions.password = options.password;
         }
-
-        if (this.response){
-            this.response.close();
-        }
-        this.response = null;
-        this.responseText = null;
-        this.responseXml = null;
         
         if  (this._fireEvent(Xmla.EVENT_REQUEST, options, true) &&
                 (
@@ -1106,6 +1217,8 @@ Xmla.prototype = {
 *       <li><code>url</code> {string} REQUIRED the URL of a XML/A datasource. 
 *           This should be a value obtained from the <code>URL</code> column of the <code>DISCOVER_DATASOURCES</code> rowset
 *           (see: <code><a href="method_discoverDataSources">discoverDataSources()</a></code>).
+*       </li>
+*       <li><code>statement</code> - {string} The MDX query to send to the server.
 *       </li>
 *       <li>
 *           <code>properties</code> {Object} XML/A properties. 
@@ -2132,6 +2245,7 @@ Xmla.Rowset.prototype = {
     },
 /**
 *   Retrieve an array of <code>fieldDef</code> objects that describes the fields of the rows in this rowset.
+*   The position of the <code>fieldDef</code> objects in the array corresponds to the column order of the rowset.
 *   For a description of the <code>fieldDef</code> object, see the 
 *   <code><a href="#method_fieldDef">fieldDef()</a></code> method.
 *
@@ -2252,6 +2366,15 @@ Xmla.Rowset.prototype = {
     },
 /**
 *   Fetch all values from all fields from the current row, and return it in an array.
+*   The position of the values in the array corresponds to the column order of the rowset.
+*   The internal row pointer is also increased so the next call will read the next row.
+*   The method returns false when there are no more rows to traverse. 
+*   You can use this method to drive a loop to travere all rows in the Rowset: 
+<pre>
+while (rowArray = rowset.fetchAsArray()){
+&nbsp;   ...process array...
+}
+</pre>
 *   @method fetchAsArray 
 *   @return {array}
 */    
@@ -2275,8 +2398,16 @@ Xmla.Rowset.prototype = {
 /**
 *   Fetch all values from all fields from the current row, and return it in an Object literal.
 *   The property names of the returned object correspond to the fieldName (actually the fieldLabel), and the field value is assigned to its respective property.
+*   The internal row pointer is also increased so the next call will read the next row.
+*   The method returns false when there are no more rows to traverse. 
+*   You can use this method to drive a loop to travere all rows in the Rowset: 
+<pre>
+while (rowObject = rowset.fetchAsObject()){
+&nbsp;   ...process object...
+}
+</pre>
 *   @method fetchAsObject 
-*   @return {Object}
+*   @return {Object|boolean}
 */    
     fetchAsObject: function(){
         var object, fields, fieldName, fieldDef;
