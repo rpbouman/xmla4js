@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262138584.69" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262138584.69" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262185359.41" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262185359.41" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262138584.69"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262138584.69"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262185359.41"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262185359.41"></script>
 </head>
 
 <body id="yahoo-com">
@@ -103,7 +103,7 @@ see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla
                                             <dt>Parameters:</dt>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">options</span>
-                                                    &lt;<span property="yui:type">object</span>&gt;
+                                                    &lt;<span property="yui:type">Object</span>&gt;
                                                     </code>
                                                     <span property="yui:description"></span>
                                                 </dd>
@@ -135,7 +135,7 @@ The <code>discoverDBCatalogs()</code> method issues a request to invoke the Disc
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DBSCHEMA_CATALOGS
+                                        Default Value: <code>DBSCHEMA_CATALOGS</code>
                                     </div>        
 
 
@@ -157,7 +157,7 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DBSCHEMA_COLUMNS
+                                        Default Value: <code>DBSCHEMA_COLUMNS</code>
                                     </div>        
 
 
@@ -179,7 +179,7 @@ The <code>discoverDBProviderTypes()</code> method issues a request to invoke the
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DBSCHEMA_PROVIDER_TYPES
+                                        Default Value: <code>DBSCHEMA_PROVIDER_TYPES</code>
                                     </div>        
 
 
@@ -201,7 +201,7 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DBSCHEMA_SCHEMATA
+                                        Default Value: <code>DBSCHEMA_SCHEMATA</code>
                                     </div>        
 
 
@@ -216,14 +216,14 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
                                             Can be used as value for the <code>requestType</code> option in the options object passed to the to 
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
-Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBPTables">discoverDBColumns()</a></code> method. 
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBTables">discoverDBColumns()</a></code> method. 
 The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES</code> as requestType.
                                         </div>
                                     </div>
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DBSCHEMA_TABLES
+                                        Default Value: <code>DBSCHEMA_TABLES</code>
                                     </div>        
 
 
@@ -238,14 +238,15 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
                                             Can be used as value for the <code>requestType</code> option in the options object passed to the to 
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES_INFO</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
-Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#discoverDBTablesInfo">discoverDBTablesInfo()</a></code> method. 
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverDBTablesInfo">discoverDBTablesInfo()</a></code> method. 
 The <code>discoverDBTablesInfo()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES_INFO</code> as requestType.
                                         </div>
                                     </div>
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DBSCHEMA_TABLES_INFO
+                                        Default Value: <code>DBSCHEMA_TABLES_INFO</code>
                                     </div>        
 
 
@@ -267,7 +268,7 @@ The <code>discoverDataSources()</code> method passes <code>DISCOVER_DATASOURCES<
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DISCOVER_DATASOURCES
+                                        Default Value: <code>DISCOVER_DATASOURCES</code>
                                     </div>        
 
 
@@ -289,7 +290,7 @@ The <code>discoverSchemaRowsets()</code> method issues a request to invoke the D
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DISCOVER_ENUMERATORS
+                                        Default Value: <code>DISCOVER_ENUMERATORS</code>
                                     </div>        
 
 
@@ -311,7 +312,7 @@ The <code>discoverKeywords()</code> method issues a request to invoke the Discov
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DISCOVER_KEYWORDS
+                                        Default Value: <code>DISCOVER_KEYWORDS</code>
                                     </div>        
 
 
@@ -333,7 +334,7 @@ The <code>discoverLiterals()</code> method issues a request to invoke the Discov
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DISCOVER_LITERALS
+                                        Default Value: <code>DISCOVER_LITERALS</code>
                                     </div>        
 
 
@@ -355,7 +356,7 @@ The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</c
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DISCOVER_PROPERTIES
+                                        Default Value: <code>DISCOVER_PROPERTIES</code>
                                     </div>        
 
 
@@ -377,7 +378,7 @@ The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</c
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: DISCOVER_SCHEMA_ROWSETS
+                                        Default Value: <code>DISCOVER_SCHEMA_ROWSETS</code>
                                     </div>        
 
 
@@ -396,7 +397,7 @@ This constant can be used as events array argument for the <code><a href="#metho
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: [].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)
+                                        Default Value: <code>[].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)</code>
                                     </div>        
 
 
@@ -419,7 +420,7 @@ to the server, but after firing the <code>request</code> event
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: discover
+                                        Default Value: <code>discover</code>
                                     </div>        
 
 
@@ -439,7 +440,7 @@ or you can use array concatenation to combine it with other arrays of <code>EVEN
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: [EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]
+                                        Default Value: <code>[EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]</code>
                                     </div>        
 
 
@@ -461,7 +462,7 @@ or receiving a response to an <code>Discover</code method.
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: discovererror
+                                        Default Value: <code>discovererror</code>
                                     </div>        
 
 
@@ -484,7 +485,7 @@ to an incovation of the XML/A <code>Discover</code> method
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: discoversuccess
+                                        Default Value: <code>discoversuccess</code>
                                     </div>        
 
 
@@ -505,7 +506,7 @@ The <code>error</code> event is not method-specific, and fires for errors encoun
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: error
+                                        Default Value: <code>error</code>
                                     </div>        
 
 
@@ -528,7 +529,7 @@ to the server, but after firing the <code>request</code> event
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: execute
+                                        Default Value: <code>execute</code>
                                     </div>        
 
 
@@ -548,7 +549,7 @@ or you can use array concatenation to combine it with other arrays of <code>EVEN
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: [EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]
+                                        Default Value: <code>[EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]</code>
                                     </div>        
 
 
@@ -569,7 +570,7 @@ The <code>executeerror</code> event is method-specific and fired when an error o
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: executeerror
+                                        Default Value: <code>executeerror</code>
                                     </div>        
 
 
@@ -592,7 +593,7 @@ to an incovation of the XML/A <code>Execute</code> method
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: executesuccess
+                                        Default Value: <code>executesuccess</code>
                                     </div>        
 
 
@@ -613,7 +614,7 @@ This constant is especially intended for asyncronous handling of Schema rowset d
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: [EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]
+                                        Default Value: <code>[EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]</code>
                                     </div>        
 
 
@@ -638,7 +639,7 @@ The <code>request</code> event itself is not method-specific, and fires for <cod
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: request
+                                        Default Value: <code>request</code>
                                     </div>        
 
 
@@ -663,7 +664,7 @@ The <code>success</code> event is not method-specific, and fires for <code>Execu
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: success
+                                        Default Value: <code>success</code>
                                     </div>        
 
 
@@ -683,17 +684,266 @@ each value is an array of listener objects that are subscribed to that particula
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: {
-"request": []
-,   "succss": []
-,   "error": []
-,   "discover": []
-,   "discoversuccss": []
-,   "discovererror": []
-,   "execute": []
-,   "executesuccss": []
-,   "executeerror": []
-}
+                                        Default Value: <pre>
+{
+&nbsp;     "request": []
+&nbsp;,   "succss": []
+&nbsp;,   "error": []
+&nbsp;,   "discover": []
+&nbsp;,   "discoversuccss": []
+&nbsp;,   "discovererror": []
+&nbsp;,   "execute": []
+&nbsp;,   "executesuccss": []
+&nbsp;,   "executeerror": []
+}</pre>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_ACTIONS">
+                                    <h4><a name="property_MDSCHEMA_ACTIONS" property="yui:name">MDSCHEMA_ACTIONS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>MDSCHEMA_ACTIONS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDActions">discoverMDActions()</a></code> method. 
+The <code>discoverMDActions()</code> method issues a request to invoke the Discover method using <code>MDSCHEMA_ACTIONS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_ACTIONS</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_CUBES">
+                                    <h4><a name="property_MDSCHEMA_CUBES" property="yui:name">MDSCHEMA_CUBES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_CUBES</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDCubes">discoverMDCubes()</a></code> method. 
+The <code>discoverMDCubes()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_CUBES</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_CUBES</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_DIMENSIONS">
+                                    <h4><a name="property_MDSCHEMA_DIMENSIONS" property="yui:name">MDSCHEMA_DIMENSIONS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_DIMENSIONS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDDimensions">discoverMDCubes()</a></code> method. 
+The <code>discoverMDDimensions()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_DIMENSIONS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_DIMENSIONS</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_FUNCTIONS">
+                                    <h4><a name="property_MDSCHEMA_FUNCTIONS" property="yui:name">MDSCHEMA_FUNCTIONS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_FUNCTIONS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDFunctions">discoverMDFunctions()</a></code> method. 
+The <code>discoverMDFunctions()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_FUNCTIONS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_FUNCTIONS</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_HIERARCHIES">
+                                    <h4><a name="property_MDSCHEMA_HIERARCHIES" property="yui:name">MDSCHEMA_HIERARCHIES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_HIERARCHIES</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code> method. 
+The <code>discoverMDHierarchies()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_HIERARCHIES</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_HIERARCHIES</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_LEVELS">
+                                    <h4><a name="property_MDSCHEMA_LEVELS" property="yui:name">MDSCHEMA_LEVELS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_LEVELS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDLevels">discoverMDLevels()</a></code> method. 
+The <code>discoverMDLevels()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_LEVELS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_LEVELS</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_MEASURES">
+                                    <h4><a name="property_MDSCHEMA_MEASURES" property="yui:name">MDSCHEMA_MEASURES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_MEASURES</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDMeasures">discoverMDMeasures()</a></code> method. 
+The <code>discoverMDMeasures()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_MEASURES</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_MEASURES</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_MEMBERS">
+                                    <h4><a name="property_MDSCHEMA_MEMBERS" property="yui:name">MDSCHEMA_MEMBERS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_MEMBERS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDMembers">discoverMDMembers()</a></code> method. 
+The <code>discoverMDMembers()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_MEMBERS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_MEMBERS</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_PROPERTIES">
+                                    <h4><a name="property_MDSCHEMA_PROPERTIES" property="yui:name">MDSCHEMA_PROPERTIES</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_PROPERTIES</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDProperties">discoverMDProperties()</a></code> method. 
+The <code>discoverMDProperties()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_PROPERTIES</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_PROPERTIES</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MDSCHEMA_SETS">
+                                    <h4><a name="property_MDSCHEMA_SETS" property="yui:name">MDSCHEMA_SETS</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can be used as value for the <code>requestType</code> option in the options object passed to the to 
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the 
+<code>MDSCHEMA_SETS</code> schema rowset.
+The <code>requestType</code> option applies only to Discover requests.
+Instead of passing this <code>requestType</code> yourself, consider calling the 
+<code><a href="#method_discoverMDSets">discoverMDSets()</a></code> method. 
+The <code>discoverMDSets()</code> method issues a request to invoke the Discover method using
+<code>MDSCHEMA_SETS</code> as requestType.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>MDSCHEMA_SETS</code>
                                     </div>        
 
 
@@ -714,7 +964,7 @@ The <code>discover()</code> method automatically sets the method option to <code
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: Discover
+                                        Default Value: <code>Discover</code>
                                     </div>        
 
 
@@ -735,7 +985,7 @@ The <code>execute()</code> method automatically sets the method option to <code>
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: Discover
+                                        Default Value: <code>Discover</code>
                                     </div>        
 
 
@@ -760,7 +1010,7 @@ Valid values for the <code>AxisFormat</code> property are available as the stati
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: AxisFormat
+                                        Default Value: <code>AxisFormat</code>
                                     </div>        
 
 
@@ -781,7 +1031,7 @@ in invocations of the <code>Execute</code> method
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: ClusterFormat
+                                        Default Value: <code>ClusterFormat</code>
                                     </div>        
 
 
@@ -802,7 +1052,7 @@ in invocations of the <code>Execute</code> method
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: CustomFormat
+                                        Default Value: <code>CustomFormat</code>
                                     </div>        
 
 
@@ -823,7 +1073,7 @@ in invocations of the <code>Execute</code> method
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: TupleFormat
+                                        Default Value: <code>TupleFormat</code>
                                     </div>        
 
 
@@ -853,7 +1103,7 @@ or any of the <code>discoverXXX()</code> methods.
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: Content
+                                        Default Value: <code>Content</code>
                                     </div>        
 
 
@@ -875,7 +1125,7 @@ this option is primarily useful if you know how to process the XML response dire
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: Data
+                                        Default Value: <code>Data</code>
                                     </div>        
 
 
@@ -896,7 +1146,7 @@ This is useful to check the validity of the request.
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: None
+                                        Default Value: <code>None</code>
                                     </div>        
 
 
@@ -916,7 +1166,7 @@ This value specifies that the response should only return XML Schema metadata, b
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: Schema
+                                        Default Value: <code>Schema</code>
                                     </div>        
 
 
@@ -936,7 +1186,7 @@ This value specifies that the response should return both data as well as XML Sc
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: SchemaData
+                                        Default Value: <code>SchemaData</code>
                                     </div>        
 
 
@@ -964,7 +1214,7 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: null
+                                        Default Value: <code>null</code>
                                     </div>        
 
 
@@ -989,7 +1239,7 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: null
+                                        Default Value: <code>null</code>
                                     </div>        
 
 
@@ -1014,7 +1264,7 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
      
                                         
                                     <div class="default" property="yui:defaultValue">
-                                        Default Value: null
+                                        Default Value: <code>null</code>
                                     </div>        
 
 
@@ -1080,7 +1330,7 @@ When not specified, the global <code>window</code> is used.
                                                         <code><span property="yui:name">listener</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object that defines the events and the notification function to be called.</span>
+                                                        <span property="yui:description"> An object that defines the events and the notification function to be called.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1124,8 +1374,9 @@ When not specified, the global <code>window</code> is used.
 Options are passed using a generic <code>options</code> object.
 Applicable properties of the <code>options</code> object are:
 <ul>
-<li><code>requestType</code> - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.
-You can use one of the following predefined constants: <ul>
+<li><code>requestType</code> - {string} Indicates the kind of schema rowset to retrieve.
+You can use one of the following predefined XML for Analysis Schema Rowset constants:
+<ul>
 <li><code><a href="#property_DISCOVER_DATASOURCES">DISCOVER_DATASOURCES</a></code></li>
 <li><code><a href="#property_DISCOVER_ENUMERATORS">DISCOVER_ENUMERATORS</a></code></li>
 <li><code><a href="#property_DISCOVER_KEYWORDS">DISCOVER_KEYWORDS</a></code></li>
@@ -1133,7 +1384,29 @@ You can use one of the following predefined constants: <ul>
 <li><code><a href="#property_DISCOVER_PROPERTIES">DISCOVER_PROPERTIES</a></code></li>
 <li><code><a href="#property_DISCOVER_SCHEMA_ROWSETS">DISCOVER_SCHEMA_ROWSETS</a></code></li>
 </ul>
-You can also use any Schema Rowset Constant returned in the <code>SchemaName</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> rowset
+Or one of the applicable OLE DB Schema Rowset constants: 
+<ul>
+<li><code><a href="#property_DBSCHEMA_CATALOGS">DBSCHEMA_CATALOGS</a></code></li>
+<li><code><a href="#property_DBSCHEMA_COLUMNS">DBSCHEMA_COLUMNS</a></code></li>
+<li><code><a href="#property_DBSCHEMA_PROVIDER_TYPES">DBSCHEMA_PROVIDER_TYPES</a></code></li>
+<li><code><a href="#property_DBSCHEMA_SCHEMATA">DBSCHEMA_SCHEMATA</a></code></li>
+<li><code><a href="#property_DBSCHEMA_TABLES">DBSCHEMA_TABLES</a></code></li>
+<li><code><a href="#property_DBSCHEMA_TABLES_INFO">DBSCHEMA_TABLES_INFO</a></code></li>
+</ul>
+Or one of the applicable OLE DB for OLAP Schema Rowset constants: 
+<ul>
+<li><code><a href="#property_MDSCHEMA_ACTIONS">MDSCHEMA_ACTIONS</a></code></li>
+<li><code><a href="#property_MDSCHEMA_CUBES">MDSCHEMA_CUBES</a></code></li>
+<li><code><a href="#property_MDSCHEMA_DIMENSIONS">MDSCHEMA_DIMENSIONS</a></code></li>
+<li><code><a href="#property_MDSCHEMA_FUNCTIONS">MDSCHEMA_FUNCTIONS</a></code></li>
+<li><code><a href="#property_MDSCHEMA_HIERARCHIES">MDSCHEMA_HIERARCHIES</a></code></li>
+<li><code><a href="#property_MDSCHEMA_MEASURES">MDSCHEMA_MEASURES</a></code></li>
+<li><code><a href="#property_MDSCHEMA_MEMBERS">MDSCHEMA_MEMBERS</a></code></li>
+<li><code><a href="#property_MDSCHEMA_PROPERTIES">MDSCHEMA_PROPERTIES</a></code></li>
+<li><code><a href="#property_MDSCHEMA_SETS">MDSCHEMA_SETS</a></code></li>
+</ul>
+You can also dymically discover which values for <code>requestType</code> are supported by the XML/A provider.
+To do that, refer to the <code>SchemaName</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> rowset
 (see: <code><a href="method_discoverMDSchemaRowsets">discoverMDSchemaRowsets()</a></code>).
 </li>
 <li><code>url</code> {string} REQUIRED the url of the XML/A service or XML/A datasource.        
@@ -1156,7 +1429,7 @@ Each javascript property of the <code>restrictions</code> object is mapped to a 
 The value for the restriction is sent with the request, and processed by the XML/A server to only return matching rows from the requested schema dataset.
 The name, types and values of the restrictions are dependent upon which schema rowset is requested.
 The available restrictions are specified by the <code>Restrictions</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
-For a number of schema rowsets, the avaialale restrictions are pre-defined. 
+For a number of schema rowsets, the available restrictions are pre-defined. 
 These are documented together with each particular <code>discoverXXX()</code> method.
 </li>
 <li><code>async</code> {boolean} 
@@ -1186,7 +1459,7 @@ or one of the specialized <code>discoverXXX()</code> methods to obtain a particu
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A <code>Discover</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A <code>Discover</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1380,7 +1653,7 @@ No
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1390,6 +1663,390 @@ No
                                                         Xmla.Rowset
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDBCatalogs">
+                                    <h4>
+                                        <a name="method_discoverDBCatalogs">discoverDBCatalogs</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDBCatalogs</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_DBSCHEMA_CATALOGS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DBSCHEMA_CATALOGS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DBSCHEMA_CATALOGS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDBColumns">
+                                    <h4>
+                                        <a name="method_discoverDBColumns">discoverDBColumns</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDBColumns</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_DBSCHEMA_COLUMNS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DBSCHEMA_COLUMNS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DBSCHEMA_COLUMNS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDBProviderTypes">
+                                    <h4>
+                                        <a name="method_discoverDBProviderTypes">discoverDBProviderTypes</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDBProviderTypes</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_DBSCHEMA_PROVIDER_TYPES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DBSCHEMA_PROVIDER_TYPES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDBSchemata">
+                                    <h4>
+                                        <a name="method_discoverDBSchemata">discoverDBSchemata</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDBSchemata</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_DBSCHEMA_SCHEMATA"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DBSCHEMA_SCHEMATA</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DBSCHEMA_SCHEMATA</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDBTables">
+                                    <h4>
+                                        <a name="method_discoverDBTables">discoverDBTables</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDBTables</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_DBSCHEMA_TABLES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DBSCHEMA_TABLES</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DBSCHEMA_TABLES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverDBTablesInfo">
+                                    <h4>
+                                        <a name="method_discoverDBTablesInfo">discoverDBTablesInfo</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverDBTablesInfo</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_DBSCHEMA_TABLES_INFO"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>DBSCHEMA_TABLES_INFO</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DBSCHEMA_TABLES_INFO</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES_INFO</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
                                                 </dl>
 
 
@@ -1485,7 +2142,7 @@ The rowset has the following columns:
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_ENUMERATORS</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DISCOVER_ENUMERATORS</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1555,7 +2212,7 @@ The rowset has the following columns:
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_KEYWORDS</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DISCOVER_KEYWORDS</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1653,7 +2310,7 @@ The rowset has the following columns:
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_LITERALS</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DISCOVER_LITERALS</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1663,6 +2320,646 @@ The rowset has the following columns:
                                                         Xmla.Rowset
                                                     </code></dt>
                                                     <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDActions">
+                                    <h4>
+                                        <a name="method_discoverMDActions">discoverMDActions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDActions</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_ACTIONS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_ACTIONS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_ACTIONS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDCubes">
+                                    <h4>
+                                        <a name="method_discoverMDCubes">discoverMDCubes</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDCubes</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_CUBES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_CUBES</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_CUBES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDDimensions">
+                                    <h4>
+                                        <a name="method_discoverMDDimensions">discoverMDDimensions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDDimensions</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_DIMENSIONS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_DIMENSIONS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDFunctions">
+                                    <h4>
+                                        <a name="method_discoverMDFunctions">discoverMDFunctions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDFunctions</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_FUNCTIONS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_FUNCTIONS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDHierarchies">
+                                    <h4>
+                                        <a name="method_discoverMDHierarchies">discoverMDHierarchies</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDHierarchies</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_HIERARCHIES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_HIERARCHIES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDLevels">
+                                    <h4>
+                                        <a name="method_discoverMDLevels">discoverMDLevels</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDLevels</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_LEVELS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_LEVELS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_LEVELS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDMeasures">
+                                    <h4>
+                                        <a name="method_discoverMDMeasures">discoverMDMeasures</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDMeasures</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_MEASURES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_MEASURES</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_MEASURES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDMembers">
+                                    <h4>
+                                        <a name="method_discoverMDMembers">discoverMDMembers</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDMembers</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_MEMBERS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_MEMBERS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_MEMBERS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDProperties">
+                                    <h4>
+                                        <a name="method_discoverMDProperties">discoverMDProperties</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDProperties</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_PROPERTIES"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_PROPERTIES</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_PROPERTIES</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:method" resource="#method_discoverMDSets">
+                                    <h4>
+                                        <a name="method_discoverMDSets">discoverMDSets</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        Xmla.Rowset
+                                            <strong property="yui:name">discoverMDSets</strong>
+                                           (
+                                                
+                                                        
+                                                         options
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            Invokes the <code><a href="#method_discover">discover()</a></code> method using 
+<code><a href="#property_MDSCHEMA_SETS"></a></code> as value for the <code>requestType</code>, 
+and retrieves the <code>MDSCHEMA_SETS</code> schema rowset. 
+...todo...
+The rowset has the following columns:
+<table border="1" class="schema-rowset">
+<tr>
+<th>Column Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Restriction</th>
+<th>Nullable</th>
+</tr>
+</table>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">options</span>
+                                                        &lt;<span property="yui:type">Object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>MDSCHEMA_SETS</code> request.</span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        Xmla.Rowset
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events.</dd>
                                                 </dl>
 
 
@@ -1823,7 +3120,7 @@ Yes
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -1907,7 +3204,7 @@ The rowset has the following columns:
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A a <code>DISCOVER_SCHEMA_ROWSETS</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A a <code>DISCOVER_SCHEMA_ROWSETS</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -2006,7 +3303,7 @@ then these will still be notified.
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the XML/A <code>Execute</code> request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the XML/A <code>Execute</code> request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -2050,8 +3347,38 @@ then these will still be notified.
 This method is rather low-level and allows full control over the request 
 by passing an options object. General properties of the options object are:
 <ul>
-<li><code>method</code> {string} REQUIRED the XML/A method to invoke (<code>Discover</code> or <code>Execute</code>, 
-or use the constants <code><a href="#property_METHOD_DISCOVER">METHOD_DISCOVER</a></code> and <code><a href="#property_METHOD_EXECUTE">METHOD_EXECUTE</a></code>).</li>
+<li><code>method</code> {string} REQUIRED the XML/A method to invoke. This should be one of the following constants:
+<dl>
+<dt><code><a href="#property_METHOD_DISCOVER">METHOD_DISCOVER</a></code></dt>
+<dd>
+<p>
+This method is used to obtain metadata from the XML/A service or XML/A provider. 
+Metadata is returned in a tabular format called Schema Rowsets, which are represented by an instance of the 
+<code><a href="Xmla.Rowset.html#class_Xmla.Rowset">Xmla.Rowset</a></code> class.
+For these types of requests, you must pass the <code>requestType</code> option to specify which schema rowset you want to obtain.
+In addition, you can specify a <code>restrictions</code> object that is used as filter criteria to restrict which rows will be returned in the rowset.
+</p>
+<p>
+Instead of explicitly passing <code>METHOD_DISCOVER</code> as the <code>requestType</code>, you can also call the 
+<code><a href="#method_discover">discover()</a></code> method (which requires you to explictly pass a <code>requestType</code> option).
+Finally, you can also call one of the <code>discoverXXX()</code> methods in order to request a particular schema rowset.
+</p>
+</dd>
+<dt><code><a href="#property_METHOD_EXECUTE">METHOD_EXECUTE</a></code></dt>
+<dd>
+<p>
+This method is used to send an MDX quey to the XML/A provider. 
+Query results are returned in a multidimentsional format which is represented by an instance of the 
+<code><a href="Xmla.Resultset.html#class_Xmla.Resultset">Xmla.Resultset</a></code> class.
+For these types of requests, you must pass the <code>statement</code> option to specify the MDX query.
+</p>
+<p>
+Instead of explicitly passing <code>METHOD_EXECUTE</code> as the <code>requestType</code>, you can also call the 
+<code><a href="#method_execute">execute()</a></code> method.
+</p>
+</dd>
+</dl>
+</li>
 <li><code>url</code> {string} REQUIRED the URL of XML/A service, or of a XML/A datasource. 
 Typically, you first use the URL of a XML/A service (like <code>http://your.pentaho.server:8080/pentaho/Xmla?userid=joe&amp;password=password</code>) 
 and use that to retrieve the <code>DISCOVER_DATASOURCES</code> rowset. 
@@ -2066,27 +3393,6 @@ The <code>Xmla</code> class defines a static final property for each of these (s
 The list of all valid properties can be obtained from the <code>DISCOVER_PROPERTIES</code> schema rowset 
 (see <code><a href="#method_discoverProperties()">discoverProperties()</a></code>). 
 Each javascript property of the <code>properties</code> object is mapped literally to a XML/A property.
-</li>
-<li><code>requestType</code> - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.
-You can use one of the following predefined constants: <ul>
-<li><code><a href="#property_DISCOVER_DATASOURCES">DISCOVER_DATASOURCES</a></code></li>
-<li><code><a href="#property_DISCOVER_ENUMERATORS">DISCOVER_ENUMERATORS</a></code></li>
-<li><code><a href="#property_DISCOVER_KEYWORDS">DISCOVER_KEYWORDS</a></code></li>
-<li><code><a href="#property_DISCOVER_LITERALS">DISCOVER_LITERALS</a></code></li>
-<li><code><a href="#property_DISCOVER_PROPERTIES">DISCOVER_PROPERTIES</a></code></li>
-<li><code><a href="#property_DISCOVER_SCHEMA_ROWSETS">DISCOVER_SCHEMA_ROWSETS</a></code></li>
-</ul>
-You can also use any Schema Rowset Constant returned in the <code>SchemaName</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> rowset
-(see: <code><a href="method_discoverMDSchemaRowsets">discoverMDSchemaRowsets()</a></code>).
-</li>
-<li><code>statement</code> - {string} Applies to the Execute method and specifies the MDX query to send to the server.
-</li>
-<li>
-<code>restrictions</code> {Object} XML/A restrictions.
-Restrictions apply only to the XML/A Discover method, and is used to filter the requested schema rowset. 
-Each javascript property of the <code>restrictions</code> object is mapped to a column of the requested schema rowset.
-The types and values of the restrictions are dependent upon which schema rowset is requested.
-The available restrictions are specified by the <code>Restrictions</code> column of the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
 </li>
 <li><code>async</code> {boolean} 
 Determines how the request is performed:<ul>
@@ -2105,6 +3411,29 @@ then these will still be notified of any events (such as receiving the response)
 </ul>
 </li>
 </ul>
+Other parts of the <code>options</code> object are method-specific.
+<ul>
+<li>The following options are applicable in case the <code>method</code> is <code>METHOD_DISCOVER</code>:
+<ul>
+<li><code>requestType</code> - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.
+You can use one of the <code>DISCOVER_XXX</code>, <code>DBSCHEMA_XXX</code> or <code>MDSCHEMA_XXX</code> constants for this property.
+You can also dymically discover which values for <code>requestType</code> are supported by the XML/A provider using the 
+<code>DISCOVER_SCHEMA_ROWSETS</code> rowset (see: <code><a href="method_discoverMDSchemaRowsets">discoverMDSchemaRowsets()</a></code>).
+See the <code><a href="#method_discover">discover()</a></code> method for more information.
+</li>
+<li>
+<code>restrictions</code> {Object} XML/A restrictions are used to filter the requested schema rowset. 
+For more information on restrictions, see the <code><a href="#method_discover">discover()</a></code> method.
+</li>
+</ul>
+</li>
+<li>The following options are applicable in case the <code>method</code> is <code>METHOD_EXECUTE</code>:
+<ul>
+<li><code>statement</code> - {string} Applies to the Execute method and specifies the MDX query to send to the server.
+</li>
+</ul>
+</li>
+</ul>
 Instead of calling this method directly, consider calling 
 <code><a href="#method_discover">discover()</a></code> (to obtain a schema rowset),
 <code><a href="#method_execute">execute()</a></code> (to issue a MDX query), 
@@ -2119,7 +3448,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                                         <code><span property="yui:name">options</span>
                                                         &lt;<span property="yui:type">Object</span>&gt;
                                                         </code>
-                                                        <span property="yui:description">  An object whose properties convey the options for the request.</span>
+                                                        <span property="yui:description"> An object whose properties convey the options for the request.</span>
                                                         </dd>
                                                 </dl>
 
@@ -2209,6 +3538,16 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#property_EVENT_REQUEST" title="EVENT_REQUEST">EVENT_REQUEST</a></li>
                                 <li class=""><a href="#property_EVENT_SUCCESS" title="EVENT_SUCCESS">EVENT_SUCCESS</a></li>
                                 <li class="protected"><a href="#property_listeners" title="listeners">listeners</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_ACTIONS" title="MDSCHEMA_ACTIONS">MDSCHEMA_ACTIONS</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_CUBES" title="MDSCHEMA_CUBES">MDSCHEMA_CUBES</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_DIMENSIONS" title="MDSCHEMA_DIMENSIONS">MDSCHEMA_DIMENSIONS</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_FUNCTIONS" title="MDSCHEMA_FUNCTIONS">MDSCHEMA_FUNCTIONS</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_HIERARCHIES" title="MDSCHEMA_HIERARCHIES">MDSCHEMA_HIERARCHIES</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_LEVELS" title="MDSCHEMA_LEVELS">MDSCHEMA_LEVELS</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_MEASURES" title="MDSCHEMA_MEASURES">MDSCHEMA_MEASURES</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_MEMBERS" title="MDSCHEMA_MEMBERS">MDSCHEMA_MEMBERS</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_PROPERTIES" title="MDSCHEMA_PROPERTIES">MDSCHEMA_PROPERTIES</a></li>
+                                <li class=""><a href="#property_MDSCHEMA_SETS" title="MDSCHEMA_SETS">MDSCHEMA_SETS</a></li>
                                 <li class=""><a href="#property_METHOD_DISCOVER" title="METHOD_DISCOVER">METHOD_DISCOVER</a></li>
                                 <li class=""><a href="#property_METHOD_EXECUTE" title="METHOD_EXECUTE">METHOD_EXECUTE</a></li>
                                 <li class=""><a href="#property_PROP_AXISFORMAT" title="PROP_AXISFORMAT">PROP_AXISFORMAT</a></li>
@@ -2232,9 +3571,25 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#method_addListener" title="addListener">addListener</a></li>
                                 <li class=""><a href="#method_discover" title="discover">discover</a></li>
                                 <li class=""><a href="#method_discoverDataSources" title="discoverDataSources">discoverDataSources</a></li>
+                                <li class=""><a href="#method_discoverDBCatalogs" title="discoverDBCatalogs">discoverDBCatalogs</a></li>
+                                <li class=""><a href="#method_discoverDBColumns" title="discoverDBColumns">discoverDBColumns</a></li>
+                                <li class=""><a href="#method_discoverDBProviderTypes" title="discoverDBProviderTypes">discoverDBProviderTypes</a></li>
+                                <li class=""><a href="#method_discoverDBSchemata" title="discoverDBSchemata">discoverDBSchemata</a></li>
+                                <li class=""><a href="#method_discoverDBTables" title="discoverDBTables">discoverDBTables</a></li>
+                                <li class=""><a href="#method_discoverDBTablesInfo" title="discoverDBTablesInfo">discoverDBTablesInfo</a></li>
                                 <li class=""><a href="#method_discoverEnumerators" title="discoverEnumerators">discoverEnumerators</a></li>
                                 <li class=""><a href="#method_discoverKeywords" title="discoverKeywords">discoverKeywords</a></li>
                                 <li class=""><a href="#method_discoverLiterals" title="discoverLiterals">discoverLiterals</a></li>
+                                <li class=""><a href="#method_discoverMDActions" title="discoverMDActions">discoverMDActions</a></li>
+                                <li class=""><a href="#method_discoverMDCubes" title="discoverMDCubes">discoverMDCubes</a></li>
+                                <li class=""><a href="#method_discoverMDDimensions" title="discoverMDDimensions">discoverMDDimensions</a></li>
+                                <li class=""><a href="#method_discoverMDFunctions" title="discoverMDFunctions">discoverMDFunctions</a></li>
+                                <li class=""><a href="#method_discoverMDHierarchies" title="discoverMDHierarchies">discoverMDHierarchies</a></li>
+                                <li class=""><a href="#method_discoverMDLevels" title="discoverMDLevels">discoverMDLevels</a></li>
+                                <li class=""><a href="#method_discoverMDMeasures" title="discoverMDMeasures">discoverMDMeasures</a></li>
+                                <li class=""><a href="#method_discoverMDMembers" title="discoverMDMembers">discoverMDMembers</a></li>
+                                <li class=""><a href="#method_discoverMDProperties" title="discoverMDProperties">discoverMDProperties</a></li>
+                                <li class=""><a href="#method_discoverMDSets" title="discoverMDSets">discoverMDSets</a></li>
                                 <li class=""><a href="#method_discoverProperties" title="discoverProperties">discoverProperties</a></li>
                                 <li class=""><a href="#method_discoverSchemaRowsets" title="discoverSchemaRowsets">discoverSchemaRowsets</a></li>
                                 <li class=""><a href="#method_execute" title="execute">execute</a></li>
@@ -2254,7 +3609,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
 </script>
 </body>
 </html>

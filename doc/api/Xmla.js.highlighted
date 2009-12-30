@@ -257,7 +257,7 @@
 <span class="cm">*   &lt;/p&gt;</span>
 <span class="cm">*   @class Xmla</span>
 <span class="cm">*   @constructor</span>
-<span class="cm">*   @param options</span>
+<span class="cm">*   @param {Object} options</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
 
@@ -299,7 +299,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default Discover</span>
+<span class="cm">*   @default &lt;code&gt;Discover&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span> <span class="o">=</span> <span class="s2">&quot;Discover&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -311,7 +311,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default Discover</span>
+<span class="cm">*   @default &lt;code&gt;Discover&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_EXECUTE</span> <span class="o">=</span> <span class="s2">&quot;Execute&quot;</span><span class="p">;</span>
 
@@ -331,7 +331,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DISCOVER_DATASOURCES</span>
+<span class="cm">*   @default &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_DATASOURCES</span> <span class="o">=</span>     <span class="nx">_xmlaDISCOVER</span> <span class="o">+</span> <span class="s2">&quot;DATASOURCES&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -345,7 +345,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DISCOVER_PROPERTIES</span>
+<span class="cm">*   @default &lt;code&gt;DISCOVER_PROPERTIES&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_PROPERTIES</span> <span class="o">=</span>      <span class="nx">_xmlaDISCOVER</span> <span class="o">+</span> <span class="s2">&quot;PROPERTIES&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -359,7 +359,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DISCOVER_SCHEMA_ROWSETS</span>
+<span class="cm">*   @default &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span> <span class="o">=</span>  <span class="nx">_xmlaDISCOVER</span> <span class="o">+</span> <span class="s2">&quot;SCHEMA_ROWSETS&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -373,7 +373,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DISCOVER_ENUMERATORS</span>
+<span class="cm">*   @default &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_ENUMERATORS</span> <span class="o">=</span>     <span class="nx">_xmlaDISCOVER</span> <span class="o">+</span> <span class="s2">&quot;ENUMERATORS&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -387,7 +387,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DISCOVER_KEYWORDS</span>
+<span class="cm">*   @default &lt;code&gt;DISCOVER_KEYWORDS&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_KEYWORDS</span> <span class="o">=</span>        <span class="nx">_xmlaDISCOVER</span> <span class="o">+</span> <span class="s2">&quot;KEYWORDS&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -401,7 +401,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DISCOVER_LITERALS</span>
+<span class="cm">*   @default &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_LITERALS</span> <span class="o">=</span>        <span class="nx">_xmlaDISCOVER</span> <span class="o">+</span> <span class="s2">&quot;LITERALS&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -415,7 +415,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DBSCHEMA_CATALOGS</span>
+<span class="cm">*   @default &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_CATALOGS</span> <span class="o">=</span>       <span class="nx">_xmlaDBSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;CATALOGS&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -429,7 +429,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DBSCHEMA_COLUMNS</span>
+<span class="cm">*   @default &lt;code&gt;DBSCHEMA_COLUMNS&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_COLUMNS</span> <span class="o">=</span>        <span class="nx">_xmlaDBSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;COLUMNS&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -443,7 +443,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DBSCHEMA_PROVIDER_TYPES</span>
+<span class="cm">*   @default &lt;code&gt;DBSCHEMA_PROVIDER_TYPES&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_PROVIDER_TYPES</span> <span class="o">=</span> <span class="nx">_xmlaDBSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;PROVIDER_TYPES&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -457,49 +457,206 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DBSCHEMA_SCHEMATA</span>
+<span class="cm">*   @default &lt;code&gt;DBSCHEMA_SCHEMATA&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_SCHEMATA</span> <span class="o">=</span>       <span class="nx">_xmlaDBSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;SCHEMATA&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
 <span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
 <span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt; schema rowset.</span>
 <span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
-<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the &lt;code&gt;&lt;a href=&quot;#method_discoverDBPTables&quot;&gt;discoverDBColumns()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the &lt;code&gt;&lt;a href=&quot;#method_discoverDBTables&quot;&gt;discoverDBColumns()&lt;/a&gt;&lt;/code&gt; method. </span>
 <span class="cm">*   The &lt;code&gt;discoverDBColumns()&lt;/code&gt; method issues a request to invoke the Discover method using &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt; as requestType.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property DBSCHEMA_TABLES</span>
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DBSCHEMA_TABLES</span>
+<span class="cm">*   @default &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES</span> <span class="o">=</span>         <span class="nx">_xmlaDBSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;TABLES&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
 <span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
 <span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt; schema rowset.</span>
 <span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
-<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the &lt;code&gt;&lt;a href=&quot;#discoverDBTablesInfo&quot;&gt;discoverDBTablesInfo()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverDBTablesInfo&quot;&gt;discoverDBTablesInfo()&lt;/a&gt;&lt;/code&gt; method. </span>
 <span class="cm">*   The &lt;code&gt;discoverDBTablesInfo()&lt;/code&gt; method issues a request to invoke the Discover method using &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt; as requestType.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property DBSCHEMA_TABLES_INFO</span>
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default DBSCHEMA_TABLES_INFO</span>
+<span class="cm">*   @default &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES_INFO</span> <span class="o">=</span>    <span class="nx">_xmlaDBSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;TABLES_INFO&quot;</span><span class="p">;</span>
-
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDActions&quot;&gt;discoverMDActions()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDActions()&lt;/code&gt; method issues a request to invoke the Discover method using &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_ACTIONS</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_ACTIONS</span> <span class="o">=</span>        <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;ACTIONS&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDCubes&quot;&gt;discoverMDCubes()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDCubes()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_CUBES</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_CUBES</span> <span class="o">=</span>          <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;CUBES&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDDimensions&quot;&gt;discoverMDCubes()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDDimensions()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_DIMENSIONS</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_DIMENSIONS</span> <span class="o">=</span>     <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;DIMENSIONS&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDFunctions&quot;&gt;discoverMDFunctions()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDFunctions()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_FUNCTIONS</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_FUNCTIONS</span> <span class="o">=</span>      <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;FUNCTIONS&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDHierarchies()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_HIERARCHIES</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_HIERARCHIES</span> <span class="o">=</span>    <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;HIERARCHIES&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDLevels&quot;&gt;discoverMDLevels()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDLevels()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_LEVELS</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_LEVELS</span> <span class="o">=</span>         <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;LEVELS&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDMeasures&quot;&gt;discoverMDMeasures()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDMeasures()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_MEASURES</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEASURES</span> <span class="o">=</span>       <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;MEASURES&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDMembers&quot;&gt;discoverMDMembers()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDMembers()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_MEMBERS</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEMBERS</span> <span class="o">=</span>        <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;MEMBERS&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDProperties&quot;&gt;discoverMDProperties()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDProperties()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_PROPERTIES</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_PROPERTIES</span> <span class="o">=</span>     <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;PROPERTIES&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can be used as value for the &lt;code&gt;requestType&lt;/code&gt; option in the options object passed to the to </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method to invoke the XML/A Discover method on the server to return the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; schema rowset.</span>
+<span class="cm">*   The &lt;code&gt;requestType&lt;/code&gt; option applies only to Discover requests.</span>
+<span class="cm">*   Instead of passing this &lt;code&gt;requestType&lt;/code&gt; yourself, consider calling the </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discoverMDSets&quot;&gt;discoverMDSets()&lt;/a&gt;&lt;/code&gt; method. </span>
+<span class="cm">*   The &lt;code&gt;discoverMDSets()&lt;/code&gt; method issues a request to invoke the Discover method using</span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; as requestType.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MDSCHEMA_SETS</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt;</span>
+<span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_SETS</span> <span class="o">=</span>           <span class="nx">_xmlaMDSCHEMA</span> <span class="o">+</span> <span class="s2">&quot;SETS&quot;</span><span class="p">;</span>
-
 <span class="cm">/**</span>
 <span class="cm">*   Indicates the &lt;code&gt;request&lt;/code&gt; event. </span>
 <span class="cm">*   This constant can be used as en entry in the events array argument for the &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt; method.</span>
@@ -514,7 +671,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default request</span>
+<span class="cm">*   @default &lt;code&gt;request&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;request&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -531,7 +688,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default success</span>
+<span class="cm">*   @default &lt;code&gt;success&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_SUCCESS</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -544,7 +701,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default error</span>
+<span class="cm">*   @default &lt;code&gt;error&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_ERROR</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span><span class="p">;</span>
 
@@ -560,7 +717,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default execute</span>
+<span class="cm">*   @default &lt;code&gt;execute&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE</span> <span class="o">=</span> <span class="s2">&quot;execute&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -575,7 +732,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default executesuccess</span>
+<span class="cm">*   @default &lt;code&gt;executesuccess&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_SUCCESS</span> <span class="o">=</span> <span class="s2">&quot;executesuccess&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -588,7 +745,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default executeerror</span>
+<span class="cm">*   @default &lt;code&gt;executeerror&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_ERROR</span> <span class="o">=</span> <span class="s2">&quot;executeerror&quot;</span><span class="p">;</span>
 
@@ -604,7 +761,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default discover</span>
+<span class="cm">*   @default &lt;code&gt;discover&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER</span> <span class="o">=</span> <span class="s2">&quot;discover&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -619,7 +776,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default discoversuccess</span>
+<span class="cm">*   @default &lt;code&gt;discoversuccess&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_SUCCESS</span> <span class="o">=</span> <span class="s2">&quot;discoversuccess&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -633,7 +790,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default discovererror</span>
+<span class="cm">*   @default &lt;code&gt;discovererror&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_ERROR</span> <span class="o">=</span> <span class="s2">&quot;discovererror&quot;</span><span class="p">;</span>
 
@@ -647,7 +804,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string[]</span>
-<span class="cm">*   @default [EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]</span>
+<span class="cm">*   @default &lt;code&gt;[EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_GENERAL</span> <span class="o">=</span> <span class="p">[</span>
     <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_REQUEST</span><span class="p">,</span>
@@ -664,7 +821,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string[]</span>
-<span class="cm">*   @default [EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]</span>
+<span class="cm">*   @default &lt;code&gt;[EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_ALL</span> <span class="o">=</span> <span class="p">[</span>
     <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER</span><span class="p">,</span>
@@ -681,7 +838,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string[]</span>
-<span class="cm">*   @default [EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]</span>
+<span class="cm">*   @default &lt;code&gt;[EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_ALL</span> <span class="o">=</span> <span class="p">[</span>
     <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE</span><span class="p">,</span>
@@ -697,7 +854,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string[]</span>
-<span class="cm">*   @default [].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)</span>
+<span class="cm">*   @default &lt;code&gt;[].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_ALL</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">concat</span><span class="p">(</span>
     <span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_GENERAL</span><span class="p">,</span>
@@ -727,7 +884,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default AxisFormat</span>
+<span class="cm">*   @default &lt;code&gt;AxisFormat&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span> <span class="o">=</span> <span class="s2">&quot;AxisFormat&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -740,7 +897,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default TupleFormat</span>
+<span class="cm">*   @default &lt;code&gt;TupleFormat&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT_TUPLE</span> <span class="o">=</span> <span class="s2">&quot;TupleFormat&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -753,7 +910,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default ClusterFormat</span>
+<span class="cm">*   @default &lt;code&gt;ClusterFormat&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT_CLUSTER</span> <span class="o">=</span> <span class="s2">&quot;ClusterFormat&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -766,7 +923,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default CustomFormat</span>
+<span class="cm">*   @default &lt;code&gt;CustomFormat&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT_CUSTOM</span> <span class="o">=</span> <span class="s2">&quot;CustomFormat&quot;</span><span class="p">;</span>
 
@@ -790,7 +947,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default Content</span>
+<span class="cm">*   @default &lt;code&gt;Content&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CONTENT</span> <span class="o">=</span> <span class="s2">&quot;Content&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -805,7 +962,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default Data</span>
+<span class="cm">*   @default &lt;code&gt;Data&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CONTENT_DATA</span> <span class="o">=</span> <span class="s2">&quot;Data&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -818,7 +975,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default None</span>
+<span class="cm">*   @default &lt;code&gt;None&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CONTENT_NONE</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -830,7 +987,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default Schema</span>
+<span class="cm">*   @default &lt;code&gt;Schema&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CONTENT_SCHEMA</span> <span class="o">=</span> <span class="s2">&quot;Schema&quot;</span><span class="p">;</span>
 <span class="cm">/**</span>
@@ -842,7 +999,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default SchemaData</span>
+<span class="cm">*   @default &lt;code&gt;SchemaData&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CONTENT_SCHEMADATA</span> <span class="o">=</span> <span class="s2">&quot;SchemaData&quot;</span><span class="p">;</span>
 
@@ -855,17 +1012,18 @@
 <span class="cm">*   @property listeners</span>
 <span class="cm">*   @protected</span>
 <span class="cm">*   @type Object</span>
-<span class="cm">*   @default {</span>
-<span class="cm">*       &quot;request&quot;: []</span>
-<span class="cm">*   ,   &quot;succss&quot;: []</span>
-<span class="cm">*   ,   &quot;error&quot;: []</span>
-<span class="cm">*   ,   &quot;discover&quot;: []</span>
-<span class="cm">*   ,   &quot;discoversuccss&quot;: []</span>
-<span class="cm">*   ,   &quot;discovererror&quot;: []</span>
-<span class="cm">*   ,   &quot;execute&quot;: []</span>
-<span class="cm">*   ,   &quot;executesuccss&quot;: []</span>
-<span class="cm">*   ,   &quot;executeerror&quot;: []</span>
-<span class="cm">*   }</span>
+<span class="cm">*   @default &lt;pre&gt;</span>
+<span class="cm">{</span>
+<span class="cm">&amp;nbsp;     &quot;request&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;succss&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;error&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;discover&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;discoversuccss&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;discovererror&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;execute&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;executesuccss&quot;: []</span>
+<span class="cm">&amp;nbsp;,   &quot;executeerror&quot;: []</span>
+<span class="cm">}&lt;/pre&gt;</span>
 <span class="cm">*/</span>
     <span class="nx">listeners</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 <span class="cm">/**</span>
@@ -885,7 +1043,7 @@
 <span class="cm">*</span>
 <span class="cm">*   @property response</span>
 <span class="cm">*   @type Xmla.Rowset|Xmla.Resultset</span>
-<span class="cm">*   @default null</span>
+<span class="cm">*   @default &lt;code&gt;null&lt;/code&gt;</span>
 <span class="cm">*/</span>
     <span class="nx">response</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 <span class="cm">/**</span>
@@ -903,7 +1061,7 @@
 <span class="cm">*</span>
 <span class="cm">*   @property responseText</span>
 <span class="cm">*   @type {string}</span>
-<span class="cm">*   @default null</span>
+<span class="cm">*   @default &lt;code&gt;null&lt;/code&gt;</span>
 <span class="cm">*/</span>
     <span class="nx">responseText</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 <span class="cm">/**</span>
@@ -921,7 +1079,7 @@
 <span class="cm">*</span>
 <span class="cm">*   @property responseXml</span>
 <span class="cm">*   @type {DOMDocument}</span>
-<span class="cm">*   @default null</span>
+<span class="cm">*   @default &lt;code&gt;null&lt;/code&gt;</span>
 <span class="cm">*/</span>
     <span class="nx">responseXml</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     <span class="nx">setOptions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -954,7 +1112,7 @@
 <span class="cm">*       &lt;/dd&gt;</span>
 <span class="cm">*   &lt;/dl&gt;</span>
 <span class="cm">*   @method addListener</span>
-<span class="cm">*   @param listener {Object} An object that defines the events and the notification function to be called.</span>
+<span class="cm">*   @param {Object} listener An object that defines the events and the notification function to be called.</span>
 <span class="cm">*/</span>    
     <span class="nx">addListener</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">listener</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">events</span><span class="p">;</span>
@@ -1024,8 +1182,38 @@
 <span class="cm">*   This method is rather low-level and allows full control over the request </span>
 <span class="cm">*   by passing an options object. General properties of the options object are:</span>
 <span class="cm">*   &lt;ul&gt;</span>
-<span class="cm">*       &lt;li&gt;&lt;code&gt;method&lt;/code&gt; {string} REQUIRED the XML/A method to invoke (&lt;code&gt;Discover&lt;/code&gt; or &lt;code&gt;Execute&lt;/code&gt;, </span>
-<span class="cm">*    or use the constants &lt;code&gt;&lt;a href=&quot;#property_METHOD_DISCOVER&quot;&gt;METHOD_DISCOVER&lt;/a&gt;&lt;/code&gt; and &lt;code&gt;&lt;a href=&quot;#property_METHOD_EXECUTE&quot;&gt;METHOD_EXECUTE&lt;/a&gt;&lt;/code&gt;).&lt;/li&gt;</span>
+<span class="cm">*       &lt;li&gt;&lt;code&gt;method&lt;/code&gt; {string} REQUIRED the XML/A method to invoke. This should be one of the following constants:</span>
+<span class="cm">*           &lt;dl&gt;</span>
+<span class="cm">*               &lt;dt&gt;&lt;code&gt;&lt;a href=&quot;#property_METHOD_DISCOVER&quot;&gt;METHOD_DISCOVER&lt;/a&gt;&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="cm">*               &lt;dd&gt;</span>
+<span class="cm">*                   &lt;p&gt;</span>
+<span class="cm">*                   This method is used to obtain metadata from the XML/A service or XML/A provider. </span>
+<span class="cm">*                   Metadata is returned in a tabular format called Schema Rowsets, which are represented by an instance of the </span>
+<span class="cm">*                   &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#class_Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; class.</span>
+<span class="cm">*                   For these types of requests, you must pass the &lt;code&gt;requestType&lt;/code&gt; option to specify which schema rowset you want to obtain.</span>
+<span class="cm">*                   In addition, you can specify a &lt;code&gt;restrictions&lt;/code&gt; object that is used as filter criteria to restrict which rows will be returned in the rowset.</span>
+<span class="cm">*                   &lt;/p&gt;</span>
+<span class="cm">*                   &lt;p&gt;</span>
+<span class="cm">*                   Instead of explicitly passing &lt;code&gt;METHOD_DISCOVER&lt;/code&gt; as the &lt;code&gt;requestType&lt;/code&gt;, you can also call the </span>
+<span class="cm">*                   &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method (which requires you to explictly pass a &lt;code&gt;requestType&lt;/code&gt; option).</span>
+<span class="cm">*                   Finally, you can also call one of the &lt;code&gt;discoverXXX()&lt;/code&gt; methods in order to request a particular schema rowset.</span>
+<span class="cm">*                   &lt;/p&gt;</span>
+<span class="cm">*               &lt;/dd&gt;</span>
+<span class="cm">*               &lt;dt&gt;&lt;code&gt;&lt;a href=&quot;#property_METHOD_EXECUTE&quot;&gt;METHOD_EXECUTE&lt;/a&gt;&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="cm">*               &lt;dd&gt;</span>
+<span class="cm">*                   &lt;p&gt;</span>
+<span class="cm">*                   This method is used to send an MDX quey to the XML/A provider. </span>
+<span class="cm">*                   Query results are returned in a multidimentsional format which is represented by an instance of the </span>
+<span class="cm">*                   &lt;code&gt;&lt;a href=&quot;Xmla.Resultset.html#class_Xmla.Resultset&quot;&gt;Xmla.Resultset&lt;/a&gt;&lt;/code&gt; class.</span>
+<span class="cm">*                   For these types of requests, you must pass the &lt;code&gt;statement&lt;/code&gt; option to specify the MDX query.</span>
+<span class="cm">*                   &lt;/p&gt;</span>
+<span class="cm">*                   &lt;p&gt;</span>
+<span class="cm">*                   Instead of explicitly passing &lt;code&gt;METHOD_EXECUTE&lt;/code&gt; as the &lt;code&gt;requestType&lt;/code&gt;, you can also call the </span>
+<span class="cm">*                   &lt;code&gt;&lt;a href=&quot;#method_execute&quot;&gt;execute()&lt;/a&gt;&lt;/code&gt; method.</span>
+<span class="cm">*                   &lt;/p&gt;</span>
+<span class="cm">*               &lt;/dd&gt;</span>
+<span class="cm">*           &lt;/dl&gt;</span>
+<span class="cm">*       &lt;/li&gt;</span>
 <span class="cm">*       &lt;li&gt;&lt;code&gt;url&lt;/code&gt; {string} REQUIRED the URL of XML/A service, or of a XML/A datasource. </span>
 <span class="cm">*           Typically, you first use the URL of a XML/A service (like &lt;code&gt;http://your.pentaho.server:8080/pentaho/Xmla?userid=joe&amp;amp;password=password&lt;/code&gt;) </span>
 <span class="cm">*           and use that to retrieve the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; rowset. </span>
@@ -1040,27 +1228,6 @@
 <span class="cm">*           The list of all valid properties can be obtained from the &lt;code&gt;DISCOVER_PROPERTIES&lt;/code&gt; schema rowset </span>
 <span class="cm">*           (see &lt;code&gt;&lt;a href=&quot;#method_discoverProperties()&quot;&gt;discoverProperties()&lt;/a&gt;&lt;/code&gt;). </span>
 <span class="cm">*           Each javascript property of the &lt;code&gt;properties&lt;/code&gt; object is mapped literally to a XML/A property.</span>
-<span class="cm">*       &lt;/li&gt;</span>
-<span class="cm">*       &lt;li&gt;&lt;code&gt;requestType&lt;/code&gt; - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.</span>
-<span class="cm">*       You can use one of the following predefined constants: &lt;ul&gt;</span>
-<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_DATASOURCES&quot;&gt;DISCOVER_DATASOURCES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
-<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_ENUMERATORS&quot;&gt;DISCOVER_ENUMERATORS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
-<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_KEYWORDS&quot;&gt;DISCOVER_KEYWORDS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
-<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_LITERALS&quot;&gt;DISCOVER_LITERALS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
-<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_PROPERTIES&quot;&gt;DISCOVER_PROPERTIES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
-<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_SCHEMA_ROWSETS&quot;&gt;DISCOVER_SCHEMA_ROWSETS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
-<span class="cm">*           &lt;/ul&gt;</span>
-<span class="cm">*       You can also use any Schema Rowset Constant returned in the &lt;code&gt;SchemaName&lt;/code&gt; column of the &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; rowset</span>
-<span class="cm">*       (see: &lt;code&gt;&lt;a href=&quot;method_discoverMDSchemaRowsets&quot;&gt;discoverMDSchemaRowsets()&lt;/a&gt;&lt;/code&gt;).</span>
-<span class="cm">*       &lt;/li&gt;</span>
-<span class="cm">*       &lt;li&gt;&lt;code&gt;statement&lt;/code&gt; - {string} Applies to the Execute method and specifies the MDX query to send to the server.</span>
-<span class="cm">*       &lt;/li&gt;</span>
-<span class="cm">*       &lt;li&gt;</span>
-<span class="cm">*           &lt;code&gt;restrictions&lt;/code&gt; {Object} XML/A restrictions.</span>
-<span class="cm">*           Restrictions apply only to the XML/A Discover method, and is used to filter the requested schema rowset. </span>
-<span class="cm">*           Each javascript property of the &lt;code&gt;restrictions&lt;/code&gt; object is mapped to a column of the requested schema rowset.</span>
-<span class="cm">*           The types and values of the restrictions are dependent upon which schema rowset is requested.</span>
-<span class="cm">*           The available restrictions are specified by the &lt;code&gt;Restrictions&lt;/code&gt; column of the &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; schema rowset.</span>
 <span class="cm">*       &lt;/li&gt;</span>
 <span class="cm">*       &lt;li&gt;&lt;code&gt;async&lt;/code&gt; {boolean} </span>
 <span class="cm">*           Determines how the request is performed:&lt;ul&gt;</span>
@@ -1079,12 +1246,35 @@
 <span class="cm">*           &lt;/ul&gt;</span>
 <span class="cm">*       &lt;/li&gt;</span>
 <span class="cm">*   &lt;/ul&gt;</span>
+<span class="cm">*   Other parts of the &lt;code&gt;options&lt;/code&gt; object are method-specific.</span>
+<span class="cm">*   &lt;ul&gt;</span>
+<span class="cm">*       &lt;li&gt;The following options are applicable in case the &lt;code&gt;method&lt;/code&gt; is &lt;code&gt;METHOD_DISCOVER&lt;/code&gt;:</span>
+<span class="cm">*           &lt;ul&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;requestType&lt;/code&gt; - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.</span>
+<span class="cm">*                   You can use one of the &lt;code&gt;DISCOVER_XXX&lt;/code&gt;, &lt;code&gt;DBSCHEMA_XXX&lt;/code&gt; or &lt;code&gt;MDSCHEMA_XXX&lt;/code&gt; constants for this property.</span>
+<span class="cm">*                   You can also dymically discover which values for &lt;code&gt;requestType&lt;/code&gt; are supported by the XML/A provider using the </span>
+<span class="cm">*                   &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; rowset (see: &lt;code&gt;&lt;a href=&quot;method_discoverMDSchemaRowsets&quot;&gt;discoverMDSchemaRowsets()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*                   See the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method for more information.</span>
+<span class="cm">*               &lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;</span>
+<span class="cm">*                   &lt;code&gt;restrictions&lt;/code&gt; {Object} XML/A restrictions are used to filter the requested schema rowset. </span>
+<span class="cm">*                   For more information on restrictions, see the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method.</span>
+<span class="cm">*               &lt;/li&gt;</span>
+<span class="cm">*           &lt;/ul&gt;</span>
+<span class="cm">*       &lt;/li&gt;</span>
+<span class="cm">*       &lt;li&gt;The following options are applicable in case the &lt;code&gt;method&lt;/code&gt; is &lt;code&gt;METHOD_EXECUTE&lt;/code&gt;:</span>
+<span class="cm">*           &lt;ul&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;statement&lt;/code&gt; - {string} Applies to the Execute method and specifies the MDX query to send to the server.</span>
+<span class="cm">*               &lt;/li&gt;</span>
+<span class="cm">*           &lt;/ul&gt;</span>
+<span class="cm">*       &lt;/li&gt;</span>
+<span class="cm">*   &lt;/ul&gt;</span>
 <span class="cm">*   Instead of calling this method directly, consider calling </span>
 <span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; (to obtain a schema rowset),</span>
 <span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_execute&quot;&gt;execute()&lt;/a&gt;&lt;/code&gt; (to issue a MDX query), </span>
 <span class="cm">*   or one of the specialized &lt;code&gt;discoverXXX()&lt;/code&gt; methods (to obtain a particular schema rowset).</span>
 <span class="cm">*   @method request</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the request. </span>
 <span class="cm">*   @return {Xmla.Rowset|Xmla.Resultset} The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, &lt;code&gt;Discover&lt;/code&gt; requests return an instance of a &lt;code&gt;Xmla.Rowset&lt;/code&gt;, and &lt;code&gt;Execute&lt;/code&gt; results return an instance of a &lt;code&gt;Xmla.Resultset&lt;/code&gt;.</span>
 <span class="cm">*/</span>
     <span class="nx">request</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1260,7 +1450,7 @@
 <span class="cm">*       &lt;/li&gt;</span>
 <span class="cm">*   &lt;/ul&gt;</span>
 <span class="cm">*   @method execute</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A &lt;code&gt;Execute&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A &lt;code&gt;Execute&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Resultset} The result of the invoking the XML/A &lt;code&gt;Execute&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;Xmla.Resultset&lt;/code&gt; that represents the multi-dimensional result set of the MDX query.</span>
 <span class="cm">*/</span>
     <span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
@@ -1289,8 +1479,9 @@
 <span class="cm">*   Options are passed using a generic &lt;code&gt;options&lt;/code&gt; object.</span>
 <span class="cm">*   Applicable properties of the &lt;code&gt;options&lt;/code&gt; object are:</span>
 <span class="cm">*   &lt;ul&gt;</span>
-<span class="cm">*       &lt;li&gt;&lt;code&gt;requestType&lt;/code&gt; - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.</span>
-<span class="cm">*       You can use one of the following predefined constants: &lt;ul&gt;</span>
+<span class="cm">*       &lt;li&gt;&lt;code&gt;requestType&lt;/code&gt; - {string} Indicates the kind of schema rowset to retrieve.</span>
+<span class="cm">*           You can use one of the following predefined XML for Analysis Schema Rowset constants:</span>
+<span class="cm">*           &lt;ul&gt;</span>
 <span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_DATASOURCES&quot;&gt;DISCOVER_DATASOURCES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
 <span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_ENUMERATORS&quot;&gt;DISCOVER_ENUMERATORS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
 <span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_KEYWORDS&quot;&gt;DISCOVER_KEYWORDS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
@@ -1298,8 +1489,30 @@
 <span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_PROPERTIES&quot;&gt;DISCOVER_PROPERTIES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
 <span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DISCOVER_SCHEMA_ROWSETS&quot;&gt;DISCOVER_SCHEMA_ROWSETS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
 <span class="cm">*           &lt;/ul&gt;</span>
-<span class="cm">*       You can also use any Schema Rowset Constant returned in the &lt;code&gt;SchemaName&lt;/code&gt; column of the &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; rowset</span>
-<span class="cm">*       (see: &lt;code&gt;&lt;a href=&quot;method_discoverMDSchemaRowsets&quot;&gt;discoverMDSchemaRowsets()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*           Or one of the applicable OLE DB Schema Rowset constants: </span>
+<span class="cm">*           &lt;ul&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_CATALOGS&quot;&gt;DBSCHEMA_CATALOGS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_COLUMNS&quot;&gt;DBSCHEMA_COLUMNS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_PROVIDER_TYPES&quot;&gt;DBSCHEMA_PROVIDER_TYPES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_SCHEMATA&quot;&gt;DBSCHEMA_SCHEMATA&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_TABLES&quot;&gt;DBSCHEMA_TABLES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_TABLES_INFO&quot;&gt;DBSCHEMA_TABLES_INFO&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*           &lt;/ul&gt;</span>
+<span class="cm">*           Or one of the applicable OLE DB for OLAP Schema Rowset constants: </span>
+<span class="cm">*           &lt;ul&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_ACTIONS&quot;&gt;MDSCHEMA_ACTIONS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_CUBES&quot;&gt;MDSCHEMA_CUBES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_DIMENSIONS&quot;&gt;MDSCHEMA_DIMENSIONS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_FUNCTIONS&quot;&gt;MDSCHEMA_FUNCTIONS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_HIERARCHIES&quot;&gt;MDSCHEMA_HIERARCHIES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_MEASURES&quot;&gt;MDSCHEMA_MEASURES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_MEMBERS&quot;&gt;MDSCHEMA_MEMBERS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_PROPERTIES&quot;&gt;MDSCHEMA_PROPERTIES&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*               &lt;li&gt;&lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_SETS&quot;&gt;MDSCHEMA_SETS&lt;/a&gt;&lt;/code&gt;&lt;/li&gt;</span>
+<span class="cm">*           &lt;/ul&gt;</span>
+<span class="cm">*           You can also dymically discover which values for &lt;code&gt;requestType&lt;/code&gt; are supported by the XML/A provider.</span>
+<span class="cm">*           To do that, refer to the &lt;code&gt;SchemaName&lt;/code&gt; column of the &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; rowset</span>
+<span class="cm">*           (see: &lt;code&gt;&lt;a href=&quot;method_discoverMDSchemaRowsets&quot;&gt;discoverMDSchemaRowsets()&lt;/a&gt;&lt;/code&gt;).</span>
 <span class="cm">*       &lt;/li&gt;</span>
 <span class="cm">*       &lt;li&gt;&lt;code&gt;url&lt;/code&gt; {string} REQUIRED the url of the XML/A service or XML/A datasource.        </span>
 <span class="cm">*           If the value for the &lt;code&gt;requestType&lt;/code&gt; option is one of the predefined XML/A &lt;code&gt;&lt;a href=&quot;&quot;&gt;DISCOVER_XXX&lt;/a&gt;&lt;/code&gt; constants, </span>
@@ -1321,7 +1534,7 @@
 <span class="cm">*           The value for the restriction is sent with the request, and processed by the XML/A server to only return matching rows from the requested schema dataset.</span>
 <span class="cm">*           The name, types and values of the restrictions are dependent upon which schema rowset is requested.</span>
 <span class="cm">*           The available restrictions are specified by the &lt;code&gt;Restrictions&lt;/code&gt; column of the &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; schema rowset.</span>
-<span class="cm">*           For a number of schema rowsets, the avaialale restrictions are pre-defined. </span>
+<span class="cm">*           For a number of schema rowsets, the available restrictions are pre-defined. </span>
 <span class="cm">*           These are documented together with each particular &lt;code&gt;discoverXXX()&lt;/code&gt; method.</span>
 <span class="cm">*       &lt;/li&gt;</span>
 <span class="cm">*       &lt;li&gt;&lt;code&gt;async&lt;/code&gt; {boolean} </span>
@@ -1342,7 +1555,7 @@
 <span class="cm">*   Instead of calling this method directly, consider calling </span>
 <span class="cm">*   or one of the specialized &lt;code&gt;discoverXXX()&lt;/code&gt; methods to obtain a particular schema rowset.</span>
 <span class="cm">*   @method discover</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A &lt;code&gt;Discover&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A &lt;code&gt;Discover&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discover</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>        
@@ -1502,7 +1715,7 @@
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   </span>
 <span class="cm">*   @method discoverDataSources</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverDataSources</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1638,7 +1851,7 @@
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   </span>
 <span class="cm">*   @method discoverProperties</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverProperties</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1688,7 +1901,7 @@
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*</span>
 <span class="cm">*   @method discoverSchemaRowsets</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverSchemaRowsets</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1759,7 +1972,7 @@
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*</span>
 <span class="cm">*   @method discoverEnumerators</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverEnumerators</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1795,7 +2008,7 @@
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*</span>
 <span class="cm">*   @method discoverKeywords</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_KEYWORDS&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_KEYWORDS&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_ENUMERATORS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverKeywords</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1859,7 +2072,7 @@
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*</span>
 <span class="cm">*   @method discoverLiterals</span>
-<span class="cm">*   @param options {Object} An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt; request. </span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt; request. </span>
 <span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DISCOVER_LITERALS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
 <span class="cm">*/</span>    
     <span class="nx">discoverLiterals</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
@@ -1872,6 +2085,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span> 
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_CATALOGS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverDBCatalogs</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverDBCatalogs</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1882,6 +2114,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_COLUMNS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DBSCHEMA_COLUMNS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverDBColumns</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_COLUMNS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DBSCHEMA_COLUMNS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverDBColumns</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1892,6 +2143,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_PROVIDER_TYPES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DBSCHEMA_PROVIDER_TYPES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverDBProviderTypes</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_PROVIDER_TYPES&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DBSCHEMA_PROVIDER_TYPES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverDBProviderTypes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1902,6 +2172,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_SCHEMATA&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DBSCHEMA_SCHEMATA&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverDBSchemata</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_SCHEMATA&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DBSCHEMA_SCHEMATA&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverDBSchemata</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1912,6 +2201,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_TABLES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverDBTables</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverDBTables</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1922,6 +2230,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_DBSCHEMA_TABLES_INFO&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverDBTablesInfo</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverDBTablesInfo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1932,6 +2259,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_ACTIONS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDActions</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDActions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1942,6 +2288,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_CUBES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDCubes</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDCubes</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1952,6 +2317,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_DIMENSIONS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDDimensions</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDDimensions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1962,6 +2346,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_FUNCTIONS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDFunctions</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDFunctions</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1972,6 +2375,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_HIERARCHIES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDHierarchies</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDHierarchies</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1982,6 +2404,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_LEVELS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDLevels</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDLevels</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -1992,6 +2433,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_MEASURES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDMeasures</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDMeasures</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -2002,6 +2462,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_MEMBERS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDMembers</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDMembers</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -2012,6 +2491,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_PROPERTIES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDProperties</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDProperties</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -2022,6 +2520,25 @@
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">discover</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
     <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using </span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_SETS&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;, </span>
+<span class="cm">*   and retrieves the &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; schema rowset. </span>
+<span class="cm">*   ...todo...</span>
+<span class="cm">*   The rowset has the following columns:</span>
+<span class="cm">*   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;th&gt;Column Name&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Type&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
+<span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*   &lt;/table&gt;</span>
+<span class="cm">*   @method discoverMDSets</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Discover&lt;/code&gt; method. For synchronous requests, an instance of a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset.html#Xmla.Rowset&quot;&gt;Xmla.Rowset&lt;/a&gt;&lt;/code&gt; that represents the &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;) and listen for the &lt;code&gt;success&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_SUCCESS&quot;&gt;EVENT_SUCCESS&lt;/a&gt;&lt;/code&gt;) or &lt;code&gt;discoversuccess&lt;/code&gt; (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;SUCCESS&lt;/a&gt;&lt;/code&gt;) events. </span>
+<span class="cm">*/</span>        
     <span class="nx">discoverMDSets</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -2065,8 +2582,8 @@
 <span class="cm">*   </span>
 <span class="cm">*   @class Xmla.Rowset</span>
 <span class="cm">*   @constructor</span>
-<span class="cm">*   @param node {DOMDocument} The responseXML result returned by server in response to a &lt;code&gt;Discover&lt;/code&gt; request. </span>
-<span class="cm">*   @param requestTtype {string} The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</span>
+<span class="cm">*   @param {DOMDocument} node The responseXML result returned by server in response to a &lt;code&gt;Discover&lt;/code&gt; request. </span>
+<span class="cm">*   @param {string} requestTtype The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
@@ -2250,7 +2767,7 @@
 <span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fieldDef&quot;&gt;fieldDef()&lt;/a&gt;&lt;/code&gt; method.</span>
 <span class="cm">*</span>
 <span class="cm">*   @method getFields</span>
-<span class="cm">*   @return fieldDef[] An (ordered) array of field definition objects. </span>
+<span class="cm">*   @return &lt;code&gt;fieldDef[]&lt;/code&gt; An (ordered) array of field definition objects. </span>
 <span class="cm">*/</span>    
     <span class="nx">getFields</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">[],</span> 
