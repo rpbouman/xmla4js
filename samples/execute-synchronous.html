@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: Execute</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            #url {
+                width: 100%;
+            }
+            
+            .error {
+                border-style:outset;
+                border-width: 2px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+                background-color: red;
+                color: white;
+            }
+            
+            table {
+                border-color: ThreeDFace;
+                border-style: outset;
+                border-width:2px;
+            }
+            td.th {
+                font-weight: bold;
+                text-align: center;
+                background-color: ThreeDFace;
+            }
+            td {
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Execute</h1>
+        <p>
+        </p>
+        <div>
+            URL:
+            <input type="text" id="url" name="url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="discover">Discover Datasources...</button>            
+            DataSource: <select id="select_datasources">
+                <option value="_">Please press "Discover Datasources..." first</option>
+            </select>
+        </div>
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+                
+        <script type="text/javascript">
+            var xmla = new Xmla({
+                async: false
+            });
+            var dataSourceCache = [];
+            var dataSource;
+
+            var select_datasources = document.getElementById("select_datasources");
+            var button_discover = document.getElementById("discover");
+
+            select_datasources.onchange = function(){
+                button_discover.disabled = true;
+                if (dataSourceCache.length){
+                    dataSource = dataSourceCache[this.selectedIndex];                    
+                }
+                button_discover.disabled = false;
+            }
+        
+            button_discover.onclick = function(){ 
+debugger;            
+                select_datasources.disabled = true; //prevent user from choosing a new datasource while we're busy
+                dataSource = null;
+                try {
+                    var dataSources = xmla.discoverDataSources();
+                    if (dataSources.hasMoreRows()) {
+                        dataSourceCache = dataSources.fetchAllAsObject();
+                        for (var numDataSources = dataSourceCache.length, i=0; i<numDataSources; i++){
+                            select_datasources.innerHTML += "<option>" +  dataSourceCache[i].DataSourceName +"<\/option>";
+                        }
+                    } else {
+                        dataSourceCache = [];
+                        select_datasources.innerHTML = "<option value=\"0\">No datasources found.<\/option>";
+                    }
+                } catch (exception){
+debugger;            
+                }
+                select_datasources.disabled = false; //unlock ui again.
+            }
+            
+        </script>
+    </body>
+</html>

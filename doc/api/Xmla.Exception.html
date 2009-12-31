@@ -1,0 +1,520 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
+<!--
+    Copyright 2009, Roland Bouman (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<title>API: xmla  Xmla.Exception   (xmla4js library)</title>
+
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262225918.89" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262225918.89" />
+
+    <script type="text/javascript" src="assets/api-js?stamp=1262225918.89"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262225918.89"></script>
+</head>
+
+<body id="yahoo-com">
+
+<div id="doc3" class="yui-t2">
+	<div id="hd">
+        <h1><a href="http://code.google.com/p/xmla4js/" title="xmla4js">xmla4js</a></h1>
+        <h3>Xmla utility&nbsp; <span class="subtitle">r12</span></h3>
+        <a href="./index.html" title="xmla4js">xmla4js</a> 
+            &gt; <a href="./module_xmla.html" title="xmla">xmla</a>
+                 &gt; Xmla.Exception 
+                
+        <form onsubmit="return false">
+            <div id="propertysearch">
+                Search: <input autocomplete="off" id="searchinput" />
+                <div id="searchresults">
+                    &nbsp;
+                </div>
+            </div>
+        </form>
+	</div>
+
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+            <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
+                <fieldset>
+                    <legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset>
+            </form>
+
+                    <h2>
+                        
+
+                        
+                        
+                            Class <b property="yui:name">Xmla.Exception</b>
+                        <span class="extends">
+                        </span>
+
+                    </h2>
+                    <!-- class tree goes here -->
+                    
+                
+  
+
+                    <div class="summary description" property="yui:description">
+                        <p>
+This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.
+</p>
+<p>
+You do not need to instantiate objects of this class yourself. 
+Rather, instances of this class are created and thrown at runtime whenever an error occurs.
+The purpose is to provide a clean and clear way for applications that use xmla4js to recognize and handle Xmla4js specific runtime errors.
+</p>
+<p>
+To handle Xmla4js errors, you can use a <code>try...catch</code> block like this:
+</p>
+<pre>
+&nbsp;try {
+&nbsp;    ...general xmla4js work...
+&nbsp;} catch (exception) {
+&nbsp;    if (exception instanceof Xmla.Exception) {
+&nbsp;        ...use exception.code, exception.message and exception.data to handle the exception.
+&nbsp;    } else {
+&nbsp;        ...handle other errors...
+&nbsp;    }
+&nbsp;}
+</pre>
+                    </div>
+
+                        <div class="section constructor details" rel="yui:constructor" resource="#constructor">
+                        <h3 id="constructor">Constructor</h3>
+                        <div class="content">
+                            <div class="detail">
+                                <strong property="yui:name">Xmla.Exception</strong>
+                                <code>
+                                    (
+                                    )
+                                </code>
+                                <div class="description">
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div rel="yui:properties" resource="#properties">
+                        <div class="section field details">
+                            <h3 id="properties">Properties</h3>
+                            <div class="content">
+                                    <div class="" rel="yui:property" resource="#property_code">
+                                    <h4><a name="property_code" property="yui:name">code</a>
+                                        - <code><span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            A code that can be used to identify this particular kind of exception.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {null}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_data">
+                                    <h4><a name="property_data" property="yui:name">data</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Additional data captured when the exception was instantiated.
+The type of information stored here is dependent upon the nature of the error.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {null}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_ERROR_PARSING_RESPONSE_CDE">
+                                    <h4><a name="property_ERROR_PARSING_RESPONSE_CDE" property="yui:name">ERROR_PARSING_RESPONSE_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating that the rrepsonse could not be parsed
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-8</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_helpfile">
+                                    <h4><a name="property_helpfile" property="yui:name">helpfile</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            A path or url that points to a document that contains more information about this error.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {null}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_INVALID_EVENT_HANDLER_CDE">
+                                    <h4><a name="property_INVALID_EVENT_HANDLER_CDE" property="yui:name">INVALID_EVENT_HANDLER_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating that no proper handler was passed for the events.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-7</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_INVALID_FIELD_CDE">
+                                    <h4><a name="property_INVALID_FIELD_CDE" property="yui:name">INVALID_FIELD_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating the field name is not valid.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-9</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_message">
+                                    <h4><a name="property_message" property="yui:name">message</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            A human readable message that describes the nature of the error or warning.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {null}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MISSING_REQUEST_TYPE_CDE">
+                                    <h4><a name="property_MISSING_REQUEST_TYPE_CDE" property="yui:name">MISSING_REQUEST_TYPE_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating a <code>requestType</code> option was expected but ommitted.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-1</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MISSING_STATEMENT_CDE">
+                                    <h4><a name="property_MISSING_STATEMENT_CDE" property="yui:name">MISSING_STATEMENT_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating a <code>statement</code> option was expected but ommitted.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-2</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_MISSING_URL_CDE">
+                                    <h4><a name="property_MISSING_URL_CDE" property="yui:name">MISSING_URL_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating a <code>url</code> option was expected but ommitted.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-3</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_NO_EVENTS_SPECIFIED_CDE">
+                                    <h4><a name="property_NO_EVENTS_SPECIFIED_CDE" property="yui:name">NO_EVENTS_SPECIFIED_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating a <code>events</code> were expected but ommitted.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-4</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_source">
+                                    <h4><a name="property_source" property="yui:name">source</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            A name that indicates in what component (on the client or server side) this error or warning occurred.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {null}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_type">
+                                    <h4><a name="property_type" property="yui:name">type</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            This propery indicates what kind of exception occurred. It can have one of the following values: <dl>
+<dt><code><a href="property_TYPE_WARNING">TYPE_WARNING</a></code></dt><dd>Indicates a warning</dd>
+<dt><code><a href="property_TYPE_ERROR">TYPE_ERROR</a></code></dt><dd>Indicates an error</dd>
+</dl>
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: {null}
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_TYPE_ERROR">
+                                    <h4><a name="property_TYPE_ERROR" property="yui:name">TYPE_ERROR</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class, 
+and indicates that this <code>Xmla.Exception</code> signals an error.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>error</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_TYPE_WARNING">
+                                    <h4><a name="property_TYPE_WARNING" property="yui:name">TYPE_WARNING</a>
+                                        - <code>static final <span property="yui:type">string</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class, 
+and indicates that this <code>Xmla.Exception</code> signals a warning.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>warning</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_UNKNOWN_EVENT_CDE">
+                                    <h4><a name="property_UNKNOWN_EVENT_CDE" property="yui:name">UNKNOWN_EVENT_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating that the event name was unrecognized.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-6</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                                    <div class="" rel="yui:property" resource="#property_WRONG_EVENTS_FORMAT_CDE">
+                                    <h4><a name="property_WRONG_EVENTS_FORMAT_CDE" property="yui:name">WRONG_EVENTS_FORMAT_CDE</a>
+                                        - <code>static final <span property="yui:type">{int}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            Exception code indicating a <code>events</code> were specifeid in the wrong format.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>-5</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div rel="yui:methods" resource="#methods">
+
+                    </div>
+
+                    <div rel="yui:events" resource="#events">
+
+
+                    </div>
+
+                    <div rel="yui:attributes" resource="#configattributes">
+
+                    </div>
+
+			</div>
+		</div>
+		<div class="yui-b">
+            <div class="nav">
+
+                    <div id="moduleList" class="module">
+                        <h4>Modules</h4>
+                        <ul class="content">
+                                <li class="selected"><a href="module_xmla.html" title="xmla">xmla</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="classList" class="module">
+                        <h4>Classes</h4>
+                        <ul class="content">
+                                <li class=""><a href="Xmla.html" title="Xmla">Xmla</a></li>
+                                <li class="selected"><a href="Xmla.Exception.html" title="Xmla.Exception">Xmla.Exception</a></li>
+                                <li class=""><a href="Xmla.Rowset.html" title="Xmla.Rowset">Xmla.Rowset</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="fileList" class="module">
+                        <h4>Files</h4>
+                        <ul class="content">        
+                                <li class=""><a href="Xmla.js.html" title="Xmla.js">Xmla.js</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="propertyList" class="module">
+                        <h4>Properties</h4>
+                        <ul class="content">        
+                                <li class=""><a href="#property_code" title="code">code</a></li>
+                                <li class=""><a href="#property_data" title="data">data</a></li>
+                                <li class=""><a href="#property_ERROR_PARSING_RESPONSE_CDE" title="ERROR_PARSING_RESPONSE_CDE">ERROR_PARSING_RESPONSE_CDE</a></li>
+                                <li class=""><a href="#property_helpfile" title="helpfile">helpfile</a></li>
+                                <li class=""><a href="#property_INVALID_EVENT_HANDLER_CDE" title="INVALID_EVENT_HANDLER_CDE">INVALID_EVENT_HANDLER_CDE</a></li>
+                                <li class=""><a href="#property_INVALID_FIELD_CDE" title="INVALID_FIELD_CDE">INVALID_FIELD_CDE</a></li>
+                                <li class=""><a href="#property_message" title="message">message</a></li>
+                                <li class=""><a href="#property_MISSING_REQUEST_TYPE_CDE" title="MISSING_REQUEST_TYPE_CDE">MISSING_REQUEST_TYPE_CDE</a></li>
+                                <li class=""><a href="#property_MISSING_STATEMENT_CDE" title="MISSING_STATEMENT_CDE">MISSING_STATEMENT_CDE</a></li>
+                                <li class=""><a href="#property_MISSING_URL_CDE" title="MISSING_URL_CDE">MISSING_URL_CDE</a></li>
+                                <li class=""><a href="#property_NO_EVENTS_SPECIFIED_CDE" title="NO_EVENTS_SPECIFIED_CDE">NO_EVENTS_SPECIFIED_CDE</a></li>
+                                <li class=""><a href="#property_source" title="source">source</a></li>
+                                <li class=""><a href="#property_type" title="type">type</a></li>
+                                <li class=""><a href="#property_TYPE_ERROR" title="TYPE_ERROR">TYPE_ERROR</a></li>
+                                <li class=""><a href="#property_TYPE_WARNING" title="TYPE_WARNING">TYPE_WARNING</a></li>
+                                <li class=""><a href="#property_UNKNOWN_EVENT_CDE" title="UNKNOWN_EVENT_CDE">UNKNOWN_EVENT_CDE</a></li>
+                                <li class=""><a href="#property_WRONG_EVENTS_FORMAT_CDE" title="WRONG_EVENTS_FORMAT_CDE">WRONG_EVENTS_FORMAT_CDE</a></li>
+                        </ul>
+                    </div>
+
+
+
+
+            </div>
+		</div>
+	</div>
+	<div id="ft">
+        <hr />
+        Copyright &copy; 2009 <a href="http://rpbouman.blogspot.com/">Roland Bouman</a>. 
+        (This documentation is part of the <a href="http://code.google.com/p/xmla4js/">xmla4js</a> project.)
+	</div>
+</div>
+<script type="text/javascript">
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.Rowset.html#method_close", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "close"}, {"url": "Xmla.Exception.html#property_code", "access": "", "host": "Xmla.Exception", "type": "property", "name": "code"}, {"url": "Xmla.Exception.html#property_data", "access": "", "host": "Xmla.Exception", "type": "property", "name": "data"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.Exception.html#property_ERROR_PARSING_RESPONSE_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "ERROR_PARSING_RESPONSE_CDE"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_fetchAllAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAllAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsObject"}, {"url": "Xmla.Rowset.html#method_fetchAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsObject"}, {"url": "Xmla.Rowset.html#method_fieldCount", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldCount"}, {"url": "Xmla.Rowset.html#method_fieldDef", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldDef"}, {"url": "Xmla.Rowset.html#method_fieldIndex", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldIndex"}, {"url": "Xmla.Rowset.html#method_fieldName", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldName"}, {"url": "Xmla.Rowset.html#method_fieldVal", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldVal"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.Exception.html#property_helpfile", "access": "", "host": "Xmla.Exception", "type": "property", "name": "helpfile"}, {"url": "Xmla.Exception.html#property_INVALID_EVENT_HANDLER_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "INVALID_EVENT_HANDLER_CDE"}, {"url": "Xmla.Exception.html#property_INVALID_FIELD_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "INVALID_FIELD_CDE"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.Exception.html#property_message", "access": "", "host": "Xmla.Exception", "type": "property", "name": "message"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.Exception.html#property_MISSING_REQUEST_TYPE_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_REQUEST_TYPE_CDE"}, {"url": "Xmla.Exception.html#property_MISSING_STATEMENT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_STATEMENT_CDE"}, {"url": "Xmla.Exception.html#property_MISSING_URL_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_URL_CDE"}, {"url": "Xmla.Rowset.html#method_next", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "next"}, {"url": "Xmla.Exception.html#property_NO_EVENTS_SPECIFIED_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "NO_EVENTS_SPECIFIED_CDE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}, {"url": "Xmla.Exception.html#property_source", "access": "", "host": "Xmla.Exception", "type": "property", "name": "source"}, {"url": "Xmla.Exception.html#property_type", "access": "", "host": "Xmla.Exception", "type": "property", "name": "type"}, {"url": "Xmla.Exception.html#property_TYPE_ERROR", "access": "", "host": "Xmla.Exception", "type": "property", "name": "TYPE_ERROR"}, {"url": "Xmla.Exception.html#property_TYPE_WARNING", "access": "", "host": "Xmla.Exception", "type": "property", "name": "TYPE_WARNING"}, {"url": "Xmla.Exception.html#property_UNKNOWN_EVENT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "UNKNOWN_EVENT_CDE"}, {"url": "Xmla.Exception.html#property_WRONG_EVENTS_FORMAT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "WRONG_EVENTS_FORMAT_CDE"}];
+</script>
+</body>
+</html>

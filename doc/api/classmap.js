@@ -1,4 +1,4 @@
-YAHOO.env.classMap = {"Xmla.Rowset": "xmla", "Xmla": "xmla"};
+YAHOO.env.classMap = {"Xmla.Rowset": "xmla", "Xmla": "xmla", "Xmla.Exception": "xmla"};
 
 YAHOO.env.resolveClass = function(className) {
     var a=className.split('.'), ns=YAHOO.env.classMap;

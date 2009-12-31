@@ -191,10 +191,14 @@
     <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
         <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span><span class="o">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">requestType</span><span class="p">))</span> <span class="p">{</span>
-                <span class="nx">exception</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Missing request type&quot;</span><span class="p">,</span>
-                    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Requests of the \&quot;Discover\&quot; method must specify a requestType.&quot;</span>
-                <span class="p">};</span>
+                <span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_CDE</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_MSG</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_HLP</span><span class="p">,</span>
+                    <span class="s2">&quot;Xmla._getXmlaSoapMessage&quot;</span><span class="p">,</span>
+                    <span class="nx">options</span>
+                <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestType</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
@@ -205,10 +209,14 @@
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_EXECUTE</span><span class="o">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">statement</span><span class="p">)){</span>
-                <span class="nx">exception</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Missing statement&quot;</span><span class="p">,</span>
-                    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Requests of the \&quot;Execute\&quot; method must specify an MDX statement.&quot;</span>
-                <span class="p">};</span>
+                <span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_CDE</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_MSG</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_HLP</span><span class="p">,</span>
+                    <span class="s2">&quot;Xmla._getXmlaSoapMessage&quot;</span><span class="p">,</span>
+                    <span class="nx">options</span>
+                <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;Command&gt;&lt;Statement&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">statement</span> <span class="o">+</span> <span class="s2">&quot;&lt;/Statement&gt;&lt;/Command&gt;&quot;</span> <span class="o">+</span> 
@@ -217,13 +225,12 @@
             <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">default</span><span class="o">:</span>
-            <span class="nx">exception</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Invalid XMLA method&quot;</span><span class="p">,</span>
-                <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;The method must be either \&quot;Discover\&quot; or \&quot;Execute\&quot;.&quot;</span>
-            <span class="p">};</span>
+            <span class="c1">//we used to throw an exception here, </span>
+            <span class="c1">//but this would make it impossible </span>
+            <span class="c1">//to execute service or provider specific methods. </span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">exception</span><span class="o">!==</span><span class="kc">null</span><span class="p">){</span>
-        <span class="k">throw</span> <span class="nx">exception</span><span class="p">;</span>
+        <span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;   &lt;/&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
         <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
@@ -1117,7 +1124,14 @@
     <span class="nx">addListener</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">listener</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">listener</span><span class="p">.</span><span class="nx">events</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">events</span><span class="p">)){</span>
-            <span class="k">throw</span> <span class="s2">&quot;No events specified&quot;</span><span class="p">;</span> 
+            <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_CDE</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_MSG</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_HLP</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla.addListener&quot;</span><span class="p">,</span>
+                <span class="nx">options</span>
+            <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isString</span><span class="p">(</span><span class="nx">events</span><span class="p">)){</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">events</span><span class="o">===</span><span class="s2">&quot;all&quot;</span><span class="p">){</span>
@@ -1127,7 +1141,14 @@
             <span class="p">}</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">events</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)){</span>
-            <span class="k">throw</span> <span class="s2">&quot;Property \&quot;events\&quot; must be comma separated list string or array.&quot;</span><span class="p">;</span> 
+            <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">WRONG_EVENTS_FORMAT_CDE</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">WRONG_EVENTS_FORMAT_MSG</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">WRONG_EVENTS_FORMAT_HLP</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla.addListener&quot;</span><span class="p">,</span>
+                <span class="nx">options</span>
+            <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">numEvents</span> <span class="o">=</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">eventName</span><span class="p">,</span> <span class="nx">myListeners</span><span class="p">;</span>
@@ -1135,7 +1156,14 @@
             <span class="nx">eventName</span> <span class="o">=</span> <span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\s+/g</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
             <span class="nx">myListeners</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listeners</span><span class="p">[</span><span class="nx">eventName</span><span class="p">];</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">myListeners</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="s2">&quot;Event \&quot;&quot;</span> <span class="o">+</span> <span class="nx">eventName</span> <span class="o">+</span> <span class="s2">&quot;\&quot; is not defined.&quot;</span><span class="p">;</span> 
+                <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_CDE</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_MSG</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_HLP</span><span class="p">,</span>
+                    <span class="s2">&quot;Xmla.addListener&quot;</span><span class="p">,</span>
+                    <span class="nx">options</span>
+                <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
             <span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">_isFunction</span><span class="p">(</span><span class="nx">listener</span><span class="p">.</span><span class="nx">handler</span><span class="p">)){</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_isObject</span><span class="p">(</span><span class="nx">listener</span><span class="p">.</span><span class="nx">scope</span><span class="p">))</span> <span class="p">{</span>
@@ -1144,14 +1172,28 @@
                 <span class="nx">myListeners</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">listener</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="s2">&quot;Invalid listener: handler is not a function&quot;</span><span class="p">;</span> 
+                <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_CDE</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_MSG</span><span class="p">,</span>
+                    <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_HLP</span><span class="p">,</span>
+                    <span class="s2">&quot;Xmla.addListener&quot;</span><span class="p">,</span>
+                    <span class="nx">options</span>
+                <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">},</span>    
     <span class="nx">_fireEvent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">eventData</span><span class="p">,</span> <span class="nx">cancelable</span><span class="p">){</span>
         <span class="kd">var</span> <span class="nx">listeners</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">listeners</span><span class="p">[</span><span class="nx">eventName</span><span class="p">];</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">listeners</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="s2">&quot;Event \&quot;&quot;</span> <span class="o">+</span> <span class="nx">eventName</span> <span class="o">+</span> <span class="s2">&quot;\&quot; is not defined.&quot;</span><span class="p">;</span> 
+            <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_CDE</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_MSG</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_HLP</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla._fireEvent&quot;</span><span class="p">,</span>
+                <span class="nx">options</span>
+            <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">numListeners</span> <span class="o">=</span> <span class="nx">listeners</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">outcome</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
@@ -1173,7 +1215,14 @@
         <span class="p">}</span>
         <span class="k">else</span> 
         <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span><span class="o">===</span><span class="s2">&quot;error&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">throw</span> <span class="nx">eventData</span><span class="p">;</span>
+            <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultCode</span><span class="p">,</span>
+                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultDescription</span><span class="p">,</span>
+                <span class="kc">null</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla._fireEvent&quot;</span><span class="p">,</span>
+                <span class="nx">eventData</span>
+            <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">outcome</span><span class="p">;</span>
     <span class="p">},</span>
@@ -1321,7 +1370,16 @@
             <span class="nx">url</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">url</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
             <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span>
         <span class="p">};</span>
-        
+        <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">)){</span>
+            <span class="kd">var</span> <span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_CDE</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_MSG</span><span class="p">,</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_HLP</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla.request&quot;</span><span class="p">,</span>
+                <span class="nx">options</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">username</span><span class="p">){</span>
             <span class="nx">ajaxOptions</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">username</span><span class="p">;</span>
         <span class="p">}</span>
@@ -2625,7 +2683,14 @@
         <span class="p">}</span>        
     <span class="p">}</span>
     <span class="k">else</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="s2">&quot;Couldn&#39;t parse XML schema while constructing resultset&quot;</span><span class="p">;</span>
+        <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+            <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span>
+        <span class="p">,</span>   <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_CDE</span>
+        <span class="p">,</span>   <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_MSG</span>
+        <span class="p">,</span>   <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_HLP</span>
+        <span class="p">,</span>   <span class="s2">&quot;Xmla.Rowset&quot;</span>
+        <span class="p">,</span>   <span class="nx">node</span>
+        <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
     <span class="p">}</span>
 <span class="p">};</span>
 
@@ -2970,6 +3035,258 @@
         <span class="k">return</span> <span class="nx">rows</span><span class="p">;</span>
     <span class="p">}</span>    
 <span class="p">};</span>
+
+<span class="cm">/**</span>
+<span class="cm">*   &lt;p&gt;</span>
+<span class="cm">*   This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.</span>
+<span class="cm">*   &lt;/p&gt;</span>
+<span class="cm">*   &lt;p&gt;</span>
+<span class="cm">*   You do not need to instantiate objects of this class yourself. </span>
+<span class="cm">*   Rather, instances of this class are created and thrown at runtime whenever an error occurs.</span>
+<span class="cm">*   The purpose is to provide a clean and clear way for applications that use xmla4js to recognize and handle Xmla4js specific runtime errors.</span>
+<span class="cm">*   &lt;/p&gt;</span>
+<span class="cm">*   &lt;p&gt;</span>
+<span class="cm">*   To handle Xmla4js errors, you can use a &lt;code&gt;try...catch&lt;/code&gt; block like this:</span>
+<span class="cm">*   &lt;/p&gt;</span>
+<span class="cm">&lt;pre&gt;</span>
+<span class="cm">&amp;nbsp;try {</span>
+<span class="cm">&amp;nbsp;    ...general xmla4js work...</span>
+<span class="cm">&amp;nbsp;} catch (exception) {</span>
+<span class="cm">&amp;nbsp;    if (exception instanceof Xmla.Exception) {</span>
+<span class="cm">&amp;nbsp;        ...use exception.code, exception.message and exception.data to handle the exception.</span>
+<span class="cm">&amp;nbsp;    } else {</span>
+<span class="cm">&amp;nbsp;        ...handle other errors...</span>
+<span class="cm">&amp;nbsp;    }</span>
+<span class="cm">&amp;nbsp;}</span>
+<span class="cm">&lt;/pre&gt;</span>
+<span class="cm">*   </span>
+<span class="cm">*   @class Xmla.Exception</span>
+<span class="cm">*   @constructor</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">,</span> <span class="nx">code</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">helpfile</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">code</span> <span class="o">=</span> <span class="nx">code</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">message</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">source</span> <span class="o">=</span> <span class="nx">source</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">helpfile</span> <span class="o">=</span> <span class="nx">helpfile</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm">*   Can appear as value for the &lt;code&gt;&lt;a href=&quot;#property_type&quot;&gt;type&lt;/a&gt;&lt;/code&gt; property of instances of the &lt;code&gt;&lt;a href=&quot;#class_Xmla.Exception&quot;&gt;Xmla.Exception&lt;/a&gt;&lt;/code&gt; class, </span>
+<span class="cm">*   and indicates that this &lt;code&gt;Xmla.Exception&lt;/code&gt; signals a warning.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property TYPE_WARNING</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;warning&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_WARNING</span> <span class="o">=</span> <span class="s2">&quot;warning&quot;</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Can appear as value for the &lt;code&gt;&lt;a href=&quot;#property_type&quot;&gt;type&lt;/a&gt;&lt;/code&gt; property of instances of the &lt;code&gt;&lt;a href=&quot;#class_Xmla.Exception&quot;&gt;Xmla.Exception&lt;/a&gt;&lt;/code&gt; class, </span>
+<span class="cm">*   and indicates that this &lt;code&gt;Xmla.Exception&lt;/code&gt; signals an error.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property TYPE_ERROR</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type string</span>
+<span class="cm">*   @default &lt;code&gt;error&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">_exceptionHlp</span> <span class="o">=</span> <span class="s2">&quot;http://code.google.com/p/xmla4js/wiki/ExceptionCodes&quot;</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a &lt;code&gt;requestType&lt;/code&gt; option was expected but ommitted.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MISSING_REQUEST_TYPE_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-1&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_MSG</span> <span class="o">=</span> <span class="s2">&quot;Missing_Request_Type&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_CDE</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_REQUEST_TYPE_MSG</span><span class="p">;</span>
+                                    
+
+
+                                    <span class="nx">exception</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Missing statement&quot;</span><span class="p">,</span>
+                    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Requests of the \&quot;Execute\&quot; method must specify an MDX statement.&quot;</span>
+                <span class="p">};</span>
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a &lt;code&gt;statement&lt;/code&gt; option was expected but ommitted.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MISSING_STATEMENT_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-2&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_MSG</span> <span class="o">=</span> <span class="s2">&quot;Missing_Statement&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_CDE</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_STATEMENT_MSG</span><span class="p">;</span>
+                                    
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a &lt;code&gt;url&lt;/code&gt; option was expected but ommitted.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property MISSING_URL_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-3&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_MSG</span> <span class="o">=</span> <span class="s2">&quot;Missing_Statement&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_CDE</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">MISSING_URL_MSG</span><span class="p">;</span>
+                                    
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a &lt;code&gt;events&lt;/code&gt; were expected but ommitted.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property NO_EVENTS_SPECIFIED_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-4&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_MSG</span> <span class="o">=</span> <span class="s2">&quot;No_Events_Specified&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_MSG</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a &lt;code&gt;events&lt;/code&gt; were specifeid in the wrong format.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property WRONG_EVENTS_FORMAT_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-5&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">WRONG_EVENTS_FORMAT_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">WRONG_EVENTS_FORMAT_MSG</span> <span class="o">=</span> <span class="s2">&quot;Wrong_Events_Format&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">WRONG_EVENTS_FORMAT_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">NO_EVENTS_SPECIFIED_MSG</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating that the event name was unrecognized.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property UNKNOWN_EVENT_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-6&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">6</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_MSG</span> <span class="o">=</span> <span class="s2">&quot;Unknown_Event&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">UNKNOWN_EVENT_MSG</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating that no proper handler was passed for the events.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property INVALID_EVENT_HANDLER_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-7&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">7</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_MSG</span> <span class="o">=</span> <span class="s2">&quot;Invalid_Events_Handler&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_EVENT_HANDLER_MSG</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating that the rrepsonse could not be parsed</span>
+<span class="cm">*</span>
+<span class="cm">*   @property ERROR_PARSING_RESPONSE_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-8&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_MSG</span> <span class="o">=</span> <span class="s2">&quot;Invalid_Events_Handler&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">ERROR_PARSING_RESPONSE_MSG</span> <span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating the field name is not valid.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property INVALID_FIELD_CDE</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-9&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_MSG</span> <span class="o">=</span> <span class="s2">&quot;Invalid_Field&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_MSG</span><span class="p">;</span>
+                                    
+                                    
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">protoype</span> <span class="o">=</span> <span class="p">{</span>
+<span class="cm">/**</span>
+<span class="cm">*   This propery indicates what kind of exception occurred. It can have one of the following values: &lt;dl&gt;</span>
+<span class="cm">*       &lt;dt&gt;&lt;code&gt;&lt;a href=&quot;property_TYPE_WARNING&quot;&gt;TYPE_WARNING&lt;/a&gt;&lt;/code&gt;&lt;/dt&gt;&lt;dd&gt;Indicates a warning&lt;/dd&gt;</span>
+<span class="cm">*       &lt;dt&gt;&lt;code&gt;&lt;a href=&quot;property_TYPE_ERROR&quot;&gt;TYPE_ERROR&lt;/a&gt;&lt;/code&gt;&lt;/dt&gt;&lt;dd&gt;Indicates an error&lt;/dd&gt;</span>
+<span class="cm">*   &lt;/dl&gt;</span>
+<span class="cm">*   @property type</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default {null}</span>
+<span class="cm">*/</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
+<span class="cm">*   A code that can be used to identify this particular kind of exception.</span>
+<span class="cm">*   @property code</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default {null}</span>
+<span class="cm">*/</span>
+    <span class="nx">code</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
+<span class="cm">*   A human readable message that describes the nature of the error or warning.</span>
+<span class="cm">*   @property message</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default {null}</span>
+<span class="cm">*/</span>
+    <span class="nx">message</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
+<span class="cm">*   A name that indicates in what component (on the client or server side) this error or warning occurred.</span>
+<span class="cm">*   @property source</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default {null}</span>
+<span class="cm">*/</span>
+    <span class="nx">source</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
+<span class="cm">*   A path or url that points to a document that contains more information about this error.</span>
+<span class="cm">*   @property helpfile</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default {null}</span>
+<span class="cm">*/</span>
+    <span class="nx">helpfile</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
+<span class="cm">*   Additional data captured when the exception was instantiated.</span>
+<span class="cm">*   The type of information stored here is dependent upon the nature of the error. </span>
+<span class="cm">*   @property data</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default {null}</span>
+<span class="cm">*/</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_throw</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">throw</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
 <span class="p">}());</span>
 </pre></div>

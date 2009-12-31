@@ -191,10 +191,14 @@ function _getXmlaSoapMessage(
     switch(method){
         case Xmla.METHOD_DISCOVER:
             if (_isUndefined(options.requestType)) {
-                exception = {
-                    name: "Missing request type",
-                    description: "Requests of the \"Discover\" method must specify a requestType."
-                };
+                exception = new Xmla.Exception(
+                    Xmla.Exception.TYPE_ERROR,
+                    Xmla.Exception.MISSING_REQUEST_TYPE_CDE,
+                    Xmla.Exception.MISSING_REQUEST_TYPE_MSG,
+                    Xmla.Exception.MISSING_REQUEST_TYPE_HLP,
+                    "Xmla._getXmlaSoapMessage",
+                    options
+                );
             }
             else {
                 msg += "<" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" + 
@@ -205,10 +209,14 @@ function _getXmlaSoapMessage(
             break;
         case Xmla.METHOD_EXECUTE:
             if (_isUndefined(options.statement)){
-                exception = {
-                    name: "Missing statement",
-                    description: "Requests of the \"Execute\" method must specify an MDX statement."
-                };
+                exception = new Xmla.Exception(
+                    Xmla.Exception.TYPE_ERROR,
+                    Xmla.Exception.MISSING_STATEMENT_CDE,
+                    Xmla.Exception.MISSING_STATEMENT_MSG,
+                    Xmla.Exception.MISSING_STATEMENT_HLP,
+                    "Xmla._getXmlaSoapMessage",
+                    options
+                );
             }
             else {
                 msg += "<Command><Statement>" + options.statement + "</Statement></Command>" + 
@@ -217,13 +225,12 @@ function _getXmlaSoapMessage(
             }
             break;
         default:
-            exception = {
-                name: "Invalid XMLA method",
-                description: "The method must be either \"Discover\" or \"Execute\"."
-            };
+            //we used to throw an exception here, 
+            //but this would make it impossible 
+            //to execute service or provider specific methods. 
     }
     if (exception!==null){
-        throw exception;
+        exception._throw();
     }
     msg += "   </" + method + ">" + 
         "</" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
@@ -1117,7 +1124,14 @@ Xmla.prototype = {
     addListener: function(listener){
         var events = listener.events;
         if (_isUndefined(events)){
-            throw "No events specified"; 
+            new Xmla.Exception(
+                Xmla.Exception.TYPE_ERROR,
+                Xmla.Exception.NO_EVENTS_SPECIFIED_CDE,
+                Xmla.Exception.NO_EVENTS_SPECIFIED_MSG,
+                Xmla.Exception.NO_EVENTS_SPECIFIED_HLP,
+                "Xmla.addListener",
+                options
+            )._throw();
         }
         if (_isString(events)){
             if (events==="all"){
@@ -1127,7 +1141,14 @@ Xmla.prototype = {
             }
         }
         if (!(events instanceof Array)){
-            throw "Property \"events\" must be comma separated list string or array."; 
+            new Xmla.Exception(
+                Xmla.Exception.TYPE_ERROR,
+                Xmla.Exception.WRONG_EVENTS_FORMAT_CDE,
+                Xmla.Exception.WRONG_EVENTS_FORMAT_MSG,
+                Xmla.Exception.WRONG_EVENTS_FORMAT_HLP,
+                "Xmla.addListener",
+                options
+            )._throw();
         }
         var numEvents = events.length;
         var eventName, myListeners;
@@ -1135,7 +1156,14 @@ Xmla.prototype = {
             eventName = events[i].replace(/\s+/g,"");
             myListeners = this.listeners[eventName];
             if (!myListeners) {
-                throw "Event \"" + eventName + "\" is not defined."; 
+                new Xmla.Exception(
+                    Xmla.Exception.TYPE_ERROR,
+                    Xmla.Exception.UNKNOWN_EVENT_CDE,
+                    Xmla.Exception.UNKNOWN_EVENT_MSG,
+                    Xmla.Exception.UNKNOWN_EVENT_HLP,
+                    "Xmla.addListener",
+                    options
+                )._throw();
             }
             if (_isFunction(listener.handler)){
                 if (!_isObject(listener.scope)) {
@@ -1144,14 +1172,28 @@ Xmla.prototype = {
                 myListeners.push(listener);
             }
             else {
-                throw "Invalid listener: handler is not a function"; 
+                new Xmla.Exception(
+                    Xmla.Exception.TYPE_ERROR,
+                    Xmla.Exception.INVALID_EVENT_HANDLER_CDE,
+                    Xmla.Exception.INVALID_EVENT_HANDLER_MSG,
+                    Xmla.Exception.INVALID_EVENT_HANDLER_HLP,
+                    "Xmla.addListener",
+                    options
+                )._throw();
             }
         }
     },    
     _fireEvent: function(eventName, eventData, cancelable){
         var listeners = this.listeners[eventName];
         if (!listeners) {
-            throw "Event \"" + eventName + "\" is not defined."; 
+            new Xmla.Exception(
+                Xmla.Exception.TYPE_ERROR,
+                Xmla.Exception.UNKNOWN_EVENT_CDE,
+                Xmla.Exception.UNKNOWN_EVENT_MSG,
+                Xmla.Exception.UNKNOWN_EVENT_HLP,
+                "Xmla._fireEvent",
+                options
+            )._throw();
         }
         var numListeners = listeners.length;
         var outcome = true;
@@ -1173,7 +1215,14 @@ Xmla.prototype = {
         }
         else 
         if (eventName==="error") {
-            throw eventData;
+            new Xmla.Exception(
+                Xmla.Exception.TYPE_ERROR,
+                eventData.error.faultCode,
+                eventData.error.faultDescription,
+                null,
+                "Xmla._fireEvent",
+                eventData
+            )._throw();
         }
         return outcome;
     },
@@ -1321,7 +1370,16 @@ Xmla.prototype = {
             url: _isUndefined(options.url)? this.options.url : options.url,
             type: "POST"
         };
-        
+        if (_isUndefined(options.url)){
+            var exception = new Xmla.Exception(
+                Xmla.Exception.TYPE_ERROR,
+                Xmla.Exception.MISSING_URL_CDE,
+                Xmla.Exception.MISSING_URL_MSG,
+                Xmla.Exception.MISSING_URL_HLP,
+                "Xmla.request",
+                options
+            );
+        }
         if (options.username){
             ajaxOptions.username = options.username;
         }
@@ -2625,7 +2683,14 @@ Xmla.Rowset = function (node, requestType){
         }        
     }
     else {
-        throw "Couldn't parse XML schema while constructing resultset";
+        new Xmla.Exception(
+            Xmla.Exception.TYPE_ERROR
+        ,   Xmla.Exception.ERROR_PARSING_RESPONSE_CDE
+        ,   Xmla.Exception.ERROR_PARSING_RESPONSE_MSG
+        ,   Xmla.Exception.ERROR_PARSING_RESPONSE_HLP
+        ,   "Xmla.Rowset"
+        ,   node
+        )._throw();
     }
 };
 
@@ -2970,5 +3035,257 @@ while (rowObject = rowset.fetchAsObject()){
         return rows;
     }    
 };
+
+/**
+*   <p>
+*   This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.
+*   </p>
+*   <p>
+*   You do not need to instantiate objects of this class yourself. 
+*   Rather, instances of this class are created and thrown at runtime whenever an error occurs.
+*   The purpose is to provide a clean and clear way for applications that use xmla4js to recognize and handle Xmla4js specific runtime errors.
+*   </p>
+*   <p>
+*   To handle Xmla4js errors, you can use a <code>try...catch</code> block like this:
+*   </p>
+<pre>
+&nbsp;try {
+&nbsp;    ...general xmla4js work...
+&nbsp;} catch (exception) {
+&nbsp;    if (exception instanceof Xmla.Exception) {
+&nbsp;        ...use exception.code, exception.message and exception.data to handle the exception.
+&nbsp;    } else {
+&nbsp;        ...handle other errors...
+&nbsp;    }
+&nbsp;}
+</pre>
+*   
+*   @class Xmla.Exception
+*   @constructor
+*/
+Xmla.Exception = function(type, code, message, helpfile, source, data){
+    this.type = type;
+    this.code = code;
+    this.message = message;
+    this.source = source;
+    this.helpfile = helpfile;
+    this.data = data;
+}
+
+/**
+*   Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class, 
+*   and indicates that this <code>Xmla.Exception</code> signals a warning.
+*
+*   @property TYPE_WARNING
+*   @static
+*   @final
+*   @type string
+*   @default <code>warning</code>
+*/
+Xmla.Exception.TYPE_WARNING = "warning";
+/**
+*   Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class, 
+*   and indicates that this <code>Xmla.Exception</code> signals an error.
+*
+*   @property TYPE_ERROR
+*   @static
+*   @final
+*   @type string
+*   @default <code>error</code>
+*/
+Xmla.Exception.TYPE_ERROR = "error";
+
+var _exceptionHlp = "http://code.google.com/p/xmla4js/wiki/ExceptionCodes";
+
+/**
+*   Exception code indicating a <code>requestType</code> option was expected but ommitted.
+*
+*   @property MISSING_REQUEST_TYPE_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-1</code>
+*/
+Xmla.Exception.MISSING_REQUEST_TYPE_CDE = -1; 
+Xmla.Exception.MISSING_REQUEST_TYPE_MSG = "Missing_Request_Type"; 
+Xmla.Exception.MISSING_REQUEST_TYPE_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.MISSING_REQUEST_TYPE_CDE + 
+                                    "_" + Xmla.Exception.MISSING_REQUEST_TYPE_MSG;
+                                    
+
+
+                                    exception = {
+                    name: "Missing statement",
+                    description: "Requests of the \"Execute\" method must specify an MDX statement."
+                };
+/**
+*   Exception code indicating a <code>statement</code> option was expected but ommitted.
+*
+*   @property MISSING_STATEMENT_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-2</code>
+*/
+Xmla.Exception.MISSING_STATEMENT_CDE = -2; 
+Xmla.Exception.MISSING_STATEMENT_MSG = "Missing_Statement"; 
+Xmla.Exception.MISSING_STATEMENT_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.MISSING_STATEMENT_CDE + 
+                                    "_" + Xmla.Exception.MISSING_STATEMENT_MSG;
+                                    
+/**
+*   Exception code indicating a <code>url</code> option was expected but ommitted.
+*
+*   @property MISSING_URL_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-3</code>
+*/
+Xmla.Exception.MISSING_URL_CDE = -3;
+Xmla.Exception.MISSING_URL_MSG = "Missing_Statement"; 
+Xmla.Exception.MISSING_URL_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.MISSING_URL_CDE + 
+                                    "_" + Xmla.Exception.MISSING_URL_MSG;
+                                    
+/**
+*   Exception code indicating a <code>events</code> were expected but ommitted.
+*
+*   @property NO_EVENTS_SPECIFIED_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-4</code>
+*/
+Xmla.Exception.NO_EVENTS_SPECIFIED_CDE = -4;
+Xmla.Exception.NO_EVENTS_SPECIFIED_MSG = "No_Events_Specified"; 
+Xmla.Exception.NO_EVENTS_SPECIFIED_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.NO_EVENTS_SPECIFIED_CDE  + 
+                                    "_" + Xmla.Exception.NO_EVENTS_SPECIFIED_MSG;
+
+/**
+*   Exception code indicating a <code>events</code> were specifeid in the wrong format.
+*
+*   @property WRONG_EVENTS_FORMAT_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-5</code>
+*/
+Xmla.Exception.WRONG_EVENTS_FORMAT_CDE = -5;
+Xmla.Exception.WRONG_EVENTS_FORMAT_MSG = "Wrong_Events_Format"; 
+Xmla.Exception.WRONG_EVENTS_FORMAT_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.NO_EVENTS_SPECIFIED_CDE  + 
+                                    "_" + Xmla.Exception.NO_EVENTS_SPECIFIED_MSG;
+
+/**
+*   Exception code indicating that the event name was unrecognized.
+*
+*   @property UNKNOWN_EVENT_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-6</code>
+*/
+Xmla.Exception.UNKNOWN_EVENT_CDE = -6;
+Xmla.Exception.UNKNOWN_EVENT_MSG = "Unknown_Event"; 
+Xmla.Exception.UNKNOWN_EVENT_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.UNKNOWN_EVENT_CDE  + 
+                                    "_" + Xmla.Exception.UNKNOWN_EVENT_MSG;
+/**
+*   Exception code indicating that no proper handler was passed for the events.
+*
+*   @property INVALID_EVENT_HANDLER_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-7</code>
+*/
+Xmla.Exception.INVALID_EVENT_HANDLER_CDE = -7;
+Xmla.Exception.INVALID_EVENT_HANDLER_MSG = "Invalid_Events_Handler"; 
+Xmla.Exception.INVALID_EVENT_HANDLER_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.INVALID_EVENT_HANDLER_CDE  + 
+                                    "_" + Xmla.Exception.INVALID_EVENT_HANDLER_MSG;
+/**
+*   Exception code indicating that the rrepsonse could not be parsed
+*
+*   @property ERROR_PARSING_RESPONSE_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-8</code>
+*/
+Xmla.Exception.ERROR_PARSING_RESPONSE_CDE = -8;
+Xmla.Exception.ERROR_PARSING_RESPONSE_MSG = "Invalid_Events_Handler"; 
+Xmla.Exception.ERROR_PARSING_RESPONSE_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.ERROR_PARSING_RESPONSE_CDE  + 
+                                    "_" + Xmla.Exception.ERROR_PARSING_RESPONSE_MSG ;
+/**
+*   Exception code indicating the field name is not valid.
+*
+*   @property INVALID_FIELD_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-9</code>
+*/
+Xmla.Exception.INVALID_FIELD_CDE = -9;
+Xmla.Exception.INVALID_FIELD_MSG = "Invalid_Field"; 
+Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.INVALID_FIELD_CDE  + 
+                                    "_" + Xmla.Exception.INVALID_FIELD_MSG;
+                                    
+                                    
+Xmla.Exception.protoype = {
+/**
+*   This propery indicates what kind of exception occurred. It can have one of the following values: <dl>
+*       <dt><code><a href="property_TYPE_WARNING">TYPE_WARNING</a></code></dt><dd>Indicates a warning</dd>
+*       <dt><code><a href="property_TYPE_ERROR">TYPE_ERROR</a></code></dt><dd>Indicates an error</dd>
+*   </dl>
+*   @property type
+*   @type {string}
+*   @default {null}
+*/
+    type: null,
+/**
+*   A code that can be used to identify this particular kind of exception.
+*   @property code
+*   @type {int}
+*   @default {null}
+*/
+    code: null,
+/**
+*   A human readable message that describes the nature of the error or warning.
+*   @property message
+*   @type {string}
+*   @default {null}
+*/
+    message: null,
+/**
+*   A name that indicates in what component (on the client or server side) this error or warning occurred.
+*   @property source
+*   @type {string}
+*   @default {null}
+*/
+    source: null,
+/**
+*   A path or url that points to a document that contains more information about this error.
+*   @property helpfile
+*   @type {string}
+*   @default {null}
+*/
+    helpfile: null,
+/**
+*   Additional data captured when the exception was instantiated.
+*   The type of information stored here is dependent upon the nature of the error. 
+*   @property data
+*   @type {string}
+*   @default {null}
+*/
+    data: null,
+    _throw: function(){
+        throw this;
+    }
+}
 
 }());
