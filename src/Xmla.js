@@ -178,6 +178,8 @@ function _getXmlaSoapList(container, listType, items){
     return msg;
 }
 
+var _xmlRequestType = "RequestType";
+
 function _getXmlaSoapMessage(
     options
 ){
@@ -191,11 +193,8 @@ function _getXmlaSoapMessage(
     switch(method){
         case Xmla.METHOD_DISCOVER:
             if (_isUndefined(options.requestType)) {
-                exception = new Xmla.Exception(
-                    Xmla.Exception.TYPE_ERROR,
-                    Xmla.Exception.MISSING_REQUEST_TYPE_CDE,
-                    Xmla.Exception.MISSING_REQUEST_TYPE_MSG,
-                    Xmla.Exception.MISSING_REQUEST_TYPE_HLP,
+                exception = Xmla.Exception._newError(
+                    "MISSING_REQUEST_TYPE",
                     "Xmla._getXmlaSoapMessage",
                     options
                 );
@@ -209,11 +208,8 @@ function _getXmlaSoapMessage(
             break;
         case Xmla.METHOD_EXECUTE:
             if (_isUndefined(options.statement)){
-                exception = new Xmla.Exception(
-                    Xmla.Exception.TYPE_ERROR,
-                    Xmla.Exception.MISSING_STATEMENT_CDE,
-                    Xmla.Exception.MISSING_STATEMENT_MSG,
-                    Xmla.Exception.MISSING_STATEMENT_HLP,
+                exception = Xmla.Exception._newError(
+                    "MISSING_REQUEST_TYPE",
                     "Xmla._getXmlaSoapMessage",
                     options
                 );
@@ -322,7 +318,6 @@ Xmla.METHOD_DISCOVER = "Discover";
 */
 Xmla.METHOD_EXECUTE = "Execute";
 
-var _xmlRequestType = "RequestType";
 var _xmlaDISCOVER = "DISCOVER_";
 var _xmlaMDSCHEMA = "MDSCHEMA_";
 var _xmlaDBSCHEMA = "DBSCHEMA_";
@@ -869,6 +864,25 @@ Xmla.EVENT_ALL = [].concat(
     Xmla.EVENT_EXECUTE_ALL
 );
 
+/**
+*   Can be used as key in the <code>properties</code> member of the <code>options</code> object 
+*   passed to the <code><a href="#method_request">request()</a></code> method 
+*   to specify the XML/A <code>DataSourceInfo</code> property.
+*   The XML/A <code>DataSourceInfo</code>, together with the XML/A service URL are required to 
+*   connect to a particular OLAP datasource.
+*   Valid values for the <code>DataSourceInfo</code> as well as the corresponding URL should be obtained
+*   by querying the <code>DataSourceInfo</code> and <code>URL</code> columns of the <code>DISCOVER_DATASOURCES</code> 
+*   rowset respectively (see <code><a href="method_discoverDataSources">discoverDataSources()</a></code>).
+*   <code><a href="#property_PROP_AXISFORMAT_TUPLE">PROP_AXISFORMAT_TUPLE</a></code>, 
+*   <code><a href="#property_PROP_AXISFORMAT_CLUSTER">PROP_AXISFORMAT_CLUSTER</a></code>,
+*   <code><a href="#property_PROP_AXISFORMAT_CUSTOM">PROP_AXISFORMAT_CUSTOM</a></code>.
+*
+*   @property PROP_DataSourceInfo
+*   @static
+*   @final
+*   @type string
+*   @default <code>DataSourceInfo</code>
+*/
 Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
 Xmla.PROP_CATALOG = "Catalog";
 Xmla.PROP_CUBE = "Cube";
@@ -879,7 +893,7 @@ Xmla.PROP_FORMAT_MULTIDIMENSIONAL = "Multidimensional";
 
 /**
 *   Can be used as key in the <code>properties</code> member of the <code>options</code> object 
-*   passed to the <code><a href="#method_request">execute()</a></code> method 
+*   passed to the <code><a href="#method_execute">execute()</a></code> method 
 *   to specify the XML/A <code>AxisFormat</code> property.
 *   The XML/A <code>AxisFormat</code> property specifies how the client wants to receive the multi-dimensional resultset of a MDX query.
 *   Valid values for the <code>AxisFormat</code> property are available as the static final properties 
@@ -898,7 +912,7 @@ Xmla.PROP_AXISFORMAT = "AxisFormat";
 *   Can be used as value for the <code>AxisFormat</code> XML/A property 
 *   (see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>) 
 *   in invocations of the <code>Execute</code> method 
-*   (see: <code><a href="#method_request">execute()</a></code>).
+*   (see: <code><a href="#method_execute">execute()</a></code>).
 *
 *   @property PROP_AXISFORMAT_TUPLE
 *   @static
@@ -911,7 +925,7 @@ Xmla.PROP_AXISFORMAT_TUPLE = "TupleFormat";
 *   Can be used as value for the <code>AxisFormat</code> XML/A property 
 *   (see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>) 
 *   in invocations of the <code>Execute</code> method 
-*   (see: <code><a href="#method_request">execute()</a></code>).
+*   (see: <code><a href="#method_execute">execute()</a></code>).
 *
 *   @property PROP_AXISFORMAT_CLUSTER
 *   @static
@@ -924,7 +938,7 @@ Xmla.PROP_AXISFORMAT_CLUSTER = "ClusterFormat";
 *   Can be used as value for the <code>AxisFormat</code> XML/A property 
 *   (see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>) 
 *   in invocations of the <code>Execute</code> method 
-*   (see: <code><a href="#method_request">execute()</a></code>).
+*   (see: <code><a href="#method_execute">execute()</a></code>).
 *
 *   @property PROP_AXISFORMAT_CUSTOM
 *   @static
@@ -1124,13 +1138,10 @@ Xmla.prototype = {
     addListener: function(listener){
         var events = listener.events;
         if (_isUndefined(events)){
-            new Xmla.Exception(
-                Xmla.Exception.TYPE_ERROR,
-                Xmla.Exception.NO_EVENTS_SPECIFIED_CDE,
-                Xmla.Exception.NO_EVENTS_SPECIFIED_MSG,
-                Xmla.Exception.NO_EVENTS_SPECIFIED_HLP,
+            Xmla.Exception._newError(
+                "NO_EVENTS_SPECIFIED",
                 "Xmla.addListener",
-                options
+                listener
             )._throw();
         }
         if (_isString(events)){
@@ -1141,13 +1152,10 @@ Xmla.prototype = {
             }
         }
         if (!(events instanceof Array)){
-            new Xmla.Exception(
-                Xmla.Exception.TYPE_ERROR,
-                Xmla.Exception.WRONG_EVENTS_FORMAT_CDE,
-                Xmla.Exception.WRONG_EVENTS_FORMAT_MSG,
-                Xmla.Exception.WRONG_EVENTS_FORMAT_HLP,
+            Xmla.Exception._newError(
+                "WRONG_EVENTS_FORMAT",
                 "Xmla.addListener",
-                options
+                listener
             )._throw();
         }
         var numEvents = events.length;
@@ -1156,13 +1164,10 @@ Xmla.prototype = {
             eventName = events[i].replace(/\s+/g,"");
             myListeners = this.listeners[eventName];
             if (!myListeners) {
-                new Xmla.Exception(
-                    Xmla.Exception.TYPE_ERROR,
-                    Xmla.Exception.UNKNOWN_EVENT_CDE,
-                    Xmla.Exception.UNKNOWN_EVENT_MSG,
-                    Xmla.Exception.UNKNOWN_EVENT_HLP,
+                Xmla.Exception._newError(
+                    "UNKNOWN_EVENT",
                     "Xmla.addListener",
-                    options
+                    listener
                 )._throw();
             }
             if (_isFunction(listener.handler)){
@@ -1172,13 +1177,10 @@ Xmla.prototype = {
                 myListeners.push(listener);
             }
             else {
-                new Xmla.Exception(
-                    Xmla.Exception.TYPE_ERROR,
-                    Xmla.Exception.INVALID_EVENT_HANDLER_CDE,
-                    Xmla.Exception.INVALID_EVENT_HANDLER_MSG,
-                    Xmla.Exception.INVALID_EVENT_HANDLER_HLP,
+                Xmla.Exception._newError(
+                    "INVALID_EVENT_HANDLER",
                     "Xmla.addListener",
-                    options
+                    listener
                 )._throw();
             }
         }
@@ -1186,13 +1188,10 @@ Xmla.prototype = {
     _fireEvent: function(eventName, eventData, cancelable){
         var listeners = this.listeners[eventName];
         if (!listeners) {
-            new Xmla.Exception(
-                Xmla.Exception.TYPE_ERROR,
-                Xmla.Exception.UNKNOWN_EVENT_CDE,
-                Xmla.Exception.UNKNOWN_EVENT_MSG,
-                Xmla.Exception.UNKNOWN_EVENT_HLP,
+            Xmla.Exception._newError(
+                "UNKNOWN_EVENT",
                 "Xmla._fireEvent",
-                options
+                eventName
             )._throw();
         }
         var numListeners = listeners.length;
@@ -1215,14 +1214,15 @@ Xmla.prototype = {
         }
         else 
         if (eventName==="error") {
-            new Xmla.Exception(
+            var exception = new Xmla.Exception(
                 Xmla.Exception.TYPE_ERROR,
                 eventData.error.faultCode,
                 eventData.error.faultDescription,
                 null,
                 "Xmla._fireEvent",
                 eventData
-            )._throw();
+            );
+            exception._throw();
         }
         return outcome;
     },
@@ -1336,12 +1336,27 @@ Xmla.prototype = {
         this.responseText = null;
         this.responseXml = null;
         
+        options.url = _isUndefined(options.url)? this.options.url : options.url;
+        if (_isUndefined(options.url)){
+            ex = Xmla.Exception._newError(
+                "MISSING_URL",
+                "Xmla.request",
+                options
+            );
+            ex._throw();
+        }
+
+        options.properties = _applyProperties(options.properties, this.options.properties, false);
+        options.restrictions = _applyProperties(options.restrictions, this.options.restrictions, false);
+        options.async = _isUndefined(options.async) ? this.options.async : options.async;
+        options.requestTimeout = _isUndefined(options.requestTimeout) ? this.options.requestTimeout : options.requestTimeout;
+        
         var soapMessage = _getXmlaSoapMessage(options);
         options.soapMessage = soapMessage;
         var myXhr;
         var ajaxOptions = {
-            async: _isUndefined(options.async) ? this.options.async : options.async,
-            timeout: this.options.requestTimeout,
+            async: options.async,
+            timeout: options.requestTimeout,
             contentType: "text/xml",
             data: soapMessage,
             dataType: "xml",
@@ -1363,23 +1378,13 @@ Xmla.prototype = {
                         xmla: xmla,
                         request: options,
                         xhr: xhr,
-                        status: status
+                        status: textStatus
                     });
                 }
             },
-            url: _isUndefined(options.url)? this.options.url : options.url,
+            url: options.url,
             type: "POST"
         };
-        if (_isUndefined(options.url)){
-            var exception = new Xmla.Exception(
-                Xmla.Exception.TYPE_ERROR,
-                Xmla.Exception.MISSING_URL_CDE,
-                Xmla.Exception.MISSING_URL_MSG,
-                Xmla.Exception.MISSING_URL_HLP,
-                "Xmla.request",
-                options
-            );
-        }
         if (options.username){
             ajaxOptions.username = options.username;
         }
@@ -1512,7 +1517,7 @@ Xmla.prototype = {
 *   @return {Xmla.Resultset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query.
 */
     execute: function(options) {
-        var errorObject, properties = options.properties;
+        var properties = options.properties;
         if (_isUndefined(properties)){
             properties = {};
             options.properties = properties;
@@ -2683,13 +2688,10 @@ Xmla.Rowset = function (node, requestType){
         }        
     }
     else {
-        new Xmla.Exception(
-            Xmla.Exception.TYPE_ERROR
-        ,   Xmla.Exception.ERROR_PARSING_RESPONSE_CDE
-        ,   Xmla.Exception.ERROR_PARSING_RESPONSE_MSG
-        ,   Xmla.Exception.ERROR_PARSING_RESPONSE_HLP
-        ,   "Xmla.Rowset"
-        ,   node
+        Xmla.Exception._newError(
+            "ERROR_PARSING_RESPONSE",
+            "Xmla.Rowset",
+            node
         )._throw();
     }
 };
@@ -2891,7 +2893,11 @@ Xmla.Rowset.prototype = {
     fieldDef: function(name){
         var field = this.fields[name];
         if (_isUndefined(field)){
-            throw "No such field: \"" + name + "\"";
+            Xmla.Exception._newError(
+                "INVALID_FIELD",
+                "Xmla.Rowset.fieldDef",
+                name
+            )._throw();
         }
         return field;
     },
@@ -2914,7 +2920,15 @@ Xmla.Rowset.prototype = {
 *   @return {int} The ordinal position (starting at 0) of the field that matches the argument.
 */    
     fieldName: function(index){
-        return this.fieldOrder[index];
+        var fieldName = this.fieldOrder[index];
+        if (_isUndefined(fieldName)){
+            Xmla.Exception._newError(
+                "INVALID_FIELD",
+                "Xmla.Rowset.fieldDef",
+                index
+            )._throw();
+        }
+        return fieldName;
     },
 /**
 *   Retrieves a value from the current row for the field having the name specified by the argument.
@@ -3070,7 +3084,8 @@ Xmla.Exception = function(type, code, message, helpfile, source, data){
     this.source = source;
     this.helpfile = helpfile;
     this.data = data;
-}
+    return this;
+};
 
 /**
 *   Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class, 
@@ -3111,13 +3126,6 @@ Xmla.Exception.MISSING_REQUEST_TYPE_MSG = "Missing_Request_Type";
 Xmla.Exception.MISSING_REQUEST_TYPE_HLP = _exceptionHlp + 
                                     "#" + Xmla.Exception.MISSING_REQUEST_TYPE_CDE + 
                                     "_" + Xmla.Exception.MISSING_REQUEST_TYPE_MSG;
-                                    
-
-
-                                    exception = {
-                    name: "Missing statement",
-                    description: "Requests of the \"Execute\" method must specify an MDX statement."
-                };
 /**
 *   Exception code indicating a <code>statement</code> option was expected but ommitted.
 *
@@ -3143,7 +3151,7 @@ Xmla.Exception.MISSING_STATEMENT_HLP = _exceptionHlp +
 *   @default <code>-3</code>
 */
 Xmla.Exception.MISSING_URL_CDE = -3;
-Xmla.Exception.MISSING_URL_MSG = "Missing_Statement"; 
+Xmla.Exception.MISSING_URL_MSG = "Missing_URL"; 
 Xmla.Exception.MISSING_URL_HLP = _exceptionHlp + 
                                     "#" + Xmla.Exception.MISSING_URL_CDE + 
                                     "_" + Xmla.Exception.MISSING_URL_MSG;
@@ -3216,7 +3224,7 @@ Xmla.Exception.INVALID_EVENT_HANDLER_HLP = _exceptionHlp +
 *   @default <code>-8</code>
 */
 Xmla.Exception.ERROR_PARSING_RESPONSE_CDE = -8;
-Xmla.Exception.ERROR_PARSING_RESPONSE_MSG = "Invalid_Events_Handler"; 
+Xmla.Exception.ERROR_PARSING_RESPONSE_MSG = "Error_Parsing_Response"; 
 Xmla.Exception.ERROR_PARSING_RESPONSE_HLP = _exceptionHlp + 
                                     "#" + Xmla.Exception.ERROR_PARSING_RESPONSE_CDE  + 
                                     "_" + Xmla.Exception.ERROR_PARSING_RESPONSE_MSG ;
@@ -3235,8 +3243,18 @@ Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp +
                                     "#" + Xmla.Exception.INVALID_FIELD_CDE  + 
                                     "_" + Xmla.Exception.INVALID_FIELD_MSG;
                                     
+Xmla.Exception._newError = function(codeName, source, data){
+    return new Xmla.Exception(
+        Xmla.Exception.TYPE_ERROR,
+        Xmla.Exception[codeName + "_CDE"],
+        Xmla.Exception[codeName + "_MSG"],
+        Xmla.Exception[codeName + "_HLP"],
+        source,
+        data
+    );
+};
                                     
-Xmla.Exception.protoype = {
+Xmla.Exception.prototype = {
 /**
 *   This propery indicates what kind of exception occurred. It can have one of the following values: <dl>
 *       <dt><code><a href="property_TYPE_WARNING">TYPE_WARNING</a></code></dt><dd>Indicates a warning</dd>
@@ -3286,6 +3304,6 @@ Xmla.Exception.protoype = {
     _throw: function(){
         throw this;
     }
-}
+};
 
 }());
