@@ -57,8 +57,13 @@
         <fieldset>
             MDX Statement:
             <textarea id="textarea_statement"></textarea>
+            <label>Format:</label>
+            <select id="select_format" name="select_fomat"></select>
+            <label>Axis Format:</label>
+            <select id="select_axisformat" name="select_axisfomat"></select>
             <button id="button_execute" name="button_execute">Execute Statement...</button>            
         </fieldset>
+        <div id="section_result"></div>
         <div id="section_error"></div>
         <pre id="section_request"></pre>
         <pre id="section_response"></pre>
@@ -69,15 +74,56 @@
             var xmla = new Xmla({
                 async: false
             });
-            var dataSourceCache = [];
+            var datasourceCache = [];
 
             var input_url = document.getElementById("input_url");
+            var textarea_statement = document.getElementById("textarea_statement");
             var select_datasources = document.getElementById("select_datasources");
             var select_catalogs = document.getElementById("select_catalogs");
             var button_discover = document.getElementById("button_discover");
+            var button_execute = document.getElementById("button_execute");
             var section_error = document.getElementById("section_error");
             var section_request = document.getElementById("section_request");
             var section_response = document.getElementById("section_response");
+            var section_result = document.getElementById("section_result");
+
+            var select_format = document.getElementById("select_format");
+            select_format.innerHTML = "<option>" + Xmla.PROP_FORMAT_MULTIDIMENSIONAL + "</option>" +
+                "<option>" + Xmla.PROP_FORMAT_TABULAR + "</option>" 
+            ;
+            var select_axisformat = document.getElementById("select_axisformat");
+            select_axisformat.innerHTML = "<option>" + Xmla.PROP_AXISFORMAT_TUPLE + "</option>" +
+                "<option>" + Xmla.PROP_AXISFORMAT_CLUSTER + "</option>" +
+                "<option>" + Xmla.PROP_AXISFORMAT_CUSTOM + "</option>"
+            ;            
+            
+            function setGuiDisabled(disabled) {
+                input_url.disabled = disabled;
+                select_datasources.disabled = disabled;
+                select_catalogs.disabled = disabled;
+                button_discover.disabled = disabled;
+                if (!disabled && select_catalogs.selectedIndex) {                
+                    textarea_statement.disabled = disabled;
+                    button_execute.disabled = disabled;
+                }
+            }
+            
+            function getDatasource(){
+                return datasourceCache[select_datasources.selectedIndex];
+            }
+            
+            function clearError(){
+                section_error.innerHTML = "";
+            }
+            function setResponse(txt){                
+                section_response.innerHTML = txt.replace(
+                    /\&/g,"&amp;"
+                ).replace(
+                    /</g,"&lt;"
+                ).replace(
+                    />/g,"&gt;"
+                );
+            }
 
             function showException(exception){
                 if (exception instanceof Xmla.Exception){
@@ -93,21 +139,22 @@
                 }
             }
             
-            function populate_datasources(){
-                debugger;
-                select_datasources.disabled = true; //prevent user from choosing a new datasource while we're busy
-                select_catalogs.disabled = true; //prevent user from choosing a new datasource while we're busy
+            function populateDatasources(){
+                section_result.innerHTML = "";
+                clearError();
+                setGuiDisabled(true);
                 try {
                     select_datasources.innerHTML = "";
+                    select_catalogs.innerHTML = "";
                     var rowset = xmla.discoverDataSources({
                         url: input_url.value
                     });
                     if (rowset.hasMoreRows()) {
-                        dataSourceCache = rowset.fetchAllAsObject();
-                        for (var numDataSources = dataSourceCache.length, i=0; i<numDataSources; i++){
-                            select_datasources.innerHTML += "<option>" +  dataSourceCache[i].DataSourceName +"<\/option>";
+                        datasourceCache = rowset.fetchAllAsObject();
+                        for (var numDataSources = datasourceCache.length, i=0; i<numDataSources; i++){
+                            select_datasources.innerHTML += "<option>" +  datasourceCache[i].DataSourceName +"<\/option>";
                         }
-                        populate_catalogs()
+                        populateCatalogs()
                     } 
                     else {
                         section_error.innerHTML = "No datasources found";
@@ -115,14 +162,16 @@
                 } catch (exception){
                     showException(exception);
                 }
-                select_datasources.disabled = false; //unlock ui again.
-                select_catalogs.disabled = false;
+                setGuiDisabled(false);
             }
 
-            function populate_catalogs(){
+            function populateCatalogs(){
+                clearError();
+                setResponse("");
+                setGuiDisabled(true);
                 try {
                     select_catalogs.innerHTML = "";
-                    var datasource = dataSourceCache[select_datasources.selectedIndex];
+                    var datasource = getDatasource();
                     var properties = {};
                     properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
                     var rowset = xmla.discoverDBCatalogs({
@@ -141,10 +190,60 @@
                 } catch(exception) {
                     showException(exception);
                 }
+                setGuiDisabled(false);
             }
             
-            select_datasources.onchange = populate_catalogs;        
-            button_discover.onclick = populate_datasources;
+            function fillTable(rowset){ 
+                var tab = document.createElement("table");
+                tab.setAttribute("border", "1");
+                section_result.appendChild(tab);
+                var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
+                for (i=0; i<fieldCount; i++){
+                    c = r.insertCell(i);
+                    c.innerHTML = rowset.fieldName(i);
+                    c.setAttribute("class", "th");
+                }
+                var rows = rowset.fetchAllAsArray();                
+                for (var rowCount = rows.length, j=0; j<rowCount; j++){
+                    r = tab.insertRow(j+1);
+                    for (i=0; i<fieldCount; i++){
+                        c = r.insertCell(i);
+                        c.innerHTML = rows[j][i];
+                    }
+                }
+            }
+
+            function executeQuery(){
+                clearError();
+                section_result.innerHTML = "";
+                setResponse("");
+                debugger;
+                setGuiDisabled(true);
+                try {
+                    var datasource = getDatasource();
+                    var properties = {};
+                    properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                    properties[Xmla.PROP_CATALOG] = select_catalogs.value;
+                    properties[Xmla.PROP_FORMAT] = select_format.value;
+                    properties[Xmla.PROP_AXISFORMAT] = select_axisformat.value;
+                    var resultset = xmla.execute({
+                        url: datasource["URL"],
+                        statement: textarea_statement.value,
+                        properties: properties
+                    });
+                    setResponse(xmla.responseText);
+                    if (resultset instanceof Xmla.Rowset){
+                        fillTable(resultset);
+                    }
+                } catch (exception) { 
+                    showException(exception);
+                }
+                setGuiDisabled(false);
+            }
+            
+            select_datasources.onchange = populateCatalogs;        
+            button_discover.onclick = populateDatasources;
+            button_execute.onclick = executeQuery;
             
         </script>
     </body>

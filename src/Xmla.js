@@ -90,7 +90,10 @@ function _ajax(options){
                     options.complete(xhr, "success");
                 }
                 else {
-                    options.error(xhr, xhr.status, null);
+                    options.error(xhr, xhr.status, {
+                        statusCode: xhr.status,
+                        statusText: xhr.statusText
+                    });
                 }
             break;
         }
@@ -873,9 +876,6 @@ Xmla.EVENT_ALL = [].concat(
 *   Valid values for the <code>DataSourceInfo</code> as well as the corresponding URL should be obtained
 *   by querying the <code>DataSourceInfo</code> and <code>URL</code> columns of the <code>DISCOVER_DATASOURCES</code> 
 *   rowset respectively (see <code><a href="method_discoverDataSources">discoverDataSources()</a></code>).
-*   <code><a href="#property_PROP_AXISFORMAT_TUPLE">PROP_AXISFORMAT_TUPLE</a></code>, 
-*   <code><a href="#property_PROP_AXISFORMAT_CLUSTER">PROP_AXISFORMAT_CLUSTER</a></code>,
-*   <code><a href="#property_PROP_AXISFORMAT_CUSTOM">PROP_AXISFORMAT_CUSTOM</a></code>.
 *
 *   @property PROP_DataSourceInfo
 *   @static
@@ -1217,7 +1217,7 @@ Xmla.prototype = {
             var exception = new Xmla.Exception(
                 Xmla.Exception.TYPE_ERROR,
                 eventData.error.faultCode,
-                eventData.error.faultDescription,
+                eventData.error.faultString,
                 null,
                 "Xmla._fireEvent",
                 eventData
@@ -1449,7 +1449,7 @@ Xmla.prototype = {
                     var format = request.properties[Xmla.PROP_FORMAT];
                     switch(format){
                         case Xmla.PROP_FORMAT_TABULAR:
-                            
+                            resultset = new Xmla.Rowset(this.responseXML);
                             break;
                         case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
                             break;
@@ -1527,6 +1527,9 @@ Xmla.prototype = {
         }
         if (_isUndefined(properties[Xmla.PROP_FORMAT])){
             options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        }
+        if (_isUndefined(properties[Xmla.PROP_AXISFORMAT])){
+            options.properties[Xmla.PROP_AXISFORMAT] = Xmla.PROP_AXISFORMAT_CLUSTER;
         }
         var request = _applyProperties(
             options,

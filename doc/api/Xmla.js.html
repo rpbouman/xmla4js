@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla   Xmla.js  (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262282437.45" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262282437.45" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262438153.06" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262438153.06" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262282437.45"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262282437.45"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262438153.06"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262438153.06"></script>
 </head>
 
 <body id="yahoo-com">
@@ -155,7 +155,10 @@
                     <span class="nx">options</span><span class="p">.</span><span class="nx">complete</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">);</span>
                 <span class="p">}</span>
                 <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">options</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+                    <span class="nx">options</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span> <span class="p">{</span>
+                        <span class="nx">statusCode</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span>
+                        <span class="nx">statusText</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">statusText</span>
+                    <span class="p">});</span>
                 <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
@@ -938,9 +941,6 @@
 <span class="cm">*   Valid values for the &lt;code&gt;DataSourceInfo&lt;/code&gt; as well as the corresponding URL should be obtained</span>
 <span class="cm">*   by querying the &lt;code&gt;DataSourceInfo&lt;/code&gt; and &lt;code&gt;URL&lt;/code&gt; columns of the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; </span>
 <span class="cm">*   rowset respectively (see &lt;code&gt;&lt;a href=&quot;method_discoverDataSources&quot;&gt;discoverDataSources()&lt;/a&gt;&lt;/code&gt;).</span>
-<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_PROP_AXISFORMAT_TUPLE&quot;&gt;PROP_AXISFORMAT_TUPLE&lt;/a&gt;&lt;/code&gt;, </span>
-<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_PROP_AXISFORMAT_CLUSTER&quot;&gt;PROP_AXISFORMAT_CLUSTER&lt;/a&gt;&lt;/code&gt;,</span>
-<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#property_PROP_AXISFORMAT_CUSTOM&quot;&gt;PROP_AXISFORMAT_CUSTOM&lt;/a&gt;&lt;/code&gt;.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property PROP_DataSourceInfo</span>
 <span class="cm">*   @static</span>
@@ -1282,7 +1282,7 @@
             <span class="kd">var</span> <span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
                 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
                 <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultCode</span><span class="p">,</span>
-                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultDescription</span><span class="p">,</span>
+                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultString</span><span class="p">,</span>
                 <span class="kc">null</span><span class="p">,</span>
                 <span class="s2">&quot;Xmla._fireEvent&quot;</span><span class="p">,</span>
                 <span class="nx">eventData</span>
@@ -1514,7 +1514,7 @@
                     <span class="kd">var</span> <span class="nx">format</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">];</span>
                     <span class="k">switch</span><span class="p">(</span><span class="nx">format</span><span class="p">){</span>
                         <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_TABULAR</span><span class="o">:</span>
-                            
+                            <span class="nx">resultset</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">);</span>
                             <span class="k">break</span><span class="p">;</span>
                         <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="o">:</span>
                             <span class="k">break</span><span class="p">;</span>
@@ -1592,6 +1592,9 @@
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">])){</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span><span class="p">])){</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT_CLUSTER</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -3411,7 +3414,7 @@
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2009 <a href="http://rpbouman.blogspot.com/">Roland Bouman</a>. 
+        Copyright &copy; 2010 <a href="http://rpbouman.blogspot.com/">Roland Bouman</a>. 
         (This documentation is part of the <a href="http://code.google.com/p/xmla4js/">xmla4js</a> project.)
 	</div>
 </div>
