@@ -158,15 +158,18 @@ var _getAttributeNS = function(element, ns, prefix, attributeName){
 };
 
 
-function _getXmlaSoapList(container, listType, items){
-    var msg = "<" + container + ">";
+function _getXmlaSoapList(container, listType, items, indent){
+    if (!indent){
+        indent = "";
+    }
+    var msg = "\n" + indent + "<" + container + ">";
     if (items) {
         var item;
-        msg += "<" + listType + ">";
+        msg += "\n" + indent + " <" + listType + ">";
         for (var property in items){
             if (items.hasOwnProperty(property)) {
                 item = items[property];
-                msg += "<" + property + ">";
+                msg += "\n" + indent + "  <" + property + ">";
                 if (typeof(item)==="array"){
                     for (var entry, i=0, numItems = item.length; i<numItems; i++){
                         entry = item[i];
@@ -178,9 +181,9 @@ function _getXmlaSoapList(container, listType, items){
                 msg += "</" + property + ">";
             }
         }
-        msg += "</" + listType + ">";
+        msg += "\n" + indent + " </" + listType + ">";
     }
-    msg += "</" + container + ">";
+    msg += "\n" + indent + "</" + container + ">";
     return msg;
 }
 
@@ -191,9 +194,9 @@ function _getXmlaSoapMessage(
 ){
     var msg = "";
     var method = options.method;
-    msg += "<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
-    "<" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
-    "<" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
+    msg += "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
+    "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+    "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
     var exception = null;
     switch(method){
@@ -206,9 +209,9 @@ function _getXmlaSoapMessage(
                 );
             }
             else {
-                msg += "<" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" + 
-                _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions) + 
-                _getXmlaSoapList("Properties", "PropertyList", options.properties)
+                msg += "\n   <" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" + 
+                _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions, "   ") + 
+                _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
             }
             break;
@@ -221,8 +224,11 @@ function _getXmlaSoapMessage(
                 );
             }
             else {
-                msg += "<Command><Statement>" + options.statement + "</Statement></Command>" + 
-                _getXmlaSoapList("Properties", "PropertyList", options.properties)
+                msg += "" + 
+                "\n   <Command>" +
+                "\n    <Statement>" + options.statement + "</Statement>" + 
+                "\n   </Command>" + 
+                _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
             }
             break;
@@ -234,9 +240,9 @@ function _getXmlaSoapMessage(
     if (exception!==null){
         exception._throw();
     }
-    msg += "   </" + method + ">" + 
-        "</" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
-        "</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
+    msg += "\n  </" + method + ">" + 
+        "\n </" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+        "\n</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
     ;
     return msg;
 }
@@ -1066,6 +1072,14 @@ Xmla.prototype = {
 */
     listeners: null,
 /**
+*   The soap message sent in the last request to the server.
+*
+*   @property soapMessage
+*   @type {string}
+*   @default <code>null</code>
+*/
+    soapMessage: null,
+/**
 *   This property is set to <code>null</code> right before sending an XML/A request.
 *   When a successfull response is received, it is processed and the response object is assigned to this property.
 *   The response object is either a 
@@ -1389,7 +1403,7 @@ Xmla.prototype = {
         options.requestTimeout = _isUndefined(options.requestTimeout) ? this.options.requestTimeout : options.requestTimeout;
         
         var soapMessage = _getXmlaSoapMessage(options);
-        options.soapMessage = soapMessage;
+        this.soapMessage = soapMessage;
         var myXhr;
         var ajaxOptions = {
             async: options.async,
@@ -1549,9 +1563,6 @@ Xmla.prototype = {
         }
         if (_isUndefined(properties[Xmla.PROP_FORMAT])){
             options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
-        }
-        if (_isUndefined(properties[Xmla.PROP_AXISFORMAT])){
-            options.properties[Xmla.PROP_AXISFORMAT] = Xmla.PROP_AXISFORMAT_CLUSTER;
         }
         var request = _applyProperties(
             options,
@@ -2681,55 +2692,59 @@ function _getRowSchema(xmlDoc){
 *   @param {string} requestTtype The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.
 */
 Xmla.Rowset = function (node, requestType){
-    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
-    this.numRows = this.rows? this.rows.length : 0;
-    this.rowIndex = 0;
-    this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
-    this.fieldOrder = [];
-    this.fields = {};
-    this._fieldCount = 0;
-    var rowSchema = _getRowSchema(node);
-    if (rowSchema){    
-        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
-            seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
-            fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter;
-        for (var i=0; i<numChildren; i++){
-            seqChild = seqChildren.item(i);
-            if (seqChild.nodeType!=1) {
-                continue;
-            }
-            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
-            fieldName = seqChild.getAttribute("name");
-            type = seqChild.getAttribute("type");
-            if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
-                type = "Restrictions";
-            }
-            minOccurs = seqChild.getAttribute("minOccurs");
-            maxOccurs = seqChild.getAttribute("maxOccurs");
-            valueConverter = this._getValueConverter(type);
-            this.fields[fieldLabel] = {
-                name: fieldName,
-                label: fieldLabel,
-                index: this._fieldCount++,
-                type: type,
-                jsType: valueConverter.type,
-                minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
-                maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs==="unbounded"?Infinity:maxOccurs),
-                getter: this._createFieldGetter(fieldName, valueConverter.func, minOccurs, maxOccurs)
-            };            
-            this.fieldOrder.push(fieldLabel);
-        }        
-    }
-    else {
-        Xmla.Exception._newError(
-            "ERROR_PARSING_RESPONSE",
-            "Xmla.Rowset",
-            node
-        )._throw();
-    }
+    this._initData(node, requestType);
+    return this;
 };
 
 Xmla.Rowset.prototype = {
+    _initData: function(node, requestType){
+        this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
+        this.numRows = this.rows? this.rows.length : 0;
+        this.rowIndex = 0;
+        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
+        this.fieldOrder = [];
+        this.fields = {};
+        this._fieldCount = 0;
+        var rowSchema = _getRowSchema(node);
+        if (rowSchema){    
+            var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
+                seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
+                fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter;
+            for (var i=0; i<numChildren; i++){
+                seqChild = seqChildren.item(i);
+                if (seqChild.nodeType!=1) {
+                    continue;
+                }
+                fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
+                fieldName = seqChild.getAttribute("name");
+                type = seqChild.getAttribute("type");
+                if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
+                    type = "Restrictions";
+                }
+                minOccurs = seqChild.getAttribute("minOccurs");
+                maxOccurs = seqChild.getAttribute("maxOccurs");
+                valueConverter = this._getValueConverter(type);
+                this.fields[fieldLabel] = {
+                    name: fieldName,
+                    label: fieldLabel,
+                    index: this._fieldCount++,
+                    type: type,
+                    jsType: valueConverter.jsType,
+                    minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
+                    maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs==="unbounded"?Infinity:maxOccurs),
+                    getter: this._createFieldGetter(fieldName, valueConverter.func, minOccurs, maxOccurs)
+                };            
+                this.fieldOrder.push(fieldLabel);
+            }        
+        }
+        else {
+            Xmla.Exception._newError(
+                "ERROR_PARSING_RESPONSE",
+                "Xmla.Rowset",
+                node
+            )._throw();
+        }
+    },
     _boolConverter: function(val){
         return val==="true"?true:false;
     },
@@ -3286,7 +3301,7 @@ Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp +
                                     "_" + Xmla.Exception.INVALID_FIELD_MSG;
                                     
 /**
-*   Exception code indicating an general Xml HTTP request error.
+*   Exception code indicating a general XMLHttpRequest error.
 *
 *   @property HTTP_ERROR
 *   @static
