@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: Execute</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            #input_url {
+                width: 100%;
+            }
+            
+            #section_error {
+                border-style:outset;
+                border-width: 2px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+                background-color: red;
+                color: white;
+            }
+            
+            #textarea_statement {
+                width:100%;
+                height:10em;
+            }
+                        
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="../index.html">Home</a>
+            |
+            <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+            |
+            <a href="index.html">Samples</a>
+            |
+            <a href="../doc/api/index.html">API Reference Documentation</a>
+        </div>
+        <h1>Sample: Simple Piechart</h1>
+        <fieldset>
+            URL:
+            <input type="text" id="input_url" name="input_url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="button_discover" name="button_discover">Discover Datasources...</button>            
+            <div>
+                <label>DataSource:</label>
+                <select id="select_datasources" name="select_datasources"></select>            
+            <div>
+            <div>
+                <label>Catalog:</label>
+                <select id="select_catalogs" name="select_catalgogs"></select>            
+            <div>
+        </fieldset>
+        <fieldset>
+            MDX Statement:
+            <textarea id="textarea_statement"></textarea>
+            <button id="button_execute" name="button_execute">Execute Statement...</button>            
+        </fieldset>
+        <div id="section_pie"></div>
+        <div id="section_error"></div>
+
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+                
+        <script type="text/javascript">        
+            var xmla = new Xmla({
+                async: false
+            });
+            var datasourceCache = [];
+            var dataTable = null;
+
+            var input_url = document.getElementById("input_url");
+            var textarea_statement = document.getElementById("textarea_statement");
+            var select_datasources = document.getElementById("select_datasources");
+            var select_catalogs = document.getElementById("select_catalogs");
+            var button_discover = document.getElementById("button_discover");
+            var button_execute = document.getElementById("button_execute");
+            var section_error = document.getElementById("section_error");
+            var section_result = document.getElementById("section_result");
+            
+            
+            function discoverDatasources(){
+                xmla.discoverDataSources({
+                    url: input_url.value
+                });
+            }
+            function discoverCatalogs(){
+                var properties = {};
+                var datasource = datasourceCache[select_datasources.selectedIndex];
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                xmla.discoverDBCatalogs({
+                    url: datasource["URL"],
+                    properties: properties
+                });                
+            }
+            
+            function populateDatasources(rowset){
+                select_datasources.innerHTML = "";
+                if (rowset.hasMoreRows()) {
+                    datasourceCache = rowset.fetchAllAsObject();
+                    for (var numDataSources = datasourceCache.length, i=0; i<numDataSources; i++){
+                        select_datasources.innerHTML += "<option>" +  datasourceCache[i].DataSourceName +"<\/option>";
+                    }
+                } 
+                rowset.close();
+            }
+
+            function populateCatalogs(rowset){
+                select_catalogs.innerHTML = "";
+                if (rowset.hasMoreRows()) {
+                    var catalog;
+                    while (catalog = rowset.fetchAsObject()){
+                        select_catalogs.innerHTML += "<option>" +  catalog["CATALOG_NAME"] +"<\/option>";
+                    }                        
+                } 
+                rowset.close();
+            }
+                        
+            function executeQuery(){
+                var datasource = datasourceCache[select_datasources.selectedIndex];
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalogs.value;
+                properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
+                xmla.execute({
+                    url: datasource["URL"],
+                    statement: textarea_statement.value,
+                    properties: properties
+                });
+            }
+            
+            function fillTable(rowset) {
+                var rows = rowset.fetchAllAsArray();
+                
+            }
+            
+        </script>
+        <script type="text/javascript">
+            google.load('visualization', '1', {'packages':['piechart']});
+            google.setOnLoadCallback(function(){                
+                xmla.addListener({
+                    events: Xmla.EVENT_REQUEST,
+                    handler:    function(){
+                                    section_error.innerHTML = "";
+                                }
+                });
+                xmla.addListener({
+                    events: Xmla.EVENT_ERROR,
+                    handler:    function (eventName, eventData, xmla){
+                                    var exception = eventData.exception;
+                                    section_error.innerHTML = "" +
+                                    "<div>code: " + exception.code + "<\/div>" +
+                                    "<div>message: " + exception.message + "<\/div>" +
+                                    "<div>source: " + exception.source + "<\/div>" +
+                                    "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "</a>"
+                                    ;
+                                }
+                });
+                xmla.addListener({
+                    events: Xmla.EVENT_DISCOVER_SUCCESS,
+                    handler:    function(eventName, eventData, xmla){
+                                    var rowset = eventData.rowset;
+                                    switch (eventData.requestType){
+                                        case Xmla.DISCOVER_DATASOURCES:
+                                            populateDatasources(rowset);
+                                            discoverCatalogs();
+                                            break;
+                                        case Xmla.DBSCHEMA_CATALOGS:
+                                            populateCatalogs(rowset);
+                                            break;
+                                    }
+                                }
+                });
+                xmla.addListener({
+                    events: Xmla.EVENT_EXECUTE_SUCCESS,
+                    handler:    function(eventName, eventData, xmla){
+                                    var numRows, numColumns, rowset, fieldDef, rows;
+                                    numRows = dataTable.getNumberOfRows();
+                                    if (numRows) {
+                                        dataTable.removeRows(0, numRows);
+                                        numColumns = dataTable.getNumberOfColumns();
+                                        dataTable.removeColumns(0, numColumns);
+                                    }
+                                    if (eventData.properties &&
+                                        eventData.properties[Xmla.PROP_FORMAT] &&
+                                        eventData.properties[Xmla.PROP_FORMAT_TABULAR]) {
+                                        rowset = xmla.response;                                        
+                                        if (rowset.hasMoreRows()){
+                                            numColumns = rowset.fieldCount();
+                                            for (var i=0; i<numColumns; i++){
+                                                fieldDef = rowset.fieldDef(i);
+                                                dataTable.addColumn(fieldDef.jsType, fieldDef.label);
+                                            }
+                                            data = rowset.fetchAllAsArray();
+                                            dataTable.addRows(data);
+                                        }
+                                    }
+                                }
+                });
+                select_datasources.onchange = populateCatalogs;        
+                button_discover.onclick = discoverDatasources;
+                button_execute.onclick = executeQuery;
+                dataTable = new google.visualization.DataTable();
+            });
+            
+        </script>        
+    </body>
+</html>

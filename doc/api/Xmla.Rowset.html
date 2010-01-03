@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla.Rowset   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262438153.06" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262438153.06" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262474688.77" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262474688.77" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262438153.06"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262438153.06"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262474688.77"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262474688.77"></script>
 </head>
 
 <body id="yahoo-com">
@@ -82,11 +82,18 @@ This class implements an XML/A Rowset object.
 You do not need to instantiate objects of this class yourself. 
 Rather, the <code><a href="Xmla.html#class_Xmla">Xmla</a></code> class will instantiate this class to convey the result of any of the various <code>discoverXXX()</code> methods
 (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
+In addition, this class is also used to instantiate a Resultset for the 
+<code><a name="Xmla.html#method_execute">execute()</code> method in case the 
+<code>Format</code> property is set to <code>Tabular</code>
+(see <code><a name="Xmla.html#property_OPTION_FORMAT">OPTION_FORMAT</a></code> and <code><a name="Xmla.html#property_OPTION_FORMAT_TABULAR">OPTION_FORMAT_TABULAR</a></code>).
+The <code><a href="Xmla.html#method_request">request()</a></code> method itself will also return an instance of this class in case the <code>method</code> is used to do a 
+<code>Discover</code> request, or in case it is used to do a <code>Execute</code> request and the <code>Format</code> property is set to <code>Tabular</code>.
 </p>
 <p>
-The <code>discoverXXX()</code> methods return the <code>Xmla.Rowset</code> instance when doing a synchronous request. 
+An instance of the <code>Xmla.Rowset</code> class is returned immediately as return value from the <code>disoverXXX()</code> or <code>execute()</code> method when doing a synchronous request. 
 In addition, the rowset is available in the eventdata passed to any registered listeners
 (see <code><a href="Xmla.html#method_addListener">addListener()</a></code>).
+Note that for asynchronous requests, the only way to obtain the returned <code>Rowset</code> instance is through the listeners. 
 </p>
                     </div>
 

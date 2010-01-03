@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla   Xmla.js  (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262438153.06" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262438153.06" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262474688.77" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262474688.77" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262438153.06"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262438153.06"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262474688.77"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262474688.77"></script>
 </head>
 
 <body id="yahoo-com">
@@ -358,7 +358,7 @@
 
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">defaultOptions</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">requestTimeout</span><span class="o">:</span> <span class="mi">30000</span><span class="p">,</span>   <span class="c1">//by default, we bail out after 30 seconds</span>
-    <span class="nx">async</span><span class="o">:</span> <span class="kc">false</span>            <span class="c1">//by default, we do a synchronous request</span>
+    <span class="nx">async</span><span class="o">:</span> <span class="kc">false</span>             <span class="c1">//by default, we do a synchronous request</span>
 <span class="p">};</span>
 
 <span class="cm">/**</span>
@@ -736,6 +736,9 @@
 <span class="cm">*   (see &lt;code&gt;&lt;a href=&quot;#property_EVENT_EXECUTE&quot;&gt;EVENT_EXECUTE&lt;/a&gt;&lt;/code&gt; </span>
 <span class="cm">*   and &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER&quot;&gt;EVENT_DISCOVER&lt;/a&gt;&lt;/code&gt;). </span>
 <span class="cm">*   The &lt;code&gt;request&lt;/code&gt; event itself is not method-specific, and fires for &lt;code&gt;Execute&lt;/code&gt; as well as &lt;code&gt;Discover&lt;/code&gt; requests.</span>
+<span class="cm">*   The &lt;code&gt;EVENT_REQUEST&lt;/code&gt; event is &lt;em&gt;cancelable&lt;/em&gt;:</span>
+<span class="cm">*   the &lt;code&gt;handler&lt;/code&gt; function specified in the listener object passed to &lt;code&gt;addListener&lt;/code&gt; should return a boolen, indicating </span>
+<span class="cm">*   whether the respective operation should be canceled. </span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_REQUEST</span>
 <span class="cm">*   @static</span>
@@ -753,6 +756,7 @@
 <span class="cm">*   (see &lt;code&gt;&lt;a href=&quot;#property_EVENT_EXECUTE_SUCCESS&quot;&gt;EVENT_EXECUTE_SUCCESS&lt;/a&gt;&lt;/code&gt; </span>
 <span class="cm">*   and &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER_SUCCESS&quot;&gt;EVENT_DISCOVER_SUCCESS&lt;/a&gt;&lt;/code&gt;). </span>
 <span class="cm">*   The &lt;code&gt;success&lt;/code&gt; event is not method-specific, and fires for &lt;code&gt;Execute&lt;/code&gt; as well as &lt;code&gt;Discover&lt;/code&gt; responses.</span>
+<span class="cm">*   This is event is not cancelable.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_SUCCESS</span>
 <span class="cm">*   @static</span>
@@ -766,6 +770,7 @@
 <span class="cm">*   This constant can be used as en entry in the events array argument for the &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt; method.</span>
 <span class="cm">*   The &lt;code&gt;error&lt;/code&gt; is fired when an error occurs while sending a request or receiving a response.</span>
 <span class="cm">*   The &lt;code&gt;error&lt;/code&gt; event is not method-specific, and fires for errors encountered during both &lt;code&gt;Execute&lt;/code&gt; as well as &lt;code&gt;Discover&lt;/code&gt; method invocations.</span>
+<span class="cm">*   This is event is not cancelable.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_ERROR</span>
 <span class="cm">*   @static</span>
@@ -782,6 +787,9 @@
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#method_execute&quot;&gt;execute()&lt;/a&gt;&lt;/code&gt;)</span>
 <span class="cm">*   to the server, but after firing the &lt;code&gt;request&lt;/code&gt; event</span>
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_REQUEST&quot;&gt;EVENT_REQUEST&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   The &lt;code&gt;EVENT_EXECUTE&lt;/code&gt; event is &lt;em&gt;cancelable&lt;/em&gt;:</span>
+<span class="cm">*   the &lt;code&gt;handler&lt;/code&gt; function specified in the listener object passed to &lt;code&gt;addListener&lt;/code&gt; should return a boolen, indicating </span>
+<span class="cm">*   whether the respective operation should be canceled. </span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_EXECUTE</span>
 <span class="cm">*   @static</span>
@@ -797,6 +805,7 @@
 <span class="cm">*   (that is, a response that does not contain a &lt;code&gt;SoapFault&lt;/code&gt;)</span>
 <span class="cm">*   to an incovation of the XML/A &lt;code&gt;Execute&lt;/code&gt; method</span>
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#method_execute&quot;&gt;execute()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   This is event is not cancelable.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_EXECUTE_SUCCESS</span>
 <span class="cm">*   @static</span>
@@ -810,6 +819,7 @@
 <span class="cm">*   This constant can be used as en entry in the events array argument for the &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt; method.</span>
 <span class="cm">*   The &lt;code&gt;executeerror&lt;/code&gt; event is method-specific and fired when an error occurs while sending an &lt;code&gt;Execute&lt;/code&gt; request, or receiving a response to an &lt;code&gt;Execute&lt;/code method.</span>
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#method_execute&quot;&gt;execute()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   This is event is not cancelable.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_EXECUTE_ERROR</span>
 <span class="cm">*   @static</span>
@@ -826,6 +836,9 @@
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;)</span>
 <span class="cm">*   to the server, but after firing the &lt;code&gt;request&lt;/code&gt; event</span>
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER&quot;&gt;EVENT_DISCOVER&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   The &lt;code&gt;EVENT_DISCOVER&lt;/code&gt; event is &lt;em&gt;cancelable&lt;/em&gt;:</span>
+<span class="cm">*   the &lt;code&gt;handler&lt;/code&gt; function specified in the listener object passed to &lt;code&gt;addListener&lt;/code&gt; should return a boolen, indicating </span>
+<span class="cm">*   whether the respective operation should be canceled. </span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_DISCOVER</span>
 <span class="cm">*   @static</span>
@@ -841,6 +854,7 @@
 <span class="cm">*   (that is, a response that does not contain a &lt;code&gt;SoapFault&lt;/code&gt;)</span>
 <span class="cm">*   to an incovation of the XML/A &lt;code&gt;Discover&lt;/code&gt; method</span>
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   This is event is not cancelable.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_DISCOVER_SUCCESS</span>
 <span class="cm">*   @static</span>
@@ -855,6 +869,7 @@
 <span class="cm">*   The &lt;code&gt;discovererror&lt;/code&gt; is method-specific and fired when an error occurs while sending an &lt;code&gt;Discover&lt;/code&gt; request, </span>
 <span class="cm">*   or receiving a response to an &lt;code&gt;Discover&lt;/code method.</span>
 <span class="cm">*   (see: &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   This is event is not cancelable.</span>
 <span class="cm">*</span>
 <span class="cm">*   @property EVENT_DISCOVER_ERROR</span>
 <span class="cm">*   @static</span>
@@ -1179,21 +1194,41 @@
 <span class="cm">*   This method can be used to register a listener to one or more events.</span>
 <span class="cm">*   The &lt;code&gt;listener&lt;/code&gt; argument should have the following structure: &lt;pre&gt;{</span>
 <span class="cm">*       events: [...event names...],</span>
-<span class="cm">*       handler: function() {...code to run upon notification...},</span>
+<span class="cm">*       handler: function(eventName, eventData, xmla) {...code to run upon notification...},</span>
 <span class="cm">*       scope: object</span>
 <span class="cm">*   }&lt;/pre&gt;</span>
 <span class="cm">*   &lt;dl&gt;</span>
 <span class="cm">*       &lt;dt&gt;&lt;code&gt;events&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*       &lt;dd&gt;string[] REQUIRED. This must be an array containing final static &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values. </span>
+<span class="cm">*       &lt;dd&gt;&lt;code&gt;string[]&lt;/code&gt; REQUIRED. This must be an array containing final static &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values. </span>
 <span class="cm">*       You can also use one of the predefined &lt;code&gt;EVENT_XXX&lt;/code&gt; array constant values, </span>
 <span class="cm">*       or use array concatenation and compose a custom list of event names.</span>
 <span class="cm">*       &lt;/dd&gt;</span>
-<span class="cm">*       &lt;dt&gt;&lt;code&gt;handler&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*       &lt;dd&gt;function REQUIRED. This function will be called and notified whenever one of the specified events occurs.</span>
-<span class="cm">*       The function is called in scope of the &lt;code&gt;scope&lt;/code&gt; property, otherwise a global function (= &lt;code&gt;window&lt;/code&gt; scope) is assumed.</span>
+<span class="cm">*       &lt;dt&gt;&lt;code&gt;boolean handler(eventName, eventData, xmla)&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="cm">*       &lt;dd&gt;&lt;code&gt;function&lt;/code&gt; REQUIRED. This function will be called and notified whenever one of the specified events occurs.</span>
+<span class="cm">*       The function is called in scope of the &lt;code&gt;scope&lt;/code&gt; property of the listener object. </span>
+<span class="cm">*       If no &lt;code&gt;scope&lt;/code&gt; is specified, a global function (having brower built-in &lt;code&gt;window&lt;/code&gt; scope) is assumed.</span>
+<span class="cm">*       The &lt;code&gt;handler&lt;/code&gt; function has the following arguments:</span>
+<span class="cm">*           &lt;dl&gt;</span>
+<span class="cm">*               &lt;dt&gt;&lt;code&gt;eventName&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="cm">*               &lt;dd&gt;&lt;code&gt;string&lt;/code&gt; The event for which notification is give. Use the &lt;code&gt;EVENT_XXX&lt;/code&gt; constants to check the &lt;code&gt;eventName&lt;/code&gt;.&lt;/dd&gt;</span>
+<span class="cm">*               &lt;dt&gt;&lt;code&gt;eventData&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="cm">*               &lt;dd&gt;&lt;code&gt;Object&lt;/code&gt; An object that conveys event-specific data.&lt;/dd&gt;</span>
+<span class="cm">*               &lt;dt&gt;&lt;code&gt;xmla&lt;/code&gt;&lt;/dt&gt;</span>
+<span class="cm">*               &lt;dd&gt;&lt;code&gt;&lt;a href=&quot;class_Xmla&quot;&gt;Xmla&lt;/a&gt;&lt;/code&gt; A reference to this &lt;code&gt;Xmla&lt;/code&gt; instance that is the source of the event. </span>
+<span class="cm">*                   Listeners can obtain the response as well as the original SOAP message sent to the server through this instance.</span>
+<span class="cm">*                   This allows one listener to be shared across multiple &lt;code&gt;Xmla&lt;/code&gt; instances without managing the context manually. </span>
+<span class="cm">*               &lt;/dd&gt;</span>
+<span class="cm">*           &lt;/dl&gt;</span>
+<span class="cm">*       For events that are &lt;em&gt;cancelable&lt;/em&gt;, the handler should return a &lt;code&gt;boolean&lt;/code&gt;.</span>
+<span class="cm">*       If the handler returns &lt;code&gt;false&lt;/code&gt; the respective operation will be canceled.</span>
+<span class="cm">*       Otherwise, the operation continues (but may be canceled by another handler).</span>
+<span class="cm">*       Currently, the following events are cancelable: </span>
+<span class="cm">*       &lt;code&gt;&lt;a href=&quot;#property_EVENT_DISCOVER&quot;&gt;EVENT_DISCOVER&lt;/a&gt;&lt;/code&gt;,</span>
+<span class="cm">*       &lt;code&gt;&lt;a href=&quot;#property_EVENT_EXECUTE&quot;&gt;EVENT_EXECUTE&lt;/a&gt;&lt;/code&gt;, and</span>
+<span class="cm">*       &lt;code&gt;&lt;a href=&quot;#property_EVENT_REQUEST&quot;&gt;EVENT_REQUEST&lt;/a&gt;&lt;/code&gt;. </span>
 <span class="cm">*       &lt;/dd&gt;</span>
 <span class="cm">*       &lt;dt&gt;&lt;code&gt;scope&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*       &lt;dd&gt;Object. When specified, this object is used as the &lt;code&gt;this&lt;/code&gt; object when calling the handler.</span>
+<span class="cm">*       &lt;dd&gt;&lt;code&gt;Object&lt;/code&gt; OPTIONAL When specified, this object is used as the &lt;code&gt;this&lt;/code&gt; object when calling the handler.</span>
 <span class="cm">*           When not specified, the global &lt;code&gt;window&lt;/code&gt; is used.</span>
 <span class="cm">*       &lt;/dd&gt;</span>
 <span class="cm">*   &lt;/dl&gt;</span>
@@ -1579,7 +1614,8 @@
 <span class="cm">*   &lt;/ul&gt;</span>
 <span class="cm">*   @method execute</span>
 <span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A &lt;code&gt;Execute&lt;/code&gt; request. </span>
-<span class="cm">*   @return {Xmla.Resultset} The result of the invoking the XML/A &lt;code&gt;Execute&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;Xmla.Resultset&lt;/code&gt; that represents the multi-dimensional result set of the MDX query.</span>
+<span class="cm">*   @return {Xmla.Resultset|Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Execute&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;Xmla.Resultset&lt;/code&gt; that represents the multi-dimensional result set of the MDX query. If the &lt;code&gt;Format&lt;/code&gt; property in the request was set to &lt;code&gt;Tabular&lt;/code&gt;, then an instance of the </span>
+<span class="cm">&lt;code&gt;&lt;a href=&quot;Xmla.Rowset#class_Xmla.Rowset&quot;&gt;Rowset&lt;/a&gt;&lt;/code&gt; class is returned to represent the &lt;code&gt;Resultset&lt;/code&gt;.</span>
 <span class="cm">*/</span>
     <span class="nx">execute</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">properties</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">;</span>
@@ -2704,11 +2740,18 @@
 <span class="cm">*   You do not need to instantiate objects of this class yourself. </span>
 <span class="cm">*   Rather, the &lt;code&gt;&lt;a href=&quot;Xmla.html#class_Xmla&quot;&gt;Xmla&lt;/a&gt;&lt;/code&gt; class will instantiate this class to convey the result of any of the various &lt;code&gt;discoverXXX()&lt;/code&gt; methods</span>
 <span class="cm">*   (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   In addition, this class is also used to instantiate a Resultset for the </span>
+<span class="cm">*   &lt;code&gt;&lt;a name=&quot;Xmla.html#method_execute&quot;&gt;execute()&lt;/code&gt; method in case the </span>
+<span class="cm">*   &lt;code&gt;Format&lt;/code&gt; property is set to &lt;code&gt;Tabular&lt;/code&gt;</span>
+<span class="cm">*   (see &lt;code&gt;&lt;a name=&quot;Xmla.html#property_OPTION_FORMAT&quot;&gt;OPTION_FORMAT&lt;/a&gt;&lt;/code&gt; and &lt;code&gt;&lt;a name=&quot;Xmla.html#property_OPTION_FORMAT_TABULAR&quot;&gt;OPTION_FORMAT_TABULAR&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   The &lt;code&gt;&lt;a href=&quot;Xmla.html#method_request&quot;&gt;request()&lt;/a&gt;&lt;/code&gt; method itself will also return an instance of this class in case the &lt;code&gt;method&lt;/code&gt; is used to do a </span>
+<span class="cm">*   &lt;code&gt;Discover&lt;/code&gt; request, or in case it is used to do a &lt;code&gt;Execute&lt;/code&gt; request and the &lt;code&gt;Format&lt;/code&gt; property is set to &lt;code&gt;Tabular&lt;/code&gt;.</span>
 <span class="cm">*   &lt;/p&gt;</span>
 <span class="cm">*   &lt;p&gt;</span>
-<span class="cm">*   The &lt;code&gt;discoverXXX()&lt;/code&gt; methods return the &lt;code&gt;Xmla.Rowset&lt;/code&gt; instance when doing a synchronous request. </span>
+<span class="cm">*   An instance of the &lt;code&gt;Xmla.Rowset&lt;/code&gt; class is returned immediately as return value from the &lt;code&gt;disoverXXX()&lt;/code&gt; or &lt;code&gt;execute()&lt;/code&gt; method when doing a synchronous request. </span>
 <span class="cm">*   In addition, the rowset is available in the eventdata passed to any registered listeners</span>
 <span class="cm">*   (see &lt;code&gt;&lt;a href=&quot;Xmla.html#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;).</span>
+<span class="cm">*   Note that for asynchronous requests, the only way to obtain the returned &lt;code&gt;Rowset&lt;/code&gt; instance is through the listeners. </span>
 <span class="cm">*   &lt;/p&gt;</span>
 <span class="cm">*   </span>
 <span class="cm">*   @class Xmla.Rowset</span>

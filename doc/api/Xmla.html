@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262438153.06" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262438153.06" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262474688.77" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262474688.77" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262438153.06"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262438153.06"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262474688.77"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262474688.77"></script>
 </head>
 
 <body id="yahoo-com">
@@ -415,6 +415,9 @@ The <code>discover</code> event is method-specific, and is fired before submitti
 (see: <code><a href="#method_discover">discover()</a></code>)
 to the server, but after firing the <code>request</code> event
 (see: <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>).
+The <code>EVENT_DISCOVER</code> event is <em>cancelable</em>:
+the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating 
+whether the respective operation should be canceled.
                                         </div>
                                     </div>
      
@@ -457,6 +460,7 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>discovererror</code> is method-specific and fired when an error occurs while sending an <code>Discover</code> request, 
 or receiving a response to an <code>Discover</code method.
 (see: <code><a href="#method_discover">discover()</a></code>).
+This is event is not cancelable.
                                         </div>
                                     </div>
      
@@ -480,6 +484,7 @@ The <code>discoversuccess</code> event is method-specific and fired only after r
 (that is, a response that does not contain a <code>SoapFault</code>)
 to an incovation of the XML/A <code>Discover</code> method
 (see: <code><a href="#method_discover">discover()</a></code>).
+This is event is not cancelable.
                                         </div>
                                     </div>
      
@@ -501,6 +506,7 @@ to an incovation of the XML/A <code>Discover</code> method
 This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
 The <code>error</code> is fired when an error occurs while sending a request or receiving a response.
 The <code>error</code> event is not method-specific, and fires for errors encountered during both <code>Execute</code> as well as <code>Discover</code> method invocations.
+This is event is not cancelable.
                                         </div>
                                     </div>
      
@@ -524,6 +530,9 @@ The <code>execute</code> event is method-specific, and is fired before submittin
 (see: <code><a href="#method_execute">execute()</a></code>)
 to the server, but after firing the <code>request</code> event
 (see: <code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>).
+The <code>EVENT_EXECUTE</code> event is <em>cancelable</em>:
+the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating 
+whether the respective operation should be canceled.
                                         </div>
                                     </div>
      
@@ -565,6 +574,7 @@ or you can use array concatenation to combine it with other arrays of <code>EVEN
 This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
 The <code>executeerror</code> event is method-specific and fired when an error occurs while sending an <code>Execute</code> request, or receiving a response to an <code>Execute</code method.
 (see: <code><a href="#method_execute">execute()</a></code>).
+This is event is not cancelable.
                                         </div>
                                     </div>
      
@@ -588,6 +598,7 @@ The <code>executesuccess</code> event is method-specific and fired only after re
 (that is, a response that does not contain a <code>SoapFault</code>)
 to an incovation of the XML/A <code>Execute</code> method
 (see: <code><a href="#method_execute">execute()</a></code>).
+This is event is not cancelable.
                                         </div>
                                     </div>
      
@@ -634,6 +645,9 @@ to the server, and before firing the method-specific request events
 (see <code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code> 
 and <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>). 
 The <code>request</code> event itself is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> requests.
+The <code>EVENT_REQUEST</code> event is <em>cancelable</em>:
+the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating 
+whether the respective operation should be canceled.
                                         </div>
                                     </div>
      
@@ -659,6 +673,7 @@ after firing the method-specific success events
 (see <code><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a></code> 
 and <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>). 
 The <code>success</code> event is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> responses.
+This is event is not cancelable.
                                         </div>
                                     </div>
      
@@ -1327,21 +1342,41 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
                                             This method can be used to register a listener to one or more events.
 The <code>listener</code> argument should have the following structure: <pre>{
 events: [...event names...],
-handler: function() {...code to run upon notification...},
+handler: function(eventName, eventData, xmla) {...code to run upon notification...},
 scope: object
 }</pre>
 <dl>
 <dt><code>events</code></dt>
-<dd>string[] REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
+<dd><code>string[]</code> REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
 You can also use one of the predefined <code>EVENT_XXX</code> array constant values, 
 or use array concatenation and compose a custom list of event names.
 </dd>
-<dt><code>handler</code></dt>
-<dd>function REQUIRED. This function will be called and notified whenever one of the specified events occurs.
-The function is called in scope of the <code>scope</code> property, otherwise a global function (= <code>window</code> scope) is assumed.
+<dt><code>boolean handler(eventName, eventData, xmla)</code></dt>
+<dd><code>function</code> REQUIRED. This function will be called and notified whenever one of the specified events occurs.
+The function is called in scope of the <code>scope</code> property of the listener object. 
+If no <code>scope</code> is specified, a global function (having brower built-in <code>window</code> scope) is assumed.
+The <code>handler</code> function has the following arguments:
+<dl>
+<dt><code>eventName</code></dt>
+<dd><code>string</code> The event for which notification is give. Use the <code>EVENT_XXX</code> constants to check the <code>eventName</code>.</dd>
+<dt><code>eventData</code></dt>
+<dd><code>Object</code> An object that conveys event-specific data.</dd>
+<dt><code>xmla</code></dt>
+<dd><code><a href="class_Xmla">Xmla</a></code> A reference to this <code>Xmla</code> instance that is the source of the event. 
+Listeners can obtain the response as well as the original SOAP message sent to the server through this instance.
+This allows one listener to be shared across multiple <code>Xmla</code> instances without managing the context manually. 
+</dd>
+</dl>
+For events that are <em>cancelable</em>, the handler should return a <code>boolean</code>.
+If the handler returns <code>false</code> the respective operation will be canceled.
+Otherwise, the operation continues (but may be canceled by another handler).
+Currently, the following events are cancelable: 
+<code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>,
+<code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code>, and
+<code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>. 
 </dd>
 <dt><code>scope</code></dt>
-<dd>Object. When specified, this object is used as the <code>this</code> object when calling the handler.
+<dd><code>Object</code> OPTIONAL When specified, this object is used as the <code>this</code> object when calling the handler.
 When not specified, the global <code>window</code> is used.
 </dd>
 </dl>
@@ -3257,7 +3292,7 @@ The rowset has the following columns:
                                         
                                         
                                         
-                                        Xmla.Resultset
+                                        Xmla.Resultset|Xmla.Rowset
                                             <strong property="yui:name">execute</strong>
                                            (
                                                 
@@ -3335,9 +3370,10 @@ then these will still be notified.
                                                 <dl>
                                                     <dt>Returns:
                                                     <code property="yui:return">
-                                                        Xmla.Resultset
+                                                        Xmla.Resultset|Xmla.Rowset
                                                     </code></dt>
-                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query.</dd>
+                                                    <dd property="yui:returnInfo">The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query. If the <code>Format</code> property in the request was set to <code>Tabular</code>, then an instance of the 
+<code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code> class is returned to represent the <code>Resultset</code>.</dd>
                                                 </dl>
 
 

@@ -293,7 +293,7 @@ Xmla = function(options){
 
 Xmla.defaultOptions = {
     requestTimeout: 30000,   //by default, we bail out after 30 seconds
-    async: false            //by default, we do a synchronous request
+    async: false             //by default, we do a synchronous request
 };
 
 /**
@@ -671,6 +671,9 @@ Xmla.MDSCHEMA_SETS =           _xmlaMDSCHEMA + "SETS";
 *   (see <code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code> 
 *   and <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>). 
 *   The <code>request</code> event itself is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> requests.
+*   The <code>EVENT_REQUEST</code> event is <em>cancelable</em>:
+*   the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating 
+*   whether the respective operation should be canceled. 
 *
 *   @property EVENT_REQUEST
 *   @static
@@ -688,6 +691,7 @@ Xmla.EVENT_REQUEST = "request";
 *   (see <code><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a></code> 
 *   and <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>). 
 *   The <code>success</code> event is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> responses.
+*   This is event is not cancelable.
 *
 *   @property EVENT_SUCCESS
 *   @static
@@ -701,6 +705,7 @@ Xmla.EVENT_SUCCESS = "success";
 *   This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
 *   The <code>error</code> is fired when an error occurs while sending a request or receiving a response.
 *   The <code>error</code> event is not method-specific, and fires for errors encountered during both <code>Execute</code> as well as <code>Discover</code> method invocations.
+*   This is event is not cancelable.
 *
 *   @property EVENT_ERROR
 *   @static
@@ -717,6 +722,9 @@ Xmla.EVENT_ERROR = "error";
 *   (see: <code><a href="#method_execute">execute()</a></code>)
 *   to the server, but after firing the <code>request</code> event
 *   (see: <code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>).
+*   The <code>EVENT_EXECUTE</code> event is <em>cancelable</em>:
+*   the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating 
+*   whether the respective operation should be canceled. 
 *
 *   @property EVENT_EXECUTE
 *   @static
@@ -732,6 +740,7 @@ Xmla.EVENT_EXECUTE = "execute";
 *   (that is, a response that does not contain a <code>SoapFault</code>)
 *   to an incovation of the XML/A <code>Execute</code> method
 *   (see: <code><a href="#method_execute">execute()</a></code>).
+*   This is event is not cancelable.
 *
 *   @property EVENT_EXECUTE_SUCCESS
 *   @static
@@ -745,6 +754,7 @@ Xmla.EVENT_EXECUTE_SUCCESS = "executesuccess";
 *   This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
 *   The <code>executeerror</code> event is method-specific and fired when an error occurs while sending an <code>Execute</code> request, or receiving a response to an <code>Execute</code method.
 *   (see: <code><a href="#method_execute">execute()</a></code>).
+*   This is event is not cancelable.
 *
 *   @property EVENT_EXECUTE_ERROR
 *   @static
@@ -761,6 +771,9 @@ Xmla.EVENT_EXECUTE_ERROR = "executeerror";
 *   (see: <code><a href="#method_discover">discover()</a></code>)
 *   to the server, but after firing the <code>request</code> event
 *   (see: <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>).
+*   The <code>EVENT_DISCOVER</code> event is <em>cancelable</em>:
+*   the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating 
+*   whether the respective operation should be canceled. 
 *
 *   @property EVENT_DISCOVER
 *   @static
@@ -776,6 +789,7 @@ Xmla.EVENT_DISCOVER = "discover";
 *   (that is, a response that does not contain a <code>SoapFault</code>)
 *   to an incovation of the XML/A <code>Discover</code> method
 *   (see: <code><a href="#method_discover">discover()</a></code>).
+*   This is event is not cancelable.
 *
 *   @property EVENT_DISCOVER_SUCCESS
 *   @static
@@ -790,6 +804,7 @@ Xmla.EVENT_DISCOVER_SUCCESS = "discoversuccess";
 *   The <code>discovererror</code> is method-specific and fired when an error occurs while sending an <code>Discover</code> request, 
 *   or receiving a response to an <code>Discover</code method.
 *   (see: <code><a href="#method_discover">discover()</a></code>).
+*   This is event is not cancelable.
 *
 *   @property EVENT_DISCOVER_ERROR
 *   @static
@@ -1114,21 +1129,41 @@ Xmla.prototype = {
 *   This method can be used to register a listener to one or more events.
 *   The <code>listener</code> argument should have the following structure: <pre>{
 *       events: [...event names...],
-*       handler: function() {...code to run upon notification...},
+*       handler: function(eventName, eventData, xmla) {...code to run upon notification...},
 *       scope: object
 *   }</pre>
 *   <dl>
 *       <dt><code>events</code></dt>
-*       <dd>string[] REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
+*       <dd><code>string[]</code> REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
 *       You can also use one of the predefined <code>EVENT_XXX</code> array constant values, 
 *       or use array concatenation and compose a custom list of event names.
 *       </dd>
-*       <dt><code>handler</code></dt>
-*       <dd>function REQUIRED. This function will be called and notified whenever one of the specified events occurs.
-*       The function is called in scope of the <code>scope</code> property, otherwise a global function (= <code>window</code> scope) is assumed.
+*       <dt><code>boolean handler(eventName, eventData, xmla)</code></dt>
+*       <dd><code>function</code> REQUIRED. This function will be called and notified whenever one of the specified events occurs.
+*       The function is called in scope of the <code>scope</code> property of the listener object. 
+*       If no <code>scope</code> is specified, a global function (having brower built-in <code>window</code> scope) is assumed.
+*       The <code>handler</code> function has the following arguments:
+*           <dl>
+*               <dt><code>eventName</code></dt>
+*               <dd><code>string</code> The event for which notification is give. Use the <code>EVENT_XXX</code> constants to check the <code>eventName</code>.</dd>
+*               <dt><code>eventData</code></dt>
+*               <dd><code>Object</code> An object that conveys event-specific data.</dd>
+*               <dt><code>xmla</code></dt>
+*               <dd><code><a href="class_Xmla">Xmla</a></code> A reference to this <code>Xmla</code> instance that is the source of the event. 
+*                   Listeners can obtain the response as well as the original SOAP message sent to the server through this instance.
+*                   This allows one listener to be shared across multiple <code>Xmla</code> instances without managing the context manually. 
+*               </dd>
+*           </dl>
+*       For events that are <em>cancelable</em>, the handler should return a <code>boolean</code>.
+*       If the handler returns <code>false</code> the respective operation will be canceled.
+*       Otherwise, the operation continues (but may be canceled by another handler).
+*       Currently, the following events are cancelable: 
+*       <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>,
+*       <code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code>, and
+*       <code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>. 
 *       </dd>
 *       <dt><code>scope</code></dt>
-*       <dd>Object. When specified, this object is used as the <code>this</code> object when calling the handler.
+*       <dd><code>Object</code> OPTIONAL When specified, this object is used as the <code>this</code> object when calling the handler.
 *           When not specified, the global <code>window</code> is used.
 *       </dd>
 *   </dl>
@@ -1514,7 +1549,8 @@ Xmla.prototype = {
 *   </ul>
 *   @method execute
 *   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request. 
-*   @return {Xmla.Resultset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query.
+*   @return {Xmla.Resultset|Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query. If the <code>Format</code> property in the request was set to <code>Tabular</code>, then an instance of the 
+<code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code> class is returned to represent the <code>Resultset</code>.
 */
     execute: function(options) {
         var properties = options.properties;
@@ -2639,11 +2675,18 @@ function _getRowSchema(xmlDoc){
 *   You do not need to instantiate objects of this class yourself. 
 *   Rather, the <code><a href="Xmla.html#class_Xmla">Xmla</a></code> class will instantiate this class to convey the result of any of the various <code>discoverXXX()</code> methods
 *   (see <code><a href="Xmla.html#method_discover">discover()</a></code>).
+*   In addition, this class is also used to instantiate a Resultset for the 
+*   <code><a name="Xmla.html#method_execute">execute()</code> method in case the 
+*   <code>Format</code> property is set to <code>Tabular</code>
+*   (see <code><a name="Xmla.html#property_OPTION_FORMAT">OPTION_FORMAT</a></code> and <code><a name="Xmla.html#property_OPTION_FORMAT_TABULAR">OPTION_FORMAT_TABULAR</a></code>).
+*   The <code><a href="Xmla.html#method_request">request()</a></code> method itself will also return an instance of this class in case the <code>method</code> is used to do a 
+*   <code>Discover</code> request, or in case it is used to do a <code>Execute</code> request and the <code>Format</code> property is set to <code>Tabular</code>.
 *   </p>
 *   <p>
-*   The <code>discoverXXX()</code> methods return the <code>Xmla.Rowset</code> instance when doing a synchronous request. 
+*   An instance of the <code>Xmla.Rowset</code> class is returned immediately as return value from the <code>disoverXXX()</code> or <code>execute()</code> method when doing a synchronous request. 
 *   In addition, the rowset is available in the eventdata passed to any registered listeners
 *   (see <code><a href="Xmla.html#method_addListener">addListener()</a></code>).
+*   Note that for asynchronous requests, the only way to obtain the returned <code>Rowset</code> instance is through the listeners. 
 *   </p>
 *   
 *   @class Xmla.Rowset
