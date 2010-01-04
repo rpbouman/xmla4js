@@ -32,8 +32,10 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsIsXmla = "xmlns=\"" + _xmlnsXmla + "\"",
     _xmlnsSQLPrefix = "sql",
     _xmlnsSQL = _ms + "xml-sql",
-    _xmlnsSchemaPrefix = "xsd", 
     _xmlnsSchema = "http://www.w3.org/2001/XMLSchema",
+    _xmlnsSchemaPrefix = "xsd", 
+    _xmlnsSchemaInstance = "http://www.w3.org/2001/XMLSchema-instance",
+    _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
     _useAX = window.ActiveXObject? true : false
 ;    
@@ -2198,6 +2200,34 @@ Xmla.prototype = {
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>Human readable description</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>ROLES</td>
+*           <td>string</td>
+*           <td>A comma-separatd list of roles available to the current user.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DATE_MODIFIED</td>
+*           <td>Date</td>
+*           <td>The date this catalog was modified</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
 *   </table>
 *   @method discoverDBCatalogs
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_CATALOGS</code> request. 
@@ -2400,6 +2430,27 @@ Xmla.prototype = {
 *           <th>Description</th>
 *           <th>Restriction</th>
 *           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>No</td>
+*           <td>Yes</td>
 *       </tr>
 *   </table>
 *   @method discoverMDCubes
@@ -2717,7 +2768,18 @@ Xmla.Rowset.prototype = {
                 }
                 fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
                 fieldName = seqChild.getAttribute("name");
-                type = seqChild.getAttribute("type");
+                type = seqChild.getAttribute("type");   //get the type from the xsd
+                if (type==null && this.row) {           //bummer, not defined there try to get it from xsi:type in the row
+                    var val = this.row.getElementsByTagName(fieldName);
+                    if (val.length){
+                        type = _getAttributeNS(
+                            val.item(0), 
+                            _xmlnsSchemaInstance, 
+                            _xmlnsSchemaInstancePrefix, 
+                            "type"
+                        );
+                    }                    
+                }
                 if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
                     type = "Restrictions";
                 }

@@ -35,7 +35,7 @@
             |
             <a href="../doc/api/index.html">API Reference Documentation</a>
         </div>
-        <h1>Sample: Simple Piechart</h1>
+        <h1>Sample: Simple Piechart<img style="display:none" id="image_ajax_loader" src="../css/ajax-loader.gif"/></h1>
         <fieldset>
             URL:
             <input type="text" id="input_url" name="input_url" 
@@ -56,18 +56,38 @@
             <textarea id="textarea_statement"></textarea>
             <button id="button_execute" name="button_execute">Execute Statement...</button>            
         </fieldset>
-        <div id="section_pie"></div>
+        <div>Charts:
+            <div id="section_pie" 
+                style="
+                    width:400px; 
+                    height: 200px; 
+                    position: relative; 
+                    border-style:solid
+                "
+            ></div>
+            <div id="section_gauge" 
+                style="
+                    width:300px;
+                    height: 300px;
+                    position: relative;
+                    border-style:solid
+                "
+            ></div>
+        </div>
         <div id="section_error"></div>
 
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript" src="../src/Xmla.js"></script>
                 
         <script type="text/javascript">        
+            var dataTable = null;
+            var pieChart = null;
+            var gauge = null;
+
             var xmla = new Xmla({
-                async: false
+                async: true
             });
             var datasourceCache = [];
-            var dataTable = null;
 
             var input_url = document.getElementById("input_url");
             var textarea_statement = document.getElementById("textarea_statement");
@@ -77,7 +97,7 @@
             var button_execute = document.getElementById("button_execute");
             var section_error = document.getElementById("section_error");
             var section_result = document.getElementById("section_result");
-            
+            var image_ajax_loader = document.getElementById("image_ajax_loader");            
             
             function discoverDatasources(){
                 xmla.discoverDataSources({
@@ -130,14 +150,52 @@
             }
             
             function fillTable(rowset) {
+                var numRows = dataTable.getNumberOfRows();
+                if (numRows){
+                    dataTable.removeRows(0, numRows);
+                    dataTable.removeColumns(0, dataTable.getNumberOfColumns());
+                }
+                var fields = rowset.getFields();                
+                for (var field, i=0, numFields = fields.length; i<numFields; i++) {
+                    field = fields[i];
+                    dataTable.addColumn(field.jsType, field.label)
+                }
                 var rows = rowset.fetchAllAsArray();
-                
+                dataTable.addRows(rows);
+                pieChart.draw(dataTable, {width: 400, height: 200, is3D: true});
+                gauge.draw(dataTable, {width: 400, height: 400});
             }
             
         </script>
         <script type="text/javascript">
-            google.load('visualization', '1', {'packages':['piechart']});
-            google.setOnLoadCallback(function(){                
+            google.load("visualization", "1", {
+                "packages":[
+                    "gauge"
+                ,   "piechart"
+                ]
+            });
+            google.setOnLoadCallback(function(){
+
+                dataTable = new google.visualization.DataTable();
+                pieChart = new google.visualization.PieChart(document.getElementById("section_pie"));
+                gauge = new google.visualization.Gauge(document.getElementById("section_gauge"));
+                
+                xmla.addListener({
+                    events: Xmla.EVENT_GENERAL,
+                    handler:    function(eventName){
+                                    var display;
+                                    switch (eventName) {
+                                        case Xmla.EVENT_REQUEST:
+                                            display = "";
+                                            break;
+                                        case Xmla.EVENT_SUCCESS:
+                                        case Xmla.EVENT_ERROR:
+                                            display = "none";
+                                            break;
+                                    }
+                                    image_ajax_loader.style.display = display;
+                                }
+                });
                 xmla.addListener({
                     events: Xmla.EVENT_REQUEST,
                     handler:    function(){
@@ -174,33 +232,16 @@
                 xmla.addListener({
                     events: Xmla.EVENT_EXECUTE_SUCCESS,
                     handler:    function(eventName, eventData, xmla){
-                                    var numRows, numColumns, rowset, fieldDef, rows;
-                                    numRows = dataTable.getNumberOfRows();
-                                    if (numRows) {
-                                        dataTable.removeRows(0, numRows);
-                                        numColumns = dataTable.getNumberOfColumns();
-                                        dataTable.removeColumns(0, numColumns);
-                                    }
                                     if (eventData.properties &&
                                         eventData.properties[Xmla.PROP_FORMAT] &&
-                                        eventData.properties[Xmla.PROP_FORMAT_TABULAR]) {
-                                        rowset = xmla.response;                                        
-                                        if (rowset.hasMoreRows()){
-                                            numColumns = rowset.fieldCount();
-                                            for (var i=0; i<numColumns; i++){
-                                                fieldDef = rowset.fieldDef(i);
-                                                dataTable.addColumn(fieldDef.jsType, fieldDef.label);
-                                            }
-                                            data = rowset.fetchAllAsArray();
-                                            dataTable.addRows(data);
-                                        }
+                                        eventData.properties[Xmla.PROP_FORMAT] === Xmla.PROP_FORMAT_TABULAR) {
+                                        fillTable(xmla.response); 
                                     }
                                 }
                 });
                 select_datasources.onchange = populateCatalogs;        
                 button_discover.onclick = discoverDatasources;
                 button_execute.onclick = executeQuery;
-                dataTable = new google.visualization.DataTable();
             });
             
         </script>        

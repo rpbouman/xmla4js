@@ -124,14 +124,20 @@
             function clearError(){
                 section_error.innerHTML = "";
             }
-            function setResponse(txt){                
-                section_response.innerHTML = txt.replace(
+            function escapeXML(xml) {
+                return xml.replace(
                     /\&/g,"&amp;"
                 ).replace(
                     /</g,"&lt;"
                 ).replace(
                     />/g,"&gt;"
                 );
+            }
+            function setResponse(txt){                
+                section_response.innerHTML = escapeXML(txt);
+            }
+            function setRequest(txt){                
+                section_request.innerHTML = escapeXML(txt);
             }
 
             function showException(exception){
@@ -240,6 +246,7 @@
                         statement: textarea_statement.value,
                         properties: properties
                     });
+                    setRequest(xmla.soapMessage);
                     setResponse(xmla.responseText);
                     if (resultset instanceof Xmla.Rowset){
                         fillTable(resultset);
