@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262474688.77" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262474688.77" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262566392.44" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262566392.44" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262474688.77"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262474688.77"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262566392.44"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262566392.44"></script>
 </head>
 
 <body id="yahoo-com">
@@ -1310,6 +1310,24 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
 
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:property" resource="#property_soapMessage">
+                                    <h4><a name="property_soapMessage" property="yui:name">soapMessage</a>
+                                        - <code><span property="yui:type">{string}</span></code>
+                                    </h4>
+                                    <div class="detail">
+                                        <div class="description" property="yui:description">
+                                            The soap message sent in the last request to the server.
+                                        </div>
+                                    </div>
+     
+                                        
+                                    <div class="default" property="yui:defaultValue">
+                                        Default Value: <code>null</code>
+                                    </div>        
+
+
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -1347,9 +1365,14 @@ scope: object
 }</pre>
 <dl>
 <dt><code>events</code></dt>
-<dd><code>string[]</code> REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
+<dd><code>string</code>|<code>string[]</code> REQUIRED. 
+The event or events to listen to. 
+You can specify a single event by using one of the <code>EVENT_XXX</code> string constant values.
+You can specify multiple events by using an array of <code>EVENT_XXX</code> string constant values.
 You can also use one of the predefined <code>EVENT_XXX</code> array constant values, 
 or use array concatenation and compose a custom list of event names.
+To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>, 
+or otherwise the <code>string</code> value <code>"all"</code>.
 </dd>
 <dt><code>boolean handler(eventName, eventData, xmla)</code></dt>
 <dd><code>function</code> REQUIRED. This function will be called and notified whenever one of the specified events occurs.
@@ -1358,7 +1381,9 @@ If no <code>scope</code> is specified, a global function (having brower built-in
 The <code>handler</code> function has the following arguments:
 <dl>
 <dt><code>eventName</code></dt>
-<dd><code>string</code> The event for which notification is give. Use the <code>EVENT_XXX</code> constants to check the <code>eventName</code>.</dd>
+<dd><code>string</code> The event for which notification is given. 
+This is useful to distinguish between events in case the same handler function is used for multiple events.
+In this case, use the <code>EVENT_XXX</code> constants to check the <code>eventName</code>.</dd>
 <dt><code>eventData</code></dt>
 <dd><code>Object</code> An object that conveys event-specific data.</dd>
 <dt><code>xmla</code></dt>
@@ -1765,6 +1790,34 @@ The rowset has the following columns:
 <th>Description</th>
 <th>Restriction</th>
 <th>Nullable</th>
+</tr>
+<tr>
+<td>CATALOG_NAME</td>
+<td>string</td>
+<td>Name of the catalog</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DESCRIPTION</td>
+<td>string</td>
+<td>Human readable description</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>ROLES</td>
+<td>string</td>
+<td>A comma-separatd list of roles available to the current user.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>DATE_MODIFIED</td>
+<td>Date</td>
+<td>The date this catalog was modified</td>
+<td>No</td>
+<td>Yes</td>
 </tr>
 </table>
                                         </div>
@@ -2486,6 +2539,55 @@ The rowset has the following columns:
 <th>Description</th>
 <th>Restriction</th>
 <th>Nullable</th>
+</tr>
+<tr>
+<td>CATALOG_NAME</td>
+<td>string</td>
+<td>Name of the catalog</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>SCHEMA_NAME</td>
+<td>string</td>
+<td>Not supported</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CUBE_NAME</td>
+<td>string</td>
+<td>Name of the cube.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CUBE_TYPE</td>
+<td>string</td>
+<td>Type of the cube.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CUBE_GUID</td>
+<td>string</td>
+<td>Not supported</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CREATED_ON</td>
+<td>Date</td>
+<td>Not supported</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>LAST_SCHEMA_UPDATE</td>
+<td>Date</td>
+<td>The last dat</td>
+<td>Yes</td>
+<td>No</td>
 </tr>
 </table>
                                         </div>
@@ -3625,6 +3727,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#property_response" title="response">response</a></li>
                                 <li class=""><a href="#property_responseText" title="responseText">responseText</a></li>
                                 <li class=""><a href="#property_responseXml" title="responseXml">responseXml</a></li>
+                                <li class=""><a href="#property_soapMessage" title="soapMessage">soapMessage</a></li>
                         </ul>
                     </div>
 
@@ -3672,7 +3775,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#property_PROP_DataSourceInfo", "access": "", "host": "Xmla", "type": "property", "name": "PROP_DataSourceInfo"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#property_PROP_DataSourceInfo", "access": "", "host": "Xmla", "type": "property", "name": "PROP_DataSourceInfo"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}, {"url": "Xmla.html#property_soapMessage", "access": "", "host": "Xmla", "type": "property", "name": "soapMessage"}];
 </script>
 </body>
 </html>

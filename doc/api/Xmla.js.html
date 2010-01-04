@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla   Xmla.js  (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262474688.77" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262474688.77" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1262566392.44" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1262566392.44" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1262474688.77"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1262474688.77"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1262566392.44"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1262566392.44"></script>
 </head>
 
 <body id="yahoo-com">
@@ -97,8 +97,10 @@
     <span class="nx">_xmlnsIsXmla</span> <span class="o">=</span> <span class="s2">&quot;xmlns=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsXmla</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="p">,</span>
     <span class="nx">_xmlnsSQLPrefix</span> <span class="o">=</span> <span class="s2">&quot;sql&quot;</span><span class="p">,</span>
     <span class="nx">_xmlnsSQL</span> <span class="o">=</span> <span class="nx">_ms</span> <span class="o">+</span> <span class="s2">&quot;xml-sql&quot;</span><span class="p">,</span>
-    <span class="nx">_xmlnsSchemaPrefix</span> <span class="o">=</span> <span class="s2">&quot;xsd&quot;</span><span class="p">,</span> 
     <span class="nx">_xmlnsSchema</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema&quot;</span><span class="p">,</span>
+    <span class="nx">_xmlnsSchemaPrefix</span> <span class="o">=</span> <span class="s2">&quot;xsd&quot;</span><span class="p">,</span> 
+    <span class="nx">_xmlnsSchemaInstance</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><span class="p">,</span>
+    <span class="nx">_xmlnsSchemaInstancePrefix</span> <span class="o">=</span> <span class="s2">&quot;xsi&quot;</span><span class="p">,</span> 
     <span class="nx">_xmlnsRowset</span> <span class="o">=</span> <span class="nx">_xmlnsXmla</span> <span class="o">+</span> <span class="s2">&quot;:rowset&quot;</span><span class="p">,</span>
     <span class="nx">_useAX</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ActiveXObject</span><span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span>
 <span class="p">;</span>    
@@ -152,13 +154,16 @@
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="o">===</span><span class="mi">200</span><span class="p">){</span>
-                    <span class="nx">options</span><span class="p">.</span><span class="nx">complete</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">);</span>
+                    <span class="nx">options</span><span class="p">.</span><span class="nx">complete</span><span class="p">(</span><span class="nx">xhr</span><span class="p">);</span>
                 <span class="p">}</span>
                 <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">options</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span> <span class="p">{</span>
-                        <span class="nx">statusCode</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span>
-                        <span class="nx">statusText</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">statusText</span>
-                    <span class="p">});</span>
+                    <span class="nx">options</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span>
+                        <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span><span class="p">(</span>
+                            <span class="s2">&quot;HTTP_ERROR&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_ajax&quot;</span><span class="p">,</span>
+                            <span class="nx">options</span>
+                        <span class="p">)</span>
+                    <span class="p">);</span>
                 <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
@@ -220,15 +225,18 @@
 <span class="p">};</span>
 
 
-<span class="kd">function</span> <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">listType</span><span class="p">,</span> <span class="nx">items</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">listType</span><span class="p">,</span> <span class="nx">items</span><span class="p">,</span> <span class="nx">indent</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">indent</span><span class="p">){</span>
+        <span class="nx">indent</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">item</span><span class="p">;</span>
-        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot; &lt;&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">property</span> <span class="k">in</span> <span class="nx">items</span><span class="p">){</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">items</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span> <span class="p">{</span>
                 <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
-                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">property</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot;  &lt;&quot;</span> <span class="o">+</span> <span class="nx">property</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
                 <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span><span class="o">===</span><span class="s2">&quot;array&quot;</span><span class="p">){</span>
                     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">numItems</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">numItems</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
                         <span class="nx">entry</span> <span class="o">=</span> <span class="nx">item</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
@@ -240,9 +248,9 @@
                 <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">property</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot; &lt;/&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
     <span class="k">return</span> <span class="nx">msg</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -253,9 +261,9 @@
 <span class="p">){</span>
     <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsSOAPenvelope</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
-    <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
-    <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsXmla</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
+    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsSOAPenvelope</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
+    <span class="s2">&quot;\n &lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
+    <span class="s2">&quot;\n  &lt;&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsXmla</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
     <span class="p">;</span>
     <span class="kd">var</span> <span class="nx">exception</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
@@ -268,9 +276,9 @@
                 <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestType</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
-                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">,</span> <span class="s2">&quot;RestrictionList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">restrictions</span><span class="p">)</span> <span class="o">+</span> 
-                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">)</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n   &lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestType</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
+                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">,</span> <span class="s2">&quot;RestrictionList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">restrictions</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span> <span class="o">+</span> 
+                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span>
                 <span class="p">;</span>
             <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
@@ -283,8 +291,11 @@
                 <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;Command&gt;&lt;Statement&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">statement</span> <span class="o">+</span> <span class="s2">&quot;&lt;/Statement&gt;&lt;/Command&gt;&quot;</span> <span class="o">+</span> 
-                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">)</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> 
+                <span class="s2">&quot;\n   &lt;Command&gt;&quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;\n    &lt;Statement&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">statement</span> <span class="o">+</span> <span class="s2">&quot;&lt;/Statement&gt;&quot;</span> <span class="o">+</span> 
+                <span class="s2">&quot;\n   &lt;/Command&gt;&quot;</span> <span class="o">+</span> 
+                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span>
                 <span class="p">;</span>
             <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
@@ -296,9 +307,9 @@
     <span class="k">if</span> <span class="p">(</span><span class="nx">exception</span><span class="o">!==</span><span class="kc">null</span><span class="p">){</span>
         <span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
     <span class="p">}</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;   &lt;/&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
-        <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
-        <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope&gt;&quot;</span>
+    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n  &lt;/&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
+        <span class="s2">&quot;\n &lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
+        <span class="s2">&quot;\n&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope&gt;&quot;</span>
     <span class="p">;</span>
     <span class="k">return</span> <span class="nx">msg</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1128,6 +1139,14 @@
 <span class="cm">*/</span>
     <span class="nx">listeners</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 <span class="cm">/**</span>
+<span class="cm">*   The soap message sent in the last request to the server.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property soapMessage</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default &lt;code&gt;null&lt;/code&gt;</span>
+<span class="cm">*/</span>
+    <span class="nx">soapMessage</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
 <span class="cm">*   This property is set to &lt;code&gt;null&lt;/code&gt; right before sending an XML/A request.</span>
 <span class="cm">*   When a successfull response is received, it is processed and the response object is assigned to this property.</span>
 <span class="cm">*   The response object is either a </span>
@@ -1199,9 +1218,14 @@
 <span class="cm">*   }&lt;/pre&gt;</span>
 <span class="cm">*   &lt;dl&gt;</span>
 <span class="cm">*       &lt;dt&gt;&lt;code&gt;events&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*       &lt;dd&gt;&lt;code&gt;string[]&lt;/code&gt; REQUIRED. This must be an array containing final static &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values. </span>
+<span class="cm">*       &lt;dd&gt;&lt;code&gt;string&lt;/code&gt;|&lt;code&gt;string[]&lt;/code&gt; REQUIRED. </span>
+<span class="cm">*       The event or events to listen to. </span>
+<span class="cm">*       You can specify a single event by using one of the &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values.</span>
+<span class="cm">*       You can specify multiple events by using an array of &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values.</span>
 <span class="cm">*       You can also use one of the predefined &lt;code&gt;EVENT_XXX&lt;/code&gt; array constant values, </span>
 <span class="cm">*       or use array concatenation and compose a custom list of event names.</span>
+<span class="cm">*       To listen to all events, either use &lt;code&gt;&lt;a href=&quot;#property_EVENT_ALL&quot;&gt;EVENT_ALL&lt;/a&gt;&lt;/code&gt;, </span>
+<span class="cm">*       or otherwise the &lt;code&gt;string&lt;/code&gt; value &lt;code&gt;&quot;all&quot;&lt;/code&gt;.</span>
 <span class="cm">*       &lt;/dd&gt;</span>
 <span class="cm">*       &lt;dt&gt;&lt;code&gt;boolean handler(eventName, eventData, xmla)&lt;/code&gt;&lt;/dt&gt;</span>
 <span class="cm">*       &lt;dd&gt;&lt;code&gt;function&lt;/code&gt; REQUIRED. This function will be called and notified whenever one of the specified events occurs.</span>
@@ -1210,7 +1234,9 @@
 <span class="cm">*       The &lt;code&gt;handler&lt;/code&gt; function has the following arguments:</span>
 <span class="cm">*           &lt;dl&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;eventName&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*               &lt;dd&gt;&lt;code&gt;string&lt;/code&gt; The event for which notification is give. Use the &lt;code&gt;EVENT_XXX&lt;/code&gt; constants to check the &lt;code&gt;eventName&lt;/code&gt;.&lt;/dd&gt;</span>
+<span class="cm">*               &lt;dd&gt;&lt;code&gt;string&lt;/code&gt; The event for which notification is given. </span>
+<span class="cm">*               This is useful to distinguish between events in case the same handler function is used for multiple events.</span>
+<span class="cm">*               In this case, use the &lt;code&gt;EVENT_XXX&lt;/code&gt; constants to check the &lt;code&gt;eventName&lt;/code&gt;.&lt;/dd&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;eventData&lt;/code&gt;&lt;/dt&gt;</span>
 <span class="cm">*               &lt;dd&gt;&lt;code&gt;Object&lt;/code&gt; An object that conveys event-specific data.&lt;/dd&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;xmla&lt;/code&gt;&lt;/dt&gt;</span>
@@ -1314,15 +1340,7 @@
         <span class="p">}</span>
         <span class="k">else</span> 
         <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span><span class="o">===</span><span class="s2">&quot;error&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
-                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
-                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultCode</span><span class="p">,</span>
-                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultString</span><span class="p">,</span>
-                <span class="kc">null</span><span class="p">,</span>
-                <span class="s2">&quot;Xmla._fireEvent&quot;</span><span class="p">,</span>
-                <span class="nx">eventData</span>
-            <span class="p">);</span>
-            <span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
+            <span class="nx">eventData</span><span class="p">.</span><span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">outcome</span><span class="p">;</span>
     <span class="p">},</span>
@@ -1452,7 +1470,7 @@
         <span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span> <span class="o">=</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span><span class="p">;</span>
         
         <span class="kd">var</span> <span class="nx">soapMessage</span> <span class="o">=</span> <span class="nx">_getXmlaSoapMessage</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-        <span class="nx">options</span><span class="p">.</span><span class="nx">soapMessage</span> <span class="o">=</span> <span class="nx">soapMessage</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">soapMessage</span> <span class="o">=</span> <span class="nx">soapMessage</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">myXhr</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">ajaxOptions</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">async</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">async</span><span class="p">,</span>
@@ -1460,28 +1478,14 @@
             <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/xml&quot;</span><span class="p">,</span>
             <span class="nx">data</span><span class="o">:</span> <span class="nx">soapMessage</span><span class="p">,</span>
             <span class="nx">dataType</span><span class="o">:</span> <span class="s2">&quot;xml&quot;</span><span class="p">,</span>
-            <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">errorString</span><span class="p">,</span> <span class="nx">errorObject</span><span class="p">){</span>
-                <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestError</span><span class="p">({</span>
-                    <span class="nx">xmla</span><span class="o">:</span> <span class="nx">xmla</span><span class="p">,</span>
-                    <span class="nx">request</span><span class="o">:</span> <span class="nx">options</span><span class="p">,</span>
-                    <span class="nx">xhr</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">,</span>
-                    <span class="nx">error</span><span class="o">:</span> <span class="p">{</span>
-                        <span class="nx">errorCategory</span><span class="o">:</span> <span class="s2">&quot;xhrError&quot;</span><span class="p">,</span>
-                        <span class="nx">errorString</span><span class="o">:</span> <span class="nx">errorString</span><span class="p">,</span>
-                        <span class="nx">errorObject</span><span class="o">:</span> <span class="nx">errorObject</span>
-                    <span class="p">}</span>
-                <span class="p">});</span>
-            <span class="p">},</span>
-            <span class="nx">complete</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">){</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">textStatus</span><span class="o">===</span><span class="s2">&quot;success&quot;</span><span class="p">){</span>
-                    <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestSuccess</span><span class="p">({</span>
-                        <span class="nx">xmla</span><span class="o">:</span> <span class="nx">xmla</span><span class="p">,</span>
-                        <span class="nx">request</span><span class="o">:</span> <span class="nx">options</span><span class="p">,</span>
-                        <span class="nx">xhr</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">,</span>
-                        <span class="nx">status</span><span class="o">:</span> <span class="nx">textStatus</span>
-                    <span class="p">});</span>
-                <span class="p">}</span>
-            <span class="p">},</span>
+            <span class="nx">error</span><span class="o">:</span>      <span class="kd">function</span><span class="p">(</span><span class="nx">exception</span><span class="p">){</span>
+                            <span class="nx">options</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="nx">exeception</span><span class="p">;</span>
+                            <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestError</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
+                        <span class="p">},</span>
+            <span class="nx">complete</span><span class="o">:</span>   <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">){</span>
+                            <span class="nx">options</span><span class="p">.</span><span class="nx">xhr</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">;</span>
+                            <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestSuccess</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+                        <span class="p">},</span>
             <span class="nx">url</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
             <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span>
         <span class="p">};</span>
@@ -1502,47 +1506,45 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">;</span>
     <span class="p">},</span>
-    <span class="nx">_requestError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">obj</span><span class="p">.</span><span class="nx">xmla</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+    <span class="nx">_requestError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="p">},</span>
-    <span class="nx">_requestSuccess</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">xhr</span><span class="p">;</span>
+    <span class="nx">_requestSuccess</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">xhr</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">responseText</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
 
-        <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">request</span><span class="p">;</span> 
         <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
         
         <span class="kd">var</span> <span class="nx">soapFault</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">,</span> <span class="nx">_xmlnsSOAPenvelope</span><span class="p">,</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span><span class="p">,</span> <span class="s2">&quot;Fault&quot;</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">soapFault</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">//TODO: extract error info</span>
             <span class="nx">soapFault</span> <span class="o">=</span> <span class="nx">soapFault</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">faultCode</span> <span class="o">=</span> <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultcode&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">faultString</span> <span class="o">=</span> <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultstring&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">soapFaultObject</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">errorCategory</span><span class="o">:</span> <span class="s2">&quot;soapFault&quot;</span><span class="p">,</span>
-                <span class="nx">faultCode</span><span class="o">:</span> <span class="nx">faultCode</span><span class="p">,</span>
-                <span class="nx">faultString</span><span class="o">:</span> <span class="nx">faultString</span>
-            <span class="p">};</span>
-            <span class="nx">obj</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="nx">soapFaultObject</span><span class="p">;</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultcode&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">,</span>
+                <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultstring&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">,</span>
+                <span class="kc">null</span><span class="p">,</span>
+                <span class="s2">&quot;_requestSuccess&quot;</span><span class="p">,</span>
+                <span class="nx">request</span>
+            <span class="p">);</span>
             <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span><span class="o">:</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_ERROR</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_ERROR</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_EXECUTE</span><span class="o">:</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_ERROR</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_ERROR</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_ERROR</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_ERROR</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>        
             <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span><span class="o">:</span>
                     <span class="kd">var</span> <span class="nx">rowset</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">requestType</span><span class="p">);</span>
-                    <span class="nx">obj</span><span class="p">.</span><span class="nx">rowset</span> <span class="o">=</span> <span class="nx">rowset</span><span class="p">;</span>
+                    <span class="nx">request</span><span class="p">.</span><span class="nx">rowset</span> <span class="o">=</span> <span class="nx">rowset</span><span class="p">;</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">response</span> <span class="o">=</span> <span class="nx">rowset</span><span class="p">;</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_SUCCESS</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_SUCCESS</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_EXECUTE</span><span class="o">:</span>
                     <span class="kd">var</span> <span class="nx">resultset</span><span class="p">;</span>
@@ -1554,12 +1556,12 @@
                         <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="o">:</span>
                             <span class="k">break</span><span class="p">;</span>
                     <span class="p">}</span>                    
-                    <span class="nx">obj</span><span class="p">.</span><span class="nx">resultset</span> <span class="o">=</span> <span class="nx">resultset</span><span class="p">;</span>
+                    <span class="nx">request</span><span class="p">.</span><span class="nx">resultset</span> <span class="o">=</span> <span class="nx">resultset</span><span class="p">;</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">response</span> <span class="o">=</span> <span class="nx">resultset</span><span class="p">;</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_SUCCESS</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_SUCCESS</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_SUCCESS</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_SUCCESS</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
@@ -1628,9 +1630,6 @@
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">])){</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span><span class="p">])){</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT_CLUSTER</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -2266,6 +2265,34 @@
 <span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
 <span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
 <span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CATALOG_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the catalog&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;DESCRIPTION&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Human readable description&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;ROLES&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;A comma-separatd list of roles available to the current user.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;DATE_MODIFIED&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Date&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The date this catalog was modified&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   @method discoverDBCatalogs</span>
 <span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; request. </span>
@@ -2468,6 +2495,55 @@
 <span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
 <span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
 <span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CATALOG_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the catalog&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;SCHEMA_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Not supported&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CUBE_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the cube.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CUBE_TYPE&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Type of the cube.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CUBE_GUID&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Not supported&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CREATED_ON&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Date&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Not supported&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LAST_SCHEMA_UPDATE&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Date&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The last dat&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
 <span class="cm">*       &lt;/tr&gt;</span>
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   @method discoverMDCubes</span>
@@ -2760,54 +2836,70 @@
 <span class="cm">*   @param {string} requestTtype The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">fields</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">rowSchema</span> <span class="o">=</span> <span class="nx">_getRowSchema</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">rowSchema</span><span class="p">){</span>    
-        <span class="kd">var</span> <span class="nx">seq</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">rowSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchemaPrefix</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-            <span class="nx">seqChildren</span> <span class="o">=</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">,</span> <span class="nx">numChildren</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">seqChild</span><span class="p">,</span>
-            <span class="nx">fieldLabel</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">,</span> <span class="nx">type</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">numChildren</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-            <span class="nx">seqChild</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">seqChild</span><span class="p">.</span><span class="nx">nodeType</span><span class="o">!=</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">fieldLabel</span> <span class="o">=</span> <span class="nx">_getAttributeNS</span><span class="p">(</span><span class="nx">seqChild</span><span class="p">,</span> <span class="nx">_xmlnsSQL</span><span class="p">,</span> <span class="nx">_xmlnsSQLPrefix</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">);</span>
-            <span class="nx">fieldName</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span>
-            <span class="nx">type</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="nx">requestType</span><span class="o">==</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span> <span class="o">&amp;&amp;</span> <span class="nx">fieldName</span><span class="o">==</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;Restrictions&quot;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">minOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;minOccurs&quot;</span><span class="p">);</span>
-            <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;maxOccurs&quot;</span><span class="p">);</span>
-
-            <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">[</span><span class="nx">fieldLabel</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">name</span><span class="o">:</span> <span class="nx">fieldName</span><span class="p">,</span>
-                <span class="nx">label</span><span class="o">:</span> <span class="nx">fieldLabel</span><span class="p">,</span>
-                <span class="nx">index</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span><span class="o">++</span><span class="p">,</span>
-                <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span><span class="p">,</span>
-                <span class="nx">minOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">minOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="nx">minOccurs</span><span class="p">,</span>
-                <span class="nx">maxOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">maxOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="p">(</span><span class="nx">maxOccurs</span><span class="o">===</span><span class="s2">&quot;unbounded&quot;</span><span class="o">?</span><span class="kc">Infinity</span><span class="o">:</span><span class="nx">maxOccurs</span><span class="p">),</span>
-                <span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_createFieldGetter</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">)</span>
-            <span class="p">};</span>            
-            <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fieldLabel</span><span class="p">);</span>
-        <span class="p">}</span>        
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span><span class="p">(</span>
-            <span class="s2">&quot;ERROR_PARSING_RESPONSE&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Xmla.Rowset&quot;</span><span class="p">,</span>
-            <span class="nx">node</span>
-        <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_initData</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">_initData</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fields</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">rowSchema</span> <span class="o">=</span> <span class="nx">_getRowSchema</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">rowSchema</span><span class="p">){</span>    
+            <span class="kd">var</span> <span class="nx">seq</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">rowSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchemaPrefix</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                <span class="nx">seqChildren</span> <span class="o">=</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">,</span> <span class="nx">numChildren</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">seqChild</span><span class="p">,</span>
+                <span class="nx">fieldLabel</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">valueConverter</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">numChildren</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                <span class="nx">seqChild</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">seqChild</span><span class="p">.</span><span class="nx">nodeType</span><span class="o">!=</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">fieldLabel</span> <span class="o">=</span> <span class="nx">_getAttributeNS</span><span class="p">(</span><span class="nx">seqChild</span><span class="p">,</span> <span class="nx">_xmlnsSQL</span><span class="p">,</span> <span class="nx">_xmlnsSQLPrefix</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">);</span>
+                <span class="nx">fieldName</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span>
+                <span class="nx">type</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">);</span>   <span class="c1">//get the type from the xsd</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">type</span><span class="o">==</span><span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>           <span class="c1">//bummer, not defined there try to get it from xsi:type in the row</span>
+                    <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">row</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                        <span class="nx">type</span> <span class="o">=</span> <span class="nx">_getAttributeNS</span><span class="p">(</span>
+                            <span class="nx">val</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> 
+                            <span class="nx">_xmlnsSchemaInstance</span><span class="p">,</span> 
+                            <span class="nx">_xmlnsSchemaInstancePrefix</span><span class="p">,</span> 
+                            <span class="s2">&quot;type&quot;</span>
+                        <span class="p">);</span>
+                    <span class="p">}</span>                    
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="nx">requestType</span><span class="o">==</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span> <span class="o">&amp;&amp;</span> <span class="nx">fieldName</span><span class="o">==</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;Restrictions&quot;</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">minOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;minOccurs&quot;</span><span class="p">);</span>
+                <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;maxOccurs&quot;</span><span class="p">);</span>
+                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_getValueConverter</span><span class="p">(</span><span class="nx">type</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">[</span><span class="nx">fieldLabel</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="nx">name</span><span class="o">:</span> <span class="nx">fieldName</span><span class="p">,</span>
+                    <span class="nx">label</span><span class="o">:</span> <span class="nx">fieldLabel</span><span class="p">,</span>
+                    <span class="nx">index</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span><span class="o">++</span><span class="p">,</span>
+                    <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span><span class="p">,</span>
+                    <span class="nx">jsType</span><span class="o">:</span> <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span><span class="p">,</span>
+                    <span class="nx">minOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">minOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="nx">minOccurs</span><span class="p">,</span>
+                    <span class="nx">maxOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">maxOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="p">(</span><span class="nx">maxOccurs</span><span class="o">===</span><span class="s2">&quot;unbounded&quot;</span><span class="o">?</span><span class="kc">Infinity</span><span class="o">:</span><span class="nx">maxOccurs</span><span class="p">),</span>
+                    <span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_createFieldGetter</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">)</span>
+                <span class="p">};</span>            
+                <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fieldLabel</span><span class="p">);</span>
+            <span class="p">}</span>        
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR_PARSING_RESPONSE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla.Rowset&quot;</span><span class="p">,</span>
+                <span class="nx">node</span>
+            <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
     <span class="nx">_boolConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
         <span class="k">return</span> <span class="nx">val</span><span class="o">===</span><span class="s2">&quot;true&quot;</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">;</span>
     <span class="p">},</span>
@@ -2853,23 +2945,18 @@
             <span class="k">return</span> <span class="nx">text</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="nx">_createFieldGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">){</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">minOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
-            <span class="nx">minOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span> <span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">maxOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
-            <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span>    
-        <span class="p">}</span>
-        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">valueConverter</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>        
+    <span class="nx">_getValueConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">valueConverter</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="k">switch</span> <span class="p">(</span><span class="nx">type</span><span class="p">){</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:boolean&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_boolConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_boolConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;boolean&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:decimal&quot;</span><span class="o">:</span> <span class="c1">//FIXME: not sure if you can use parseFloat for this.</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:double&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:float&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_floatConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_floatConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;number&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:int&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:integer&quot;</span><span class="o">:</span>
@@ -2884,18 +2971,32 @@
             <span class="k">case</span> <span class="s2">&quot;xsd:unsignedInt&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:unsignedShort&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:unsignedByte&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_intConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_intConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;number&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:string&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;Restrictions&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_restrictionsConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_restrictionsConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">default</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">valueConverter</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_createFieldGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">valueConverter</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">minOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+            <span class="nx">minOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span> <span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">maxOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+            <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span>    
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">getter</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">maxOccurs</span><span class="o">===</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span><span class="p">(</span><span class="nx">minOccurs</span><span class="o">===</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="p">{</span>
@@ -3354,6 +3455,21 @@
                                     <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_CDE</span>  <span class="o">+</span> 
                                     <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_MSG</span><span class="p">;</span>
                                     
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a general XMLHttpRequest error.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property HTTP_ERROR</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-10&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">HTTP_ERROR_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">HTTP_ERROR_MSG</span> <span class="o">=</span> <span class="s2">&quot;HTTP Error&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">HTTP_ERROR_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_MSG</span><span class="p">;</span>
+
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">codeName</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
         <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
@@ -3462,7 +3578,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.Rowset.html#method_close", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "close"}, {"url": "Xmla.Exception.html#property_code", "access": "", "host": "Xmla.Exception", "type": "property", "name": "code"}, {"url": "Xmla.Exception.html#property_data", "access": "", "host": "Xmla.Exception", "type": "property", "name": "data"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.Exception.html#property_ERROR_PARSING_RESPONSE_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "ERROR_PARSING_RESPONSE_CDE"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_fetchAllAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAllAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsObject"}, {"url": "Xmla.Rowset.html#method_fetchAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsObject"}, {"url": "Xmla.Rowset.html#method_fieldCount", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldCount"}, {"url": "Xmla.Rowset.html#method_fieldDef", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldDef"}, {"url": "Xmla.Rowset.html#method_fieldIndex", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldIndex"}, {"url": "Xmla.Rowset.html#method_fieldName", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldName"}, {"url": "Xmla.Rowset.html#method_fieldVal", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldVal"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.Exception.html#property_helpfile", "access": "", "host": "Xmla.Exception", "type": "property", "name": "helpfile"}, {"url": "Xmla.Exception.html#property_INVALID_EVENT_HANDLER_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "INVALID_EVENT_HANDLER_CDE"}, {"url": "Xmla.Exception.html#property_INVALID_FIELD_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "INVALID_FIELD_CDE"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.Exception.html#property_message", "access": "", "host": "Xmla.Exception", "type": "property", "name": "message"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.Exception.html#property_MISSING_REQUEST_TYPE_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_REQUEST_TYPE_CDE"}, {"url": "Xmla.Exception.html#property_MISSING_STATEMENT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_STATEMENT_CDE"}, {"url": "Xmla.Exception.html#property_MISSING_URL_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_URL_CDE"}, {"url": "Xmla.Rowset.html#method_next", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "next"}, {"url": "Xmla.Exception.html#property_NO_EVENTS_SPECIFIED_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "NO_EVENTS_SPECIFIED_CDE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#property_PROP_DataSourceInfo", "access": "", "host": "Xmla", "type": "property", "name": "PROP_DataSourceInfo"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}, {"url": "Xmla.Exception.html#property_source", "access": "", "host": "Xmla.Exception", "type": "property", "name": "source"}, {"url": "Xmla.Exception.html#property_type", "access": "", "host": "Xmla.Exception", "type": "property", "name": "type"}, {"url": "Xmla.Exception.html#property_TYPE_ERROR", "access": "", "host": "Xmla.Exception", "type": "property", "name": "TYPE_ERROR"}, {"url": "Xmla.Exception.html#property_TYPE_WARNING", "access": "", "host": "Xmla.Exception", "type": "property", "name": "TYPE_WARNING"}, {"url": "Xmla.Exception.html#property_UNKNOWN_EVENT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "UNKNOWN_EVENT_CDE"}, {"url": "Xmla.Exception.html#property_WRONG_EVENTS_FORMAT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "WRONG_EVENTS_FORMAT_CDE"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.Rowset.html#method_close", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "close"}, {"url": "Xmla.Exception.html#property_code", "access": "", "host": "Xmla.Exception", "type": "property", "name": "code"}, {"url": "Xmla.Exception.html#property_data", "access": "", "host": "Xmla.Exception", "type": "property", "name": "data"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.Exception.html#property_ERROR_PARSING_RESPONSE_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "ERROR_PARSING_RESPONSE_CDE"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.Rowset.html#method_fetchAllAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAllAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAllAsObject"}, {"url": "Xmla.Rowset.html#method_fetchAsArray", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsArray"}, {"url": "Xmla.Rowset.html#method_fetchAsObject", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fetchAsObject"}, {"url": "Xmla.Rowset.html#method_fieldCount", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldCount"}, {"url": "Xmla.Rowset.html#method_fieldDef", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldDef"}, {"url": "Xmla.Rowset.html#method_fieldIndex", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldIndex"}, {"url": "Xmla.Rowset.html#method_fieldName", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldName"}, {"url": "Xmla.Rowset.html#method_fieldVal", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "fieldVal"}, {"url": "Xmla.Rowset.html#method_getFields", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "getFields"}, {"url": "Xmla.Rowset.html#method_hasMoreRows", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "hasMoreRows"}, {"url": "Xmla.Exception.html#property_helpfile", "access": "", "host": "Xmla.Exception", "type": "property", "name": "helpfile"}, {"url": "Xmla.Exception.html#property_HTTP_ERROR", "access": "", "host": "Xmla.Exception", "type": "property", "name": "HTTP_ERROR"}, {"url": "Xmla.Exception.html#property_INVALID_EVENT_HANDLER_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "INVALID_EVENT_HANDLER_CDE"}, {"url": "Xmla.Exception.html#property_INVALID_FIELD_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "INVALID_FIELD_CDE"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.Exception.html#property_message", "access": "", "host": "Xmla.Exception", "type": "property", "name": "message"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.Exception.html#property_MISSING_REQUEST_TYPE_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_REQUEST_TYPE_CDE"}, {"url": "Xmla.Exception.html#property_MISSING_STATEMENT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_STATEMENT_CDE"}, {"url": "Xmla.Exception.html#property_MISSING_URL_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "MISSING_URL_CDE"}, {"url": "Xmla.Rowset.html#method_next", "access": "", "host": "Xmla.Rowset", "type": "method", "name": "next"}, {"url": "Xmla.Exception.html#property_NO_EVENTS_SPECIFIED_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "NO_EVENTS_SPECIFIED_CDE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#property_PROP_DataSourceInfo", "access": "", "host": "Xmla", "type": "property", "name": "PROP_DataSourceInfo"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}, {"url": "Xmla.html#property_soapMessage", "access": "", "host": "Xmla", "type": "property", "name": "soapMessage"}, {"url": "Xmla.Exception.html#property_source", "access": "", "host": "Xmla.Exception", "type": "property", "name": "source"}, {"url": "Xmla.Exception.html#property_type", "access": "", "host": "Xmla.Exception", "type": "property", "name": "type"}, {"url": "Xmla.Exception.html#property_TYPE_ERROR", "access": "", "host": "Xmla.Exception", "type": "property", "name": "TYPE_ERROR"}, {"url": "Xmla.Exception.html#property_TYPE_WARNING", "access": "", "host": "Xmla.Exception", "type": "property", "name": "TYPE_WARNING"}, {"url": "Xmla.Exception.html#property_UNKNOWN_EVENT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "UNKNOWN_EVENT_CDE"}, {"url": "Xmla.Exception.html#property_WRONG_EVENTS_FORMAT_CDE", "access": "", "host": "Xmla.Exception", "type": "property", "name": "WRONG_EVENTS_FORMAT_CDE"}];
 </script>
 </body>
 </html>

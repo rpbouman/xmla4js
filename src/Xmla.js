@@ -2442,15 +2442,43 @@ Xmla.prototype = {
 *           <td>SCHEMA_NAME</td>
 *           <td>string</td>
 *           <td>Not supported</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>CUBE_NAME</td>
 *           <td>string</td>
 *           <td>Name of the cube.</td>
-*           <td>No</td>
 *           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_TYPE</td>
+*           <td>string</td>
+*           <td>Type of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_GUID</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CREATED_ON</td>
+*           <td>Date</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LAST_SCHEMA_UPDATE</td>
+*           <td>Date</td>
+*           <td>The last dat</td>
+*           <td>Yes</td>
+*           <td>No</td>
 *       </tr>
 *   </table>
 *   @method discoverMDCubes

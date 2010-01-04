@@ -32,8 +32,10 @@
     <span class="nx">_xmlnsIsXmla</span> <span class="o">=</span> <span class="s2">&quot;xmlns=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsXmla</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="p">,</span>
     <span class="nx">_xmlnsSQLPrefix</span> <span class="o">=</span> <span class="s2">&quot;sql&quot;</span><span class="p">,</span>
     <span class="nx">_xmlnsSQL</span> <span class="o">=</span> <span class="nx">_ms</span> <span class="o">+</span> <span class="s2">&quot;xml-sql&quot;</span><span class="p">,</span>
-    <span class="nx">_xmlnsSchemaPrefix</span> <span class="o">=</span> <span class="s2">&quot;xsd&quot;</span><span class="p">,</span> 
     <span class="nx">_xmlnsSchema</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema&quot;</span><span class="p">,</span>
+    <span class="nx">_xmlnsSchemaPrefix</span> <span class="o">=</span> <span class="s2">&quot;xsd&quot;</span><span class="p">,</span> 
+    <span class="nx">_xmlnsSchemaInstance</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><span class="p">,</span>
+    <span class="nx">_xmlnsSchemaInstancePrefix</span> <span class="o">=</span> <span class="s2">&quot;xsi&quot;</span><span class="p">,</span> 
     <span class="nx">_xmlnsRowset</span> <span class="o">=</span> <span class="nx">_xmlnsXmla</span> <span class="o">+</span> <span class="s2">&quot;:rowset&quot;</span><span class="p">,</span>
     <span class="nx">_useAX</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ActiveXObject</span><span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span>
 <span class="p">;</span>    
@@ -87,13 +89,16 @@
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="o">===</span><span class="mi">200</span><span class="p">){</span>
-                    <span class="nx">options</span><span class="p">.</span><span class="nx">complete</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">);</span>
+                    <span class="nx">options</span><span class="p">.</span><span class="nx">complete</span><span class="p">(</span><span class="nx">xhr</span><span class="p">);</span>
                 <span class="p">}</span>
                 <span class="k">else</span> <span class="p">{</span>
-                    <span class="nx">options</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span> <span class="p">{</span>
-                        <span class="nx">statusCode</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span>
-                        <span class="nx">statusText</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">statusText</span>
-                    <span class="p">});</span>
+                    <span class="nx">options</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span>
+                        <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span><span class="p">(</span>
+                            <span class="s2">&quot;HTTP_ERROR&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_ajax&quot;</span><span class="p">,</span>
+                            <span class="nx">options</span>
+                        <span class="p">)</span>
+                    <span class="p">);</span>
                 <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
@@ -155,15 +160,18 @@
 <span class="p">};</span>
 
 
-<span class="kd">function</span> <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">listType</span><span class="p">,</span> <span class="nx">items</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="nx">container</span><span class="p">,</span> <span class="nx">listType</span><span class="p">,</span> <span class="nx">items</span><span class="p">,</span> <span class="nx">indent</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">indent</span><span class="p">){</span>
+        <span class="nx">indent</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">item</span><span class="p">;</span>
-        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot; &lt;&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">property</span> <span class="k">in</span> <span class="nx">items</span><span class="p">){</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">items</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span> <span class="p">{</span>
                 <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
-                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">property</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot;  &lt;&quot;</span> <span class="o">+</span> <span class="nx">property</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
                 <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span><span class="o">===</span><span class="s2">&quot;array&quot;</span><span class="p">){</span>
                     <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">numItems</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">numItems</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
                         <span class="nx">entry</span> <span class="o">=</span> <span class="nx">item</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
@@ -175,9 +183,9 @@
                 <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">property</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+        <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot; &lt;/&quot;</span> <span class="o">+</span> <span class="nx">listType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
+    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&quot;</span> <span class="o">+</span> <span class="nx">indent</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">container</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">;</span>
     <span class="k">return</span> <span class="nx">msg</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -188,9 +196,9 @@
 <span class="p">){</span>
     <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsSOAPenvelope</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
-    <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
-    <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsXmla</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
+    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsSOAPenvelope</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
+    <span class="s2">&quot;\n &lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
+    <span class="s2">&quot;\n  &lt;&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_xmlnsIsXmla</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">_SOAPencodingStyle</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span>
     <span class="p">;</span>
     <span class="kd">var</span> <span class="nx">exception</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
@@ -203,9 +211,9 @@
                 <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestType</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
-                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">,</span> <span class="s2">&quot;RestrictionList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">restrictions</span><span class="p">)</span> <span class="o">+</span> 
-                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">)</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n   &lt;&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestType</span> <span class="o">+</span> <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlRequestType</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
+                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">,</span> <span class="s2">&quot;RestrictionList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">restrictions</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span> <span class="o">+</span> 
+                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span>
                 <span class="p">;</span>
             <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
@@ -218,8 +226,11 @@
                 <span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&lt;Command&gt;&lt;Statement&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">statement</span> <span class="o">+</span> <span class="s2">&quot;&lt;/Statement&gt;&lt;/Command&gt;&quot;</span> <span class="o">+</span> 
-                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">)</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span> <span class="o">+</span> 
+                <span class="s2">&quot;\n   &lt;Command&gt;&quot;</span> <span class="o">+</span>
+                <span class="s2">&quot;\n    &lt;Statement&gt;&quot;</span> <span class="o">+</span> <span class="nx">options</span><span class="p">.</span><span class="nx">statement</span> <span class="o">+</span> <span class="s2">&quot;&lt;/Statement&gt;&quot;</span> <span class="o">+</span> 
+                <span class="s2">&quot;\n   &lt;/Command&gt;&quot;</span> <span class="o">+</span> 
+                <span class="nx">_getXmlaSoapList</span><span class="p">(</span><span class="s2">&quot;Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;PropertyList&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span>
                 <span class="p">;</span>
             <span class="p">}</span>
             <span class="k">break</span><span class="p">;</span>
@@ -231,9 +242,9 @@
     <span class="k">if</span> <span class="p">(</span><span class="nx">exception</span><span class="o">!==</span><span class="kc">null</span><span class="p">){</span>
         <span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
     <span class="p">}</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;   &lt;/&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
-        <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
-        <span class="s2">&quot;&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope&gt;&quot;</span>
+    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\n  &lt;/&quot;</span> <span class="o">+</span> <span class="nx">method</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> 
+        <span class="s2">&quot;\n &lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Body&gt;&quot;</span> <span class="o">+</span> 
+        <span class="s2">&quot;\n&lt;/&quot;</span> <span class="o">+</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span> <span class="o">+</span> <span class="s2">&quot;:Envelope&gt;&quot;</span>
     <span class="p">;</span>
     <span class="k">return</span> <span class="nx">msg</span><span class="p">;</span>
 <span class="p">}</span>
@@ -1063,6 +1074,14 @@
 <span class="cm">*/</span>
     <span class="nx">listeners</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 <span class="cm">/**</span>
+<span class="cm">*   The soap message sent in the last request to the server.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property soapMessage</span>
+<span class="cm">*   @type {string}</span>
+<span class="cm">*   @default &lt;code&gt;null&lt;/code&gt;</span>
+<span class="cm">*/</span>
+    <span class="nx">soapMessage</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="cm">/**</span>
 <span class="cm">*   This property is set to &lt;code&gt;null&lt;/code&gt; right before sending an XML/A request.</span>
 <span class="cm">*   When a successfull response is received, it is processed and the response object is assigned to this property.</span>
 <span class="cm">*   The response object is either a </span>
@@ -1134,9 +1153,14 @@
 <span class="cm">*   }&lt;/pre&gt;</span>
 <span class="cm">*   &lt;dl&gt;</span>
 <span class="cm">*       &lt;dt&gt;&lt;code&gt;events&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*       &lt;dd&gt;&lt;code&gt;string[]&lt;/code&gt; REQUIRED. This must be an array containing final static &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values. </span>
+<span class="cm">*       &lt;dd&gt;&lt;code&gt;string&lt;/code&gt;|&lt;code&gt;string[]&lt;/code&gt; REQUIRED. </span>
+<span class="cm">*       The event or events to listen to. </span>
+<span class="cm">*       You can specify a single event by using one of the &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values.</span>
+<span class="cm">*       You can specify multiple events by using an array of &lt;code&gt;EVENT_XXX&lt;/code&gt; string constant values.</span>
 <span class="cm">*       You can also use one of the predefined &lt;code&gt;EVENT_XXX&lt;/code&gt; array constant values, </span>
 <span class="cm">*       or use array concatenation and compose a custom list of event names.</span>
+<span class="cm">*       To listen to all events, either use &lt;code&gt;&lt;a href=&quot;#property_EVENT_ALL&quot;&gt;EVENT_ALL&lt;/a&gt;&lt;/code&gt;, </span>
+<span class="cm">*       or otherwise the &lt;code&gt;string&lt;/code&gt; value &lt;code&gt;&quot;all&quot;&lt;/code&gt;.</span>
 <span class="cm">*       &lt;/dd&gt;</span>
 <span class="cm">*       &lt;dt&gt;&lt;code&gt;boolean handler(eventName, eventData, xmla)&lt;/code&gt;&lt;/dt&gt;</span>
 <span class="cm">*       &lt;dd&gt;&lt;code&gt;function&lt;/code&gt; REQUIRED. This function will be called and notified whenever one of the specified events occurs.</span>
@@ -1145,7 +1169,9 @@
 <span class="cm">*       The &lt;code&gt;handler&lt;/code&gt; function has the following arguments:</span>
 <span class="cm">*           &lt;dl&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;eventName&lt;/code&gt;&lt;/dt&gt;</span>
-<span class="cm">*               &lt;dd&gt;&lt;code&gt;string&lt;/code&gt; The event for which notification is give. Use the &lt;code&gt;EVENT_XXX&lt;/code&gt; constants to check the &lt;code&gt;eventName&lt;/code&gt;.&lt;/dd&gt;</span>
+<span class="cm">*               &lt;dd&gt;&lt;code&gt;string&lt;/code&gt; The event for which notification is given. </span>
+<span class="cm">*               This is useful to distinguish between events in case the same handler function is used for multiple events.</span>
+<span class="cm">*               In this case, use the &lt;code&gt;EVENT_XXX&lt;/code&gt; constants to check the &lt;code&gt;eventName&lt;/code&gt;.&lt;/dd&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;eventData&lt;/code&gt;&lt;/dt&gt;</span>
 <span class="cm">*               &lt;dd&gt;&lt;code&gt;Object&lt;/code&gt; An object that conveys event-specific data.&lt;/dd&gt;</span>
 <span class="cm">*               &lt;dt&gt;&lt;code&gt;xmla&lt;/code&gt;&lt;/dt&gt;</span>
@@ -1249,15 +1275,7 @@
         <span class="p">}</span>
         <span class="k">else</span> 
         <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span><span class="o">===</span><span class="s2">&quot;error&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
-                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
-                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultCode</span><span class="p">,</span>
-                <span class="nx">eventData</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">faultString</span><span class="p">,</span>
-                <span class="kc">null</span><span class="p">,</span>
-                <span class="s2">&quot;Xmla._fireEvent&quot;</span><span class="p">,</span>
-                <span class="nx">eventData</span>
-            <span class="p">);</span>
-            <span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
+            <span class="nx">eventData</span><span class="p">.</span><span class="nx">exception</span><span class="p">.</span><span class="nx">_throw</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">outcome</span><span class="p">;</span>
     <span class="p">},</span>
@@ -1387,7 +1405,7 @@
         <span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span> <span class="o">=</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span><span class="p">)</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span> <span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span><span class="p">;</span>
         
         <span class="kd">var</span> <span class="nx">soapMessage</span> <span class="o">=</span> <span class="nx">_getXmlaSoapMessage</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-        <span class="nx">options</span><span class="p">.</span><span class="nx">soapMessage</span> <span class="o">=</span> <span class="nx">soapMessage</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">soapMessage</span> <span class="o">=</span> <span class="nx">soapMessage</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">myXhr</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">ajaxOptions</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">async</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">async</span><span class="p">,</span>
@@ -1395,28 +1413,14 @@
             <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/xml&quot;</span><span class="p">,</span>
             <span class="nx">data</span><span class="o">:</span> <span class="nx">soapMessage</span><span class="p">,</span>
             <span class="nx">dataType</span><span class="o">:</span> <span class="s2">&quot;xml&quot;</span><span class="p">,</span>
-            <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">errorString</span><span class="p">,</span> <span class="nx">errorObject</span><span class="p">){</span>
-                <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestError</span><span class="p">({</span>
-                    <span class="nx">xmla</span><span class="o">:</span> <span class="nx">xmla</span><span class="p">,</span>
-                    <span class="nx">request</span><span class="o">:</span> <span class="nx">options</span><span class="p">,</span>
-                    <span class="nx">xhr</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">,</span>
-                    <span class="nx">error</span><span class="o">:</span> <span class="p">{</span>
-                        <span class="nx">errorCategory</span><span class="o">:</span> <span class="s2">&quot;xhrError&quot;</span><span class="p">,</span>
-                        <span class="nx">errorString</span><span class="o">:</span> <span class="nx">errorString</span><span class="p">,</span>
-                        <span class="nx">errorObject</span><span class="o">:</span> <span class="nx">errorObject</span>
-                    <span class="p">}</span>
-                <span class="p">});</span>
-            <span class="p">},</span>
-            <span class="nx">complete</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">){</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">textStatus</span><span class="o">===</span><span class="s2">&quot;success&quot;</span><span class="p">){</span>
-                    <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestSuccess</span><span class="p">({</span>
-                        <span class="nx">xmla</span><span class="o">:</span> <span class="nx">xmla</span><span class="p">,</span>
-                        <span class="nx">request</span><span class="o">:</span> <span class="nx">options</span><span class="p">,</span>
-                        <span class="nx">xhr</span><span class="o">:</span> <span class="nx">xhr</span><span class="p">,</span>
-                        <span class="nx">status</span><span class="o">:</span> <span class="nx">textStatus</span>
-                    <span class="p">});</span>
-                <span class="p">}</span>
-            <span class="p">},</span>
+            <span class="nx">error</span><span class="o">:</span>      <span class="kd">function</span><span class="p">(</span><span class="nx">exception</span><span class="p">){</span>
+                            <span class="nx">options</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="nx">exeception</span><span class="p">;</span>
+                            <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestError</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
+                        <span class="p">},</span>
+            <span class="nx">complete</span><span class="o">:</span>   <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">){</span>
+                            <span class="nx">options</span><span class="p">.</span><span class="nx">xhr</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">;</span>
+                            <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestSuccess</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+                        <span class="p">},</span>
             <span class="nx">url</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
             <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span>
         <span class="p">};</span>
@@ -1437,47 +1441,45 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">;</span>
     <span class="p">},</span>
-    <span class="nx">_requestError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">obj</span><span class="p">.</span><span class="nx">xmla</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+    <span class="nx">_requestError</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="p">},</span>
-    <span class="nx">_requestSuccess</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">xhr</span><span class="p">;</span>
+    <span class="nx">_requestSuccess</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">xhr</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">responseText</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
 
-        <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">request</span><span class="p">;</span> 
         <span class="kd">var</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">;</span>
         
         <span class="kd">var</span> <span class="nx">soapFault</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">,</span> <span class="nx">_xmlnsSOAPenvelope</span><span class="p">,</span> <span class="nx">_xmlnsSOAPenvelopePrefix</span><span class="p">,</span> <span class="s2">&quot;Fault&quot;</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">soapFault</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">//TODO: extract error info</span>
             <span class="nx">soapFault</span> <span class="o">=</span> <span class="nx">soapFault</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">faultCode</span> <span class="o">=</span> <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultcode&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">faultString</span> <span class="o">=</span> <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultstring&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">soapFaultObject</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">errorCategory</span><span class="o">:</span> <span class="s2">&quot;soapFault&quot;</span><span class="p">,</span>
-                <span class="nx">faultCode</span><span class="o">:</span> <span class="nx">faultCode</span><span class="p">,</span>
-                <span class="nx">faultString</span><span class="o">:</span> <span class="nx">faultString</span>
-            <span class="p">};</span>
-            <span class="nx">obj</span><span class="p">.</span><span class="nx">error</span> <span class="o">=</span> <span class="nx">soapFaultObject</span><span class="p">;</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
+                <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>
+                <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultcode&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">,</span>
+                <span class="nx">soapFault</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;faultstring&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">data</span><span class="p">,</span>
+                <span class="kc">null</span><span class="p">,</span>
+                <span class="s2">&quot;_requestSuccess&quot;</span><span class="p">,</span>
+                <span class="nx">request</span>
+            <span class="p">);</span>
             <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span><span class="o">:</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_ERROR</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_ERROR</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_EXECUTE</span><span class="o">:</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_ERROR</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_ERROR</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_ERROR</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_ERROR</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>        
             <span class="k">switch</span><span class="p">(</span><span class="nx">method</span><span class="p">){</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_DISCOVER</span><span class="o">:</span>
                     <span class="kd">var</span> <span class="nx">rowset</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">requestType</span><span class="p">);</span>
-                    <span class="nx">obj</span><span class="p">.</span><span class="nx">rowset</span> <span class="o">=</span> <span class="nx">rowset</span><span class="p">;</span>
+                    <span class="nx">request</span><span class="p">.</span><span class="nx">rowset</span> <span class="o">=</span> <span class="nx">rowset</span><span class="p">;</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">response</span> <span class="o">=</span> <span class="nx">rowset</span><span class="p">;</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_SUCCESS</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_DISCOVER_SUCCESS</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
                 <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">METHOD_EXECUTE</span><span class="o">:</span>
                     <span class="kd">var</span> <span class="nx">resultset</span><span class="p">;</span>
@@ -1489,12 +1491,12 @@
                         <span class="k">case</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="o">:</span>
                             <span class="k">break</span><span class="p">;</span>
                     <span class="p">}</span>                    
-                    <span class="nx">obj</span><span class="p">.</span><span class="nx">resultset</span> <span class="o">=</span> <span class="nx">resultset</span><span class="p">;</span>
+                    <span class="nx">request</span><span class="p">.</span><span class="nx">resultset</span> <span class="o">=</span> <span class="nx">resultset</span><span class="p">;</span>
                     <span class="k">this</span><span class="p">.</span><span class="nx">response</span> <span class="o">=</span> <span class="nx">resultset</span><span class="p">;</span>
-                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_SUCCESS</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+                    <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_EXECUTE_SUCCESS</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
                     <span class="k">break</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_SUCCESS</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">_fireEvent</span><span class="p">(</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">EVENT_SUCCESS</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
@@ -1563,9 +1565,6 @@
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">])){</span>
             <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span><span class="p">])){</span>
-            <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_AXISFORMAT_CLUSTER</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">_applyProperties</span><span class="p">(</span>
             <span class="nx">options</span><span class="p">,</span>
@@ -2201,6 +2200,34 @@
 <span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
 <span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
 <span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CATALOG_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the catalog&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;DESCRIPTION&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Human readable description&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;ROLES&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;A comma-separatd list of roles available to the current user.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;DATE_MODIFIED&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Date&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The date this catalog was modified&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   @method discoverDBCatalogs</span>
 <span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; request. </span>
@@ -2403,6 +2430,55 @@
 <span class="cm">*           &lt;th&gt;Description&lt;/th&gt;</span>
 <span class="cm">*           &lt;th&gt;Restriction&lt;/th&gt;</span>
 <span class="cm">*           &lt;th&gt;Nullable&lt;/th&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CATALOG_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the catalog&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;SCHEMA_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Not supported&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CUBE_NAME&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Name of the cube.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CUBE_TYPE&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Type of the cube.&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CUBE_GUID&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Not supported&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;CREATED_ON&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Date&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Not supported&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
+<span class="cm">*       &lt;/tr&gt;</span>
+<span class="cm">*       &lt;tr&gt;</span>
+<span class="cm">*           &lt;td&gt;LAST_SCHEMA_UPDATE&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Date&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;The last dat&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
 <span class="cm">*       &lt;/tr&gt;</span>
 <span class="cm">*   &lt;/table&gt;</span>
 <span class="cm">*   @method discoverMDCubes</span>
@@ -2695,54 +2771,70 @@
 <span class="cm">*   @param {string} requestTtype The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">fields</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">rowSchema</span> <span class="o">=</span> <span class="nx">_getRowSchema</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">rowSchema</span><span class="p">){</span>    
-        <span class="kd">var</span> <span class="nx">seq</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">rowSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchemaPrefix</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-            <span class="nx">seqChildren</span> <span class="o">=</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">,</span> <span class="nx">numChildren</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">seqChild</span><span class="p">,</span>
-            <span class="nx">fieldLabel</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">,</span> <span class="nx">type</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">numChildren</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-            <span class="nx">seqChild</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">seqChild</span><span class="p">.</span><span class="nx">nodeType</span><span class="o">!=</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">continue</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">fieldLabel</span> <span class="o">=</span> <span class="nx">_getAttributeNS</span><span class="p">(</span><span class="nx">seqChild</span><span class="p">,</span> <span class="nx">_xmlnsSQL</span><span class="p">,</span> <span class="nx">_xmlnsSQLPrefix</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">);</span>
-            <span class="nx">fieldName</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span>
-            <span class="nx">type</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="nx">requestType</span><span class="o">==</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span> <span class="o">&amp;&amp;</span> <span class="nx">fieldName</span><span class="o">==</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;Restrictions&quot;</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="nx">minOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;minOccurs&quot;</span><span class="p">);</span>
-            <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;maxOccurs&quot;</span><span class="p">);</span>
-
-            <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">[</span><span class="nx">fieldLabel</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">name</span><span class="o">:</span> <span class="nx">fieldName</span><span class="p">,</span>
-                <span class="nx">label</span><span class="o">:</span> <span class="nx">fieldLabel</span><span class="p">,</span>
-                <span class="nx">index</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span><span class="o">++</span><span class="p">,</span>
-                <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span><span class="p">,</span>
-                <span class="nx">minOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">minOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="nx">minOccurs</span><span class="p">,</span>
-                <span class="nx">maxOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">maxOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="p">(</span><span class="nx">maxOccurs</span><span class="o">===</span><span class="s2">&quot;unbounded&quot;</span><span class="o">?</span><span class="kc">Infinity</span><span class="o">:</span><span class="nx">maxOccurs</span><span class="p">),</span>
-                <span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_createFieldGetter</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">)</span>
-            <span class="p">};</span>            
-            <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fieldLabel</span><span class="p">);</span>
-        <span class="p">}</span>        
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span><span class="p">(</span>
-            <span class="s2">&quot;ERROR_PARSING_RESPONSE&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Xmla.Rowset&quot;</span><span class="p">,</span>
-            <span class="nx">node</span>
-        <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
-    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_initData</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
 <span class="p">};</span>
 
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">_initData</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fields</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">rowSchema</span> <span class="o">=</span> <span class="nx">_getRowSchema</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">rowSchema</span><span class="p">){</span>    
+            <span class="kd">var</span> <span class="nx">seq</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">rowSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchema</span><span class="p">,</span> <span class="nx">_xmlnsSchemaPrefix</span><span class="p">,</span> <span class="s2">&quot;sequence&quot;</span><span class="p">).</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                <span class="nx">seqChildren</span> <span class="o">=</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">,</span> <span class="nx">numChildren</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">seqChild</span><span class="p">,</span>
+                <span class="nx">fieldLabel</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">valueConverter</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">numChildren</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+                <span class="nx">seqChild</span> <span class="o">=</span> <span class="nx">seqChildren</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">seqChild</span><span class="p">.</span><span class="nx">nodeType</span><span class="o">!=</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">fieldLabel</span> <span class="o">=</span> <span class="nx">_getAttributeNS</span><span class="p">(</span><span class="nx">seqChild</span><span class="p">,</span> <span class="nx">_xmlnsSQL</span><span class="p">,</span> <span class="nx">_xmlnsSQLPrefix</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">);</span>
+                <span class="nx">fieldName</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span>
+                <span class="nx">type</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">);</span>   <span class="c1">//get the type from the xsd</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">type</span><span class="o">==</span><span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>           <span class="c1">//bummer, not defined there try to get it from xsi:type in the row</span>
+                    <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">row</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                        <span class="nx">type</span> <span class="o">=</span> <span class="nx">_getAttributeNS</span><span class="p">(</span>
+                            <span class="nx">val</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> 
+                            <span class="nx">_xmlnsSchemaInstance</span><span class="p">,</span> 
+                            <span class="nx">_xmlnsSchemaInstancePrefix</span><span class="p">,</span> 
+                            <span class="s2">&quot;type&quot;</span>
+                        <span class="p">);</span>
+                    <span class="p">}</span>                    
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">type</span> <span class="o">&amp;&amp;</span> <span class="nx">requestType</span><span class="o">==</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span> <span class="o">&amp;&amp;</span> <span class="nx">fieldName</span><span class="o">==</span><span class="s2">&quot;Restrictions&quot;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;Restrictions&quot;</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">minOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;minOccurs&quot;</span><span class="p">);</span>
+                <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="nx">seqChild</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s2">&quot;maxOccurs&quot;</span><span class="p">);</span>
+                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_getValueConverter</span><span class="p">(</span><span class="nx">type</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">[</span><span class="nx">fieldLabel</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="nx">name</span><span class="o">:</span> <span class="nx">fieldName</span><span class="p">,</span>
+                    <span class="nx">label</span><span class="o">:</span> <span class="nx">fieldLabel</span><span class="p">,</span>
+                    <span class="nx">index</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span><span class="o">++</span><span class="p">,</span>
+                    <span class="nx">type</span><span class="o">:</span> <span class="nx">type</span><span class="p">,</span>
+                    <span class="nx">jsType</span><span class="o">:</span> <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span><span class="p">,</span>
+                    <span class="nx">minOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">minOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="nx">minOccurs</span><span class="p">,</span>
+                    <span class="nx">maxOccurs</span><span class="o">:</span> <span class="nx">_isUndefined</span><span class="p">(</span><span class="nx">maxOccurs</span><span class="p">)</span><span class="o">?</span> <span class="mi">1</span><span class="o">:</span> <span class="p">(</span><span class="nx">maxOccurs</span><span class="o">===</span><span class="s2">&quot;unbounded&quot;</span><span class="o">?</span><span class="kc">Infinity</span><span class="o">:</span><span class="nx">maxOccurs</span><span class="p">),</span>
+                    <span class="nx">getter</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_createFieldGetter</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">)</span>
+                <span class="p">};</span>            
+                <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">fieldLabel</span><span class="p">);</span>
+            <span class="p">}</span>        
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span><span class="p">(</span>
+                <span class="s2">&quot;ERROR_PARSING_RESPONSE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Xmla.Rowset&quot;</span><span class="p">,</span>
+                <span class="nx">node</span>
+            <span class="p">).</span><span class="nx">_throw</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
     <span class="nx">_boolConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
         <span class="k">return</span> <span class="nx">val</span><span class="o">===</span><span class="s2">&quot;true&quot;</span><span class="o">?</span><span class="kc">true</span><span class="o">:</span><span class="kc">false</span><span class="p">;</span>
     <span class="p">},</span>
@@ -2788,23 +2880,18 @@
             <span class="k">return</span> <span class="nx">text</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="nx">_createFieldGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">){</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">minOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
-            <span class="nx">minOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span> <span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">maxOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
-            <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span>    
-        <span class="p">}</span>
-        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="kd">var</span> <span class="nx">valueConverter</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>        
+    <span class="nx">_getValueConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">type</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">valueConverter</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="k">switch</span> <span class="p">(</span><span class="nx">type</span><span class="p">){</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:boolean&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_boolConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_boolConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;boolean&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:decimal&quot;</span><span class="o">:</span> <span class="c1">//FIXME: not sure if you can use parseFloat for this.</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:double&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:float&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_floatConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_floatConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;number&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:int&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:integer&quot;</span><span class="o">:</span>
@@ -2819,18 +2906,32 @@
             <span class="k">case</span> <span class="s2">&quot;xsd:unsignedInt&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:unsignedShort&quot;</span><span class="o">:</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:unsignedByte&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_intConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_intConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;number&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;xsd:string&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;Restrictions&quot;</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_restrictionsConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_restrictionsConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">default</span><span class="o">:</span>
-                <span class="nx">valueConverter</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">valueConverter</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_createFieldGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">,</span> <span class="nx">valueConverter</span><span class="p">,</span> <span class="nx">minOccurs</span><span class="p">,</span> <span class="nx">maxOccurs</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">minOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+            <span class="nx">minOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span> <span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">maxOccurs</span> <span class="o">===</span> <span class="kc">null</span><span class="p">){</span>
+            <span class="nx">maxOccurs</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">;</span>    
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="kd">var</span> <span class="nx">getter</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">maxOccurs</span><span class="o">===</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">if</span><span class="p">(</span><span class="nx">minOccurs</span><span class="o">===</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="p">{</span>
@@ -3289,6 +3390,21 @@
                                     <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_CDE</span>  <span class="o">+</span> 
                                     <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_MSG</span><span class="p">;</span>
                                     
+<span class="cm">/**</span>
+<span class="cm">*   Exception code indicating a general XMLHttpRequest error.</span>
+<span class="cm">*</span>
+<span class="cm">*   @property HTTP_ERROR</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type {int}</span>
+<span class="cm">*   @default &lt;code&gt;-10&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">HTTP_ERROR_CDE</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">;</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">HTTP_ERROR_MSG</span> <span class="o">=</span> <span class="s2">&quot;HTTP Error&quot;</span><span class="p">;</span> 
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">HTTP_ERROR_HLP</span> <span class="o">=</span> <span class="nx">_exceptionHlp</span> <span class="o">+</span> 
+                                    <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_CDE</span>  <span class="o">+</span> 
+                                    <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">INVALID_FIELD_MSG</span><span class="p">;</span>
+
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">_newError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">codeName</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">(</span>
         <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Exception</span><span class="p">.</span><span class="nx">TYPE_ERROR</span><span class="p">,</span>

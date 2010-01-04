@@ -32,8 +32,10 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsIsXmla = "xmlns=\"" + _xmlnsXmla + "\"",
     _xmlnsSQLPrefix = "sql",
     _xmlnsSQL = _ms + "xml-sql",
-    _xmlnsSchemaPrefix = "xsd", 
     _xmlnsSchema = "http://www.w3.org/2001/XMLSchema",
+    _xmlnsSchemaPrefix = "xsd", 
+    _xmlnsSchemaInstance = "http://www.w3.org/2001/XMLSchema-instance",
+    _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
     _useAX = window.ActiveXObject? true : false
 ;    
@@ -87,13 +89,16 @@ function _ajax(options){
                 break;
             case 4:
                 if (xhr.status===200){
-                    options.complete(xhr, "success");
+                    options.complete(xhr);
                 }
                 else {
-                    options.error(xhr, xhr.status, {
-                        statusCode: xhr.status,
-                        statusText: xhr.statusText
-                    });
+                    options.error(
+                        Xmla.Exception._newError(
+                            "HTTP_ERROR",
+                            "_ajax",
+                            options
+                        )
+                    );
                 }
             break;
         }
@@ -155,15 +160,18 @@ var _getAttributeNS = function(element, ns, prefix, attributeName){
 };
 
 
-function _getXmlaSoapList(container, listType, items){
-    var msg = "<" + container + ">";
+function _getXmlaSoapList(container, listType, items, indent){
+    if (!indent){
+        indent = "";
+    }
+    var msg = "\n" + indent + "<" + container + ">";
     if (items) {
         var item;
-        msg += "<" + listType + ">";
+        msg += "\n" + indent + " <" + listType + ">";
         for (var property in items){
             if (items.hasOwnProperty(property)) {
                 item = items[property];
-                msg += "<" + property + ">";
+                msg += "\n" + indent + "  <" + property + ">";
                 if (typeof(item)==="array"){
                     for (var entry, i=0, numItems = item.length; i<numItems; i++){
                         entry = item[i];
@@ -175,9 +183,9 @@ function _getXmlaSoapList(container, listType, items){
                 msg += "</" + property + ">";
             }
         }
-        msg += "</" + listType + ">";
+        msg += "\n" + indent + " </" + listType + ">";
     }
-    msg += "</" + container + ">";
+    msg += "\n" + indent + "</" + container + ">";
     return msg;
 }
 
@@ -188,9 +196,9 @@ function _getXmlaSoapMessage(
 ){
     var msg = "";
     var method = options.method;
-    msg += "<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
-    "<" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
-    "<" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
+    msg += "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
+    "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+    "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
     var exception = null;
     switch(method){
@@ -203,9 +211,9 @@ function _getXmlaSoapMessage(
                 );
             }
             else {
-                msg += "<" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" + 
-                _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions) + 
-                _getXmlaSoapList("Properties", "PropertyList", options.properties)
+                msg += "\n   <" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" + 
+                _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions, "   ") + 
+                _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
             }
             break;
@@ -218,8 +226,11 @@ function _getXmlaSoapMessage(
                 );
             }
             else {
-                msg += "<Command><Statement>" + options.statement + "</Statement></Command>" + 
-                _getXmlaSoapList("Properties", "PropertyList", options.properties)
+                msg += "" + 
+                "\n   <Command>" +
+                "\n    <Statement>" + options.statement + "</Statement>" + 
+                "\n   </Command>" + 
+                _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
             }
             break;
@@ -231,9 +242,9 @@ function _getXmlaSoapMessage(
     if (exception!==null){
         exception._throw();
     }
-    msg += "   </" + method + ">" + 
-        "</" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
-        "</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
+    msg += "\n  </" + method + ">" + 
+        "\n </" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+        "\n</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
     ;
     return msg;
 }
@@ -1063,6 +1074,14 @@ Xmla.prototype = {
 */
     listeners: null,
 /**
+*   The soap message sent in the last request to the server.
+*
+*   @property soapMessage
+*   @type {string}
+*   @default <code>null</code>
+*/
+    soapMessage: null,
+/**
 *   This property is set to <code>null</code> right before sending an XML/A request.
 *   When a successfull response is received, it is processed and the response object is assigned to this property.
 *   The response object is either a 
@@ -1134,9 +1153,14 @@ Xmla.prototype = {
 *   }</pre>
 *   <dl>
 *       <dt><code>events</code></dt>
-*       <dd><code>string[]</code> REQUIRED. This must be an array containing final static <code>EVENT_XXX</code> string constant values. 
+*       <dd><code>string</code>|<code>string[]</code> REQUIRED. 
+*       The event or events to listen to. 
+*       You can specify a single event by using one of the <code>EVENT_XXX</code> string constant values.
+*       You can specify multiple events by using an array of <code>EVENT_XXX</code> string constant values.
 *       You can also use one of the predefined <code>EVENT_XXX</code> array constant values, 
 *       or use array concatenation and compose a custom list of event names.
+*       To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>, 
+*       or otherwise the <code>string</code> value <code>"all"</code>.
 *       </dd>
 *       <dt><code>boolean handler(eventName, eventData, xmla)</code></dt>
 *       <dd><code>function</code> REQUIRED. This function will be called and notified whenever one of the specified events occurs.
@@ -1145,7 +1169,9 @@ Xmla.prototype = {
 *       The <code>handler</code> function has the following arguments:
 *           <dl>
 *               <dt><code>eventName</code></dt>
-*               <dd><code>string</code> The event for which notification is give. Use the <code>EVENT_XXX</code> constants to check the <code>eventName</code>.</dd>
+*               <dd><code>string</code> The event for which notification is given. 
+*               This is useful to distinguish between events in case the same handler function is used for multiple events.
+*               In this case, use the <code>EVENT_XXX</code> constants to check the <code>eventName</code>.</dd>
 *               <dt><code>eventData</code></dt>
 *               <dd><code>Object</code> An object that conveys event-specific data.</dd>
 *               <dt><code>xmla</code></dt>
@@ -1249,15 +1275,7 @@ Xmla.prototype = {
         }
         else 
         if (eventName==="error") {
-            var exception = new Xmla.Exception(
-                Xmla.Exception.TYPE_ERROR,
-                eventData.error.faultCode,
-                eventData.error.faultString,
-                null,
-                "Xmla._fireEvent",
-                eventData
-            );
-            exception._throw();
+            eventData.exception._throw();
         }
         return outcome;
     },
@@ -1387,7 +1405,7 @@ Xmla.prototype = {
         options.requestTimeout = _isUndefined(options.requestTimeout) ? this.options.requestTimeout : options.requestTimeout;
         
         var soapMessage = _getXmlaSoapMessage(options);
-        options.soapMessage = soapMessage;
+        this.soapMessage = soapMessage;
         var myXhr;
         var ajaxOptions = {
             async: options.async,
@@ -1395,28 +1413,14 @@ Xmla.prototype = {
             contentType: "text/xml",
             data: soapMessage,
             dataType: "xml",
-            error: function(xhr, errorString, errorObject){
-                xmla._requestError({
-                    xmla: xmla,
-                    request: options,
-                    xhr: xhr,
-                    error: {
-                        errorCategory: "xhrError",
-                        errorString: errorString,
-                        errorObject: errorObject
-                    }
-                });
-            },
-            complete: function(xhr, textStatus){
-                if (textStatus==="success"){
-                    xmla._requestSuccess({
-                        xmla: xmla,
-                        request: options,
-                        xhr: xhr,
-                        status: textStatus
-                    });
-                }
-            },
+            error:      function(exception){
+                            options.exception = exeception;
+                            xmla._requestError(options)
+                        },
+            complete:   function(xhr){
+                            options.xhr = xhr;
+                            xmla._requestSuccess(options);
+                        },
             url: options.url,
             type: "POST"
         };
@@ -1437,47 +1441,45 @@ Xmla.prototype = {
         }
         return this.response;
     },
-    _requestError: function(obj) {
-        obj.xmla = this;
-        this._fireEvent("error", obj);
+    _requestError: function(options) {
+        this._fireEvent("error", options);
     },
-    _requestSuccess: function(obj) {
-        var xhr = obj.xhr;
+    _requestSuccess: function(request) {
+        var xhr = request.xhr;
         this.responseXML = xhr.responseXML;
         this.responseText = xhr.responseText;
 
-        var request = obj.request; 
         var method = request.method;
         
         var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, "Fault");
         if (soapFault.length) {
             //TODO: extract error info
             soapFault = soapFault.item(0);
-            var faultCode = soapFault.getElementsByTagName("faultcode").item(0).childNodes.item(0).data;
-            var faultString = soapFault.getElementsByTagName("faultstring").item(0).childNodes.item(0).data;
-            var soapFaultObject = {
-                errorCategory: "soapFault",
-                faultCode: faultCode,
-                faultString: faultString
-            };
-            obj.error = soapFaultObject;
+            request.exception = new Xmla.Exception(
+                Xmla.Exception.TYPE_ERROR,
+                soapFault.getElementsByTagName("faultcode").item(0).childNodes.item(0).data,
+                soapFault.getElementsByTagName("faultstring").item(0).childNodes.item(0).data,
+                null,
+                "_requestSuccess",
+                request
+            );
             switch(method){
                 case Xmla.METHOD_DISCOVER:
-                    this._fireEvent(Xmla.EVENT_DISCOVER_ERROR, obj);
+                    this._fireEvent(Xmla.EVENT_DISCOVER_ERROR, request);
                     break;
                 case Xmla.METHOD_EXECUTE:
-                    this._fireEvent(Xmla.EVENT_EXECUTE_ERROR, obj);
+                    this._fireEvent(Xmla.EVENT_EXECUTE_ERROR, request);
                     break;
             }
-            this._fireEvent(Xmla.EVENT_ERROR, obj);
+            this._fireEvent(Xmla.EVENT_ERROR, request);
         }
         else {        
             switch(method){
                 case Xmla.METHOD_DISCOVER:
                     var rowset = new Xmla.Rowset(this.responseXML, request.requestType);
-                    obj.rowset = rowset;
+                    request.rowset = rowset;
                     this.response = rowset;
-                    this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, obj);
+                    this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, request);
                     break;
                 case Xmla.METHOD_EXECUTE:
                     var resultset;
@@ -1489,12 +1491,12 @@ Xmla.prototype = {
                         case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
                             break;
                     }                    
-                    obj.resultset = resultset;
+                    request.resultset = resultset;
                     this.response = resultset;
-                    this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, obj);
+                    this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, request);
                     break;
             }
-            this._fireEvent(Xmla.EVENT_SUCCESS, obj);
+            this._fireEvent(Xmla.EVENT_SUCCESS, request);
         }
     },
 /**
@@ -1563,9 +1565,6 @@ Xmla.prototype = {
         }
         if (_isUndefined(properties[Xmla.PROP_FORMAT])){
             options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
-        }
-        if (_isUndefined(properties[Xmla.PROP_AXISFORMAT])){
-            options.properties[Xmla.PROP_AXISFORMAT] = Xmla.PROP_AXISFORMAT_CLUSTER;
         }
         var request = _applyProperties(
             options,
@@ -2201,6 +2200,34 @@ Xmla.prototype = {
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>Human readable description</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>ROLES</td>
+*           <td>string</td>
+*           <td>A comma-separatd list of roles available to the current user.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DATE_MODIFIED</td>
+*           <td>Date</td>
+*           <td>The date this catalog was modified</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
 *   </table>
 *   @method discoverDBCatalogs
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_CATALOGS</code> request. 
@@ -2403,6 +2430,55 @@ Xmla.prototype = {
 *           <th>Description</th>
 *           <th>Restriction</th>
 *           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_TYPE</td>
+*           <td>string</td>
+*           <td>Type of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_GUID</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CREATED_ON</td>
+*           <td>Date</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LAST_SCHEMA_UPDATE</td>
+*           <td>Date</td>
+*           <td>The last dat</td>
+*           <td>Yes</td>
+*           <td>No</td>
 *       </tr>
 *   </table>
 *   @method discoverMDCubes
@@ -2695,54 +2771,70 @@ function _getRowSchema(xmlDoc){
 *   @param {string} requestTtype The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.
 */
 Xmla.Rowset = function (node, requestType){
-    this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
-    this.numRows = this.rows? this.rows.length : 0;
-    this.rowIndex = 0;
-    this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
-    this.fieldOrder = [];
-    this.fields = {};
-    this._fieldCount = 0;
-    var rowSchema = _getRowSchema(node);
-    if (rowSchema){    
-        var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
-            seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
-            fieldLabel, fieldName, minOccurs, maxOccurs, type;
-        for (var i=0; i<numChildren; i++){
-            seqChild = seqChildren.item(i);
-            if (seqChild.nodeType!=1) {
-                continue;
-            }
-            fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
-            fieldName = seqChild.getAttribute("name");
-            type = seqChild.getAttribute("type");
-            if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
-                type = "Restrictions";
-            }
-            minOccurs = seqChild.getAttribute("minOccurs");
-            maxOccurs = seqChild.getAttribute("maxOccurs");
-
-            this.fields[fieldLabel] = {
-                name: fieldName,
-                label: fieldLabel,
-                index: this._fieldCount++,
-                type: type,
-                minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
-                maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs==="unbounded"?Infinity:maxOccurs),
-                getter: this._createFieldGetter(fieldName, type, minOccurs, maxOccurs)
-            };            
-            this.fieldOrder.push(fieldLabel);
-        }        
-    }
-    else {
-        Xmla.Exception._newError(
-            "ERROR_PARSING_RESPONSE",
-            "Xmla.Rowset",
-            node
-        )._throw();
-    }
+    this._initData(node, requestType);
+    return this;
 };
 
 Xmla.Rowset.prototype = {
+    _initData: function(node, requestType){
+        this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
+        this.numRows = this.rows? this.rows.length : 0;
+        this.rowIndex = 0;
+        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
+        this.fieldOrder = [];
+        this.fields = {};
+        this._fieldCount = 0;
+        var rowSchema = _getRowSchema(node);
+        if (rowSchema){    
+            var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
+                seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
+                fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter;
+            for (var i=0; i<numChildren; i++){
+                seqChild = seqChildren.item(i);
+                if (seqChild.nodeType!=1) {
+                    continue;
+                }
+                fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
+                fieldName = seqChild.getAttribute("name");
+                type = seqChild.getAttribute("type");   //get the type from the xsd
+                if (type==null && this.row) {           //bummer, not defined there try to get it from xsi:type in the row
+                    var val = this.row.getElementsByTagName(fieldName);
+                    if (val.length){
+                        type = _getAttributeNS(
+                            val.item(0), 
+                            _xmlnsSchemaInstance, 
+                            _xmlnsSchemaInstancePrefix, 
+                            "type"
+                        );
+                    }                    
+                }
+                if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
+                    type = "Restrictions";
+                }
+                minOccurs = seqChild.getAttribute("minOccurs");
+                maxOccurs = seqChild.getAttribute("maxOccurs");
+                valueConverter = this._getValueConverter(type);
+                this.fields[fieldLabel] = {
+                    name: fieldName,
+                    label: fieldLabel,
+                    index: this._fieldCount++,
+                    type: type,
+                    jsType: valueConverter.jsType,
+                    minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
+                    maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs==="unbounded"?Infinity:maxOccurs),
+                    getter: this._createFieldGetter(fieldName, valueConverter.func, minOccurs, maxOccurs)
+                };            
+                this.fieldOrder.push(fieldLabel);
+            }        
+        }
+        else {
+            Xmla.Exception._newError(
+                "ERROR_PARSING_RESPONSE",
+                "Xmla.Rowset",
+                node
+            )._throw();
+        }
+    },
     _boolConverter: function(val){
         return val==="true"?true:false;
     },
@@ -2788,23 +2880,18 @@ Xmla.Rowset.prototype = {
             return text;
         }
     },
-    _createFieldGetter: function(fieldName, type, minOccurs, maxOccurs){
-        if (minOccurs === null){
-            minOccurs = "1" ;
-        }
-        if (maxOccurs === null){
-            maxOccurs = "1";    
-        }
-        var me = this;
-        var valueConverter = null;        
+    _getValueConverter: function(type){
+        var valueConverter = {};
         switch (type){
             case "xsd:boolean":
-                valueConverter = me._boolConverter;
+                valueConverter.func = this._boolConverter;
+                valueConverter.jsType = "boolean";
                 break;
             case "xsd:decimal": //FIXME: not sure if you can use parseFloat for this.
             case "xsd:double":
             case "xsd:float":
-                valueConverter = me._floatConverter;
+                valueConverter.func = this._floatConverter;
+                valueConverter.jsType = "number";
                 break;
             case "xsd:int":
             case "xsd:integer":
@@ -2819,18 +2906,32 @@ Xmla.Rowset.prototype = {
             case "xsd:unsignedInt":
             case "xsd:unsignedShort":
             case "xsd:unsignedByte":
-                valueConverter = me._intConverter;
+                valueConverter.func = this._intConverter;
+                valueConverter.jsType = "number";
                 break;
             case "xsd:string":
-                valueConverter = me._textConverter;
+                valueConverter.func = this._textConverter;
+                valueConverter.jsType = "string";
                 break;
             case "Restrictions":
-                valueConverter = me._restrictionsConverter;
+                valueConverter.func = this._restrictionsConverter;
+                valueConverter.jsType = "object";
                 break;
             default:
-                valueConverter = me._textConverter;
+                valueConverter.func = this._textConverter;
+                valueConverter.jsType = "object";
                 break;
         }
+        return valueConverter;
+    },
+    _createFieldGetter: function(fieldName, valueConverter, minOccurs, maxOccurs){
+        if (minOccurs === null){
+            minOccurs = "1" ;
+        }
+        if (maxOccurs === null){
+            maxOccurs = "1";    
+        }
+        var me = this;
         var getter;
         if (maxOccurs==="1") {
             if(minOccurs==="1") {
@@ -3289,6 +3390,21 @@ Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp +
                                     "#" + Xmla.Exception.INVALID_FIELD_CDE  + 
                                     "_" + Xmla.Exception.INVALID_FIELD_MSG;
                                     
+/**
+*   Exception code indicating a general XMLHttpRequest error.
+*
+*   @property HTTP_ERROR
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-10</code>
+*/
+Xmla.Exception.HTTP_ERROR_CDE = -10;
+Xmla.Exception.HTTP_ERROR_MSG = "HTTP Error"; 
+Xmla.Exception.HTTP_ERROR_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.INVALID_FIELD_CDE  + 
+                                    "_" + Xmla.Exception.INVALID_FIELD_MSG;
+
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(
         Xmla.Exception.TYPE_ERROR,
