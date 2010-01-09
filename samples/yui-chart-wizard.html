@@ -1,0 +1,469 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: YUI Chart Wizard</title>
+        <link rel="stylesheet" type="text/css" href="http://localhost/yui/build/fonts/fonts-min.css" />
+        <link rel="stylesheet" type="text/css" href="http://localhost/yui/build/datatable/assets/skins/sam/datatable.css" />
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            #header {
+            }
+            #left-col {
+                width: 33.33%;
+                float: left;
+            }
+            #middle-col {
+                width: 33.33%;
+                float: left;
+            }
+            #right-col {
+                width: 33.33%;
+                float: left;
+            }
+            #footer {
+                clear: both;
+            }
+            #input_url {
+                position:relative;
+                left: 3em;
+                width:40em;
+            }
+            #button_discover_datasources {
+                position:absolute;
+            }
+            
+            #input_url,
+            #select_datasource, 
+            #select_catalog, 
+            #select_cube,
+            #select_visualization {
+                position:relative;
+                left: 7em;
+            }
+            
+            label {
+                position:absolute;
+            }
+        </style>
+    </head>
+    <body class="yui-skin-sam">
+        <div id="header">
+            <div>
+                <a href="../index.html">Home</a>
+                |
+                <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+                |
+                <a href="index.html">Samples</a>
+                |
+                <a href="../doc/api/index.html">API Reference Documentation</a>
+            </div>
+            <h1>Sample: YUI Chart wizard<img style="display:none" id="image_ajax_loader" src="../css/ajax-loader.gif"/></h1>
+
+            <fieldset>
+                <legend>XML/A Service</legend>
+                <label>URL:</label>
+                <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/>
+                <button id="button_discover_datasources">Discover Datasources...</button>
+            </fieldset>
+        </div>
+        <div id="left-col">
+            <fieldset>
+                <legend>Datasource</legend>
+                <div>
+                    <label>Datasource:</label>
+                    <select id="select_datasource"></select>
+                </div>
+                <div>
+                    <label>Catalog:</label>
+                    <select id="select_catalog"></select>
+                </div>
+                <div>
+                    <label>Cube:</label>
+                    <select id="select_cube"></select>
+                </div>
+            </fieldset>
+        </div>
+        <div id="middle-col">
+            <fieldset>
+                <legend>Measures:</legend>
+                <select multiple="true" id="select_measures"></select>
+            </fieldset>
+        </div>
+        <div id="right-col">
+            <fieldset>
+                <legend>Dimensions:</legend>
+                <select multiple="true" id="select_hierarchies"></select>
+            </fieldset>
+        </div>
+        <div id="footer">
+            <fieldset
+                style="
+                    position: relative;
+                "
+            >
+                <legend>Visualization</legend>                
+                <div>
+                    <label>Type:</label>
+                    <select id="select_visualization">
+                        <option>BarChart</option>
+                        <option>ColumnChart</option>
+                        <option>LineChart</option>
+                        <option>PieChart</option>
+                        <option>StackedBarChart</option>
+                        <option>StackedColumnChart</option>
+                    </select>
+                </div>
+                <button id="button_render_chart">Render...</button>
+                <pre id="section_query"></pre>
+                <div id="section_table"></div>
+                <div id="section_visualization"></div>
+            </fieldset>
+        </div>
+        
+        <script type="text/javascript" src="http://localhost/yui/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/json/json-min.js"></script>
+
+        <script type="text/javascript" src="http://localhost/yui/build/element/element-min.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/datasource/datasource-min.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/swf/swf-min.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/charts/charts-min.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/datatable/datatable-min.js"></script>
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        
+        <script type="text/javascript">
+            /*
+            *   references to the DOM
+            */
+            var button_discover_datasources = document.getElementById("button_discover_datasources"),
+                button_render_chart         = document.getElementById("button_render_chart"),
+                input_url                   = document.getElementById("input_url"),
+                select_datasource           = document.getElementById("select_datasource"),
+                select_catalog              = document.getElementById("select_catalog"),
+                select_cube                 = document.getElementById("select_cube"),
+                select_measures             = document.getElementById("select_measures"),
+                select_hierarchies          = document.getElementById("select_hierarchies"),
+                select_visualization        = document.getElementById("select_visualization"),
+                section_visualization       = document.getElementById("section_visualization"),
+                section_query               = document.getElementById("section_query"),
+                image_ajax_loader           = document.getElementById("image_ajax_loader"),
+            /*
+            *   local caches
+            */
+                datasources                 = null,
+                hierarchies                 = null,            
+            /*
+            *   misc
+            */
+                xmla                        = new Xmla({async: true}),
+                dataSource;
+                
+                YAHOO.widget.Chart.SWFURL   = "http://localhost/yui/build/charts/assets/charts.swf";
+            
+            /*
+            *   Functions to populate objects with data from xmla
+            */
+            
+            function populateSelect(config){                                
+                for (var str = "", i=0; i<config.options.length; i++){
+                    str += "<option>" + config.options[i][config.text] + "</option>";
+                }
+                config.select.innerHTML = str;
+            }
+            
+            function populateDatasources(rowset){
+                datasources = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_datasource,
+                    options: datasources,
+                    text: "DataSourceName"
+                });
+                rowset.close();
+                select_datasource.onchange();
+            }
+            
+            function populateCatalogs(rowset){
+                var catalogs = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_catalog,
+                    options: catalogs,
+                    text: "CATALOG_NAME"
+                });
+                rowset.close();
+                select_catalog.onchange();
+            }
+
+            function populateCubes(rowset){
+                var cubes = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_cube,
+                    options: cubes,
+                    text: "CUBE_NAME"
+                });
+                rowset.close();
+                select_cube.onchange();
+            }
+
+            function populateMeasures(rowset){
+                var measures = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_measures,
+                    options: measures,
+                    text: "MEASURE_NAME"
+                });
+                rowset.close();
+                
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+
+                var restrictions = {};
+                restrictions["CUBE_NAME"] = select_cube.value;
+                xmla.discoverMDHierarchies({
+                    url: datasource.URL,
+                    properties: properties,
+                    restrictions: restrictions
+                });                
+            }
+            
+            function populateHierarchies(rowset){
+                var hierarchy;
+                hierarchies = [];
+                while(hierarchy = rowset.fetchAsObject()){
+                    if (hierarchy["DIMENSION_TYPE"]==Xmla.Rowset.MD_DIMTYPE_MEASURE){
+                        continue;
+                    }
+                    hierarchies.push(hierarchy);
+                }
+                populateSelect({
+                    select: select_hierarchies
+                ,   options: hierarchies
+                ,   text: "HIERARCHY_NAME"
+                });
+                rowset.close();
+            }
+                       
+            function getYUIDataSource(rowset){
+                var data = rowset.fetchAllAsObject();
+                var dataSource = new YAHOO.util.DataSource(data); 
+                dataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY; 
+                dataSource.responseSchema = { 
+                    fields: rowset.getFieldNames()
+                }
+                return dataSource;
+            }
+                        
+            function render_graph(rowset){
+                var dataSource = getYUIDataSource(rowset);
+                var columnDefs = [];
+                for (var i=0, fieldNames = rowset.getFieldNames(), num=fieldNames.length; i<num; i++){
+                    columnDefs[i] = {key: fieldNames[i]};
+                }
+                var dataTable = new YAHOO.widget.DataTable(
+                    "section_table",
+                    columnDefs,
+                    dataSource,
+                    {}
+                );
+            }
+            
+            /*
+            *   Xmla event Handlers
+            */
+            function initAjaxLoader(){
+                xmla.addListener({
+                    events: Xmla.EVENT_GENERAL,
+                    handler: function(eventName){
+                        var display;
+                        switch (eventName) {
+                            case Xmla.EVENT_REQUEST:
+                                display = "";
+                                break;
+                            case Xmla.EVENT_SUCCESS:
+                            case Xmla.EVENT_ERROR:
+                                display = "none";
+                                break;
+                        }
+                        image_ajax_loader.style.display = display;
+                    }
+                });
+            }
+            function initDiscoverEvents(){
+                xmla.addListener({
+                    events: Xmla.EVENT_DISCOVER_SUCCESS,
+                    handler: function(eventName, eventData){
+                        var requestType = eventData.requestType;
+                        switch (requestType) { 
+                            case Xmla.DISCOVER_DATASOURCES:
+                                populateDatasources(eventData.rowset);
+                                break;
+                            case Xmla.DBSCHEMA_CATALOGS:
+                                populateCatalogs(eventData.rowset);
+                                break;
+                            case Xmla.MDSCHEMA_CUBES:
+                                populateCubes(eventData.rowset);
+                                break;
+                            case Xmla.MDSCHEMA_HIERARCHIES:
+                                populateHierarchies(eventData.rowset);
+                                break;
+                            case Xmla.MDSCHEMA_MEASURES:
+                                populateMeasures(eventData.rowset);
+                                break;
+                        }
+                    }
+                });
+            }
+            function initExecuteEvents(){
+                xmla.addListener({
+                    events: Xmla.EVENT_EXECUTE_SUCCESS,
+                    handler: function(eventName, eventData){
+                        var properties = eventData.properties;
+                        switch (properties[Xmla.PROP_FORMAT]){
+                            case Xmla.PROP_FORMAT_TABULAR:                                
+                                render_graph(eventData.resultset);
+                                break;
+                            case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
+                                break;
+                            default:
+                        }
+                    }
+                });
+            }
+            /*
+            *   DOM event Handlers
+            */
+            function button_discover_datasources_onclick(){            
+                select_datasource.innerHTML = "";
+                select_catalog.innerHTML = "";
+                select_cube.innerHTML = "";
+                select_measures.innerHTML = "";
+                xmla.discoverDataSources({
+                    url: input_url.value
+                });
+            }
+            
+            function select_datasource_onchange(){
+                if (!datasources.length){
+                    return;
+                }
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+
+                xmla.discoverDBCatalogs({
+                    url: datasource.URL,
+                    properties: properties
+                });
+            }
+            
+            function select_catalog_onchange(){
+                if (!select_catalog.options.length){
+                    return;
+                }
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+
+                xmla.discoverMDCubes({
+                    url: datasource.URL,
+                    properties: properties
+                });
+            }
+            
+            function select_cube_onchange(){
+                if (!select_cube.options.length){
+                    return;
+                }
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+
+                var restrictions = {};
+                restrictions["CUBE_NAME"] = select_cube.value;
+
+                xmla.discoverMDMeasures({
+                    url: datasource.URL,
+                    properties: properties,
+                    restrictions: restrictions
+                });
+            }
+            
+            function button_render_chart_onclick(){
+                var mdx = "SELECT\n{";
+                for (var measure, i=0, num = select_measures.length; i<num; i++){
+                    measure = select_measures[i];
+                    if (measure.selected){
+                        if (mdx!="SELECT\n{"){
+                            mdx += ","
+                        }
+                        mdx += "[Measures].[" + measure.value + "]";
+                    }
+                }
+                mdx += "} ON COLUMNS,\n{";
+                for (var hiearchy, i=0, num = select_hierarchies.length; i<num; i++){
+                    hierarchy = select_hierarchies[i];
+                    if (hierarchy.selected){
+                        hierarchy = hierarchies[i];
+                        mdx += hierarchy["DEFAULT_MEMBER"] + ".Children"
+                    }
+                }
+                mdx += "} ON ROWS ";
+                mdx += "\nFROM [" + select_cube.value + "]";
+                section_query.innerHTML = mdx;   
+                var datasource = datasources[select_datasource.selectedIndex];
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
+                xmla.execute({
+                    url: datasource.URL,
+                    properties: properties,
+                    statement: mdx
+                });
+            }
+            
+            function select_visualization_onchange(){
+                switch (select_visualization.value) {
+                    case "BarChart":
+                        break;
+                    case "PieChart":
+                        
+                        break;
+                    case "Scatterplot":
+                        break;
+                }
+            }
+            /*
+            *   Initialization
+            */
+            function init(){
+                
+                initAjaxLoader();
+                initDiscoverEvents();
+                initExecuteEvents();
+                
+                button_discover_datasources.onclick = button_discover_datasources_onclick;
+                button_render_chart.onclick         = button_render_chart_onclick;
+                
+                select_datasource.onchange          = select_datasource_onchange;
+                select_catalog.onchange             = select_catalog_onchange;
+                select_cube.onchange                = select_cube_onchange;
+                select_visualization.onchange       = select_visualization_onchange;
+                
+            }
+
+            YAHOO.util.Event.addListener(window, "load", function() { 
+                init();
+            });
+        </script>
+    </body>
+</html>

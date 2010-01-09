@@ -1,5 +1,6 @@
 /*
-    Copyright 2009, Roland Bouman (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/)
+    Copyright 2009,2010 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     
     Note: some portions of the API documentation were adopted from the original XML/A specification. 
     I believe that this constitutes fair use, 
@@ -56,21 +57,6 @@ function _ajax(options){
 /*
     This is not a general ajax function, 
     just something that is good enough for Xmla.
-
-    Requirement is that the responseXML can be used directly for XSLT.
-    We cannot rely on jQuery using the right object out of the mess of msxml
-    Also, since we found out that we cannot use jQuery css selectors to parse XMLA results in all browsers,
-    we moved to straight dom traversal, leaving the ajax as only jQuery dependency. 
-    We think we can end up with a leaner xmla lib if we can ditch the jQuery dependency
-    
-    options we need to support:
-    
-    async
-    data: soapMessage
-    error: callback
-    complete: callback
-    url: 
-    type: (GET, POST)
 */
     var xhr;
     if (_useAX) {
@@ -300,6 +286,7 @@ Xmla = function(options){
         options,
         true
     );
+    return this;
 };
 
 Xmla.defaultOptions = {
@@ -910,11 +897,72 @@ Xmla.EVENT_ALL = [].concat(
 *   @default <code>DataSourceInfo</code>
 */
 Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
+/**
+*   Can be used as key in the <code>properties</code> member of the <code>options</code> object 
+*   passed to the <code><a href="#method_request">execute()</a></code> method 
+*   to specify the XML/A <code>Catalog</code> property.
+*   The XML/A <code>Catalog</code> spefifies where to look for cubes that are referenced in th MDX statment.
+*   Valid values for the <code>Catalog</code> should be obtained
+*   by querying the <code>CATALOG_NAME</code> of the <code>DBSCHEMA_CATALOGS</code> 
+*   rowset (see <code><a href="method_discoverCatalogs">discoverCatalogs()</a></code>).
+*
+*   @property PROP_Catalog
+*   @static
+*   @final
+*   @type string
+*   @default <code>DataSourceInfo</code>
+*/
 Xmla.PROP_CATALOG = "Catalog";
 Xmla.PROP_CUBE = "Cube";
 
+/**
+*   Can be used as key in the <code>properties</code> member of the <code>options</code> object 
+*   passed to the <code><a href="#method_execute">execute()</a></code> method 
+*   to specify the XML/A <code>Format</code> property.
+*   This property controls the structure of the resultset.
+*
+*   @property PROP_FORMAT
+*   @static
+*   @final
+*   @type string
+*   @default <code>Format</code>
+*/
 Xmla.PROP_FORMAT = "Format";
+/**
+*   Can be used as value for the 
+*   <code><a href="#property_PROP_FORMAT>PROP_FORMAT</a></code> key of the 
+*   <code>properties</code> member of the 
+*   <code>options</code> object passed to the 
+*   <code><a href="#method_execute">execute()</a></code> method. 
+*   When used, this specifies that the multidimensional resultset should be returned in a tabular format,
+*   causeing the multidimensional resultset to be represented with an instance of the  
+*   <code><a href="Xmla.Rowset#class_Xmla.Rowset">Xmla.Rowset</a></code> class.
+*
+*   @property PROP_FORMAT_TABULAR
+*   @static
+*   @final
+*   @type string
+*   @default <code>Tabular</code>
+*/
 Xmla.PROP_FORMAT_TABULAR = "Tabular";
+/**
+*   Can be used as value for the 
+*   <code><a href="#property_PROP_FORMAT>PROP_FORMAT</a></code> key of the 
+*   <code>properties</code> member of the 
+*   <code>options</code> object passed to the 
+*   <code><a href="#method_execute">execute()</a></code> method. 
+*   When used, this specifies that the multidimensional resultset should be returned in a multidimensional format.
+*   Currently, Xmla4js does not provide a class to represent the resultset in this format.
+*   However, you can access the results as xml through the 
+*   <code><a href="#property_responseText">responseText</a></code> and
+*   <code><a href="#property_responseXML">responseXML</a></code> properties.
+*
+*   @property PROP_FORMAT_MULTIDIMENSIONAL  
+*   @static
+*   @final
+*   @type string
+*   @default <code>Multidimensional</code>
+*/
 Xmla.PROP_FORMAT_MULTIDIMENSIONAL = "Multidimensional";
 
 /**
@@ -1657,7 +1705,7 @@ Xmla.prototype = {
 *   or one of the specialized <code>discoverXXX()</code> methods to obtain a particular schema rowset.
 *   @method discover
 *   @param {Object} options An object whose properties convey the options for the XML/A <code>Discover</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discover: function(options) {        
         var request = _applyProperties(
@@ -1817,7 +1865,7 @@ Xmla.prototype = {
 *   
 *   @method discoverDataSources
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverDataSources: function(options){
         var request = _applyProperties(
@@ -1953,7 +2001,7 @@ Xmla.prototype = {
 *   
 *   @method discoverProperties
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverProperties: function(options){
         var request = _applyProperties(
@@ -2003,7 +2051,7 @@ Xmla.prototype = {
 *
 *   @method discoverSchemaRowsets
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DISCOVER_SCHEMA_ROWSETS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverSchemaRowsets: function(options){
         var request = _applyProperties(
@@ -2074,7 +2122,7 @@ Xmla.prototype = {
 *
 *   @method discoverEnumerators
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DISCOVER_ENUMERATORS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverEnumerators: function(options){
         var request = _applyProperties(
@@ -2110,7 +2158,7 @@ Xmla.prototype = {
 *
 *   @method discoverKeywords
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DISCOVER_KEYWORDS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverKeywords: function(options){
         var request = _applyProperties(
@@ -2174,7 +2222,7 @@ Xmla.prototype = {
 *
 *   @method discoverLiterals
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DISCOVER_LITERALS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverLiterals: function(options){
         var request = _applyProperties(
@@ -2190,7 +2238,6 @@ Xmla.prototype = {
 *   Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 *   <code><a href="#property_DBSCHEMA_CATALOGS"></a></code> as value for the <code>requestType</code>, 
 *   and retrieves the <code>DBSCHEMA_CATALOGS</code> schema rowset. 
-*   ...todo...
 *   The rowset has the following columns:
 *   <table border="1" class="schema-rowset">
 *       <tr>
@@ -2231,7 +2278,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverDBCatalogs
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_CATALOGS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBCatalogs: function(options){
         var request = _applyProperties(
@@ -2260,7 +2307,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverDBColumns
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_COLUMNS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBColumns: function(options){
         var request = _applyProperties(
@@ -2289,7 +2336,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverDBProviderTypes
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_PROVIDER_TYPES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBProviderTypes: function(options){
         var request = _applyProperties(
@@ -2318,7 +2365,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverDBSchemata
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_SCHEMATA</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBSchemata: function(options){
         var request = _applyProperties(
@@ -2347,7 +2394,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverDBTables
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_TABLES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBTables: function(options){
         var request = _applyProperties(
@@ -2376,7 +2423,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverDBTablesInfo
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_TABLES_INFO</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES_INFO</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES_INFO</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBTablesInfo: function(options){
         var request = _applyProperties(
@@ -2405,7 +2452,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverMDActions
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_ACTIONS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDActions: function(options){
         var request = _applyProperties(
@@ -2476,14 +2523,91 @@ Xmla.prototype = {
 *       <tr>
 *           <td>LAST_SCHEMA_UPDATE</td>
 *           <td>Date</td>
-*           <td>The last dat</td>
+*           <td>The time that the cube was last processed.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_UPDATED_BY</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LAST_DATA_UPDATE</td>
+*           <td>Date</td>
+*           <td>The time that the cube was last processed.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DATA_UPDATED_BY</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>A Human-readable description of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_DRILLTHROUGH_ENABLED</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_LINKABLE</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_WRITE_ENABLED</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_SQL_ENABLED</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_CAPTION</td>
+*           <td>string</td>
+*           <td>Caption for this cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>BASE_CUBE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the source cube (if this cube is a perspective cube).</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>ANNOTATIONS</td>
+*           <td>string</td>
+*           <td>Notes in xml format</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *   </table>
 *   @method discoverMDCubes
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_CUBES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDCubes: function(options){
         var request = _applyProperties(
@@ -2509,10 +2633,129 @@ Xmla.prototype = {
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_NAME</td>
+*           <td>string</td>
+*           <td>Name of the dimension.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_UNIQE_NAME</td>
+*           <td>string</td>
+*           <td>Unique name for this dimension.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_GUID</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_CAPTION</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_ORDINAL</td>
+*           <td>int</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_TYPE</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_CARDINALITY</td>
+*           <td>int</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DEFAULT_HIERARCHY</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>A Human-readable description of the dimension.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_VIRTUAL</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_READWRITE</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_UNIQUE_SETTINGS</td>
+*           <td></td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_MASTER_UNIQUE_NAME</td>
+*           <td></td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>IS_VISIBLE</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
 *   </table>
 *   @method discoverMDDimensions
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_DIMENSIONS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDDimensions: function(options){
         var request = _applyProperties(
@@ -2541,7 +2784,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverMDFunctions
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_FUNCTIONS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDFunctions: function(options){
         var request = _applyProperties(
@@ -2567,10 +2810,185 @@ Xmla.prototype = {
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_UNIQE_NAME</td>
+*           <td>string</td>
+*           <td>Unique name for this dimension.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_NAME</td>
+*           <td>string</td>
+*           <td>Name of the hierarchy.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_UNIQE_NAME</td>
+*           <td>string</td>
+*           <td>Unique name for this hierarchy.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_GUID</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_CAPTION</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_TYPE</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_CARDINALITY</td>
+*           <td>int</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DEFAULT_MEMBER</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>ALL_MEMBER</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>A Human-readable description of the dimension.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>STRUCTURE</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>IS_VIRTUAL</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>IS_READWRITE</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_UNIQUE_SETTINGS</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_MASTER_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_IS_VISIBLE</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_ORDINAL</td>
+*           <td>int</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_IS_SHARED</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_IS_VISIBLE</td>
+*           <td>boolean</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_ORIGIN</td>
+*           <td></td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_DISPLAY_FOLDER</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>INSTANCE_SELECTION</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
 *   </table>
 *   @method discoverMDHierarchies
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_HIERARCHIES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDHierarchies: function(options){
         var request = _applyProperties(
@@ -2599,7 +3017,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverMDLevels
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_LEVELS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDLevels: function(options){
         var request = _applyProperties(
@@ -2625,10 +3043,150 @@ Xmla.prototype = {
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>Name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>Not supported</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_CAPTION</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_GUID</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_AGGREGATOR</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DATA_TYPE</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>NUMERIC_PRECISION</td>
+*           <td>int</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>NUMERIC_SCALE</td>
+*           <td>int</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>EXPRESSION</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_IS_VISIBLE</td>
+*           <td>boolean</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LEVELS_LIST</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_NAME_SQL_COLUMN_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_UNQUALIFIED_CAPTION</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASUREGROUP_NAME</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_DISPLAY_FOLDER</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DEFAULT_FORMAT_STRING</td>
+*           <td>string</td>
+*           <td>Name of the cube.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
 *   </table>
 *   @method discoverMDMeasures
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_MEASURES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDMeasures: function(options){
         var request = _applyProperties(
@@ -2657,7 +3215,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverMDMembers
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_MEMBERS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDMembers: function(options){
         var request = _applyProperties(
@@ -2686,7 +3244,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverMDProperties
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_PROPERTIES</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDProperties: function(options){
         var request = _applyProperties(
@@ -2715,7 +3273,7 @@ Xmla.prototype = {
 *   </table>
 *   @method discoverMDSets
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_SETS</code> request. 
-*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">SUCCESS</a></code>) events. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDSets: function(options){
         var request = _applyProperties(
@@ -2775,8 +3333,216 @@ Xmla.Rowset = function (node, requestType){
     return this;
 };
 
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_UNKNOWN
+*   @static
+*   @final
+*   @type int
+*   @default <code>0</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_UNKNOWN = 0;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_TIME
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_TIME = 1;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_MEASURE
+*   @static
+*   @final
+*   @type int
+*   @default <code>2</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_MEASURE = 2;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_OTHER
+*   @static
+*   @final
+*   @type int
+*   @default <code>3</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_OTHER = 3;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_QUANTITATIVE
+*   @static
+*   @final
+*   @type int
+*   @default <code>5</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_QUANTITATIVE = 5;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_ACCOUNTS
+*   @static
+*   @final
+*   @type int
+*   @default <code>6</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_ACCOUNTS = 6;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_CUSTOMERS
+*   @static
+*   @final
+*   @type int
+*   @default <code>7</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_CUSTOMERS = 7;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_PRODUCTS
+*   @static
+*   @final
+*   @type int
+*   @default <code>8</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_PRODUCTS = 8;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_SCENARIO
+*   @static
+*   @final
+*   @type int
+*   @default <code>9</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_SCENARIO = 9;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_UTILIY
+*   @static
+*   @final
+*   @type int
+*   @default <code>10</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_UTILIY = 10;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_CURRENCY
+*   @static
+*   @final
+*   @type int
+*   @default <code>11</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_CURRENCY = 11;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_RATES
+*   @static
+*   @final
+*   @type int
+*   @default <code>12</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_RATES = 12;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_CHANNEL
+*   @static
+*   @final
+*   @type int
+*   @default <code>13</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_CHANNEL = 13;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_PROMOTION
+*   @static
+*   @final
+*   @type int
+*   @default <code>14</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_PROMOTION = 14;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_ORGANIZATION
+*   @static
+*   @final
+*   @type int
+*   @default <code>15</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_ORGANIZATION = 15;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_BILL_OF_MATERIALS
+*   @static
+*   @final
+*   @type int
+*   @default <code>16</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_BILL_OF_MATERIALS = 16;
+/**
+*   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*
+*   @property MD_DIMTYPE_GEOGRAPHY
+*   @static
+*   @final
+*   @type int
+*   @default <code>17</code>
+*/
+Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
+
+
 Xmla.Rowset.prototype = {
+    _type: null,
     _initData: function(node, requestType){
+        this.type = requestType;
         this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
         this.numRows = this.rows? this.rows.length : 0;
         this.rowIndex = 0;
@@ -2975,6 +3741,16 @@ Xmla.Rowset.prototype = {
         return getter;
     },
 /**
+*   Indicates the type of rowset. In most cases, this will be identical to the <code>requestType</code> value that was used in the 
+*   <code>Discover</code> request 
+*   
+*   @method getType
+*   @return <code>int</code> One of the <code>DISCOVER_XXX</code>, <code>DBSCHEMA_XXX</code> or <code>MDSCHEMA_XXX</code> constants
+*/    
+    getType: function(){
+        return this._type;
+    },
+/**
 *   Retrieve an array of <code>fieldDef</code> objects that describes the fields of the rows in this rowset.
 *   The position of the <code>fieldDef</code> objects in the array corresponds to the column order of the rowset.
 *   For a description of the <code>fieldDef</code> object, see the 
@@ -2992,6 +3768,16 @@ Xmla.Rowset.prototype = {
             f[i] = this.fieldDef(fieldOrder[i]);
         }
         return f;
+    },
+/**
+*   Retrieve an array of field names.
+*   The position of the names in the array corresponds to the column order of the rowset.
+*
+*   @method getFieldNamess
+*   @return <code>string[]</code> An (ordered) array of field names. 
+*/    
+    getFieldNames: function(){
+        return this.fieldOrder;
     },
 /**
 *   Indicates wheter the rowset that can be traversed.
