@@ -46,7 +46,7 @@
             #select_datasource, 
             #select_catalog, 
             #select_cube,
-            #select_chart {
+            #select_chart_type {
                 position:relative;
                 left: 7em;
             }
@@ -118,10 +118,10 @@
                     position: relative;
                 "
             >
-                <legend>Visualization</legend>                
+                <legend>Chart</legend>                
                 <div>
                     <label>Type:</label>
-                    <select id="select_chart">
+                    <select id="select_chart_type">
                         <option>BarChart</option>
                         <option>ColumnChart</option>
                         <option>LineChart</option>
@@ -163,7 +163,7 @@
                 select_cube                 = document.getElementById("select_cube"),
                 select_measures             = document.getElementById("select_measures"),
                 select_hierarchies          = document.getElementById("select_hierarchies"),
-                select_chart                = document.getElementById("select_chart"),
+                select_chart_type           = document.getElementById("select_chart_type"),
                 section_chart               = document.getElementById("section_chart"),
                 section_query               = document.getElementById("section_query"),
                 image_ajax_loader           = document.getElementById("image_ajax_loader"),
@@ -171,7 +171,8 @@
             *   local caches
             */
                 datasources                 = null,
-                hierarchies                 = null,            
+                hierarchies                 = null,
+                measures                    = null,
             /*
             *   misc
             */
@@ -225,7 +226,7 @@
             }
 
             function populateMeasures(rowset){
-                var measures = rowset.fetchAllAsObject();
+                measures = rowset.fetchAllAsObject();
                 populateSelect({
                     select: select_measures,
                     options: measures,
@@ -294,32 +295,85 @@
                 );
             }
 
-            function renderYUIChart(xmlaRowset, yuiDataSource){
-                var chartType = select_chart[select_chart.selectedIndex].value;
+            function renderYUIChart2(xmlaRowset, yuiDataSource){
+                var chartType = select_chart_type[select_chart_type.selectedIndex].value;
                 var fieldNames = xmlaRowset.getFieldNames();
                 var _constructor = YAHOO.widget[chartType];
-                try{
+/*
                 var axis = new YAHOO.widget.NumericAxis();
                 axis.labelFunction = function(value){
                     return Number(value);
                 }
+*/                
+                var series = [], metric;
+                for (var i=0, num = select_measures.length; i<num; i++){
+                    if (select_measures[i].selected){
+                        metric = fieldNames[fieldNames.length - (series.length + 1)];
+                        series.push({   
+                            yField: metric
+                        ,   displayName: metric
+                        });                        
+                    }
+                }
+                var config = {
+                    series: series,
+                    xField: fieldNames[fieldNames.length - (series.length+1)],
+                    dataField: fieldNames[fieldNames.length -1], 
+                    categoryField: fieldNames[0], 
+                    style: {
+                        legend: {display: "right" }
+                    }
+                }
+
                 var yuiChart = new _constructor(
                     "section_chart",
-                    yuiDataSource,                    
-                    {
-                        yField: fieldNames[fieldNames.length -1],
-                        xField: fieldNames[fieldNames.length -2],
-                        dataField: fieldNames[fieldNames.length -1], 
-                        categoryField: fieldNames[fieldNames.length -2], 
-                        series: [{}],
-                        style: {
-                            legend: {display: "right" }
-                        }
-                    }
+                    yuiDataSource,
+                    config
                 );
-                }catch(e){
-                debugger;
+            }
+            
+            function renderYUIChart(xmlaRowset, yuiDataSource){
+debugger;            
+                var chartType = select_chart_type[select_chart_type.selectedIndex].value;
+                var fieldNames = xmlaRowset.getFieldNames();
+                var _constructor = YAHOO.widget[chartType];
+                
+                var config = {
+                    series: [],
+                    style: {
+                        legend: {display: "right" }
+                    }
                 }
+                var seriesObject, bar;
+                switch (chartType) {
+                    case "BarChart":
+                    case "StackedBarChart":
+                        bar = true;
+                    case "ColumnChart":
+                    case "StackedColumnChart":
+                    case "LineChart":
+                        for (var i=0, num = select_measures.length; i<num; i++){
+                            if (select_measures[i].selected){
+                                metric = fieldNames[fieldNames.length - (config.series.length + 1)];
+                                seriesObject = {displayName: metric};
+                                seriesObject[bar?"xField":"yField"] = metric;
+                                config.series.push(seriesObject);
+                                config[bar?"yField":"xField"] = fieldNames[fieldNames.length - (config.series.length+1)];
+                            }
+                        }
+                        break;
+                    case "PieChart":
+                        config.dataField = fieldNames[fieldNames.length -1];
+                        config.categoryField = fieldNames[0];
+                        config.series.push({});
+                        break;
+                }
+
+                var yuiChart = new _constructor(
+                    "section_chart",
+                    yuiDataSource,
+                    config
+                );
             }
                         
             function render_graph(xmlaRowset){
@@ -488,8 +542,8 @@
                 });
             }
             
-            function select_chart_onchange(){
-                switch (select_chart.value) {
+            function select_chart_type_onchange(){
+                switch (select_chart_type.value) {
                     case "BarChart":
                         break;
                     case "PieChart":
@@ -514,7 +568,7 @@
                 select_datasource.onchange          = select_datasource_onchange;
                 select_catalog.onchange             = select_catalog_onchange;
                 select_cube.onchange                = select_cube_onchange;
-                select_chart.onchange               = select_chart_onchange;
+                select_chart_type.onchange               = select_chart_type_onchange;
                 
             }
 
