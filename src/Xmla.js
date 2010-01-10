@@ -3777,7 +3777,11 @@ Xmla.Rowset.prototype = {
 *   @return <code>string[]</code> An (ordered) array of field names. 
 */    
     getFieldNames: function(){
-        return this.fieldOrder;
+        var fieldNames = [];
+        for (var i=0, count = this.fieldCount(); i<count; i++){
+            fieldNames[i] = this.fieldOrder[i];
+        }
+        return fieldNames;
     },
 /**
 *   Indicates wheter the rowset that can be traversed.

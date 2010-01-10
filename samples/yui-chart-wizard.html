@@ -10,19 +10,27 @@
         <style type="text/css">
             #header {
             }
-            #left-col {
+            .left-col {
                 width: 33.33%;
                 float: left;
             }
-            #middle-col {
+            .middle-col {
                 width: 33.33%;
                 float: left;
             }
-            #right-col {
+            .right-col {
                 width: 33.33%;
                 float: left;
             }
-            #footer {
+            .mid-right-col {
+                width: 50%;
+                float: left;
+            }
+            .mid-left-col {
+                width: 50%;
+                float: left;
+            }
+            .footer {
                 clear: both;
             }
             #input_url {
@@ -38,9 +46,14 @@
             #select_datasource, 
             #select_catalog, 
             #select_cube,
-            #select_visualization {
+            #select_chart {
                 position:relative;
                 left: 7em;
+            }
+            #section_chart {
+                width: 500px;
+                height: 350px;
+                margin-bottom: 10px;
             }
             
             label {
@@ -68,7 +81,7 @@
                 <button id="button_discover_datasources">Discover Datasources...</button>
             </fieldset>
         </div>
-        <div id="left-col">
+        <div class="left-col">
             <fieldset>
                 <legend>Datasource</legend>
                 <div>
@@ -85,19 +98,21 @@
                 </div>
             </fieldset>
         </div>
-        <div id="middle-col">
+        <div class="middle-col">
             <fieldset>
                 <legend>Measures:</legend>
                 <select multiple="true" id="select_measures"></select>
             </fieldset>
         </div>
-        <div id="right-col">
+        <div class="right-col">
             <fieldset>
                 <legend>Dimensions:</legend>
                 <select multiple="true" id="select_hierarchies"></select>
             </fieldset>
         </div>
-        <div id="footer">
+        <div class="footer">
+        </div>
+        <div class="mid-left-col">
             <fieldset
                 style="
                     position: relative;
@@ -106,7 +121,7 @@
                 <legend>Visualization</legend>                
                 <div>
                     <label>Type:</label>
-                    <select id="select_visualization">
+                    <select id="select_chart">
                         <option>BarChart</option>
                         <option>ColumnChart</option>
                         <option>LineChart</option>
@@ -118,18 +133,21 @@
                 <button id="button_render_chart">Render...</button>
                 <pre id="section_query"></pre>
                 <div id="section_table"></div>
-                <div id="section_visualization"></div>
             </fieldset>
+        </div>
+        <div class="mid-right-col">
+            <div id="section_chart"></div>
         </div>
         
         <script type="text/javascript" src="http://localhost/yui/build/yahoo-dom-event/yahoo-dom-event.js"></script>
         <script type="text/javascript" src="http://localhost/yui/build/json/json-min.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/dragdrop/dragdrop-min.js"></script> 
 
         <script type="text/javascript" src="http://localhost/yui/build/element/element-min.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/datasource/datasource-min.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/swf/swf-min.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/charts/charts-min.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/datatable/datatable-min.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/datasource/datasource.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/swf/swf.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/charts/charts.js"></script>
+        <script type="text/javascript" src="http://localhost/yui/build/datatable/datatable.js"></script>
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
         
@@ -145,8 +163,8 @@
                 select_cube                 = document.getElementById("select_cube"),
                 select_measures             = document.getElementById("select_measures"),
                 select_hierarchies          = document.getElementById("select_hierarchies"),
-                select_visualization        = document.getElementById("select_visualization"),
-                section_visualization       = document.getElementById("section_visualization"),
+                select_chart                = document.getElementById("select_chart"),
+                section_chart               = document.getElementById("section_chart"),
                 section_query               = document.getElementById("section_query"),
                 image_ajax_loader           = document.getElementById("image_ajax_loader"),
             /*
@@ -247,28 +265,67 @@
                 rowset.close();
             }
                        
-            function getYUIDataSource(rowset){
-                var data = rowset.fetchAllAsObject();
-                var dataSource = new YAHOO.util.DataSource(data); 
-                dataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY; 
-                dataSource.responseSchema = { 
-                    fields: rowset.getFieldNames()
+            function getYUIDataSource(xmlaRowset){
+                var fieldNames = xmlaRowset.getFieldNames()
+                var data = xmlaRowset.fetchAllAsObject();
+                var yuiDataSource = new YAHOO.util.DataSource(data); 
+                yuiDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY; 
+                yuiDataSource.responseSchema = { 
+                    fields: fieldNames
                 }
-                return dataSource;
+                return yuiDataSource;
             }
-                        
-            function render_graph(rowset){
-                var dataSource = getYUIDataSource(rowset);
+            
+            function renderYUIDataTable(xmlaRowset, yuiDataSource){
                 var columnDefs = [];
-                for (var i=0, fieldNames = rowset.getFieldNames(), num=fieldNames.length; i<num; i++){
-                    columnDefs[i] = {key: fieldNames[i]};
+                var fieldNames = xmlaRowset.getFieldNames();
+                for (var i=0, num=fieldNames.length; i<num; i++){
+                    columnDefs[i] = {
+                        key: fieldNames[i],
+                        resizeable: true,
+                        sortable: true
+                    };
                 }
-                var dataTable = new YAHOO.widget.DataTable(
+                var yuiDataTable = new YAHOO.widget.DataTable(
                     "section_table",
                     columnDefs,
-                    dataSource,
+                    yuiDataSource,
                     {}
                 );
+            }
+
+            function renderYUIChart(xmlaRowset, yuiDataSource){
+                var chartType = select_chart[select_chart.selectedIndex].value;
+                var fieldNames = xmlaRowset.getFieldNames();
+                var _constructor = YAHOO.widget[chartType];
+                try{
+                var axis = new YAHOO.widget.NumericAxis();
+                axis.labelFunction = function(value){
+                    return Number(value);
+                }
+                var yuiChart = new _constructor(
+                    "section_chart",
+                    yuiDataSource,                    
+                    {
+                        yField: fieldNames[fieldNames.length -1],
+                        xField: fieldNames[fieldNames.length -2],
+                        dataField: fieldNames[fieldNames.length -1], 
+                        categoryField: fieldNames[fieldNames.length -2], 
+                        series: [{}],
+                        style: {
+                            legend: {display: "right" }
+                        }
+                    }
+                );
+                }catch(e){
+                debugger;
+                }
+            }
+                        
+            function render_graph(xmlaRowset){
+                var yuiDataSource = getYUIDataSource(xmlaRowset);
+                renderYUIDataTable(xmlaRowset, yuiDataSource);
+                renderYUIChart(xmlaRowset, yuiDataSource);
             }
             
             /*
@@ -431,8 +488,8 @@
                 });
             }
             
-            function select_visualization_onchange(){
-                switch (select_visualization.value) {
+            function select_chart_onchange(){
+                switch (select_chart.value) {
                     case "BarChart":
                         break;
                     case "PieChart":
@@ -457,7 +514,7 @@
                 select_datasource.onchange          = select_datasource_onchange;
                 select_catalog.onchange             = select_catalog_onchange;
                 select_cube.onchange                = select_cube_onchange;
-                select_visualization.onchange       = select_visualization_onchange;
+                select_chart.onchange               = select_chart_onchange;
                 
             }
 
