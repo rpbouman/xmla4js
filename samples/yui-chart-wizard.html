@@ -295,45 +295,7 @@
                 );
             }
 
-            function renderYUIChart2(xmlaRowset, yuiDataSource){
-                var chartType = select_chart_type[select_chart_type.selectedIndex].value;
-                var fieldNames = xmlaRowset.getFieldNames();
-                var _constructor = YAHOO.widget[chartType];
-/*
-                var axis = new YAHOO.widget.NumericAxis();
-                axis.labelFunction = function(value){
-                    return Number(value);
-                }
-*/                
-                var series = [], metric;
-                for (var i=0, num = select_measures.length; i<num; i++){
-                    if (select_measures[i].selected){
-                        metric = fieldNames[fieldNames.length - (series.length + 1)];
-                        series.push({   
-                            yField: metric
-                        ,   displayName: metric
-                        });                        
-                    }
-                }
-                var config = {
-                    series: series,
-                    xField: fieldNames[fieldNames.length - (series.length+1)],
-                    dataField: fieldNames[fieldNames.length -1], 
-                    categoryField: fieldNames[0], 
-                    style: {
-                        legend: {display: "right" }
-                    }
-                }
-
-                var yuiChart = new _constructor(
-                    "section_chart",
-                    yuiDataSource,
-                    config
-                );
-            }
-            
             function renderYUIChart(xmlaRowset, yuiDataSource){
-debugger;            
                 var chartType = select_chart_type[select_chart_type.selectedIndex].value;
                 var fieldNames = xmlaRowset.getFieldNames();
                 var _constructor = YAHOO.widget[chartType];
@@ -509,26 +471,30 @@ debugger;
             }
             
             function button_render_chart_onclick(){
-                var mdx = "SELECT\n{";
+                var mdx = "SELECT\n";
+                var cols = "", rows = "";                
                 for (var measure, i=0, num = select_measures.length; i<num; i++){
                     measure = select_measures[i];
                     if (measure.selected){
-                        if (mdx!="SELECT\n{"){
-                            mdx += ","
+                        if (cols!=""){
+                            cols += ","
                         }
-                        mdx += "[Measures].[" + measure.value + "]";
+                        cols += "[Measures].[" + measure.value + "]";
                     }
                 }
-                mdx += "} ON COLUMNS,\n{";
+                mdx += "\n{" + cols + "} ON COLUMNS,\n";
                 for (var hiearchy, i=0, num = select_hierarchies.length; i<num; i++){
-                    hierarchy = select_hierarchies[i];
+                    hierarchy = select_hierarchies[i];                    
                     if (hierarchy.selected){
+                        if (rows!=""){
+                            rows += "*";
+                        }
                         hierarchy = hierarchies[i];
-                        mdx += hierarchy["DEFAULT_MEMBER"] + ".Children"
+                        rows += hierarchy["DEFAULT_MEMBER"] + ".Children"
                     }
                 }
-                mdx += "} ON ROWS ";
-                mdx += "\nFROM [" + select_cube.value + "]";
+                mdx += "\n{" + rows + "} ON ROWS\n";
+                mdx += "FROM [" + select_cube.value + "]";
                 section_query.innerHTML = mdx;   
                 var datasource = datasources[select_datasource.selectedIndex];
                 var properties = {};
