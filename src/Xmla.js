@@ -3545,8 +3545,7 @@ Xmla.Rowset.prototype = {
         this.type = requestType;
         this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
         this.numRows = this.rows? this.rows.length : 0;
-        this.rowIndex = 0;
-        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
+        this.reset();
         this.fieldOrder = [];
         this.fields = {};
         this._fieldCount = 0;
@@ -3812,6 +3811,15 @@ Xmla.Rowset.prototype = {
         this.row = this.rows.item(++this.rowIndex);
     },
 /**
+*   Resets the internal row pointer so the resultset can be traversed again.
+*
+*   @method reset
+*/    
+    reset: function(){
+        this.rowIndex = 0;
+        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
+    },
+/**
 *   Retrieves a <code>fieldDef</code> object by name.
 *   A fieldDef describes a field (column). It has the following properties:
 *   <dl>
@@ -3960,6 +3968,26 @@ while (rowObject = rowset.fetchAsObject()){
         return object;
     },
 /**
+*   Fetch the values using a custom callback function.
+*   If there are rows to fetch, the custom function is called in scope of the rowset, so you can use <code>this</code> inside the custom function to refer to the rowset object.
+*   Then, the internal row pointer is increased so the next call will read the next row.
+*   The method returns whatever object or value is returned by the custom function, or false when there are no more rows to traverse. 
+*
+*   @method fetchCustom 
+*   @param {function} a custom function to extract and return the data from the current row of the xml result.
+*   @return {mixed|boolean}
+*/    
+    fetchCustom: function(func){
+        var object;
+        if (this.hasMoreRows()){
+            func.call(this);
+            this.next();
+        } else {
+            object = false;
+        }
+        return object;
+    },
+/**
 *   Fetch all values from all fields from all rows, and return it as an array of arrays.
 *   See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.
 *   @method fetchAllAsArray 
@@ -3981,6 +4009,19 @@ while (rowObject = rowset.fetchAsObject()){
     fetchAllAsObject: function(){
         var row, rows = [];
         while((row = this.fetchAsObject())){
+            rows.push(row);
+        }
+        return rows;
+    },
+/**
+*   Fetch all rows using a custom function, and return the return values as an array.
+*   See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.
+*   @method fetchAllCustom 
+*   @return array[]
+*/    
+    fetchAllCustom: function(func){
+        var row, rows = [];
+        while((row = this.fetchCustom(func))){
             rows.push(row);
         }
         return rows;
