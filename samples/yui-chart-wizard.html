@@ -39,7 +39,10 @@
                 width:40em;
             }
             #button_discover_datasources {
-                position:absolute;
+                float: right;
+            }
+            #button_render_chart {
+                float: right;
             }
             
             #input_url,
@@ -122,15 +125,15 @@
                 <div>
                     <label>Type:</label>
                     <select id="select_chart_type">
-                        <option>BarChart</option>
-                        <option>ColumnChart</option>
-                        <option>LineChart</option>
-                        <option>PieChart</option>
-                        <option>StackedBarChart</option>
-                        <option>StackedColumnChart</option>
+                        <option value="BarChart">BarChart</option>
+                        <option value="ColumnChart">ColumnChart</option>
+                        <option value="LineChart">LineChart</option>
+                        <option value="PieChart">PieChart</option>
+                        <option value="StackedBarChart">StackedBarChart</option>
+                        <option value="StackedColumnChart">StackedColumnChart</option>
                     </select>
+                    <button id="button_render_chart">Render...</button>
                 </div>
-                <button id="button_render_chart">Render...</button>
                 <pre id="section_query"></pre>
                 <div id="section_table"></div>
             </fieldset>
@@ -185,11 +188,17 @@
             *   Functions to populate objects with data from xmla
             */
             
-            function populateSelect(config){                                
-                for (var str = "", i=0; i<config.options.length; i++){
-                    str += "<option>" + config.options[i][config.text] + "</option>";
+            function populateSelect(config){
+                while (config.select.options.length){
+                    config.select.removeChild(config.select.firstChild);
                 }
-                config.select.innerHTML = str;
+                for (var option, text = "", i=0; i<config.options.length; i++){
+                    option = document.createElement("OPTION");
+                    text = config.options[i][config.text];
+                    option.innerHTML = text;
+                    option.value = text;
+                    config.select.appendChild(option);
+                }
             }
             
             function populateDatasources(rowset){
@@ -238,10 +247,10 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
 
                 var restrictions = {};
-                restrictions["CUBE_NAME"] = select_cube.value;
+                restrictions["CUBE_NAME"] = select_cube.options[select_cube.selectedIndex].value;
                 xmla.discoverMDHierarchies({
                     url: datasource.URL,
                     properties: properties,
@@ -420,7 +429,7 @@
             }
             
             function select_datasource_onchange(){
-                if (!datasources.length){
+                if (!select_datasource.options.length || !datasources.length){
                     return;
                 }
                 var datasource = datasources[select_datasource.selectedIndex];
@@ -442,7 +451,7 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
 
                 xmla.discoverMDCubes({
                     url: datasource.URL,
@@ -458,10 +467,10 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
 
                 var restrictions = {};
-                restrictions["CUBE_NAME"] = select_cube.value;
+                restrictions["CUBE_NAME"] = select_cube.options[select_cube.selectedIndex].value;
 
                 xmla.discoverMDMeasures({
                     url: datasource.URL,
@@ -494,12 +503,12 @@
                     }
                 }
                 mdx += "\n{" + rows + "} ON ROWS\n";
-                mdx += "FROM [" + select_cube.value + "]";
+                mdx += "FROM [" + select_cube.options[select_cube.selectedIndex].value + "]";
                 section_query.innerHTML = mdx;   
                 var datasource = datasources[select_datasource.selectedIndex];
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
                 properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
                 xmla.execute({
                     url: datasource.URL,
@@ -509,7 +518,7 @@
             }
             
             function select_chart_type_onchange(){
-                switch (select_chart_type.value) {
+                switch (select_chart_type.options[select_chart_type.selectedIndex].value) {
                     case "BarChart":
                         break;
                     case "PieChart":
