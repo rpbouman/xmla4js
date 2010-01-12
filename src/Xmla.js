@@ -3772,7 +3772,7 @@ Xmla.Rowset.prototype = {
 *   Retrieve an array of field names.
 *   The position of the names in the array corresponds to the column order of the rowset.
 *
-*   @method getFieldNamess
+*   @method getFieldNames
 *   @return <code>string[]</code> An (ordered) array of field names. 
 */    
     getFieldNames: function(){
@@ -3809,6 +3809,27 @@ Xmla.Rowset.prototype = {
 */    
     next: function(){
         this.row = this.rows.item(++this.rowIndex);
+    },
+/**
+*   Gets the value of the internal row index.
+*   Note that no check is performed to ensure this points to a valid row:
+*   you should call this function only when it is safe to do so.
+*   This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows()</a></code>.
+*
+*   @method curr
+*   @return int
+*/    
+    curr: function(){
+        return this.rowIndex;
+    },
+/**
+*   Returns the number of rows in the set.
+*
+*   @method rowCount
+*   @return int
+*/    
+    rowCount: function(){
+        return this.numRows;
     },
 /**
 *   Resets the internal row pointer so the resultset can be traversed again.
@@ -3906,6 +3927,28 @@ Xmla.Rowset.prototype = {
         this.rows = null;
     },
 /**
+*   Reads the current row and returns the result as a new array. 
+*   This method does not advance the internal row pointer, and does not check if there is a valid row.
+*   This method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the
+*   <code><a href="#method_fetchCustom">fetchCustom()</a></code> method.
+*   If you just want to obtain the results as arrays, see
+*   <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>
+*   and
+*   <code><a href="#method_fetchAllAsArray">fetchAllAsArray()</a></code>.
+*   @method readAsArray
+*   @return {array}
+*/    
+    readAsArray: function(){
+        var array = [], fields = this.fields, fieldName, fieldDef;
+        for (fieldName in fields){
+            if (fields.hasOwnProperty(fieldName)){
+                fieldDef = fields[fieldName];
+                array[fieldDef.index] = fieldDef.getter.call(this);
+            }
+        }
+        return array;
+    },
+/**
 *   Fetch all values from all fields from the current row, and return it in an array.
 *   The position of the values in the array corresponds to the column order of the rowset.
 *   The internal row pointer is also increased so the next call will read the next row.
@@ -3920,21 +3963,36 @@ while (rowArray = rowset.fetchAsArray()){
 *   @return {array}
 */    
     fetchAsArray: function(){
-        var array, fields, fieldName, fieldDef;
+        var array;
         if (this.hasMoreRows()) {
-            fields = this.fields; 
-            array = [];
-            for (fieldName in fields){
-                if (fields.hasOwnProperty(fieldName)){
-                    fieldDef = fields[fieldName];
-                    array[fieldDef.index] = fieldDef.getter.call(this);
-                }
-            }
+            array = this.readAsArray();
             this.next();
         } else {
             array = false;
         }
         return array;
+    },
+/**
+*   Reads the current row and returns the result as a new object. 
+*   This method does not advance the internal row pointer, and does not check if there is a valid row.
+*   This method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the
+*   <code><a href="#method_fetchCustom">fetchCustom()</a></code> method.
+*   If you just want to obtain the results as objects, see
+*   <code><a href="#method_fetchAsArray">fetchAsObject()</a></code>
+*   and
+*   <code><a href="#method_fetchAllAsArray">fetchAllAsObject()</a></code>.
+*   @method readAsObject
+*   @return {object}
+*/    
+    readAsObject: function(){
+        var object = {}, fields = this.fields, fieldName, fieldDef;
+        for (fieldName in fields){
+            if (fields.hasOwnProperty(fieldName)) {
+                fieldDef = fields[fieldName];
+                object[fieldName] = fieldDef.getter.call(this);
+            }
+        }
+        return object;
     },
 /**
 *   Fetch all values from all fields from the current row, and return it in an Object literal.
@@ -3951,16 +4009,9 @@ while (rowObject = rowset.fetchAsObject()){
 *   @return {Object|boolean}
 */    
     fetchAsObject: function(){
-        var object, fields, fieldName, fieldDef;
+        var object;
         if (this.hasMoreRows()){
-            fields = this.fields; 
-            object = {};
-            for (fieldName in fields){
-                if (fields.hasOwnProperty(fieldName)) {
-                    fieldDef = fields[fieldName];
-                    object[fieldName] = fieldDef.getter.call(this);
-                }
-            }
+            object = this.readAsObject();
             this.next();
         } else {
             object = false;
@@ -3980,7 +4031,7 @@ while (rowObject = rowset.fetchAsObject()){
     fetchCustom: function(func){
         var object;
         if (this.hasMoreRows()){
-            func.call(this);
+            object = func.call(this);
             this.next();
         } else {
             object = false;
