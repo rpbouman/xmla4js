@@ -4,22 +4,24 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>xmla4js: YUI Chart Wizard</title>
-        <link rel="stylesheet" type="text/css" href="http://localhost/yui/build/fonts/fonts-min.css" />
-        <link rel="stylesheet" type="text/css" href="http://localhost/yui/build/datatable/assets/skins/sam/datatable.css" />
+        <!-- 
+            YUI config: http://developer.yahoo.com/yui/articles/hosting/?charts&datasource&datatable&dragdrop&element&json&reset-fonts-grids&swf&yahoo&yahoo-dom-event&MIN
+        -->
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css"/> 
         <link rel="stylesheet" type="text/css" href="../css/default.css"/>
         <style type="text/css">
             #header {
             }
             .left-col {
-                width: 33.33%;
+                width: 33.32%;
                 float: left;
             }
             .middle-col {
-                width: 33.33%;
+                width: 33.32%;
                 float: left;
             }
             .right-col {
-                width: 33.33%;
+                width: 33.32%;
                 float: left;
             }
             .mid-right-col {
@@ -142,16 +144,7 @@
             <div id="section_chart"></div>
         </div>
         
-        <script type="text/javascript" src="http://localhost/yui/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/json/json-min.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/dragdrop/dragdrop-min.js"></script> 
-
-        <script type="text/javascript" src="http://localhost/yui/build/element/element-min.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/datasource/datasource.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/swf/swf.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/charts/charts.js"></script>
-        <script type="text/javascript" src="http://localhost/yui/build/datatable/datatable.js"></script>
-
+        <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js&2.8.0r4/build/dragdrop/dragdrop-min.js&2.8.0r4/build/datatable/datatable-min.js"></script>
         <script type="text/javascript" src="../src/Xmla.js"></script>
         
         <script type="text/javascript">
@@ -187,7 +180,17 @@
             /*
             *   Functions to populate objects with data from xmla
             */
-            
+            function getSelectValue(select){    //in normal browsers, we can do select.value. Why IE8 wants us to write a funcion like this?
+                var value;  
+                if (select.options.length) {
+                    value = select.options[select.selectedIndex].value;
+                }
+                else {
+                    value = null;
+                }
+                return value;
+            }
+    
             function populateSelect(config){
                 while (config.select.options.length){
                     config.select.removeChild(config.select.firstChild);
@@ -247,10 +250,10 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog)
 
                 var restrictions = {};
-                restrictions["CUBE_NAME"] = select_cube.options[select_cube.selectedIndex].value;
+                restrictions["CUBE_NAME"] = getSelectValue(select_cube);
                 xmla.discoverMDHierarchies({
                     url: datasource.URL,
                     properties: properties,
@@ -305,7 +308,7 @@
             }
 
             function renderYUIChart(xmlaRowset, yuiDataSource){
-                var chartType = select_chart_type[select_chart_type.selectedIndex].value;
+                var chartType = getSelectValue(select_chart_type);
                 var fieldNames = xmlaRowset.getFieldNames();
                 var _constructor = YAHOO.widget[chartType];
                 
@@ -451,7 +454,7 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
 
                 xmla.discoverMDCubes({
                     url: datasource.URL,
@@ -467,10 +470,10 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
 
                 var restrictions = {};
-                restrictions["CUBE_NAME"] = select_cube.options[select_cube.selectedIndex].value;
+                restrictions["CUBE_NAME"] = getSelectValue(select_cube);
 
                 xmla.discoverMDMeasures({
                     url: datasource.URL,
@@ -503,12 +506,12 @@
                     }
                 }
                 mdx += "\n{" + rows + "} ON ROWS\n";
-                mdx += "FROM [" + select_cube.options[select_cube.selectedIndex].value + "]";
+                mdx += "FROM [" + getSelectValue(select_cube) + "]";
                 section_query.innerHTML = mdx;   
                 var datasource = datasources[select_datasource.selectedIndex];
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.options[select_catalog.selectedIndex].value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
                 properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
                 xmla.execute({
                     url: datasource.URL,
@@ -518,7 +521,7 @@
             }
             
             function select_chart_type_onchange(){
-                switch (select_chart_type.options[select_chart_type.selectedIndex].value) {
+                switch (getSelectValue(select_chart_type)) {
                     case "BarChart":
                         break;
                     case "PieChart":

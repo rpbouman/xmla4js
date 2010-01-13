@@ -49,7 +49,7 @@
         </div>
         <h1>Sample: Execute</h1>
         <fieldset>
-            URL:
+            <legend>XML/A Connection</legend>
             <input type="text" id="input_url" name="input_url" 
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
@@ -64,7 +64,7 @@
             <div>
         </fieldset>
         <fieldset>
-            MDX Statement:
+            <legend>MDX Statement:</legend>
             <textarea id="textarea_statement"></textarea>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
@@ -72,10 +72,23 @@
             <select id="select_axisformat" name="select_axisfomat"></select>
             <button id="button_execute" name="button_execute">Execute Statement...</button>            
         </fieldset>
-        <div id="section_result"></div>
+
+        <fieldset>
+            <legend>Resultset:</legend>
+            <div id="section_result"></div>
+        </fieldset>
+
         <div id="section_error"></div>
-        <pre id="section_request"></pre>
-        <pre id="section_response"></pre>
+
+        <fieldset>
+            <legend>Request:</legend>
+            <pre id="section_request"></pre>
+        </fieldset>
+
+        <fieldset>
+            <legend>Response:</legend>
+            <pre id="section_response"></pre>
+        </fieldset>
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
                 
@@ -232,7 +245,6 @@
                 clearError();
                 section_result.innerHTML = "";
                 setResponse("");
-                debugger;
                 setGuiDisabled(true);
                 try {
                     var datasource = getDatasource();

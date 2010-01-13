@@ -910,7 +910,7 @@ Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DataSourceInfo</code>
+*   @default <code>Catalog</code>
 */
 Xmla.PROP_CATALOG = "Catalog";
 Xmla.PROP_CUBE = "Cube";
@@ -1458,9 +1458,7 @@ Xmla.prototype = {
         var ajaxOptions = {
             async: options.async,
             timeout: options.requestTimeout,
-            contentType: "text/xml",
             data: soapMessage,
-            dataType: "xml",
             error:      function(exception){
                             options.exception = exeception;
                             xmla._requestError(options)
@@ -1469,8 +1467,7 @@ Xmla.prototype = {
                             options.xhr = xhr;
                             xmla._requestSuccess(options);
                         },
-            url: options.url,
-            type: "POST"
+            url: options.url
         };
         if (options.username){
             ajaxOptions.username = options.username;
@@ -1622,6 +1619,32 @@ Xmla.prototype = {
             true
         );
         return this.request(request);         
+    },
+/**
+*   Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute</a></code> method using <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT_TABULAR</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. This has the effect of obtaining the multi-dimensional resultset as a <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code>.
+*   @method executeTabular
+*   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Rowset</code> that represents the multi-dimensional result set of the MDX query. 
+*/    
+    executeTabular: function(options){
+        if (!options.properties){
+            options.properties = {};
+        }
+        options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
+        return this.execute(options);
+    },
+/**
+*   Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute</a></code> method using <code><a href="#property_PROP_FORMAT_MULTIDIMENSIONAL">PROP_FORMAT_MULTIDIMENSIONAL</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. In this case, the result is available only as XML text or XML document in the <code><a href="#property_responseText">responseText</a></code>
+and  <code><a href="#property_responseXML">responseXML</a></code> properties.
+*   @method executeMultiDimensional
+*   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request. 
+*/    
+    executeMultiDimensional: function(options){
+        if (!options.properties){
+            options.properties = {};
+        }
+        options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        return this.execute(options);
     },
 /**
 *   Sends a request to invoke the XML/A <code>Discover</code> method and returns a schema rowset specified by the <code>requestType</code> option.
@@ -3545,8 +3568,7 @@ Xmla.Rowset.prototype = {
         this.type = requestType;
         this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
         this.numRows = this.rows? this.rows.length : 0;
-        this.rowIndex = 0;
-        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
+        this.reset();
         this.fieldOrder = [];
         this.fields = {};
         this._fieldCount = 0;
@@ -3773,11 +3795,15 @@ Xmla.Rowset.prototype = {
 *   Retrieve an array of field names.
 *   The position of the names in the array corresponds to the column order of the rowset.
 *
-*   @method getFieldNamess
+*   @method getFieldNames
 *   @return <code>string[]</code> An (ordered) array of field names. 
 */    
     getFieldNames: function(){
-        return this.fieldOrder;
+        var fieldNames = [];
+        for (var i=0, count = this.fieldCount(); i<count; i++){
+            fieldNames[i] = this.fieldOrder[i];
+        }
+        return fieldNames;
     },
 /**
 *   Indicates wheter the rowset that can be traversed.
@@ -3806,6 +3832,36 @@ Xmla.Rowset.prototype = {
 */    
     next: function(){
         this.row = this.rows.item(++this.rowIndex);
+    },
+/**
+*   Gets the value of the internal row index.
+*   Note that no check is performed to ensure this points to a valid row:
+*   you should call this function only when it is safe to do so.
+*   This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows()</a></code>.
+*
+*   @method curr
+*   @return int
+*/    
+    curr: function(){
+        return this.rowIndex;
+    },
+/**
+*   Returns the number of rows in the set.
+*
+*   @method rowCount
+*   @return int
+*/    
+    rowCount: function(){
+        return this.numRows;
+    },
+/**
+*   Resets the internal row pointer so the resultset can be traversed again.
+*
+*   @method reset
+*/    
+    reset: function(){
+        this.rowIndex = 0;
+        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
     },
 /**
 *   Retrieves a <code>fieldDef</code> object by name.
@@ -3894,6 +3950,28 @@ Xmla.Rowset.prototype = {
         this.rows = null;
     },
 /**
+*   Reads the current row and returns the result as a new array. 
+*   This method does not advance the internal row pointer, and does not check if there is a valid row.
+*   This method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the
+*   <code><a href="#method_fetchCustom">fetchCustom()</a></code> method.
+*   If you just want to obtain the results as arrays, see
+*   <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>
+*   and
+*   <code><a href="#method_fetchAllAsArray">fetchAllAsArray()</a></code>.
+*   @method readAsArray
+*   @return {array}
+*/    
+    readAsArray: function(){
+        var array = [], fields = this.fields, fieldName, fieldDef;
+        for (fieldName in fields){
+            if (fields.hasOwnProperty(fieldName)){
+                fieldDef = fields[fieldName];
+                array[fieldDef.index] = fieldDef.getter.call(this);
+            }
+        }
+        return array;
+    },
+/**
 *   Fetch all values from all fields from the current row, and return it in an array.
 *   The position of the values in the array corresponds to the column order of the rowset.
 *   The internal row pointer is also increased so the next call will read the next row.
@@ -3908,21 +3986,36 @@ while (rowArray = rowset.fetchAsArray()){
 *   @return {array}
 */    
     fetchAsArray: function(){
-        var array, fields, fieldName, fieldDef;
+        var array;
         if (this.hasMoreRows()) {
-            fields = this.fields; 
-            array = [];
-            for (fieldName in fields){
-                if (fields.hasOwnProperty(fieldName)){
-                    fieldDef = fields[fieldName];
-                    array[fieldDef.index] = fieldDef.getter.call(this);
-                }
-            }
+            array = this.readAsArray();
             this.next();
         } else {
             array = false;
         }
         return array;
+    },
+/**
+*   Reads the current row and returns the result as a new object. 
+*   This method does not advance the internal row pointer, and does not check if there is a valid row.
+*   This method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the
+*   <code><a href="#method_fetchCustom">fetchCustom()</a></code> method.
+*   If you just want to obtain the results as objects, see
+*   <code><a href="#method_fetchAsArray">fetchAsObject()</a></code>
+*   and
+*   <code><a href="#method_fetchAllAsArray">fetchAllAsObject()</a></code>.
+*   @method readAsObject
+*   @return {object}
+*/    
+    readAsObject: function(){
+        var object = {}, fields = this.fields, fieldName, fieldDef;
+        for (fieldName in fields){
+            if (fields.hasOwnProperty(fieldName)) {
+                fieldDef = fields[fieldName];
+                object[fieldName] = fieldDef.getter.call(this);
+            }
+        }
+        return object;
     },
 /**
 *   Fetch all values from all fields from the current row, and return it in an Object literal.
@@ -3939,16 +4032,29 @@ while (rowObject = rowset.fetchAsObject()){
 *   @return {Object|boolean}
 */    
     fetchAsObject: function(){
-        var object, fields, fieldName, fieldDef;
+        var object;
         if (this.hasMoreRows()){
-            fields = this.fields; 
-            object = {};
-            for (fieldName in fields){
-                if (fields.hasOwnProperty(fieldName)) {
-                    fieldDef = fields[fieldName];
-                    object[fieldName] = fieldDef.getter.call(this);
-                }
-            }
+            object = this.readAsObject();
+            this.next();
+        } else {
+            object = false;
+        }
+        return object;
+    },
+/**
+*   Fetch the values using a custom callback function.
+*   If there are rows to fetch, the custom function is called in scope of the rowset, so you can use <code>this</code> inside the custom function to refer to the rowset object.
+*   Then, the internal row pointer is increased so the next call will read the next row.
+*   The method returns whatever object or value is returned by the custom function, or false when there are no more rows to traverse. 
+*
+*   @method fetchCustom 
+*   @param function  a custom function to extract and return the data from the current row of the xml result.
+*   @return {mixed|boolean}
+*/    
+    fetchCustom: function(func){
+        var object;
+        if (this.hasMoreRows()){
+            object = func.call(this);
             this.next();
         } else {
             object = false;
@@ -3977,6 +4083,19 @@ while (rowObject = rowset.fetchAsObject()){
     fetchAllAsObject: function(){
         var row, rows = [];
         while((row = this.fetchAsObject())){
+            rows.push(row);
+        }
+        return rows;
+    },
+/**
+*   Fetch all rows using a custom function, and return the return values as an array.
+*   See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.
+*   @method fetchAllCustom 
+*   @return array[]
+*/    
+    fetchAllCustom: function(func){
+        var row, rows = [];
+        while((row = this.fetchCustom(func))){
             rows.push(row);
         }
         return rows;

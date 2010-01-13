@@ -910,7 +910,7 @@
 <span class="cm">*   @static</span>
 <span class="cm">*   @final</span>
 <span class="cm">*   @type string</span>
-<span class="cm">*   @default &lt;code&gt;DataSourceInfo&lt;/code&gt;</span>
+<span class="cm">*   @default &lt;code&gt;Catalog&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CATALOG</span> <span class="o">=</span> <span class="s2">&quot;Catalog&quot;</span><span class="p">;</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_CUBE</span> <span class="o">=</span> <span class="s2">&quot;Cube&quot;</span><span class="p">;</span>
@@ -1458,9 +1458,7 @@
         <span class="kd">var</span> <span class="nx">ajaxOptions</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nx">async</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">async</span><span class="p">,</span>
             <span class="nx">timeout</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span><span class="p">,</span>
-            <span class="nx">contentType</span><span class="o">:</span> <span class="s2">&quot;text/xml&quot;</span><span class="p">,</span>
             <span class="nx">data</span><span class="o">:</span> <span class="nx">soapMessage</span><span class="p">,</span>
-            <span class="nx">dataType</span><span class="o">:</span> <span class="s2">&quot;xml&quot;</span><span class="p">,</span>
             <span class="nx">error</span><span class="o">:</span>      <span class="kd">function</span><span class="p">(</span><span class="nx">exception</span><span class="p">){</span>
                             <span class="nx">options</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="nx">exeception</span><span class="p">;</span>
                             <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestError</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
@@ -1469,8 +1467,7 @@
                             <span class="nx">options</span><span class="p">.</span><span class="nx">xhr</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">;</span>
                             <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestSuccess</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
                         <span class="p">},</span>
-            <span class="nx">url</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
-            <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;POST&quot;</span>
+            <span class="nx">url</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span>
         <span class="p">};</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">username</span><span class="p">){</span>
             <span class="nx">ajaxOptions</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">username</span><span class="p">;</span>
@@ -1622,6 +1619,32 @@
             <span class="kc">true</span>
         <span class="p">);</span>
         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>         
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Sends an MDX query to a XML/A DataSource to invoke the &lt;code&gt;&lt;a href=&quot;#method_execute&lt;/a&gt;&lt;/code&gt; method using &lt;code&gt;&lt;a href=&quot;#property_PROP_FORMAT_TABULAR&quot;&gt;PROP_FORMAT_TABULAR&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;&lt;a href=&quot;#property_PROP_FORMAT_TABULAR&quot;&gt;PROP_FORMAT&lt;/a&gt;&lt;/code&gt; property. This has the effect of obtaining the multi-dimensional resultset as a &lt;code&gt;&lt;a href=&quot;Xmla.Rowset#class_Xmla.Rowset&quot;&gt;Rowset&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method executeTabular</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A &lt;code&gt;Execute&lt;/code&gt; request. </span>
+<span class="cm">*   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Execute&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;Xmla.Rowset&lt;/code&gt; that represents the multi-dimensional result set of the MDX query. </span>
+<span class="cm">*/</span>    
+    <span class="nx">executeTabular</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">){</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="p">}</span>
+        <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_TABULAR</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Sends an MDX query to a XML/A DataSource to invoke the &lt;code&gt;&lt;a href=&quot;#method_execute&lt;/a&gt;&lt;/code&gt; method using &lt;code&gt;&lt;a href=&quot;#property_PROP_FORMAT_MULTIDIMENSIONAL&quot;&gt;PROP_FORMAT_MULTIDIMENSIONAL&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;&lt;a href=&quot;#property_PROP_FORMAT_TABULAR&quot;&gt;PROP_FORMAT&lt;/a&gt;&lt;/code&gt; property. In this case, the result is available only as XML text or XML document in the &lt;code&gt;&lt;a href=&quot;#property_responseText&quot;&gt;responseText&lt;/a&gt;&lt;/code&gt;</span>
+<span class="cm">and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;/a&gt;&lt;/code&gt; properties.</span>
+<span class="cm">*   @method executeMultiDimensional</span>
+<span class="cm">*   @param {Object} options An object whose properties convey the options for the XML/A &lt;code&gt;Execute&lt;/code&gt; request. </span>
+<span class="cm">*/</span>    
+    <span class="nx">executeMultiDimensional</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">){</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="p">}</span>
+        <span class="nx">options</span><span class="p">.</span><span class="nx">properties</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">PROP_FORMAT_MULTIDIMENSIONAL</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
 <span class="cm">*   Sends a request to invoke the XML/A &lt;code&gt;Discover&lt;/code&gt; method and returns a schema rowset specified by the &lt;code&gt;requestType&lt;/code&gt; option.</span>
@@ -3545,8 +3568,7 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">requestType</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">fields</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">_fieldCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -3773,11 +3795,15 @@
 <span class="cm">*   Retrieve an array of field names.</span>
 <span class="cm">*   The position of the names in the array corresponds to the column order of the rowset.</span>
 <span class="cm">*</span>
-<span class="cm">*   @method getFieldNamess</span>
+<span class="cm">*   @method getFieldNames</span>
 <span class="cm">*   @return &lt;code&gt;string[]&lt;/code&gt; An (ordered) array of field names. </span>
 <span class="cm">*/</span>    
     <span class="nx">getFieldNames</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">fieldNames</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">count</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldCount</span><span class="p">();</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">count</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="nx">fieldNames</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">fieldNames</span><span class="p">;</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
 <span class="cm">*   Indicates wheter the rowset that can be traversed.</span>
@@ -3806,6 +3832,36 @@
 <span class="cm">*/</span>    
     <span class="nx">next</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="o">++</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">);</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Gets the value of the internal row index.</span>
+<span class="cm">*   Note that no check is performed to ensure this points to a valid row:</span>
+<span class="cm">*   you should call this function only when it is safe to do so.</span>
+<span class="cm">*   This can be determined by calling &lt;code&gt;&lt;a href=&quot;method_hasMoreRows&quot;&gt;hasMoreRows()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*</span>
+<span class="cm">*   @method curr</span>
+<span class="cm">*   @return int</span>
+<span class="cm">*/</span>    
+    <span class="nx">curr</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Returns the number of rows in the set.</span>
+<span class="cm">*</span>
+<span class="cm">*   @method rowCount</span>
+<span class="cm">*   @return int</span>
+<span class="cm">*/</span>    
+    <span class="nx">rowCount</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Resets the internal row pointer so the resultset can be traversed again.</span>
+<span class="cm">*</span>
+<span class="cm">*   @method reset</span>
+<span class="cm">*/</span>    
+    <span class="nx">reset</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">row</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">item</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">)</span> <span class="o">:</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
 <span class="cm">*   Retrieves a &lt;code&gt;fieldDef&lt;/code&gt; object by name.</span>
@@ -3894,6 +3950,28 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
+<span class="cm">*   Reads the current row and returns the result as a new array. </span>
+<span class="cm">*   This method does not advance the internal row pointer, and does not check if there is a valid row.</span>
+<span class="cm">*   This method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the</span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fetchCustom&quot;&gt;fetchCustom()&lt;/a&gt;&lt;/code&gt; method.</span>
+<span class="cm">*   If you just want to obtain the results as arrays, see</span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fetchAsArray&quot;&gt;fetchAsArray()&lt;/a&gt;&lt;/code&gt;</span>
+<span class="cm">*   and</span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fetchAllAsArray&quot;&gt;fetchAllAsArray()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method readAsArray</span>
+<span class="cm">*   @return {array}</span>
+<span class="cm">*/</span>    
+    <span class="nx">readAsArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="kd">var</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[],</span> <span class="nx">fields</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">fieldDef</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">fieldName</span> <span class="k">in</span> <span class="nx">fields</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">fields</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">)){</span>
+                <span class="nx">fieldDef</span> <span class="o">=</span> <span class="nx">fields</span><span class="p">[</span><span class="nx">fieldName</span><span class="p">];</span>
+                <span class="nx">array</span><span class="p">[</span><span class="nx">fieldDef</span><span class="p">.</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fieldDef</span><span class="p">.</span><span class="nx">getter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">array</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
 <span class="cm">*   Fetch all values from all fields from the current row, and return it in an array.</span>
 <span class="cm">*   The position of the values in the array corresponds to the column order of the rowset.</span>
 <span class="cm">*   The internal row pointer is also increased so the next call will read the next row.</span>
@@ -3908,21 +3986,36 @@
 <span class="cm">*   @return {array}</span>
 <span class="cm">*/</span>    
     <span class="nx">fetchAsArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="kd">var</span> <span class="nx">array</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">fieldDef</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">array</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">())</span> <span class="p">{</span>
-            <span class="nx">fields</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">;</span> 
-            <span class="nx">array</span> <span class="o">=</span> <span class="p">[];</span>
-            <span class="k">for</span> <span class="p">(</span><span class="nx">fieldName</span> <span class="k">in</span> <span class="nx">fields</span><span class="p">){</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">fields</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">)){</span>
-                    <span class="nx">fieldDef</span> <span class="o">=</span> <span class="nx">fields</span><span class="p">[</span><span class="nx">fieldName</span><span class="p">];</span>
-                    <span class="nx">array</span><span class="p">[</span><span class="nx">fieldDef</span><span class="p">.</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fieldDef</span><span class="p">.</span><span class="nx">getter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="nx">array</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">readAsArray</span><span class="p">();</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="nx">array</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">array</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Reads the current row and returns the result as a new object. </span>
+<span class="cm">*   This method does not advance the internal row pointer, and does not check if there is a valid row.</span>
+<span class="cm">*   This method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the</span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fetchCustom&quot;&gt;fetchCustom()&lt;/a&gt;&lt;/code&gt; method.</span>
+<span class="cm">*   If you just want to obtain the results as objects, see</span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fetchAsArray&quot;&gt;fetchAsObject()&lt;/a&gt;&lt;/code&gt;</span>
+<span class="cm">*   and</span>
+<span class="cm">*   &lt;code&gt;&lt;a href=&quot;#method_fetchAllAsArray&quot;&gt;fetchAllAsObject()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method readAsObject</span>
+<span class="cm">*   @return {object}</span>
+<span class="cm">*/</span>    
+    <span class="nx">readAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="kd">var</span> <span class="nx">object</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">fields</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">fieldDef</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">fieldName</span> <span class="k">in</span> <span class="nx">fields</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">fields</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">))</span> <span class="p">{</span>
+                <span class="nx">fieldDef</span> <span class="o">=</span> <span class="nx">fields</span><span class="p">[</span><span class="nx">fieldName</span><span class="p">];</span>
+                <span class="nx">object</span><span class="p">[</span><span class="nx">fieldName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fieldDef</span><span class="p">.</span><span class="nx">getter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
 <span class="cm">*   Fetch all values from all fields from the current row, and return it in an Object literal.</span>
@@ -3939,16 +4032,29 @@
 <span class="cm">*   @return {Object|boolean}</span>
 <span class="cm">*/</span>    
     <span class="nx">fetchAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="kd">var</span> <span class="nx">object</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">fieldName</span><span class="p">,</span> <span class="nx">fieldDef</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">object</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">()){</span>
-            <span class="nx">fields</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fields</span><span class="p">;</span> 
-            <span class="nx">object</span> <span class="o">=</span> <span class="p">{};</span>
-            <span class="k">for</span> <span class="p">(</span><span class="nx">fieldName</span> <span class="k">in</span> <span class="nx">fields</span><span class="p">){</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">fields</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">fieldName</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="nx">fieldDef</span> <span class="o">=</span> <span class="nx">fields</span><span class="p">[</span><span class="nx">fieldName</span><span class="p">];</span>
-                    <span class="nx">object</span><span class="p">[</span><span class="nx">fieldName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">fieldDef</span><span class="p">.</span><span class="nx">getter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">readAsObject</span><span class="p">();</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch the values using a custom callback function.</span>
+<span class="cm">*   If there are rows to fetch, the custom function is called in scope of the rowset, so you can use &lt;code&gt;this&lt;/code&gt; inside the custom function to refer to the rowset object.</span>
+<span class="cm">*   Then, the internal row pointer is increased so the next call will read the next row.</span>
+<span class="cm">*   The method returns whatever object or value is returned by the custom function, or false when there are no more rows to traverse. </span>
+<span class="cm">*</span>
+<span class="cm">*   @method fetchCustom </span>
+<span class="cm">*   @param function  a custom function to extract and return the data from the current row of the xml result.</span>
+<span class="cm">*   @return {mixed|boolean}</span>
+<span class="cm">*/</span>    
+    <span class="nx">fetchCustom</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">object</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasMoreRows</span><span class="p">()){</span>
+            <span class="nx">object</span> <span class="o">=</span> <span class="nx">func</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="nx">object</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
@@ -3977,6 +4083,19 @@
     <span class="nx">fetchAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
         <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsObject</span><span class="p">())){</span>
+            <span class="nx">rows</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">rows</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch all rows using a custom function, and return the return values as an array.</span>
+<span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchCustom&quot;&gt;fetchCustom()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method fetchAllCustom </span>
+<span class="cm">*   @return array[]</span>
+<span class="cm">*/</span>    
+    <span class="nx">fetchAllCustom</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchCustom</span><span class="p">(</span><span class="nx">func</span><span class="p">))){</span>
             <span class="nx">rows</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">rows</span><span class="p">;</span>

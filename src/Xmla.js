@@ -1458,9 +1458,7 @@ Xmla.prototype = {
         var ajaxOptions = {
             async: options.async,
             timeout: options.requestTimeout,
-            contentType: "text/xml",
             data: soapMessage,
-            dataType: "xml",
             error:      function(exception){
                             options.exception = exeception;
                             xmla._requestError(options)
@@ -1469,8 +1467,7 @@ Xmla.prototype = {
                             options.xhr = xhr;
                             xmla._requestSuccess(options);
                         },
-            url: options.url,
-            type: "POST"
+            url: options.url
         };
         if (options.username){
             ajaxOptions.username = options.username;
@@ -1622,6 +1619,32 @@ Xmla.prototype = {
             true
         );
         return this.request(request);         
+    },
+/**
+*   Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute</a></code> method using <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT_TABULAR</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. This has the effect of obtaining the multi-dimensional resultset as a <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code>.
+*   @method executeTabular
+*   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request. 
+*   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Rowset</code> that represents the multi-dimensional result set of the MDX query. 
+*/    
+    executeTabular: function(options){
+        if (!options.properties){
+            options.properties = {};
+        }
+        options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
+        return this.execute(options);
+    },
+/**
+*   Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute</a></code> method using <code><a href="#property_PROP_FORMAT_MULTIDIMENSIONAL">PROP_FORMAT_MULTIDIMENSIONAL</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. In this case, the result is available only as XML text or XML document in the <code><a href="#property_responseText">responseText</a></code>
+and  <code><a href="#property_responseXML">responseXML</a></code> properties.
+*   @method executeMultiDimensional
+*   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request. 
+*/    
+    executeMultiDimensional: function(options){
+        if (!options.properties){
+            options.properties = {};
+        }
+        options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        return this.execute(options);
     },
 /**
 *   Sends a request to invoke the XML/A <code>Discover</code> method and returns a schema rowset specified by the <code>requestType</code> option.
@@ -4025,7 +4048,7 @@ while (rowObject = rowset.fetchAsObject()){
 *   The method returns whatever object or value is returned by the custom function, or false when there are no more rows to traverse. 
 *
 *   @method fetchCustom 
-*   @param {function} a custom function to extract and return the data from the current row of the xml result.
+*   @param function  a custom function to extract and return the data from the current row of the xml result.
 *   @return {mixed|boolean}
 */    
     fetchCustom: function(func){
