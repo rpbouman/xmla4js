@@ -3564,6 +3564,11 @@
 
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">_type</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">rows</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">numRows</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">fieldOrder</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">fields</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fieldCount</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     <span class="nx">_initData</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">requestType</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
@@ -4065,10 +4070,14 @@
 <span class="cm">*   Fetch all values from all fields from all rows, and return it as an array of arrays.</span>
 <span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchAsArray&quot;&gt;fetchAsArray()&lt;/a&gt;&lt;/code&gt;.</span>
 <span class="cm">*   @method fetchAllAsArray </span>
+<span class="cm">*   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created</span>
 <span class="cm">*   @return array[]</span>
 <span class="cm">*/</span>    
-    <span class="nx">fetchAllAsArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">fetchAllAsArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rows</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">row</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">rows</span><span class="p">){</span>
+            <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
         <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsArray</span><span class="p">())){</span>
             <span class="nx">rows</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
         <span class="p">}</span>
@@ -4078,10 +4087,14 @@
 <span class="cm">*   Fetch all values from all fields from all rows, and return it as an array of objects.</span>
 <span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchAsObject&quot;&gt;fetchAsObject()&lt;/a&gt;&lt;/code&gt;.</span>
 <span class="cm">*   @method fetchAllAsObject </span>
+<span class="cm">*   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created</span>
 <span class="cm">*   @return array[]</span>
 <span class="cm">*/</span>    
-    <span class="nx">fetchAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-        <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">fetchAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rows</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">row</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">rows</span><span class="p">){</span>
+            <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
         <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsObject</span><span class="p">())){</span>
             <span class="nx">rows</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
         <span class="p">}</span>
@@ -4091,15 +4104,73 @@
 <span class="cm">*   Fetch all rows using a custom function, and return the return values as an array.</span>
 <span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchCustom&quot;&gt;fetchCustom()&lt;/a&gt;&lt;/code&gt;.</span>
 <span class="cm">*   @method fetchAllCustom </span>
+<span class="cm">*   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created</span>
 <span class="cm">*   @return array[]</span>
 <span class="cm">*/</span>    
-    <span class="nx">fetchAllCustom</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
-        <span class="kd">var</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">fetchAllCustom</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rows</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">row</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">rows</span><span class="p">){</span>
+            <span class="nx">rows</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
         <span class="k">while</span><span class="p">((</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchCustom</span><span class="p">(</span><span class="nx">func</span><span class="p">))){</span>
             <span class="nx">rows</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">rows</span><span class="p">;</span>
-    <span class="p">}</span>    
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   @method mapAsObject</span>
+<span class="cm">*   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.</span>
+<span class="cm">*/</span>    
+    <span class="nx">mapAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">o</span><span class="p">,</span> <span class="nx">m</span> <span class="o">=</span> <span class="nx">map</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">l</span><span class="o">=</span><span class="nx">key</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">last</span> <span class="o">=</span> <span class="nx">l</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="nx">k</span> <span class="o">=</span> <span class="nx">key</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span> <span class="c1">//get the keypart</span>
+            <span class="nx">v</span> <span class="o">=</span> <span class="nx">row</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span> <span class="c1">//get the value for the key part</span>
+            <span class="nx">p</span> <span class="o">=</span> <span class="nx">m</span><span class="p">[</span><span class="nx">v</span><span class="p">];</span>   <span class="c1">//get the property from the map for this keypart.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>   
+                <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">last</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">//last, we need to store the row now.</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">p</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">//already entries here, append</span>
+                        <span class="nx">p</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="p">{</span>          <span class="c1">//single row store here. since we need multiple rows, add an array</span>
+                        <span class="nx">m</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">p</span><span class="p">,</span> <span class="nx">row</span><span class="p">];</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span>                <span class="c1">//property didnt exist for this key yet.         </span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">last</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">//last keypart: store the row here</span>
+                <span class="nx">m</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="nx">row</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>            <span class="c1">//more keyparts to go: add a new map for this keypart</span>
+                <span class="nx">m</span> <span class="o">=</span> <span class="nx">m</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+<span class="cm">/**</span>
+<span class="cm">*   Fetch all rows as an object, store them as proprties in an object (which acts as map).</span>
+<span class="cm">*   See &lt;code&gt;&lt;a href=&quot;#method_fetchArray&quot;&gt;fetchArray()&lt;/a&gt;&lt;/code&gt;.</span>
+<span class="cm">*   @method mapAllAsObject </span>
+<span class="cm">*   @param map {object} OPTIONAL. The object that is used as map. Rows are added as properties to this map. If not specified, a new object is created</span>
+<span class="cm">*   @key {string|array} OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.</span>
+<span class="cm">*   @return {object}</span>
+<span class="cm">*/</span>    
+    <span class="nx">mapAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">key</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">map</span><span class="p">){</span>
+            <span class="nx">map</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_key</span><span class="p">){</span>
+                <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_key</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">row</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsObject</span><span class="p">()){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">mapAsObject</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">map</span><span class="p">;</span>
+    <span class="p">}</span>
 <span class="p">};</span>
 
 <span class="cm">/**</span>

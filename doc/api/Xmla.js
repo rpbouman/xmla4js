@@ -3564,6 +3564,11 @@ Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
 
 Xmla.Rowset.prototype = {
     _type: null,
+    rows: null,
+    numRows: null,
+    fieldOrder: null,
+    fields: null,
+    _fieldCount: null,
     _initData: function(node, requestType){
         this.type = requestType;
         this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
@@ -4065,10 +4070,14 @@ while (rowObject = rowset.fetchAsObject()){
 *   Fetch all values from all fields from all rows, and return it as an array of arrays.
 *   See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.
 *   @method fetchAllAsArray 
+*   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created
 *   @return array[]
 */    
-    fetchAllAsArray: function(){
-        var row, rows = [];
+    fetchAllAsArray: function(rows){
+        var row;
+        if (!rows){
+            rows = [];
+        }
         while((row = this.fetchAsArray())){
             rows.push(row);
         }
@@ -4078,10 +4087,14 @@ while (rowObject = rowset.fetchAsObject()){
 *   Fetch all values from all fields from all rows, and return it as an array of objects.
 *   See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.
 *   @method fetchAllAsObject 
+*   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created
 *   @return array[]
 */    
-    fetchAllAsObject: function(){
-        var row, rows = [];
+    fetchAllAsObject: function(rows){
+        var row;
+        if (!rows){
+            rows = [];
+        }
         while((row = this.fetchAsObject())){
             rows.push(row);
         }
@@ -4091,15 +4104,73 @@ while (rowObject = rowset.fetchAsObject()){
 *   Fetch all rows using a custom function, and return the return values as an array.
 *   See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.
 *   @method fetchAllCustom 
+*   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created
 *   @return array[]
 */    
-    fetchAllCustom: function(func){
-        var row, rows = [];
+    fetchAllCustom: function(rows, func){
+        var row;
+        if (!rows){
+            rows = [];
+        }
         while((row = this.fetchCustom(func))){
             rows.push(row);
         }
         return rows;
-    }    
+    },
+/**
+*   @method mapAsObject
+*   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.
+*/    
+    mapAsObject: function(map, key, row){
+        var k, v, p, o, m = map;
+        for (var i=0, l=key.length, last = l-1; i<l; i++){
+            k = key[i]; //get the keypart
+            v = row[k]; //get the value for the key part
+            p = m[v];   //get the property from the map for this keypart.
+            if (p) {   
+                if (i === last) {   //last, we need to store the row now.
+                    if (p instanceof Array) {   //already entries here, append
+                        p.push(row);
+                    }
+                    else {          //single row store here. since we need multiple rows, add an array
+                        m[v] = [p, row];
+                    }
+                }
+            }
+            else                //property didnt exist for this key yet.         
+            if (i === last) {   //last keypart: store the row here
+                m[v] = row;
+            } else {            //more keyparts to go: add a new map for this keypart
+                m = m[v] = {};
+            }
+        }
+    },
+/**
+*   Fetch all rows as an object, store them as proprties in an object (which acts as map).
+*   See <code><a href="#method_fetchArray">fetchArray()</a></code>.
+*   @method mapAllAsObject 
+*   @param map {object} OPTIONAL. The object that is used as map. Rows are added as properties to this map. If not specified, a new object is created
+*   @key {string|array} OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.
+*   @return {object}
+*/    
+    mapAllAsObject: function(map, key){
+        if(!map){
+            map = {};
+        }
+        if (!key) {
+            if (this._key){
+                key = this._key;
+            }
+            else {
+                key = this.fieldOrder;
+            }
+        }
+        var row;
+        while (row = this.fetchAsObject()){
+            this.mapAsObject(map, key, row);
+        }
+        return map;
+    }
 };
 
 /**
