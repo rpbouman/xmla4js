@@ -1,4 +1,23 @@
 <?xml version="1.0"?>
+<!--
+    Copyright 2009,2010 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    
+    xmla-result-pivot-table.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
 <xsl:stylesheet
     version="1.0" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -20,9 +39,17 @@
 <xsl:param name="param-render" select="'document'"/>
 <xsl:param name="param-id-prefix"/>
 
-<xsl:variable name="driller">
-    <span class="olap-driller">+</span>
-</xsl:variable>
+<xsl:template name="driller">
+    <xsl:param name="member"/>
+    <xsl:param name="expanded"/>
+    <span class="olap-driller">
+        <xsl:attribute name="onclick">drill('<xsl:value-of select="$member"/>','<xsl:value-of select="$expanded"/>')</xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="$expanded">-</xsl:when>
+            <xsl:otherwise>+</xsl:otherwise>
+        </xsl:choose>
+    </span>
+</xsl:template>
 
 <xsl:template name="min-level">
 	<xsl:param name="members"/>
@@ -346,6 +373,28 @@
 	</xsl:if>
 </xsl:template>
 
+<xsl:template name="member-path">
+    <xsl:param name="tuple"/>
+    <xsl:param name="member-uname"/>
+    <xsl:param name="hierarchy-number" select="1"/>
+    <xsl:param name="path" select="''"/>
+    <xsl:variable name="member-uname-at-hierarchy-number" select="$tuple/md:Member[$hierarchy-number]/md:UName/text()"/>
+    <xsl:variable name="new-path" select="concat($path,$member-uname-at-hierarchy-number)"/>
+    <xsl:choose>
+        <xsl:when test="$member-uname-at-hierarchy-number = $member-uname">
+            <xsl:value-of select="$new-path"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="member-path">
+                <xsl:with-param name="tuple" select="$tuple"/>
+                <xsl:with-param name="member-uname" select="$member-uname"/>
+                <xsl:with-param name="hierarchy-number" select="$hierarchy-number + 1"/>
+                <xsl:with-param name="path" select="$new-path"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template name="column-levels">
 	<xsl:param name="hierarchy-number"/>
 	<xsl:param name="hierarchy-name"/>
@@ -435,6 +484,8 @@
             <xsl:for-each select="$hierarchy-members">
                 <xsl:variable name="member-position" select="position()"/>
                 <xsl:variable name="member-level" select="number(md:LNum/text())"/>
+                <xsl:variable name="member-uname" select="md:UName/text()"/>
+                <xsl:variable name="tuple" select=".."/>
                 <td>
                     <xsl:if test="$column-tuple-count = $member-position">
                         <xsl:attribute name="style">
@@ -448,7 +499,7 @@
                                     <xsl:when 
                                         test="
                                             $level-number = $max-level
-                                        and md:UName/text() = $hierarchy-members[$member-position - 1]/md:UName/text()
+                                        and $member-uname = $hierarchy-members[$member-position - 1]/md:UName/text()
                                         "
                                     >yes</xsl:when>
                                     <xsl:otherwise>no</xsl:otherwise>
@@ -463,6 +514,27 @@
                             <xsl:choose>
                                 <xsl:when test="$join-cells = 'yes'"></xsl:when>
                                 <xsl:otherwise>
+                                    <xsl:variable name="member-path">
+                                        <xsl:call-template name="member-path">
+                                            <xsl:with-param name="tuple" select="$tuple"/>
+                                            <xsl:with-param name="member-uname" select="$member-uname"/>
+                                        </xsl:call-template>
+                                    </xsl:variable>
+                                    <xsl:variable name="members-beyond-level-with-same-ancestor">                                    
+                                        <xsl:for-each select="$members-beyond-level[substring(md:UName/text(), 1, string-length($member-uname)) = $member-uname]">
+                                            <xsl:variable name="member-beyond-level-path">
+                                                <xsl:call-template name="member-path">
+                                                    <xsl:with-param name="tuple" select=".."/>
+                                                    <xsl:with-param name="member-uname" select="md:UName/text()"/>
+                                                </xsl:call-template>
+                                            </xsl:variable>
+                                            <xsl:if test="substring($member-beyond-level-path, 1, string-length($member-path)) = $member-path">Y</xsl:if>
+                                        </xsl:for-each>
+                                    </xsl:variable>
+                                    <xsl:call-template name="driller">
+                                        <xsl:with-param name="member" select="$member-uname"/>
+                                        <xsl:with-param name="expanded" select="contains($members-beyond-level-with-same-ancestor,'Y')"/>
+                                    </xsl:call-template>
                                     <xsl:value-of select="md:Caption/text()"/>
                                 </xsl:otherwise>
                             </xsl:choose>                            
@@ -618,6 +690,10 @@
                         </xsl:if>
                     </xsl:attribute>
                     <xsl:if test="$join-cells = 'no'">
+                        <xsl:call-template name="driller">
+                            <xsl:with-param name="member" select="$member/md:UName/text()"/>
+                            <xsl:with-param name="expanded" select="$depth+1 != $level-count"/>
+                        </xsl:call-template>
                         <xsl:value-of select="$member/md:Caption/text()"/>
                     </xsl:if>
                 </td>
