@@ -2,6 +2,9 @@
 <?xml-stylesheet type="text/xsl" href="xmla-result-pivot-table.xslt"?>
 <!--
 <?xml-stylesheet type="text/xsl" href="xmla-mdx-query-text.xslt"?>
+
+
+
 select 
     NON EMPTY 
     Union(
@@ -44,7 +47,8 @@ select
               ,[Product].[All Products].[Food].[Snacks]
               ,[Product].[All Products].[Food].[Starchy Foods]
               ,[Product].[All Products].[Non-Consumable]
-            })
+              }
+           )
           )
         )
       , Crossjoin(

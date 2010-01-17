@@ -1,0 +1,701 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+    Copyright 2009,2010 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    
+    pivot-table.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: Pivot Table</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <link type="text/css" rel="stylesheet" href="../css/qbm-pivot.css"/>
+        <style type="text/css">
+            #header {
+            }
+            .left-col {
+                width: 33%;
+                float: left;
+            }
+            .middle-col {
+                width: 34%;
+                float: left;
+            }
+            .right-col {
+                width: 33%;
+                float: left;
+            }
+            .mid-right-col {
+                width: 50%;
+                float: left;
+            }
+            .mid-left-col {
+                width: 50%;
+                float: left;
+            }
+            .footer {
+                clear: both;
+            }
+            #input_url {
+                position:relative;
+                left: 3em;
+                width:40em;
+            }
+            #button_discover_datasources {
+                float: right;
+            }
+            #button_render_table {
+                float: right;
+            }
+            
+             #input_url
+            ,#select_datasource
+            ,#select_catalog
+            ,#select_cube
+            {
+                position:relative;
+                left: 7em;
+            }
+
+            td.select {
+                vertical-align: top;
+            }
+            
+             #select_hierarchies_slicer
+            ,#select_hierarchies_rows
+            ,#select_hierarchies_columns 
+            {
+            }
+            
+            label {
+                position:absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div>
+                <a href="../index.html">Home</a>
+                |
+                <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+                |
+                <a href="index.html">Samples</a>
+                |
+                <a href="../doc/api/index.html">API Reference Documentation</a>
+            </div>
+            <h1>Sample: Pivot Table<img style="display:none" id="image_ajax_loader" src="../css/ajax-loader.gif"/></h1>
+            <p>
+                Enter the URL to your XML/A service in the textbox. 
+                Then, press the "Discover Datasources..." button to find datasources, catalogs and cubes.
+                Use the combo and listboxes below to select the cube, measures and hierarchies for your pivot table.
+                When done, press the "Render Table..." button to render the pivot table matching your selections.
+            </p>
+            <fieldset>
+                <legend>XML/A Service</legend>
+                <label>URL:</label>
+                <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/>
+                <button id="button_discover_datasources">Discover Datasources...</button>
+            </fieldset>
+        </div>
+        <div class="left-col">
+            <fieldset>
+                <legend>Datasource</legend>
+                <div>
+                    <label>Datasource:</label>
+                    <select id="select_datasource"></select>
+                </div>
+                <div>
+                    <label>Catalog:</label>
+                    <select id="select_catalog"></select>
+                </div>
+                <div>
+                    <label>Cube:</label>
+                    <select id="select_cube"></select>
+                </div>
+            </fieldset>
+        </div>
+        <div class="middle-col">
+            <fieldset>
+                <legend>Measures:</legend>
+                <p>
+                    Click the measures in the unused list and they will be added to the used list.
+                    Click the measures in the used list to remove them to the unused list.
+                </p>
+                <table>
+                    <tr>
+                        <th>
+                            Unused:
+                        </th>
+                        <th>
+                            Used:
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="select">
+                            <select multiple="true" id="select_measures_unused"></select>
+                        </td>
+                        <td class="select">
+                            <select multiple="true" id="select_measures_used"></select>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+        <div class="right-col">
+            <form>
+            <fieldset>
+                <legend>Hierarchies:</legend>
+                <p>
+                    Use the radiobuttons to select an axis. 
+                    To add hierarchies to the selected axis, click the entries on any of the two other axes.
+                </p>
+                <table>
+                    <tr>
+                        <th>
+                            <input type="radio" name="axis" value="slicer"/>Slicer:
+                        </th>
+                        <th>
+                            <input type="radio" name="axis" value="rows"/>Rows:
+                        </th>
+                        <th>
+                            <input type="radio" name="axis" value="columns" checked="true"/>Columns:
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="select">
+                            <select multiple="true" id="select_hierarchies_slicer"></select>
+                        </td>
+                        <td class="select">
+                            <select multiple="true" id="select_hierarchies_rows"></select>
+                        </td>
+                        <td class="select">
+                            <select multiple="true" id="select_hierarchies_columns"></select>
+                        </td>
+                    </td>
+                </table>
+            </fieldset>
+            </form>
+        </div>
+        <div class="footer">
+            <fieldset>
+                <legend>Pivot Table</legend>                    
+                <button id="button_render_table">Render Table...</button>
+                <div id="section_table"></div>
+                <pre id="section_query"></div>
+            </fieldset>
+        </div>
+        
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        
+        <script type="text/javascript">
+            /*
+            *   references to the DOM
+            */
+            var button_discover_datasources = document.getElementById("button_discover_datasources"),
+                button_render_table         = document.getElementById("button_render_table"),
+                input_url                   = document.getElementById("input_url"),
+                select_datasource           = document.getElementById("select_datasource"),
+                select_catalog              = document.getElementById("select_catalog"),
+                select_cube                 = document.getElementById("select_cube"),
+                select_measures_unused      = document.getElementById("select_measures_unused"),
+                select_measures_used        = document.getElementById("select_measures_used"),
+                select_hierarchies_slicer   = document.getElementById("select_hierarchies_slicer"),
+                select_hierarchies_rows     = document.getElementById("select_hierarchies_rows"),
+                select_hierarchies_columns  = document.getElementById("select_hierarchies_columns"),
+                section_query               = document.getElementById("section_query"),
+                section_table               = document.getElementById("section_table"),
+                image_ajax_loader           = document.getElementById("image_ajax_loader"),
+            /*
+            *   local caches
+            */
+                datasources                 = null,
+                hierarchies                 = null,
+                measures                    = null,
+            /*
+            *   misc
+            */
+                xmla                        = new Xmla({async: true}),
+                dataSource,
+                xslt
+                ;
+                
+            /*
+            *   Functions to populate objects with data from xmla
+            */
+            
+            function getSelectValue(select){    //in normal browsers, we can do select.value. Why IE8 wants us to write a funcion like this?
+                var value;  
+                if (select.options.length) {
+                    value = select.options[select.selectedIndex].value;
+                }
+                else {
+                    value = null;
+                }
+                return value;
+            }
+            
+            function populateSelect(config){
+                while (config.select.options.length){
+                    config.select.removeChild(config.select.firstChild);
+                }
+                var options = config.options;
+                if (options instanceof Array){
+                    for (var option, text = "", i=0; i<options.length; i++){
+                        option = document.createElement("OPTION");
+                        text = options[i][config.text];
+                        option.innerHTML = text;
+                        option.value = text;                    
+                        config.select.appendChild(option);
+                    }
+                }
+                else 
+                if (options instanceof Object){
+                    for (var p in options) {
+                        if (options.hasOwnProperty(p)){
+                            option = document.createElement("OPTION");
+                            option.innerHTML = p;
+                            option.value = p;                    
+                            config.select.appendChild(option);
+                        }
+                    }
+                }
+            }
+
+            function populateChecklist(config){
+                var choices;
+                if (config.choices) {
+                    var choice;
+                    choices = "<select name=\"${name}\"" +
+                                " onchange=\"dimension_selected(this)\"" +                                
+                                ">"
+                    for (var i=0; i<config.choices.length; i++){
+                        choice = config.choices[i];
+                        choices += "<option" +
+                                (config.checked? " selected=\"" + config.checked + "\"": "") +                         
+                                " value=\"" + choice + "\">" +
+                                choice +
+                                "</option>";
+                    }
+                    choices += "</select>"
+                }
+                else {
+                    choices = "<input name=\"${name}\"" +
+                            " onclick=\"measure_clicked(this)\"" + 
+                            " type=\"checkbox\"/>"
+                }
+                for (var text, str = "", i=0; i<config.options.length; i++){
+                    text = config.options[i][config.text]
+                    str += "<div>" + choices + text + "</div>";
+                }
+                config.select.innerHTML = str;
+            }
+            
+            function populateDatasources(rowset){
+                datasources = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_datasource,
+                    options: datasources,
+                    text: "DataSourceName"
+                });
+                rowset.close();
+                select_datasource.onchange();
+            }
+            
+            function populateCatalogs(rowset){
+                var catalogs = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_catalog,
+                    options: catalogs,
+                    text: "CATALOG_NAME"
+                });
+                rowset.close();
+                select_catalog.onchange();
+            }
+
+            function populateCubes(rowset){
+                var cubes = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_cube,
+                    options: cubes,
+                    text: "CUBE_NAME"
+                });
+                rowset.close();
+                select_cube.onchange();
+            }
+
+            function populateMeasures(rowset){
+                measures = rowset.fetchAllAsObject();
+                populateSelect({
+                    select: select_measures_unused,
+                    options: measures,
+                    text: "MEASURE_NAME"
+                });
+                rowset.close();
+                
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+
+                var restrictions = {};
+                restrictions["CUBE_NAME"] = select_cube.value;
+                xmla.discoverMDHierarchies({
+                    url: datasource.URL,
+                    properties: properties,
+                    restrictions: restrictions
+                });                
+            }
+            
+            function populateHierarchies(rowset){
+                hierarchies = rowset.mapAllAsObject(["HIERARCHY_NAME"]);
+                populateSelect({
+                    select: select_hierarchies_slicer,
+                    options: hierarchies,
+                    text: "HIERARCHY_NAME",
+                    choices: ["columns", "rows", "slicer"],
+                    checked: "rows"
+                });
+                rowset.close();
+            }                        
+            
+            function getMDXSet(select_hierarchies) {
+                var hierarchy, mdx = "{";
+                
+                for (var i=0; i<select_hierarchies.length; i++){
+                    hierarchy = hierarchies[select_hierarchies.options[i].value];
+                    if (i>0){
+                        mdx += "*";
+                    }
+                    if (hierarchy["DIMENSION_TYPE"]==Xmla.Rowset.MD_DIMTYPE_MEASURE) {
+                        mdx += "(";
+                        for (var j=0; j<select_measures_used.length; j++){
+                            if (j >0){
+                                mdx += ",";
+                            }
+                            mdx += "[" + hierarchy["HIERARCHY_NAME"] + "]" +
+                                ".[" + select_measures_used.options[j].value +"]";
+                        }
+                        mdx += ")";
+                    }
+                    else {
+                        mdx += hierarchy["DEFAULT_MEMBER"];
+                    }
+                }
+                mdx += "}";
+                return mdx;
+            }
+            
+            function generateMDX(){
+                var mdx = "SELECT ";
+                mdx += getMDXSet(select_hierarchies_columns) + " ON COLUMNS";
+                if (select_hierarchies_rows.options.length){
+                    mdx += "\n," + getMDXSet(select_hierarchies_rows) +" ON ROWS";
+                }
+                mdx += "\nFROM [" + getSelectValue(select_cube) + "]";
+                return mdx;
+            }
+
+            function render_table(xmla) {
+                //xslt init code (once)
+                if (!xslt){
+                    var xsltParamName = "param-render", 
+                        xsltParamValue = "",
+                        xsltURL = "../xslt/xmla-result-pivot-table.xslt"
+                        ;
+                    if (window.ActiveXObject) {
+                        /*
+                        *   One M$ way, as per example: http://msdn.microsoft.com/en-us/library/ms763679(VS.85).aspx
+                        */
+                        var xsltDoc, xsltTemplate;
+                        xsltDoc = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.6.0');
+                        xsltDoc.async = false;
+                        xsltDoc.load(xsltURL);
+                        
+                        xsltTemplate = new ActiveXObject("Msxml2.XSLTemplate.6.0"); 
+                        xsltTemplate.stylesheet = xsltDoc;
+                        
+                        xslt = xsltTemplate.createProcessor();
+                        xslt.addParameter(xsltParamName, xsltParamValue, "");
+                    }
+                    else {
+                        /*
+                        *   Non-IE code as per example http://www.w3schools.com/xsl/xsl_client.asp
+                        */
+                        var xhr;
+                        xhr = new XMLHttpRequest();
+                        xhr.open("GET", xsltURL, false);
+                        xhr.send("");
+                        
+                        xslt = new XSLTProcessor();                        
+                        xslt.importStylesheet(xhr.responseXML);
+                        xslt.setParameter(null, xsltParamName, xsltParamValue);
+                    }
+                }
+                //xslt appy code 
+                section_table.innerHTML = "";
+                var result;
+                if (window.ActiveXObject) {
+                    xslt.input = xmla.responseXML;
+                    xslt.transform();
+                    section_table.innerHTML = xslt.output;
+                }
+                else
+                if (document.implementation && 
+                    document.implementation.createDocument) {
+                    result = xslt.transformToFragment(xmla.responseXML, document);
+                    section_table.appendChild(result);
+                }
+            }            
+
+            /*
+            *   Xmla event Handlers
+            */
+            function initAjaxLoader(){
+                xmla.addListener({
+                    events: Xmla.EVENT_GENERAL,
+                    handler: function(eventName){
+                        var display;
+                        switch (eventName) {
+                            case Xmla.EVENT_REQUEST:
+                                display = "";
+                                break;
+                            case Xmla.EVENT_SUCCESS:
+                            case Xmla.EVENT_ERROR:
+                                display = "none";
+                                break;
+                        }
+                        image_ajax_loader.style.display = display;
+                    }
+                });
+            }
+            function initDiscoverEvents(){
+                xmla.addListener({
+                    events: Xmla.EVENT_DISCOVER_SUCCESS,
+                    handler: function(eventName, eventData){
+                        var requestType = eventData.requestType;
+                        switch (requestType) { 
+                            case Xmla.DISCOVER_DATASOURCES:
+                                populateDatasources(eventData.rowset);
+                                break;
+                            case Xmla.DBSCHEMA_CATALOGS:
+                                populateCatalogs(eventData.rowset);
+                                break;
+                            case Xmla.MDSCHEMA_CUBES:
+                                populateCubes(eventData.rowset);
+                                break;
+                            case Xmla.MDSCHEMA_HIERARCHIES:
+                                populateHierarchies(eventData.rowset);
+                                break;
+                            case Xmla.MDSCHEMA_MEASURES:
+                                populateMeasures(eventData.rowset);
+                                break;
+                        }
+                    }
+                });
+            }
+            
+            function initExecuteEvents(){
+                xmla.addListener({
+                    events: Xmla.EVENT_EXECUTE_SUCCESS,
+                    handler: function(eventName, eventData, xmla){
+                        var properties = eventData.properties;
+                        switch (properties[Xmla.PROP_FORMAT]){
+                            case Xmla.PROP_FORMAT_TABULAR:                                
+                                break;
+                            case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
+                                render_table(xmla);
+                                break;
+                            default:
+                        }
+                    }
+                });
+            }
+            /*
+            *   DOM event Handlers
+            */
+            function clear_hierarchies_and_measures(){
+                select_measures_used.innerHTML = "";
+                select_measures_unused.innerHTML = "";
+                select_hierarchies_slicer.innerHTML = "";
+                select_hierarchies_rows.innerHTML = "";
+                select_hierarchies_columns.innerHTML = "";
+            }
+            
+            function button_discover_datasources_onclick(){            
+                select_datasource.innerHTML = "";
+                select_catalog.innerHTML = "";
+                select_cube.innerHTML = "";
+                clear_hierarchies_and_measures();
+                xmla.discoverDataSources({
+                    url: input_url.value
+                });
+            }
+            
+            function select_datasource_onchange(){
+                if (!select_datasource.options.length || !datasources.length){
+                    return;
+                }
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+
+                xmla.discoverDBCatalogs({
+                    url: datasource.URL,
+                    properties: properties
+                });
+            }
+            
+            function select_catalog_onchange(){
+                if (!select_catalog.options.length){
+                    return;
+                }
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+
+                xmla.discoverMDCubes({
+                    url: datasource.URL,
+                    properties: properties
+                });
+            }
+            
+            function select_cube_onchange(){
+                if (!select_cube.options.length){
+                    return;
+                }
+                clear_hierarchies_and_measures();
+                var datasource = datasources[select_datasource.selectedIndex];
+
+                var properties = {};
+                properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+
+                var restrictions = {};
+                restrictions["CUBE_NAME"] = select_cube.value;
+
+                xmla.discoverMDMeasures({
+                    url: datasource.URL,
+                    properties: properties,
+                    restrictions: restrictions
+                });
+            }
+            
+            function select_hierarchies_onchange(){
+                var prefix = "select_hierarchies_";
+                var option = this.options[this.selectedIndex];
+                option.selected = false;
+                var form = this.form;
+                var elements = form.elements;
+                var axis;
+                var axis_buttons = elements["axis"];
+                for (var i=0; i<axis_buttons.length; i++){
+                    if (axis_buttons[i].checked) {
+                        axis = axis_buttons[i].value;
+                        break;
+                    }
+                }
+                if (!axis) {
+                    throw "Whoops...expected one axis radiobutton to be checked";
+                }
+                var hierarchy = option.value;
+                var select_hierarchy = prefix + axis;
+                if (select_hierarchy == this.id) {
+                    alert("You cannot move the [" + 
+                    hierarchy + "] hierarchy to the [" +
+                    axis + "] axis, " +
+                    "because it's there already.\n" +
+                    "Use the radio buttons to select another axis."
+                    );
+                }
+                else {
+                    this.removeChild(option);
+                    document.getElementById(select_hierarchy).appendChild(option);
+                }
+            }
+            
+            function select_measures_onchange(){
+                var prefix = "select_measures_";
+                var option = this.options[this.selectedIndex];
+                option.selected = false;                
+                var select;
+                switch (this) {
+                    case select_measures_unused:
+                        select = select_measures_used;
+                        break;
+                    case select_measures_used:
+                        select = select_measures_unused;
+                        break;
+                }                
+                this.removeChild(option);
+                select.appendChild(option)
+            }
+                        
+            function button_render_table_onclick(){
+                if (!select_hierarchies_columns.options.length){
+                    alert("Please add one or more hierarchies to the Columns axis.");
+                    return;
+                }
+                var mdx = generateMDX();
+                section_query.innerHTML = mdx;
+                var datasource = datasources[select_datasource.selectedIndex];
+                var catalog = getSelectValue(select_catalog);
+                xmla.executeMultiDimensional({
+                    url: datasource["URL"],
+                    statement: mdx,
+                    properties: {
+                        DataSourceInfo: datasource["DataSourceInfo"],   
+                        Catalog: catalog
+                    }
+                });
+            }
+            
+            /*
+            *   Initialization
+            */
+            function init(){
+                
+                initAjaxLoader();
+                initDiscoverEvents();
+                initExecuteEvents();
+                
+                button_discover_datasources.onclick = button_discover_datasources_onclick;
+                button_render_table.onclick         = button_render_table_onclick;
+                
+                select_datasource.onchange          = select_datasource_onchange;
+                select_catalog.onchange             = select_catalog_onchange;
+                select_cube.onchange                = select_cube_onchange;
+                
+                select_measures_unused.onchange     = select_measures_onchange;
+                select_measures_used.onchange       = select_measures_onchange;
+
+                select_hierarchies_slicer.onchange  = select_hierarchies_onchange;
+                select_hierarchies_rows.onchange    = select_hierarchies_onchange;
+                select_hierarchies_columns.onchange = select_hierarchies_onchange;
+                
+            }
+
+            init();
+            
+        </script>
+    </body>
+</html>
