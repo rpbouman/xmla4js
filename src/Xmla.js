@@ -38,6 +38,7 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSchemaInstance = "http://www.w3.org/2001/XMLSchema-instance",
     _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
+    _xmlnsResultset = _xmlnsXmla + ":mddataset",
     _useAX = window.ActiveXObject? true : false
 ;    
 
@@ -4203,6 +4204,35 @@ while (rowObject = rowset.fetchAsObject()){
         return key;
     }
 };
+
+Xmla.Resultset = function (node){
+    this._initData(node);
+    return this;    
+}
+
+Xmla.Resultset.prototype = {
+    axes: {},
+    _initData: function(node){
+        for (var axes = _getElementsByTagNameNS(node, _xmlnsResultset, null, "Axis"), 
+                axisNode, 
+                axis, 
+                i=0, 
+                numAxes = axes.length; i<numAxes; i++
+        ){
+            axis = {};
+            this.axes[axis.getAttribute("name")] = axis;            
+            for (var tuples = _getElementsByTagNameNS(axes.item(i), _xmlnsResultset, null, "Tuple"),
+                tupleNode, 
+                tuple, 
+                j=0, 
+                numTuples = tuples.length; j<numTuples; j++
+            ) {
+                tupleNode = tuples.item(j);
+                
+            }
+        }
+    }
+}
 
 /**
 *   <p>
