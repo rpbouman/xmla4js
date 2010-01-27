@@ -656,6 +656,10 @@
                     return;
                 }
                 var mdx = generateMDX();
+                executeMDX(mdx);
+            }
+            
+            function executeMDX(mdx) {
                 section_query.innerHTML = mdx;
                 var datasource = datasources[select_datasource.selectedIndex];
                 var catalog = getSelectValue(select_catalog);
@@ -668,8 +672,246 @@
                     }
                 });
             }
+
+            var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
+                if (typeof(node.getElementsByTagNameNS)=="function"){
+                    return node.getElementsByTagNameNS(ns, tagName);
+                }
+                else    
+                if (prefix){        
+                    return node.getElementsByTagName(prefix + ":" + tagName);
+                }
+                else {
+                    return node.getElementsByTagName(tagName);
+                }
+            };
+
+            function getModel(node){
+                var _xmlnsResultset = "urn:schemas-microsoft-com:xml-analysis:mddataset";
+                var model = {
+                    type: "mdx", 
+                    axes: {},
+                    cube: _getElementsByTagNameNS(node, _xmlnsResultset, null, "CubeName").item(0).firstChild.data
+                };
+                for (var axes = _getElementsByTagNameNS(node, _xmlnsResultset, null, "Axis"), 
+                        axisNode, 
+                        axis, 
+                        i=0, 
+                        numAxes = axes.length; i<numAxes; i++
+                ){
+                    axisNode = axes.item(i);
+                    axis = {
+                        type: "set", 
+                        tuples: [],
+                        name: axisNode.getAttribute("name")
+                    };
+                    model.axes[axis.name] = axis;
+                    for (var tuples = _getElementsByTagNameNS(axisNode, _xmlnsResultset, null, "Tuple"),
+                        tupleNode, 
+                        tuple, 
+                        j=0, 
+                        numTuples = tuples.length; j<numTuples; j++
+                    ) {
+                        tupleNode = tuples.item(j);
+                        tuple = {type: "tuple", members: []};
+                        axis.tuples.push(tuple);
+                        for (var members = _getElementsByTagNameNS(tupleNode, _xmlnsResultset, null, "Member"),
+                            memberNode,
+                            k=0,
+                            numMembers = members.length; k<numMembers; k++
+                        ){
+                            memberNode = members.item(k);
+                            member = {
+                                type: "member", 
+                                hierarchy: memberNode.getAttribute("Hierarchy"),
+                            };
+                            for (var childNodes = _getElementsByTagNameNS(memberNode, _xmlnsResultset, null, "*"),
+                                childNode,
+                                l=0,
+                                numChildNodes = childNodes.length; l<numChildNodes; l++
+                            ){
+                                childNode = childNodes.item(l);
+                                member[childNode.tagName] = childNode.firstChild.data;
+                            }
+                            tuple.members.push(member);
+                        }
+                    }
+                }
+                return model;
+            }
             
-            function drill(member, expanded){
+            function transformModel(model, drillTuple, memberIndex, expanded){
+                var memberFound, drillMember = drillTuple[memberIndex];
+                var axes = model.axes;
+                for (var p in axes){
+                    if (axes.hasOwnProperty(p)){
+                        var axis = axes[p];
+                        for (var tuples = axis.tuples, numTuples = tuples.length, i=0; i<numTuples; i++){
+                            memberFound = true;                            
+                            var tuple = tuples[i];
+                            for (var members = tuple.members, numMembers = members.length, j=0; j<numMembers; j++){
+                                var member = members[j];
+                                if (memberFound && (member.UName != drillTuple[j])){
+                                    memberFound = false;
+                                }                                
+                            }
+                            if (memberFound){
+                                if (expanded){  //rollup
+                                    //advance, skippin all 'child' tuples.
+                                    var offset = i+1;
+                                    while (++i < numTuples) {
+                                        members = tuples[i].members;
+                                        for (var k=0; k<memberIndex; k++){
+                                            if (drillTuple[k].Uname!=members[k].Uname){
+                                                break;
+                                            }
+                                        }
+                                        if (members[memberIndex].UName.indexOf(drillMember)!=0){
+                                            break;
+                                        }
+                                    };
+                                    tuples.splice(offset, i-offset);
+                                }
+                                else {          //drilldown
+                                    var expr = {
+                                        type: "expression",
+                                        text: drillMember + ".Children" 
+                                    };
+                                    if (members.length > memberIndex+1) {
+                                        expr = {
+                                            type: "function", 
+                                            name: "crossjoin",
+                                            args: [
+                                                expr,
+                                                {type: "set",
+                                                 tuples: [
+                                                    {type: "tuple",
+                                                     members: members.slice(memberIndex+1)
+                                                    }
+                                                 ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                    if (memberIndex){
+                                        expr = {
+                                            type: "function",
+                                            name: "crossjoin",
+                                            args: [
+                                                {type: "set",
+                                                 tuples: [
+                                                    {type: "tuple",
+                                                     members:members.slice(0,memberIndex)
+                                                    }
+                                                 ]
+                                                },
+                                                expr
+                                            ]
+                                        }
+                                    }
+                                    if (tuples.length > i+1) {
+                                        expr = {
+                                            type: "function",
+                                            name: "union",
+                                            args:[
+                                                expr,
+                                                {type: "set", tuples: tuples.slice(i+1)}
+                                            ]
+                                        }
+                                    }
+                                    expr = {
+                                        type: "function",
+                                        name: "union",
+                                        args:[
+                                            {type: "set", tuples: tuples.slice(0, i+1)},
+                                            expr
+                                        ]
+                                    }
+                                    axes[p] = expr;
+                                }
+                                return model;
+                            }
+                        }
+                    }
+                }
+                return model;
+            }
+            
+            function getMDX(node){
+                var type = node.type;
+                var mdx = "";
+                switch (type){
+                    case "mdx":
+                        mdx = "SELECT ";
+                        var axis, axes = node.axes;
+                        for (var i=0; true; i++){
+                            axis = axes["Axis" + i];
+                            if (!axis){
+                                break;
+                            }
+                            if (i>0) {
+                                mdx += ",\n";
+                            }
+                            mdx += getMDX(axis) + " ON Axis(" + i + ")";
+                        }
+                        mdx += "\nFROM [" + node.cube + "]";
+                        axis = axes["SlicerAxis"];
+                        if (axis){
+                            mdx += "\nWHERE " + getMDX(axis);
+                        }
+                        break;
+                    case "set":                        
+                        var tuple;
+                        var tuples = node.tuples, numTuples = tuples.length, i;
+                        for (i=0; i<numTuples; i++){
+                            tuple = tuples[i];
+                            if (mdx!="" && tuple.members.length){
+                                mdx+= ",\n";
+                            }
+                            if (tuple.members.length){
+                                mdx += getMDX(tuple);
+                            }
+                        }
+                        mdx = "{" + mdx + "}";
+                        break;
+                    case "tuple":
+                        var members = node.members, numMembers = members.length, i;
+                        for (i=0; i<numMembers; i++){
+                            if (i>0){
+                                mdx+= ",\n";
+                            }
+                            mdx += getMDX(members[i]);
+                        }
+                        mdx = "(" + mdx + ")";
+                        break;
+                    case "member":
+                        mdx = node.UName;
+                        break;
+                    case "function":
+                        mdx = node.name + "(";
+                        var args = node.args, numArgs = args.length, i;
+                        for (i=0; i<numArgs; i++){
+                            if (i>0){
+                                mdx+= ",\n";
+                            }
+                            mdx += getMDX(args[i]);
+                        }
+                        mdx += ")";
+                        break;
+                    case "expression":
+                        mdx = node.text;
+                        break;
+                    default:
+                        throw "Unknown type: " + type;
+                }
+                return mdx;
+            }
+            
+            function drill(tuple, memberIndex, expanded){
+                var model = getModel(xmla.responseXML);
+                model = transformModel(model, tuple, memberIndex, expanded);
+                var mdx = getMDX(model);
+                executeMDX(mdx);
             }
             
             /*

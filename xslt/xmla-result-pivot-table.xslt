@@ -41,9 +41,13 @@
 
 <xsl:template name="driller">
     <xsl:param name="member"/>
+    <xsl:param name="tuple"/>
     <xsl:param name="expanded"/>
+    <xsl:variable name="members" select="$tuple/md:Member"/>
+    <xsl:variable name="num-members" select="count($members)"/>
+    <xsl:variable name="tuple-members">[<xsl:for-each select="$members">'<xsl:value-of select="md:UName/text()"/>'<xsl:if test="position()!=$num-members">,</xsl:if></xsl:for-each>]</xsl:variable>
     <span class="olap-driller">
-        <xsl:attribute name="onclick">drill('<xsl:value-of select="$member"/>','<xsl:value-of select="$expanded"/>')</xsl:attribute>
+        <xsl:attribute name="onclick">drill(<xsl:value-of select="$tuple-members"/>,<xsl:value-of select="$member - 1"/>,<xsl:value-of select="$expanded"/>)</xsl:attribute>
         <xsl:choose>
             <xsl:when test="$expanded">-</xsl:when>
             <xsl:otherwise>+</xsl:otherwise>
@@ -532,7 +536,8 @@
                                         </xsl:for-each>
                                     </xsl:variable>
                                     <xsl:call-template name="driller">
-                                        <xsl:with-param name="member" select="$member-uname"/>
+                                        <xsl:with-param name="tuple" select="$tuple"/>
+                                        <xsl:with-param name="member" select="$hierarchy-number"/>
                                         <xsl:with-param name="expanded" select="contains($members-beyond-level-with-same-ancestor,'Y')"/>
                                     </xsl:call-template>
                                     <xsl:value-of select="md:Caption/text()"/>
@@ -691,10 +696,11 @@
                             olap-column-header-cell2
                         </xsl:if>
                     </xsl:attribute>
-                    <xsl:if test="$join-cells = 'no'">                        
+                    <xsl:if test="$join-cells = 'no'">                 
+                        <xsl:variable name="tuple" select="$member/.."/>
                         <xsl:variable name="member-path">
                             <xsl:call-template name="member-path">
-                                <xsl:with-param name="tuple" select="$member/.."/>
+                                <xsl:with-param name="tuple" select="$tuple"/>
                                 <xsl:with-param name="member-uname" select="$member-uname"/>
                             </xsl:call-template>
                         </xsl:variable>
@@ -712,7 +718,8 @@
                         </xsl:variable>
                         
                         <xsl:call-template name="driller">
-                            <xsl:with-param name="member" select="$member-uname"/>
+                            <xsl:with-param name="tuple" select="$tuple"/>
+                            <xsl:with-param name="member" select="$row-hierarchy-position"/>
                             <xsl:with-param name="expanded" select="contains($members-beyond-level-with-same-ancestor, 'Y')"/>
                         </xsl:call-template>
                         <xsl:value-of select="$member/md:Caption/text()"/>

@@ -4205,35 +4205,6 @@ while (rowObject = rowset.fetchAsObject()){
     }
 };
 
-Xmla.Resultset = function (node){
-    this._initData(node);
-    return this;    
-}
-
-Xmla.Resultset.prototype = {
-    axes: {},
-    _initData: function(node){
-        for (var axes = _getElementsByTagNameNS(node, _xmlnsResultset, null, "Axis"), 
-                axisNode, 
-                axis, 
-                i=0, 
-                numAxes = axes.length; i<numAxes; i++
-        ){
-            axis = {};
-            this.axes[axis.getAttribute("name")] = axis;            
-            for (var tuples = _getElementsByTagNameNS(axes.item(i), _xmlnsResultset, null, "Tuple"),
-                tupleNode, 
-                tuple, 
-                j=0, 
-                numTuples = tuples.length; j<numTuples; j++
-            ) {
-                tupleNode = tuples.item(j);
-                
-            }
-        }
-    }
-}
-
 /**
 *   <p>
 *   This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.
