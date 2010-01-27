@@ -83,7 +83,15 @@
             }
             
             label {
+                
+            }
+            
+            label.abs {
                 position:absolute;
+            }
+            
+            select {
+                min-width: 0.5em;
             }
         </style>
     </head>
@@ -107,7 +115,7 @@
             </p>
             <fieldset>
                 <legend>XML/A Service</legend>
-                <label>URL:</label>
+                <label class="abs">URL:</label>
                 <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/>
                 <button id="button_discover_datasources">Discover Datasources...</button>
             </fieldset>
@@ -116,15 +124,15 @@
             <fieldset>
                 <legend>Datasource</legend>
                 <div>
-                    <label>Datasource:</label>
+                    <label class="abs">Datasource:</label>
                     <select id="select_datasource"></select>
                 </div>
                 <div>
-                    <label>Catalog:</label>
+                    <label class="abs">Catalog:</label>
                     <select id="select_catalog"></select>
                 </div>
                 <div>
-                    <label>Cube:</label>
+                    <label class="abs">Cube:</label>
                     <select id="select_cube"></select>
                 </div>
             </fieldset>
@@ -139,10 +147,10 @@
                 <table>
                     <tr>
                         <th>
-                            Unused:
+                            <label for="select_measures_unused">Unused:</label>
                         </th>
                         <th>
-                            Used:
+                            <label for="select_measures_used">Used:</label>
                         </th>
                     </tr>
                     <tr>
@@ -167,13 +175,16 @@
                 <table>
                     <tr>
                         <th>
-                            <input type="radio" name="axis" value="slicer"/>Slicer:
+                            <input type="radio" name="axis" value="slicer" id="axis_slicer"/>
+                            <label for="axis_slicer">Slicer</label>:
                         </th>
                         <th>
-                            <input type="radio" name="axis" value="rows"/>Rows:
+                            <input type="radio" name="axis" value="rows"id="axis_rows"/>
+                            <label for="axis_rows">Rows</label>:
                         </th>
                         <th>
-                            <input type="radio" name="axis" value="columns" checked="true"/>Columns:
+                            <input type="radio" name="axis" value="columns" checked="true" id="axis_columns"/>
+                            <label for="axis_columns">Columns</label>:
                         </th>
                     </tr>
                     <tr>
@@ -193,7 +204,13 @@
         </div>
         <div class="footer">
             <fieldset>
-                <legend>Pivot Table</legend>                    
+                <legend>Pivot Table</legend>
+                <select id="select_empty_cells">
+                    <option value="none">Allow empty cells</option>
+                    <option value="all">Suppress empty cells</option>
+                    <option value="rows">Suppress empty rows</option>
+                    <option value="cols">Suppress empty columns</option>
+                </select>
                 <button id="button_render_table">Render Table...</button>
                 <div id="section_table"></div>
                 <pre id="section_query"></div>
@@ -221,6 +238,7 @@
                 section_query               = document.getElementById("section_query"),
                 section_table               = document.getElementById("section_table"),
                 image_ajax_loader           = document.getElementById("image_ajax_loader"),
+                select_empty_cells          = document.getElementById("select_empty_cells"),
             /*
             *   local caches
             */
@@ -411,6 +429,8 @@
                 mdx += "\nFROM [" + getSelectValue(select_cube) + "]";
                 return mdx;
             }
+            
+            
 
             function render_table(xmla) {
                 //xslt init code (once)
@@ -632,7 +652,7 @@
                     document.getElementById(select_hierarchy).appendChild(option);
                 }
             }
-            
+                        
             function select_measures_onchange(){
                 var prefix = "select_measures_";
                 var option = this.options[this.selectedIndex];
@@ -649,6 +669,13 @@
                 this.removeChild(option);
                 select.appendChild(option)
             }
+            
+            function select_empty_cells_onchange(){
+                var model = loadModel(xmla.responseXML);
+                var mdx = getMDX(model);
+                executeMDX(mdx);
+            }
+
                         
             function button_render_table_onclick(){
                 if (!select_hierarchies_columns.options.length){
@@ -686,7 +713,7 @@
                 }
             };
 
-            function getModel(node){
+            function loadModel(node){
                 var _xmlnsResultset = "urn:schemas-microsoft-com:xml-analysis:mddataset";
                 var model = {
                     type: "mdx", 
@@ -843,7 +870,7 @@
                 switch (type){
                     case "mdx":
                         mdx = "SELECT ";
-                        var axis, axes = node.axes;
+                        var axis, axes = node.axes, emptyCells = getSelectValue(select_empty_cells);
                         for (var i=0; true; i++){
                             axis = axes["Axis" + i];
                             if (!axis){
@@ -851,6 +878,12 @@
                             }
                             if (i>0) {
                                 mdx += ",\n";
+                            }
+                            if (emptyCells === "all"
+                            ||  emptyCells === "cols" && i===0
+                            ||  emptyCells === "rows" && i===1
+                            ){
+                                mdx += "NON EMPTY ";
                             }
                             mdx += getMDX(axis) + " ON Axis(" + i + ")";
                         }
@@ -908,7 +941,7 @@
             }
             
             function drill(tuple, memberIndex, expanded){
-                var model = getModel(xmla.responseXML);
+                var model = loadModel(xmla.responseXML);
                 model = transformModel(model, tuple, memberIndex, expanded);
                 var mdx = getMDX(model);
                 executeMDX(mdx);
@@ -936,6 +969,8 @@
                 select_hierarchies_slicer.onchange  = select_hierarchies_onchange;
                 select_hierarchies_rows.onchange    = select_hierarchies_onchange;
                 select_hierarchies_columns.onchange = select_hierarchies_onchange;
+                
+                select_empty_cells.onchange         = select_empty_cells_onchange;
                 
             }
 

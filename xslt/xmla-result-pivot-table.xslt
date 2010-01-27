@@ -182,10 +182,6 @@
 </xsl:template>
 
 <xsl:template name="content">
-    $param-render: <xsl:value-of select="$param-render"/>;
-<!--
-    $param-id-prefix: <xsl:value-of select="$param-id-prefix"/>
--->    
     <xsl:choose>
         <xsl:when test="//md:OlapInfo">
             <xsl:call-template name="md"/>
