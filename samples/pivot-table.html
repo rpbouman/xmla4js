@@ -24,20 +24,16 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>xmla4js: Pivot Table</title>
         <link rel="stylesheet" type="text/css" href="../css/default.css"/>
-        <link type="text/css" rel="stylesheet" href="../css/qbm-pivot.css"/>
+        <link type="text/css" rel="stylesheet" href="../css/pivot-table.css"/>
         <style type="text/css">
             #header {
             }
             .left-col {
-                width: 33%;
-                float: left;
-            }
-            .middle-col {
-                width: 34%;
+                width: 50%;
                 float: left;
             }
             .right-col {
-                width: 33%;
+                width: 50%;
                 float: left;
             }
             .mid-right-col {
@@ -113,6 +109,8 @@
                 Use the combo and listboxes below to select the cube, measures and hierarchies for your pivot table.
                 When done, press the "Render Table..." button to render the pivot table matching your selections.
             </p>
+        </div>
+        <div class="left-col">
             <fieldset>
                 <legend>XML/A Service</legend>
                 <label class="abs">URL:</label>
@@ -120,7 +118,7 @@
                 <button id="button_discover_datasources">Discover Datasources...</button>
             </fieldset>
         </div>
-        <div class="left-col">
+        <div class="right-col">
             <fieldset>
                 <legend>Datasource</legend>
                 <div>
@@ -137,10 +135,11 @@
                 </div>
             </fieldset>
         </div>
-        <div class="middle-col">
+        <div class="footer"></div>
+        <div class="left-col">
             <fieldset>
                 <legend>Measures:</legend>
-                <p>
+                <p>                    
                     Click the measures in the unused list and they will be added to the used list.
                     Click the measures in the used list to remove them to the unused list.
                 </p>
@@ -197,7 +196,7 @@
                         <td class="select">
                             <select multiple="true" id="select_hierarchies_columns"></select>
                         </td>
-                    </td>
+                    </tr>
                 </table>
             </fieldset>
             </form>
@@ -213,7 +212,10 @@
                 </select>
                 <button id="button_render_table">Render Table...</button>
                 <div id="section_table"></div>
-                <pre id="section_query"></div>
+            </fieldset>
+            <fieldset>
+                <legend>MDX</legend>
+                <pre id="section_query"></pre>
             </fieldset>
         </div>
         
@@ -272,7 +274,7 @@
                 while (config.select.options.length){
                     config.select.removeChild(config.select.firstChild);
                 }
-                var options = config.options;
+                var size, options = config.options;
                 if (options instanceof Array){
                     for (var option, text = "", i=0; i<options.length; i++){
                         option = document.createElement("OPTION");
@@ -281,9 +283,11 @@
                         option.value = text;                    
                         config.select.appendChild(option);
                     }
+                    size = options.length;
                 }
                 else 
                 if (options instanceof Object){
+                    size = 0
                     for (var p in options) {
                         if (options.hasOwnProperty(p)){
                             option = document.createElement("OPTION");
@@ -291,8 +295,14 @@
                             option.value = p;                    
                             config.select.appendChild(option);
                         }
-                    }
+                        size++
+                    }                    
                 }
+                //setting the size is the only way I could get IE8 to behave. 
+                //of course, that is not enough becayse that would just be way too easy.
+                //no, we have to check ourself too if it was a multi select list.
+                //MS, can't you just give up on this browser thing? 
+                config.select.size = config.select.multiple? size : 1;
             }
 
             function populateChecklist(config){
@@ -437,7 +447,7 @@
                 if (!xslt){
                     var xsltParamName = "param-render", 
                         xsltParamValue = "",
-                        xsltURL = "../xslt/xmla-result-pivot-table.xslt"
+                        xsltURL = "../xslt/xmla-mdresult.xslt"
                         ;
                     if (window.ActiveXObject) {
                         /*
@@ -649,7 +659,10 @@
                 }
                 else {
                     this.removeChild(option);
-                    document.getElementById(select_hierarchy).appendChild(option);
+                    this.size = this.options.length;
+                    var target = document.getElementById(select_hierarchy);
+                    target.appendChild(option);
+                    target.size = target.options.length;
                 }
             }
                         
@@ -667,7 +680,9 @@
                         break;
                 }                
                 this.removeChild(option);
-                select.appendChild(option)
+                this.size = this.options.length;
+                select.appendChild(option);
+                select.size = select.options.length;
             }
             
             function select_empty_cells_onchange(){
@@ -678,6 +693,10 @@
 
                         
             function button_render_table_onclick(){
+                if (!select_measures_used.options.length){
+                    alert("Please add one or more measures to the used list.");
+                    return;
+                }
                 if (!select_hierarchies_columns.options.length){
                     alert("Please add one or more hierarchies to the Columns axis.");
                     return;
@@ -750,7 +769,7 @@
                             memberNode = members.item(k);
                             member = {
                                 type: "member", 
-                                hierarchy: memberNode.getAttribute("Hierarchy"),
+                                hierarchy: memberNode.getAttribute("Hierarchy")
                             };
                             for (var childNodes = _getElementsByTagNameNS(memberNode, _xmlnsResultset, null, "*"),
                                 childNode,

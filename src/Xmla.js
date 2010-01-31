@@ -1461,7 +1461,7 @@ Xmla.prototype = {
             timeout: options.requestTimeout,
             data: soapMessage,
             error:      function(exception){
-                            options.exception = exeception;
+                            options.exception = exception;
                             xmla._requestError(options)
                         },
             complete:   function(xhr){
