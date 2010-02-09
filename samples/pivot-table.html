@@ -47,11 +47,6 @@
             .footer {
                 clear: both;
             }
-            #input_url {
-                position:relative;
-                left: 3em;
-                width:40em;
-            }
             #button_discover_datasources {
                 float: right;
             }
@@ -66,6 +61,12 @@
             {
                 position:relative;
                 left: 7em;
+            }
+
+            #input_url {
+                position:relative;
+                left: 0em;
+                width:100%;
             }
 
             td.select {
@@ -113,8 +114,8 @@
         <div class="left-col">
             <fieldset>
                 <legend>XML/A Service</legend>
-                <label class="abs">URL:</label>
-                <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/>
+                <label class="abs">URL:</label><br/>
+                <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/><br/>
                 <button id="button_discover_datasources">Discover Datasources...</button>
             </fieldset>
         </div>
@@ -412,13 +413,13 @@
                         mdx += "*";
                     }
                     if (hierarchy["DIMENSION_TYPE"]==Xmla.Rowset.MD_DIMTYPE_MEASURE) {
-                        mdx += "(";
+                        mdx += "union(";
                         for (var j=0; j<select_measures_used.length; j++){
                             if (j >0){
                                 mdx += ",";
                             }
-                            mdx += "[" + hierarchy["HIERARCHY_NAME"] + "]" +
-                                ".[" + select_measures_used.options[j].value +"]";
+                            mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+                                ".[" + select_measures_used.options[j].value +"])}";
                         }
                         mdx += ")";
                     }
@@ -438,9 +439,7 @@
                 }
                 mdx += "\nFROM [" + getSelectValue(select_cube) + "]";
                 return mdx;
-            }
-            
-            
+            }            
 
             function render_table(xmla) {
                 //xslt init code (once)

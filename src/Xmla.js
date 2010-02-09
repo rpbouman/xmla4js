@@ -20,7 +20,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */    
-
+var Xmla;
 (function (){
 
 var _soap = "http://schemas.xmlsoap.org/soap/",
@@ -39,7 +39,7 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
     _xmlnsResultset = _xmlnsXmla + ":mddataset",
-    _useAX = window.ActiveXObject? true : false
+    _useAX = window.ActiveXObject ? true : false
 ;    
 
 /**
@@ -59,7 +59,30 @@ function _ajax(options){
     This is not a general ajax function, 
     just something that is good enough for Xmla.
 */
-    var xhr;
+    var xhr,
+        handlerCalled = false,
+        handler = function(){
+            handlerCalled = true;
+            switch (xhr.readyState){
+                case 0:
+                    options.aborted(xhr);                    
+                    break;
+                case 4:
+                    if (xhr.status===200){
+                        options.complete(xhr);
+                    }
+                    else {
+                        options.error(
+                            Xmla.Exception._newError(
+                                "HTTP_ERROR",
+                                "_ajax",
+                                options
+                            )
+                        );
+                    }
+                break;
+            }
+        };
     if (_useAX) {
         xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
     } 
@@ -67,29 +90,6 @@ function _ajax(options){
         xhr = new XMLHttpRequest();
     }
     xhr.open("POST", options.url, options.async);
-    var handlerCalled = false;
-    var handler = function(){
-        handlerCalled = true;
-        switch (xhr.readyState){
-            case 0:
-                options.aborted(xhr);                    
-                break;
-            case 4:
-                if (xhr.status===200){
-                    options.complete(xhr);
-                }
-                else {
-                    options.error(
-                        Xmla.Exception._newError(
-                            "HTTP_ERROR",
-                            "_ajax",
-                            options
-                        )
-                    );
-                }
-            break;
-        }
-    };
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send(options.data);
@@ -119,48 +119,43 @@ function _xmlEncodeListEntry(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
-    if (_isFunction(node.getElementsByTagNameNS)){
-        return node.getElementsByTagNameNS(ns, tagName);
-    }
-    else    
-    //the clusterfuck below tries to avoid failing fatally due to IE lack of getElementsByTagNameNS
-    if (prefix){        
-        return node.getElementsByTagName(prefix + ":" + tagName);
-    }
-    else {
-        return node.getElementsByTagName(tagName);
-    }
-};
+var _getElementsByTagNameNS = document.getElementsByTagNameNS ? function(node, ns, prefix, tagName){
+                                                                    return node.getElementsByTagNameNS(ns, tagName);
+                                                                }
+                                                              : function(node, ns, prefix, tagName){
+                                                                    if (prefix){        
+                                                                        return node.getElementsByTagName(prefix + ":" + tagName);
+                                                                    }
+                                                                    else {
+                                                                        return node.getElementsByTagName(tagName);
+                                                                    }
+                                                                };
 
-var _getAttributeNS = function(element, ns, prefix, attributeName){
-    if (_isFunction(element.getAttributeNS)){
-        return element.getAttributeNS(ns, attributeName);
-    }
-    else
-    if (prefix) {
-        return element.getAttribute(prefix + ":" + attributeName);
-    }
-    else {
-        return element.getAttribute(attributeName);
-    }
-};
-
+var _getAttributeNS = document.documentElement.getAttributeNS ? function(element, ns, prefix, attributeName){
+                                                                    return element.getAttributeNS(ns, attributeName);
+                                                                }
+                                                              : function(element, ns, prefix, attributeName){
+                                                                    if (prefix) {
+                                                                        return element.getAttribute(prefix + ":" + attributeName);
+                                                                    }
+                                                                    else {
+                                                                        return element.getAttribute(attributeName);
+                                                                    }
+                                                                };                                                              
 
 function _getXmlaSoapList(container, listType, items, indent){
     if (!indent){
         indent = "";
     }
-    var msg = "\n" + indent + "<" + container + ">";
+    var numItems, i, entry, property, item, msg = "\n" + indent + "<" + container + ">";
     if (items) {
-        var item;
         msg += "\n" + indent + " <" + listType + ">";
-        for (var property in items){
+        for (property in items){
             if (items.hasOwnProperty(property)) {
                 item = items[property];
                 msg += "\n" + indent + "  <" + property + ">";
                 if (typeof(item)==="array"){
-                    for (var entry, i=0, numItems = item.length; i<numItems; i++){
+                    for (entry, i=0, numItems = item.length; i<numItems; i += 1){
                         entry = item[i];
                         msg += "<Value>" + _xmlEncodeListEntry(entry) + "</Value>";
                     }
@@ -181,13 +176,11 @@ var _xmlRequestType = "RequestType";
 function _getXmlaSoapMessage(
     options
 ){
-    var msg = "";
-    var method = options.method;
+    var msg = "", method = options.method, exception = null;
     msg += "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
     "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
     "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
-    var exception = null;
     switch(method){
         case Xmla.METHOD_DISCOVER:
             if (_isUndefined(options.requestType)) {
@@ -1270,7 +1263,7 @@ Xmla.prototype = {
         }
         var numEvents = events.length;
         var eventName, myListeners;
-        for (var i=0; i<numEvents; i++){
+        for (var i=0; i<numEvents; i += 1){
             eventName = events[i].replace(/\s+/g,"");
             myListeners = this.listeners[eventName];
             if (!myListeners) {
@@ -1308,7 +1301,7 @@ Xmla.prototype = {
         var outcome = true;
         if (numListeners) {
             var listener, listenerResult;
-            for (var i=0; i<numListeners; i++){
+            for (var i=0; i<numListeners; i += 1){
                 listener = listeners[i];
                 listenerResult = listener.handler.call(
                     listener.scope,
@@ -1429,7 +1422,7 @@ Xmla.prototype = {
 *   @return {Xmla.Rowset|Xmla.Resultset} The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Resultset</code>.
 */
     request: function(options){
-        var xmla = this;
+        var ex, xmla = this;
 
         if (this.response){
             this.response.close();
@@ -1462,7 +1455,7 @@ Xmla.prototype = {
             data: soapMessage,
             error:      function(exception){
                             options.exception = exception;
-                            xmla._requestError(options)
+                            xmla._requestError(options);
                         },
             complete:   function(xhr){
                             options.xhr = xhr;
@@ -3316,7 +3309,7 @@ function _getRowSchema(xmlDoc){
         numTypes = types.length,
         type,
         i;
-    for (i=0; i<numTypes; i++){
+    for (i=0; i<numTypes; i += 1){
         type = types.item(i);
         if (type.getAttribute("name")==="row"){
             return type;
@@ -3605,15 +3598,15 @@ Xmla.Rowset.prototype = {
             var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
                 seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
                 fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter;
-            for (var i=0; i<numChildren; i++){
+            for (var i=0; i<numChildren; i += 1){
                 seqChild = seqChildren.item(i);
-                if (seqChild.nodeType!=1) {
+                if (seqChild.nodeType !== 1) {  //element node
                     continue;
                 }
                 fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
                 fieldName = seqChild.getAttribute("name");
                 type = seqChild.getAttribute("type");   //get the type from the xsd
-                if (type==null && this.row) {           //bummer, not defined there try to get it from xsi:type in the row
+                if (type===null && this.row) {           //bummer, not defined there try to get it from xsi:type in the row
                     var val = this.row.getElementsByTagName(fieldName);
                     if (val.length){
                         type = _getAttributeNS(
@@ -3624,7 +3617,7 @@ Xmla.Rowset.prototype = {
                         );
                     }                    
                 }
-                if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
+                if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName==="Restrictions") {
                     type = "Restrictions";
                 }
                 minOccurs = seqChild.getAttribute("minOccurs");
@@ -3633,7 +3626,7 @@ Xmla.Rowset.prototype = {
                 this.fields[fieldLabel] = {
                     name: fieldName,
                     label: fieldLabel,
-                    index: this._fieldCount++,
+                    index: this._fieldCount += 1,
                     type: type,
                     jsType: valueConverter.jsType,
                     minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
@@ -3671,7 +3664,7 @@ Xmla.Rowset.prototype = {
             numNodes = nodes.length,
             node
         ;
-        for (var i=0; i<numNodes; i++){
+        for (var i=0; i<numNodes; i += 1){
             node = nodes.item(i);
             arr.push(valueConverter(this._elementText(node)));
         }
@@ -3690,7 +3683,7 @@ Xmla.Rowset.prototype = {
                 childNodes = el.childNodes,
                 numChildNodes = childNodes.length
             ;
-            for (var i=0; i<numChildNodes; i++){
+            for (var i=0; i<numChildNodes; i += 1){
                 text += childNodes.item(i).data;
             }
             return text;
@@ -3814,7 +3807,7 @@ Xmla.Rowset.prototype = {
             fieldCount = this._fieldCount,
             fieldOrder = this.fieldOrder
         ;
-        for (var i=0; i<fieldCount; i++){
+        for (var i=0; i<fieldCount; i += 1){
             f[i] = this.fieldDef(fieldOrder[i]);
         }
         return f;
@@ -3828,7 +3821,7 @@ Xmla.Rowset.prototype = {
 */    
     getFieldNames: function(){
         var fieldNames = [];
-        for (var i=0, count = this.fieldCount(); i<count; i++){
+        for (var i=0, count = this.fieldCount(); i<count; i += 1){
             fieldNames[i] = this.fieldOrder[i];
         }
         return fieldNames;
@@ -3859,7 +3852,8 @@ Xmla.Rowset.prototype = {
 *   @method next
 */    
     next: function(){
-        this.row = this.rows.item(++this.rowIndex);
+        this.rowIndex += 1;
+        this.row = this.rows.item(this.rowIndex);
     },
 /**
 *   Gets the value of the internal row index.
@@ -4146,8 +4140,8 @@ while (rowObject = rowset.fetchAsObject()){
 *   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.
 */    
     mapAsObject: function(map, key, row){
-        var k, v, p, o, m = map;
-        for (var i=0, l=key.length, last = l-1; i<l; i++){
+        var k, v, p, i, len = key.length, last = len - 1, m = map;
+        for (i=0; i < len; i += 1){
             k = key[i]; //get the keypart
             v = row[k]; //get the value for the key part
             p = m[v];   //get the property from the map for this keypart.

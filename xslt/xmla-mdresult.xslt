@@ -37,6 +37,9 @@
 />
 
 <!-- 
+    @param param_render default 'document'
+    If this is 'document' the output will be a complete HTML document
+    Otherwise, only the <table> element for the pivot table is generated.
 -->
 <xsl:param name="param-render" select="'document'"/>
 <xsl:param name="flip-axes" select="'no'"/>
@@ -63,15 +66,17 @@
     <xsl:param name="tuple"/>
     <xsl:param name="expanded"/>
     <xsl:variable name="members" select="$tuple/md:Member"/>
-    <xsl:variable name="num-members" select="count($members)"/>
-    <xsl:variable name="tuple-members">[<xsl:for-each select="$members">'<xsl:value-of select="md:UName/text()"/>'<xsl:if test="position()!=$num-members">,</xsl:if></xsl:for-each>]</xsl:variable>
-    <span class="driller">
-        <xsl:attribute name="onclick">drill(<xsl:value-of select="$tuple-members"/>,<xsl:value-of select="$member - 1"/>,<xsl:value-of select="$expanded"/>)</xsl:attribute>
-        <xsl:choose>
-            <xsl:when test="$expanded">-</xsl:when>
-            <xsl:otherwise>+</xsl:otherwise>
-        </xsl:choose>
-    </span>
+    <xsl:if test="$members[$member][@Hierarchy!='Measures']">
+        <xsl:variable name="num-members" select="count($members)"/>
+        <xsl:variable name="tuple-members">[<xsl:for-each select="$members">'<xsl:value-of select="md:UName/text()"/>'<xsl:if test="position()!=$num-members">,</xsl:if></xsl:for-each>]</xsl:variable>
+        <span class="driller">            
+            <xsl:attribute name="onclick">drill(<xsl:value-of select="$tuple-members"/>,<xsl:value-of select="$member - 1"/>,<xsl:value-of select="$expanded"/>)</xsl:attribute>
+            <xsl:choose>
+                <xsl:when test="$expanded">-</xsl:when>
+                <xsl:otherwise>+</xsl:otherwise>
+            </xsl:choose>
+        </span>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="member-path">

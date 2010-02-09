@@ -36,7 +36,7 @@ REM verbatim to the destination directory.
 SET template="%XMLA_HOME%\build\yuidoc-template"
 
 REM The project version that will be displayed in the documentation.
-SET version="r12"
+SET version="r65"
 
 REM The version of YUI the project uses.
 SET yuiversion="2"

@@ -38,6 +38,7 @@
     <span class="nx">_xmlnsSchemaInstance</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><span class="p">,</span>
     <span class="nx">_xmlnsSchemaInstancePrefix</span> <span class="o">=</span> <span class="s2">&quot;xsi&quot;</span><span class="p">,</span> 
     <span class="nx">_xmlnsRowset</span> <span class="o">=</span> <span class="nx">_xmlnsXmla</span> <span class="o">+</span> <span class="s2">&quot;:rowset&quot;</span><span class="p">,</span>
+    <span class="nx">_xmlnsResultset</span> <span class="o">=</span> <span class="nx">_xmlnsXmla</span> <span class="o">+</span> <span class="s2">&quot;:mddataset&quot;</span><span class="p">,</span>
     <span class="nx">_useAX</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">ActiveXObject</span><span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span>
 <span class="p">;</span>    
 
@@ -1460,7 +1461,7 @@
             <span class="nx">timeout</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">requestTimeout</span><span class="p">,</span>
             <span class="nx">data</span><span class="o">:</span> <span class="nx">soapMessage</span><span class="p">,</span>
             <span class="nx">error</span><span class="o">:</span>      <span class="kd">function</span><span class="p">(</span><span class="nx">exception</span><span class="p">){</span>
-                            <span class="nx">options</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="nx">exeception</span><span class="p">;</span>
+                            <span class="nx">options</span><span class="p">.</span><span class="nx">exception</span> <span class="o">=</span> <span class="nx">exception</span><span class="p">;</span>
                             <span class="nx">xmla</span><span class="p">.</span><span class="nx">_requestError</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span>
                         <span class="p">},</span>
             <span class="nx">complete</span><span class="o">:</span>   <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">){</span>
@@ -3560,7 +3561,29 @@
 <span class="cm">*   @default &lt;code&gt;17&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_DIMTYPE_GEOGRAPHY</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span>
-
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_CATALOGS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_COLUMNS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_PROVIDER_TYPES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_SCHEMATA</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES_INFO</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_DATASOURCES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DataSourceName&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_ENUMERATORS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;EnumName&quot;</span><span class="p">,</span> <span class="s2">&quot;ElementName&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_KEYWORDS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Keyword&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_LITERALS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LiteralName&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_PROPERTIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PropertyName&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SchemaName&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_ACTIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_CUBES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_DIMENSIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;DIMENSION_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_FUNCTIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_HIERARCHIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;HIERARCHY_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_LEVELS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEASURES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;MEASURE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEMBERS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_PROPERTIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_SETS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
 
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">_type</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
@@ -3570,7 +3593,7 @@
     <span class="nx">fields</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     <span class="nx">_fieldCount</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     <span class="nx">_initData</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">requestType</span><span class="p">){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="nx">requestType</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_type</span> <span class="o">=</span> <span class="nx">requestType</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">rows</span> <span class="o">=</span> <span class="nx">_getElementsByTagNameNS</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">_xmlnsRowset</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">numRows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
@@ -4118,6 +4141,7 @@
         <span class="k">return</span> <span class="nx">rows</span><span class="p">;</span>
     <span class="p">},</span>
 <span class="cm">/**</span>
+<span class="cm">*   Fetch all row as an object, store it in nested objects according to values in the column identified by the key argument (which acts as map).</span>
 <span class="cm">*   @method mapAsObject</span>
 <span class="cm">*   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.</span>
 <span class="cm">*/</span>    
@@ -4136,6 +4160,9 @@
                         <span class="nx">m</span><span class="p">[</span><span class="nx">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">p</span><span class="p">,</span> <span class="nx">row</span><span class="p">];</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">m</span> <span class="o">=</span> <span class="nx">p</span><span class="p">;</span>
+                <span class="p">}</span>
             <span class="p">}</span>
             <span class="k">else</span>                <span class="c1">//property didnt exist for this key yet.         </span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="nx">last</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">//last keypart: store the row here</span>
@@ -4153,23 +4180,28 @@
 <span class="cm">*   @key {string|array} OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.</span>
 <span class="cm">*   @return {object}</span>
 <span class="cm">*/</span>    
-    <span class="nx">mapAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">key</span><span class="p">){</span>
+    <span class="nx">mapAllAsObject</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">map</span><span class="p">){</span>
         <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">map</span><span class="p">){</span>
             <span class="nx">map</span> <span class="o">=</span> <span class="p">{};</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_key</span><span class="p">){</span>
-                <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_key</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fieldOrder</span><span class="p">;</span>
-            <span class="p">}</span>
+            <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getKey</span><span class="p">();</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">row</span><span class="p">;</span>
         <span class="k">while</span> <span class="p">(</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fetchAsObject</span><span class="p">()){</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">mapAsObject</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">map</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">getKey</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="kd">var</span> <span class="nx">key</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_type</span><span class="p">){</span>
+            <span class="nx">key</span> <span class="o">=</span> <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">_type</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getFieldNames</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">key</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">};</span>
 

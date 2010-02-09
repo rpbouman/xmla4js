@@ -38,6 +38,7 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSchemaInstance = "http://www.w3.org/2001/XMLSchema-instance",
     _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
+    _xmlnsResultset = _xmlnsXmla + ":mddataset",
     _useAX = window.ActiveXObject? true : false
 ;    
 
@@ -1460,7 +1461,7 @@ Xmla.prototype = {
             timeout: options.requestTimeout,
             data: soapMessage,
             error:      function(exception){
-                            options.exception = exeception;
+                            options.exception = exception;
                             xmla._requestError(options)
                         },
             complete:   function(xhr){
@@ -3560,7 +3561,29 @@ Xmla.Rowset.MD_DIMTYPE_BILL_OF_MATERIALS = 16;
 *   @default <code>17</code>
 */
 Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
-
+Xmla.Rowset.KEYS = {};
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_CATALOGS] = ["CATALOG_NAME"];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_COLUMNS] = [];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_PROVIDER_TYPES] = [];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_SCHEMATA] = [];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_TABLES] = [];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_TABLES_INFO] = [];
+Xmla.Rowset.KEYS[Xmla.DISCOVER_DATASOURCES] = ["DataSourceName"];
+Xmla.Rowset.KEYS[Xmla.DISCOVER_ENUMERATORS] = ["EnumName", "ElementName"];
+Xmla.Rowset.KEYS[Xmla.DISCOVER_KEYWORDS] = ["Keyword"];
+Xmla.Rowset.KEYS[Xmla.DISCOVER_LITERALS] = ["LiteralName"];
+Xmla.Rowset.KEYS[Xmla.DISCOVER_PROPERTIES] = ["PropertyName"];
+Xmla.Rowset.KEYS[Xmla.DISCOVER_SCHEMA_ROWSETS] = ["SchemaName"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_ACTIONS] = [];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_CUBES] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_DIMENSIONS] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME","DIMENSION_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_FUNCTIONS] = [];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_HIERARCHIES] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME","HIERARCHY_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_LEVELS] = [];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEASURES] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME","MEASURE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEMBERS] = [];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_PROPERTIES] = [];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_SETS] = [];
 
 Xmla.Rowset.prototype = {
     _type: null,
@@ -3570,7 +3593,7 @@ Xmla.Rowset.prototype = {
     fields: null,
     _fieldCount: null,
     _initData: function(node, requestType){
-        this.type = requestType;
+        this._type = requestType;
         this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
         this.numRows = this.rows? this.rows.length : 0;
         this.reset();
@@ -4118,6 +4141,7 @@ while (rowObject = rowset.fetchAsObject()){
         return rows;
     },
 /**
+*   Fetch all row as an object, store it in nested objects according to values in the column identified by the key argument (which acts as map).
 *   @method mapAsObject
 *   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.
 */    
@@ -4136,6 +4160,9 @@ while (rowObject = rowset.fetchAsObject()){
                         m[v] = [p, row];
                     }
                 }
+                else {
+                    m = p;
+                }
             }
             else                //property didnt exist for this key yet.         
             if (i === last) {   //last keypart: store the row here
@@ -4153,23 +4180,28 @@ while (rowObject = rowset.fetchAsObject()){
 *   @key {string|array} OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.
 *   @return {object}
 */    
-    mapAllAsObject: function(map, key){
+    mapAllAsObject: function(key, map){
         if(!map){
             map = {};
         }
         if (!key) {
-            if (this._key){
-                key = this._key;
-            }
-            else {
-                key = this.fieldOrder;
-            }
+            key = this.getKey();
         }
         var row;
         while (row = this.fetchAsObject()){
             this.mapAsObject(map, key, row);
         }
         return map;
+    },
+    getKey: function(){
+        var key;
+        if (this._type){
+            key = Xmla.Rowset.KEYS[this._type];
+        }
+        else {
+            key = this.getFieldNames();
+        }
+        return key;
     }
 };
 
