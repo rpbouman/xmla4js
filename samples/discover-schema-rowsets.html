@@ -72,6 +72,8 @@
 
         <div id="schemaRowsets">
         </div>
+        <div id="section_error" class="error">
+        </div>
 
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
@@ -79,6 +81,25 @@
         <script type="text/javascript">
             var discover = document.getElementById("discover");
             var xmla = new Xmla({});
+
+            function showException(exception){
+                var section_error = document.getElementById("section_error");
+                if (exception instanceof Xmla.Exception){
+                    section_error.innerHTML = "" +
+                    "<div>code: " + exception.code + "<\/div>" +
+                    "<div>message: " + exception.message + "<\/div>" +
+                    "<div>source: " + exception.source + "<\/div>" +
+                    "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "</a>"
+                    ;
+                }
+                else 
+                if (exception.message) {
+                    section_error.innerHTML = exception.message;
+                }
+                else {                   
+                    section_error.innerHTML = exception;
+                }
+            }
 
             discover.onclick = function(){
                 var schemaRowsetsEl = document.getElementById("schemaRowsets");
@@ -89,12 +110,16 @@
                     async: false,
                     url: url
                 });
-                fillTable(Xmla.DISCOVER_DATASOURCES, xmla.discoverDataSources());
-                fillTable(Xmla.DISCOVER_ENUMERATORS, xmla.discoverEnumerators());
-                fillTable(Xmla.DISCOVER_KEYWORDS, xmla.discoverKeywords());
-                fillTable(Xmla.DISCOVER_LITERALS, xmla.discoverLiterals());
-                fillTable(Xmla.DISCOVER_PROPERTIES, xmla.discoverProperties());
-                fillTable(Xmla.DISCOVER_SCHEMA_ROWSETS, xmla.discoverSchemaRowsets());
+                try {
+                    fillTable(Xmla.DISCOVER_DATASOURCES, xmla.discoverDataSources());
+                    fillTable(Xmla.DISCOVER_ENUMERATORS, xmla.discoverEnumerators());
+                    fillTable(Xmla.DISCOVER_KEYWORDS, xmla.discoverKeywords());
+                    fillTable(Xmla.DISCOVER_LITERALS, xmla.discoverLiterals());
+                    fillTable(Xmla.DISCOVER_PROPERTIES, xmla.discoverProperties());
+                    fillTable(Xmla.DISCOVER_SCHEMA_ROWSETS, xmla.discoverSchemaRowsets());
+                } catch (exception) {
+                    showException(exception);
+                }
             }
 
             function fillTable(name, rowset){ 

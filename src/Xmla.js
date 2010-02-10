@@ -89,7 +89,14 @@ function _ajax(options){
     else {
         xhr = new XMLHttpRequest();
     }
-    xhr.open("POST", options.url, options.async);
+    if (options.username && options.password) {
+        xhr.open(
+            "POST", options.url, options.async, 
+            options.username, options.password
+        );
+    } else {
+        xhr.open("POST", options.url, options.async);
+    }
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send(options.data);
@@ -1445,6 +1452,12 @@ Xmla.prototype = {
         options.restrictions = _applyProperties(options.restrictions, this.options.restrictions, false);
         options.async = _isUndefined(options.async) ? this.options.async : options.async;
         options.requestTimeout = _isUndefined(options.requestTimeout) ? this.options.requestTimeout : options.requestTimeout;
+        if (!options.username && this.options.username){
+            options.username = this.options.username;
+        }
+        if (!options.password && this.options.password){
+            options.password = this.options.password;
+        }
         
         var soapMessage = _getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
@@ -1462,7 +1475,7 @@ Xmla.prototype = {
                             xmla._requestSuccess(options);
                         },
             url: options.url
-        };
+        };        
         if (options.username){
             ajaxOptions.username = options.username;
         }
@@ -3626,7 +3639,7 @@ Xmla.Rowset.prototype = {
                 this.fields[fieldLabel] = {
                     name: fieldName,
                     label: fieldLabel,
-                    index: this._fieldCount += 1,
+                    index: this._fieldCount++,
                     type: type,
                     jsType: valueConverter.jsType,
                     minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
@@ -4404,8 +4417,8 @@ Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp +
 Xmla.Exception.HTTP_ERROR_CDE = -10;
 Xmla.Exception.HTTP_ERROR_MSG = "HTTP Error"; 
 Xmla.Exception.HTTP_ERROR_HLP = _exceptionHlp + 
-                                    "#" + Xmla.Exception.INVALID_FIELD_CDE  + 
-                                    "_" + Xmla.Exception.INVALID_FIELD_MSG;
+                                    "#" + Xmla.Exception.HTTP_ERROR_CDE  + 
+                                    "_" + Xmla.Exception.HTTP_ERROR_MSG;
 
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(
