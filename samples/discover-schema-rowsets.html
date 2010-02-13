@@ -108,14 +108,36 @@
                 var url = document.getElementById("url").value;
                 xmla.setOptions({
                     async: false,
-                    url: url
+                    url: url //,
+                    //username: "admin",
+                    //password: "admin"
                 });
                 try {
                     fillTable(Xmla.DISCOVER_DATASOURCES, xmla.discoverDataSources());
+                } catch (exception) {
+                    showException(exception);
+                }
+                try {
                     fillTable(Xmla.DISCOVER_ENUMERATORS, xmla.discoverEnumerators());
+                } catch (exception) {
+                    showException(exception);
+                }
+                try {
                     fillTable(Xmla.DISCOVER_KEYWORDS, xmla.discoverKeywords());
+                } catch (exception) {
+                    showException(exception);
+                }
+                try {
                     fillTable(Xmla.DISCOVER_LITERALS, xmla.discoverLiterals());
+                } catch (exception) {
+                    showException(exception);
+                }
+                try {
                     fillTable(Xmla.DISCOVER_PROPERTIES, xmla.discoverProperties());
+                } catch (exception) {
+                    showException(exception);
+                }
+                try {
                     fillTable(Xmla.DISCOVER_SCHEMA_ROWSETS, xmla.discoverSchemaRowsets());
                 } catch (exception) {
                     showException(exception);

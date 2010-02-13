@@ -150,12 +150,15 @@
             var xmla = new Xmla({
                 async: false
             });
-                        
+            
+            function getUrl(){
+                return document.getElementById("url").value;
+            }
             var discover = document.getElementById("discover");
             discover.onclick = function(){
                 var tree = getTree();
                 tree.innerHTML = ""; 
-                var url = document.getElementById("url").value;
+                var url = getUrl();
                 discoverDataSources(url);
             }
             
@@ -163,6 +166,9 @@
                 url
             ){
                 var parent = "tree";
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverDataSources({
                     url: url
                 });
@@ -172,7 +178,9 @@
                     dataSourceInfo = rowset.fieldVal("DataSourceInfo");
                     dataSourceName = rowset.fieldVal("DataSourceName");
                     id = dataSourceInfo;
-                    url = rowset.fieldVal("URL");
+                    if (rowset.fieldVal("URL")) {
+                        url = rowset.fieldVal("URL");
+                    }
                     loader = "discoverCatalogs("
                     +   "\"" + url + "\""
                     + ", \"" + dataSourceInfo + "\""
@@ -197,6 +205,9 @@
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverDBCatalogs({
                     url: url
                 ,   properties: properties
@@ -234,10 +245,14 @@
                 ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+                properties[Xmla.PROP_CATALOG] = catalogName;
 
                 var restrictions = {};
                 restrictions["CATALOG_NAME"] = catalogName;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverMDCubes({
                     url: url
                 ,   properties: properties
@@ -280,11 +295,15 @@
                 ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+                properties[Xmla.PROP_CATALOG] = catalogName;
 
                 var restrictions = {};
                 restrictions["CATALOG_NAME"] = catalogName;
                 restrictions["CUBE_NAME"] = cubeName;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverMDDimensions({
                     url: url
                 ,   properties: properties
@@ -331,12 +350,16 @@
                 ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+                properties[Xmla.PROP_CATALOG] = catalogName;
 
                 var restrictions = {};
                 restrictions["CATALOG_NAME"] = catalogName;
                 restrictions["CUBE_NAME"] = cubeName;
                 restrictions["DIMENSION_UNIQUE_NAME"] = dimensionUniqueName;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverMDHierarchies({
                     url: url
                 ,   properties: properties
@@ -386,6 +409,7 @@
                 ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+                properties[Xmla.PROP_CATALOG] = catalogName;
 
                 var restrictions = {};
                 restrictions["CATALOG_NAME"] = catalogName;
@@ -393,6 +417,9 @@
                 restrictions["DIMENSION_UNIQUE_NAME"] = dimensionUniqueName;
                 restrictions["HIERARCHY_UNIQUE_NAME"] = hierarchyUniqueName;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverMDLevels({
                     url: url
                 ,   properties: properties
@@ -445,6 +472,7 @@
                 ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+                properties[Xmla.PROP_CATALOG] = catalogName;
 
                 var restrictions = {};
                 restrictions["CATALOG_NAME"] = catalogName;
@@ -453,6 +481,9 @@
                 restrictions["HIERARCHY_UNIQUE_NAME"] = hierarchyUniqueName;
                 restrictions["LEVEL_NUMBER"] = levelNumber;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverMDMembers({
                     url: url
                 ,   properties: properties
@@ -508,6 +539,7 @@
                 ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
+                properties[Xmla.PROP_CATALOG] = catalogName;
 
                 var restrictions = {};
                 restrictions["CATALOG_NAME"] = catalogName;
@@ -516,6 +548,9 @@
                 restrictions["HIERARCHY_UNIQUE_NAME"] = hierarchyUniqueName;
                 restrictions["MEMBER_UNIQUE_NAME"] = memberUniqueName;
 
+                if (!url){
+                    url = getUrl();
+                }
                 var rowset = xmla.discoverMDProperties({
                     url: url
                 ,   properties: properties

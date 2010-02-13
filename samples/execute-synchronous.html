@@ -222,7 +222,7 @@
                     var properties = {};
                     properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
                     var rowset = xmla.discoverDBCatalogs({
-                        url: datasource["URL"],
+                        url: datasource["URL"]?datasource["URL"]:input_url.value,
                         properties: properties
                     });
                     if (rowset.hasMoreRows()) {
@@ -271,9 +271,11 @@
                     properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
                     properties[Xmla.PROP_CATALOG] = select_catalogs.value;
                     properties[Xmla.PROP_FORMAT] = select_format.value;
-                    properties[Xmla.PROP_AXISFORMAT] = select_axisformat.value;
+                    if (select_format.value === Xmla.PROP_FORMAT_MULTIDIMENSIONAL ){
+                        properties[Xmla.PROP_AXISFORMAT] = select_axisformat.value;
+                    }
                     var resultset = xmla.execute({
-                        url: datasource["URL"],
+                        url: datasource["URL"]?datasource["URL"]:input_url.value,
                         statement: textarea_statement.value,
                         properties: properties
                     });
