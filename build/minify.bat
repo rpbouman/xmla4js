@@ -5,7 +5,7 @@ REM see: http://developer.yahoo.com/yui/compressor/
 REM 
 
 REM Set the XMLA_HOME variable to the directory to which you checked out the xmla4js project directory 
-SET XMLA_HOME="D:\Servers\biserver-ce-3.5.0.stable\biserver-ce\tomcat\webapps\xmla4js"
+SET XMLA_HOME="D:\Projects\xmla4js"
 
 REM set the YUI_COMPRESSOR variable to the location of the YUI compressor jar file.
 SET YUI_COMPRESSOR="D:\Applications\yui\yuicompressor-2.4.2\build\yuicompressor-2.4.2.jar"

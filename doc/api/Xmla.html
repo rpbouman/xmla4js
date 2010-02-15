@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1265667022.91" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1265667022.91" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1266194727.13" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1266194727.13" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1265667022.91"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1265667022.91"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1266194727.13"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1266194727.13"></script>
 </head>
 
 <body id="yahoo-com">
@@ -103,9 +103,9 @@ see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla
                                             <dt>Parameters:</dt>
                                                 <dd rel="yui:parameter">
                                                     <code><span property="yui:name">options</span>
-                                                    &lt;<span property="yui:type">Object</span>&gt;
+                                                    &lt;<span property="yui:type">object</span>&gt;
                                                     </code>
-                                                    <span property="yui:description"></span>
+                                                    <span property="yui:description"> Object standard options</span>
                                                 </dd>
                                         </dl>
                                     
@@ -194,7 +194,7 @@ The <code>discoverDBProviderTypes()</code> method issues a request to invoke the
                                             Can be used as value for the <code>requestType</code> option in the options object passed to the to 
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_SCHEMATA</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
-Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBProviderTypes">discoverDBColumns()</a></code> method. 
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBSchemata">discoverDBSchemata()</a></code> method. 
 The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_SCHEMATA</code> as requestType.
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
                                             Can be used as value for the <code>requestType</code> option in the options object passed to the to 
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
-Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBTables">discoverDBColumns()</a></code> method. 
+Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBTables">discoverDBTables()</a></code> method. 
 The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES</code> as requestType.
                                         </div>
                                     </div>
@@ -1231,8 +1231,8 @@ This value specifies that the response should return both data as well as XML Sc
 
                                     <hr />
                                     </div>
-                                    <div class="" rel="yui:property" resource="#property_PROP_DataSourceInfo">
-                                    <h4><a name="property_PROP_DataSourceInfo" property="yui:name">PROP_DataSourceInfo</a>
+                                    <div class="" rel="yui:property" resource="#property_PROP_DATASOURCEINFO">
+                                    <h4><a name="property_PROP_DATASOURCEINFO" property="yui:name">PROP_DATASOURCEINFO</a>
                                         - <code>static final <span property="yui:type">string</span></code>
                                     </h4>
                                     <div class="detail">
@@ -1969,7 +1969,7 @@ The rowset has the following columns:
                                             Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 <code><a href="#property_DBSCHEMA_COLUMNS"></a></code> as value for the <code>requestType</code>, 
 and retrieves the <code>DBSCHEMA_COLUMNS</code> schema rowset. 
-...todo...
+Provides column information for all columns meeting the provided restriction criteria.
 The rowset has the following columns:
 <table border="1" class="schema-rowset">
 <tr>
@@ -1979,7 +1979,211 @@ The rowset has the following columns:
 <th>Restriction</th>
 <th>Nullable</th>
 </tr>
+<tr>
+<td>TABLE_CATALOG</td>
+<td>string</td>
+<td>The name of the Database.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>TABLE_SCHEMA</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>TABLE_NAME</td>
+<td>string</td>
+<td>The name of the cube.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_NAME</td>
+<td>string</td>
+<td>The name of the attribute hierarchy or measure.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_GUID</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_PROPID</td>
+<td>int</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ORDINAL_POSITION</td>
+<td>int</td>
+<td>The position of the column, beginning with 1.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_HAS_DEFAULT</td>
+<td>boolean</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_DEFAULT</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_FLAGS</td>
+<td>int</td>
+<td>A DBCOLUMNFLAGS bitmask indicating column properties. See 'DBCOLUMNFLAGS Enumerated Type' in IColumnsInfo::GetColumnInfo</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>IS_NULLABLE</td>
+<td>boolean</td>
+<td>Always returns false.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DATA_TYPE</td>
+<td>string</td>
+<td>The data type of the column. Returns a string for dimension columns and a variant for measures.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>TYPE_GUID
+<td>srring</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CHARACTER_MAXIMUM_LENGTH</td>
+<td>int</td>
+<td>The maximum possible length of a value within the column. This is retrieved from the DataSize property in the DataItem.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CHARACTER_OCTET_LENGTH</td>
+<td>int</td>
+<td>The maximum possible length of a value within the column, in bytes, for character or binary columns. A value of zero (0) indicates the column has no maximum length. NULL will be returned for columns that do not return binary or character data types.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>NUMERIC_PRECISION</td>
+<td>int</td>
+<td>The maximum precision of the column for numeric data types other than DBTYPE_VARNUMERIC.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>NUMERIC_SCALE</td>
+<td>int</td>
+<td>The number of digits to the right of the decimal point for DBTYPE_DECIMAL, DBTYPE_NUMERIC, DBTYPE_VARNUMERIC. Otherwise, this is NULL.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DATETIME_PRECISION</td>
+<td>int</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CHARACTER_SET_CATALOG</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CHARACTER_SET_SCHEMA</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CHARACTER_SET_NAME</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLLATION_CATALOG</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLLATION_SCHEMA</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLLATION_NAME</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DOMAIN_CATALOG</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DOMAIN_SCHEMA</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DOMAIN_NAME</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DESCRIPTION</td>
+<td>string</td>
+<td>Not supported.</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>COLUMN_OLAP_TYPE</td>
+<td>string</td>
+<td>The OLAP type of the object. MEASURE indicates the object is a measure. ATTRIBUTE indicates the object is a dimension attribute.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
 </table>
+The rowset is sorted on TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME.
                                         </div>
 
                                         <div class="description">
@@ -2042,6 +2246,153 @@ The rowset has the following columns:
 <th>Description</th>
 <th>Restriction</th>
 <th>Nullable</th>
+</tr>
+<tr>
+<td>TYPE_NAME</td>
+<td>string</td>
+<td>The provider-specific data type name.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>DATA_TYPE</td>
+<td>int</td>
+<td>The indicator of the data type.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>COLUMN_SIZE</td>
+<td>int</td>
+<td> The length of a non-numeric column or parameter that refers to either the maximum or the length defined for this type by the provider. For character data, this is the maximum or defined length in characters. For DateTime data types, this is the length of the string representation (assuming the maximum allowed precision of the fractional seconds component). If the data type is numeric, this is the upper bound on the maximum precision of the data type. </td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>LITERAL_PREFIX</td>
+<td>string</td>
+<td>The character or characters used to prefix a literal of this type in a text command.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>LITERAL_SUFFIX</td>
+<td>string</td>
+<td>The character or characters used to suffix a literal of this type in a text command.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>CREATE_PARAMS
+<td>string</td>
+<td>The creation parameters specified by the consumer when creating a column of this data type. For example, the SQL data type, DECIMAL, needs a precision and a scale. In this case, the creation parameters might be the string "precision,scale". In a text command to create a DECIMAL column with a precision of 10 and a scale of 2, the value of the TYPE_NAME column might be DECIMAL() and the complete type specification would be DECIMAL(10,2). The creation parameters appear as a comma-separated list of values, in the order they are to be supplied and with no surrounding parentheses. If a creation parameter is length, maximum length, precision, scale, seed, or increment, use "length", "max length", "precision", "scale", "seed", and "increment", respectively. If the creation parameter is some other value, the provider determines what text is to be used to describe the creation parameter. If the data type requires creation parameters, "()" usually appears in the type name. This indicates the position at which to insert the creation parameters. If the type name does not include "()", the creation parameters are enclosed in parentheses and appended to the data type name. </td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>IS_NULLABLE</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type is nullable. VARIANT_TRUE indicates that the data type is nullable. VARIANT_FALSE indicates that the data type is not nullable. NULL indicates that it is not known whether the data type is nullable.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>CASE_SENSITIVE</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type is a characters type and case-sensitive. VARIANT_TRUE indicates that the data type is a character type and is case-sensitive. VARIANT_FALSE indicates that the data type is not a character type or is not case-sensitive.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>SEARCHABLE</td>
+<td>int</td>
+<td>An integer indicating how the data type can be used in searches if the provider supports ICommandText; otherwise, NULL. This column can have the following values: DB_UNSEARCHABLE indicates that the data type cannot be used in a WHERE clause. DB_LIKE_ONLY indicates that the data type can be used in a WHERE clause only with the LIKE predicate.DB_ALL_EXCEPT_LIKE indicates that the data type can be used in a WHERE clause with all comparison operators except LIKE. DB_SEARCHABLE indicates that the data type can be used in a WHERE clause with any comparison operator.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>UNSIGNED_ATTRIBUTE</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type is unsigned.   VARIANT_TRUE indicates that the data type is unsigned. VARIANT_FALSE indicates that the data type is signed.NULL indicates that this is not applicable to the data type.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>FIXED_PREC_SCALE</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type has a fixed precision and scale.  VARIANT_TRUE indicates that the data type has a fixed precision and scale. VARIANT_FALSE indicates that the data type does not have a fixed precision and scale.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>AUTO_UNIQUE_VALUE</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type is autoincrementing. VARIANT_TRUE indicates that values of this type can be autoincrementing. VARIANT_FALSE indicates that values of this type cannot be autoincrementing. If this value is VARIANT_TRUE, whether or not a column of this type is always autoincrementing depends on the provider's DBPROP_COL_AUTOINCREMENT column property. If the DBPROP_COL_AUTOINCREMENT property is read/write, whether or not a column of this type is autoincrementing depends on the setting of the DBPROP_COL_AUTOINCREMENT property. If DBPROP_COL_AUTOINCREMENT is a read-only property, either all or none of the columns of this type are autoincrementing. </td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>LOCAL_TYPE_NAME</td>
+<td>string</td>
+<td>The localized version of TYPE_NAME. NULL is returned if a localized name is not supported by the data provider.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>MINIMUM_SCALE</td>
+<td>int</td>
+<td>If the type indicator is DBTYPE_VARNUMERIC, DBTYPE_DECIMAL, or DBTYPE_NUMERIC, the minimum number of digits allowed to the right of the decimal point. Otherwise, NULL.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>MAXIMUM_SCALE</td>
+<td>int</td>
+<td>The maximum number of digits allowed to the right of the decimal point if the type indicator is DBTYPE_VARNUMERIC, DBTYPE_DECIMAL, or DBTYPE_NUMERIC; otherwise, NULL.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>GUID</td>
+<td>string</td>
+<td>(Intended for future use) The GUID of the type, if the type is described in a type library. Otherwise, NULL.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>TYPELIB
+<td>string</td>
+<td>(Intended for future use) The type library containing the description of the type, if the type is described in a type library. Otherwise, NULL.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>VERSION</td>
+<td>string</td>
+<td>(Intended for future use) The version of the type definition. Providers might want to version type definitions. Different providers might use different versioning schemes, such as a timestamp or number (integer or float). NULL if not supported.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>IS_LONG</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type is a binary large object (BLOB) and has very long data. VARIANT_TRUE indicates that the data type is a BLOB that contains very long data; the definition of very long data is provider-specific. VARIANT_FALSE indicates that the data type is a BLOB that does not contain very long data or is not a BLOB. This value determines the setting of the DBCOLUMNFLAGS_ISLONG flag returned by GetColumnInfo in IColumnsInfo and GetParameterInfo in ICommandWithParameters.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>BEST_MATCH</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the data type is a best match. VARIANT_TRUE indicates that the data type is the best match between all data types in the data store and the OLE DB data type indicated by the value in the DATA_TYPE column. VARIANT_FALSE indicates that the data type is not the best match. For each set of rows in which the value of the DATA_TYPE column is the same, the BEST_MATCH column is set to VARIANT_TRUE in only one row.</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>IS_FIXEDLENGTH</td>
+<td>boolean</td>
+<td>A Boolean that indicates whether the column is fixed in length. VARIANT_TRUE indicates that columns of this type created by the data definition language (DDL) will be of fixed length. VARIANT_FALSE indicates that columns of this type created by the DDL will be of variable length. If the field is NULL, it is not known whether the provider will map this field with a fixed-length or variable-length column.
+<td>false</td>
+<td>true</td>
 </tr>
 </table>
                                         </div>
@@ -3312,6 +3663,208 @@ The rowset has the following columns:
 <th>Restriction</th>
 <th>Nullable</th>
 </tr>
+<tr>
+<td>CATALOG_NAME</td>
+<td>string</td>
+The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>SCHEMA_NAME</td>
+<td>string</td>
+The name of the schema to which this level belongs. NULL if the provider does not support schemas.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CUBE_NAME</td>
+<td>string</td>
+The name of the cube to which this level belongs.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>DIMENSION_UNIQUE_NAME</td>
+<td>string</td>
+The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>HIERARCHY_UNIQUE_NAME</td>
+<td>string</td>
+The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_NAME</td>
+<td>string</td>
+The name of the level.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_UNIQUE_NAME</td>
+<td>string</td>
+The properly escaped unique name of the level.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_GUID</td>
+<td>string</td>
+Not supported.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_CAPTION</td>
+<td>string</td>
+A label or caption associated with the hierarchy. Used primarily for display purposes. If a caption does not exist, LEVEL_NAME is returned.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_NUMBER</td>
+<td>int</td>
+The distance of the level from the root of the hierarchy. Root level is zero (0).
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_CARDINALITY</td>
+<td>int</td>
+The number of members in the level.
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_TYPE</td>
+<td>int</td>
+<td>Type of the level: 
+<ul>
+<li>MDLEVEL_TYPE_GEO_CONTINENT (0x2001)</li>
+<li>MDLEVEL_TYPE_GEO_REGION (0x2002)</li>
+<li>MDLEVEL_TYPE_GEO_COUNTRY (0x2003)</li>
+<li>MDLEVEL_TYPE_GEO_STATE_OR_PROVINCE (0x2004)</li>
+<li>MDLEVEL_TYPE_GEO_COUNTY (0x2005)</li>
+<li>MDLEVEL_TYPE_GEO_CITY (0x2006)</li>
+<li>MDLEVEL_TYPE_GEO_POSTALCODE (0x2007)</li>
+<li>MDLEVEL_TYPE_GEO_POINT (0x2008)</li>
+<li>MDLEVEL_TYPE_ORG_UNIT (0x1011)</li>
+<li>MDLEVEL_TYPE_BOM_RESOURCE (0x1012)</li>
+<li>MDLEVEL_TYPE_QUANTITATIVE (0x1013)</li>
+<li>MDLEVEL_TYPE_ACCOUNT (0x1014)</li>
+<li>MDLEVEL_TYPE_CUSTOMER (0x1021)</li>
+<li>MDLEVEL_TYPE_CUSTOMER_GROUP (0x1022)</li>
+<li>MDLEVEL_TYPE_CUSTOMER_HOUSEHOLD (0x1023)</li>
+<li>MDLEVEL_TYPE_PRODUCT (0x1031)</li>
+<li>MDLEVEL_TYPE_PRODUCT_GROUP (0x1032)</li>
+<li>MDLEVEL_TYPE_SCENARIO (0x1015)</li>
+<li>MDLEVEL_TYPE_UTILITY (0x1016)</li>
+<li>MDLEVEL_TYPE_PERSON (0x1041)</li>
+<li>MDLEVEL_TYPE_COMPANY (0x1042)</li>
+<li>MDLEVEL_TYPE_CURRENCY_SOURCE (0x1051)</li>
+<li>MDLEVEL_TYPE_CURRENCY_DESTINATION (0x1052)</li>
+<li>MDLEVEL_TYPE_CHANNEL (0x1061)</li>
+<li>MDLEVEL_TYPE_REPRESENTATIVE (0x1062)</li>
+<li>MDLEVEL_TYPE_PROMOTION (0x1071)</li>
+</ul>
+<td>No</td>
+<td>Yes</td>
+<tr>
+<td>DESCRIPTION</td>
+<td>string</td>
+<td>A human-readable description of the level. NULL if no description exists.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>CUSTOM_ROLLUP_SETTINGS</td>
+<td>int</td>
+<td>A bitmap that specifies the custom rollup options: MDLEVELS_CUSTOM_ROLLUP_EXPRESSION (0x01) indicates an expression exists for this level. (Deprecated) MDLEVELS_CUSTOM_ROLLUP_COLUMN (0x02) indicates that there is a custom rollup column for this level. MDLEVELS_SKIPPED_LEVELS (0x04) indicates that there is a skipped level associated with members of this level.MDLEVELS_CUSTOM_MEMBER_PROPERTIES (0x08) indicates that members of the level have custom member properties. MDLEVELS_UNARY_OPERATOR (0x10) indicates that members on the level have unary operators.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_UNIQUE_SETTINGS</td>
+<td>int</td>
+<td>A bitmap that specifies which columns contain unique values, if the level only has members with unique names or keys. The Msmd.h file defines the following bit value constants for this bitmap: MDDIMENSIONS_MEMBER_KEY_UNIQUE (1) MDDIMENSIONS_MEMBER_NAME_UNIQUE (2)The key is always unique in Microsoft SQL Server 2005 Analysis Services (SSAS). The name will be unique if the setting on the attribute is UniqueInDimension or UniqueInAttribute</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_IS_VISIBLE</td>
+<td>bool</td>
+<td>A Boolean that indicates whether the level is visible. Always returns True. If the level is not visible, it will not be included in the schema rowset.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_ORDERING_PROPERTY</td>
+<td>string</td>
+<td>The ID of the attribute that the level is sorted on.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_DBTYPE</td>
+<td>int</td>
+<td>The DBTYPE enumeration of the member key column that is used for the level attribute. Null if concatenated keys are used as the member key column.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_MASTER_UNIQUE_NAME</td>
+<td>string</td>
+<td>Always returns NULL.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_NAME_SQL_COLUMN_NAME</td>
+<td>string</td>
+<td>The SQL representation of the level member names.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_KEY_SQL_COLUMN_NAME</td>
+<td>string</td>
+<td>The SQL representation of the level member key values.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME</td>
+<td>string</td>
+<td>The SQL representation of the member unique names.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_ATTRIBUTE_HIERARCHY_NAME</td>
+<td>string</td>
+<td>The name of the attribute hierarchy providing the source of the level.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_KEY_CARDINALITY</td>
+<td>int</td>
+<td>The number of columns in the level key.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>LEVEL_ORIGIN</td>
+<td>int</td>
+<td>A bit map that defines how the level was sourced:MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy.MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy.MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy.MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled.</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
 </table>
                                         </div>
 
@@ -4341,6 +4894,73 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                     </div>
                                     <hr />
                                     </div>
+                                    <div class="" rel="yui:method" resource="#method_setOptions">
+                                    <h4>
+                                        <a name="method_setOptions">setOptions</a></h4>
+                                    <div class="detail" >
+                                        <code>
+                                        
+                                        
+                                        
+                                        void
+                                            <strong property="yui:name">setOptions</strong>
+                                           (
+                                                
+                                                        
+                                                         Object
+                                                    
+                                                
+                                            )
+                                        </code>
+                                        
+                                        <div class="description" property="yui:description">
+                                            This method can be used to set a number of default options for the Xmla instance.
+This is especially useful if you don't want to pass each and every option to each method call all the time. 
+Where appropriate, information that is missing from the parameter objects passed to the methods of the Xmla object
+may be augmented with the values set through this method. 
+For example, if you plan to do a series of requests pertaining to one particular datasource, 
+you can set the mandatory options like url, async, datasource and catalog just once:
+<pre>
+&nbsp;   xml.setOptions({
+&nbsp;       url: "http://localhost:8080/pentaho/Xmla",
+&nbsp;       async: true,
+&nbsp;       properties: {
+&nbsp;           DataSourceInfo: "Pentaho Analysis Services",
+&nbsp;           Catalog: "Foodmart"
+&nbsp;       }
+&nbsp;   });
+</pre>
+Then, a subsequent <code></code>
+                                        </div>
+
+                                        <div class="description">
+
+                                                <dl rel="yui:parameters">
+                                                    <dt>Parameters:</dt>
+                                                        <dd rel="yui:parameter">
+                                                        <code><span property="yui:name">Object</span>
+                                                        &lt;<span property="yui:type">object</span>&gt;
+                                                        </code>
+                                                        <span property="yui:description"></span>
+                                                        </dd>
+                                                </dl>
+
+                                                <dl>
+                                                    <dt>Returns:
+                                                    <code property="yui:return">
+                                                        void
+                                                    </code></dt>
+                                                    <dd property="yui:returnInfo"></dd>
+                                                </dl>
+
+
+             
+
+                                        </div>
+
+                                    </div>
+                                    <hr />
+                                    </div>
                             </div>
                         </div>
 
@@ -4434,7 +5054,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#property_PROP_CONTENT_NONE" title="PROP_CONTENT_NONE">PROP_CONTENT_NONE</a></li>
                                 <li class=""><a href="#property_PROP_CONTENT_SCHEMA" title="PROP_CONTENT_SCHEMA">PROP_CONTENT_SCHEMA</a></li>
                                 <li class=""><a href="#property_PROP_CONTENT_SCHEMADATA" title="PROP_CONTENT_SCHEMADATA">PROP_CONTENT_SCHEMADATA</a></li>
-                                <li class=""><a href="#property_PROP_DataSourceInfo" title="PROP_DataSourceInfo">PROP_DataSourceInfo</a></li>
+                                <li class=""><a href="#property_PROP_DATASOURCEINFO" title="PROP_DATASOURCEINFO">PROP_DATASOURCEINFO</a></li>
                                 <li class=""><a href="#property_PROP_FORMAT" title="PROP_FORMAT">PROP_FORMAT</a></li>
                                 <li class=""><a href="#property_PROP_FORMAT_MULTIDIMENSIONAL" title="PROP_FORMAT_MULTIDIMENSIONAL">PROP_FORMAT_MULTIDIMENSIONAL</a></li>
                                 <li class=""><a href="#property_PROP_FORMAT_TABULAR" title="PROP_FORMAT_TABULAR">PROP_FORMAT_TABULAR</a></li>
@@ -4476,6 +5096,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                                 <li class=""><a href="#method_executeMultiDimensional" title="executeMultiDimensional">executeMultiDimensional</a></li>
                                 <li class=""><a href="#method_executeTabular" title="executeTabular">executeTabular</a></li>
                                 <li class=""><a href="#method_request" title="request">request</a></li>
+                                <li class=""><a href="#method_setOptions" title="setOptions">setOptions</a></li>
                         </ul>
                     </div>
 
@@ -4491,7 +5112,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 	</div>
 </div>
 <script type="text/javascript">
-    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#method_executeMultiDimensional", "access": "", "host": "Xmla", "type": "method", "name": "executeMultiDimensional"}, {"url": "Xmla.html#method_executeTabular", "access": "", "host": "Xmla", "type": "method", "name": "executeTabular"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_Catalog", "access": "", "host": "Xmla", "type": "property", "name": "PROP_Catalog"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#property_PROP_DataSourceInfo", "access": "", "host": "Xmla", "type": "property", "name": "PROP_DataSourceInfo"}, {"url": "Xmla.html#property_PROP_FORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_FORMAT"}, {"url": "Xmla.html#property_PROP_FORMAT_MULTIDIMENSIONAL", "access": "", "host": "Xmla", "type": "property", "name": "PROP_FORMAT_MULTIDIMENSIONAL"}, {"url": "Xmla.html#property_PROP_FORMAT_TABULAR", "access": "", "host": "Xmla", "type": "property", "name": "PROP_FORMAT_TABULAR"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}, {"url": "Xmla.html#property_soapMessage", "access": "", "host": "Xmla", "type": "property", "name": "soapMessage"}];
+    ALL_YUI_PROPS = [{"url": "Xmla.html#method_addListener", "access": "", "host": "Xmla", "type": "method", "name": "addListener"}, {"url": "Xmla.html#property_DBSCHEMA_CATALOGS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_CATALOGS"}, {"url": "Xmla.html#property_DBSCHEMA_COLUMNS", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_COLUMNS"}, {"url": "Xmla.html#property_DBSCHEMA_PROVIDER_TYPES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_PROVIDER_TYPES"}, {"url": "Xmla.html#property_DBSCHEMA_SCHEMATA", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_SCHEMATA"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES"}, {"url": "Xmla.html#property_DBSCHEMA_TABLES_INFO", "access": "", "host": "Xmla", "type": "property", "name": "DBSCHEMA_TABLES_INFO"}, {"url": "Xmla.html#method_discover", "access": "", "host": "Xmla", "type": "method", "name": "discover"}, {"url": "Xmla.html#property_DISCOVER_DATASOURCES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_DATASOURCES"}, {"url": "Xmla.html#method_discoverDataSources", "access": "", "host": "Xmla", "type": "method", "name": "discoverDataSources"}, {"url": "Xmla.html#method_discoverDBCatalogs", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBCatalogs"}, {"url": "Xmla.html#method_discoverDBColumns", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBColumns"}, {"url": "Xmla.html#method_discoverDBProviderTypes", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBProviderTypes"}, {"url": "Xmla.html#method_discoverDBSchemata", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBSchemata"}, {"url": "Xmla.html#method_discoverDBTables", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTables"}, {"url": "Xmla.html#method_discoverDBTablesInfo", "access": "", "host": "Xmla", "type": "method", "name": "discoverDBTablesInfo"}, {"url": "Xmla.html#property_DISCOVER_ENUMERATORS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_ENUMERATORS"}, {"url": "Xmla.html#method_discoverEnumerators", "access": "", "host": "Xmla", "type": "method", "name": "discoverEnumerators"}, {"url": "Xmla.html#property_DISCOVER_KEYWORDS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_KEYWORDS"}, {"url": "Xmla.html#method_discoverKeywords", "access": "", "host": "Xmla", "type": "method", "name": "discoverKeywords"}, {"url": "Xmla.html#property_DISCOVER_LITERALS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_LITERALS"}, {"url": "Xmla.html#method_discoverLiterals", "access": "", "host": "Xmla", "type": "method", "name": "discoverLiterals"}, {"url": "Xmla.html#method_discoverMDActions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDActions"}, {"url": "Xmla.html#method_discoverMDCubes", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDCubes"}, {"url": "Xmla.html#method_discoverMDDimensions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDDimensions"}, {"url": "Xmla.html#method_discoverMDFunctions", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDFunctions"}, {"url": "Xmla.html#method_discoverMDHierarchies", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDHierarchies"}, {"url": "Xmla.html#method_discoverMDLevels", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDLevels"}, {"url": "Xmla.html#method_discoverMDMeasures", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMeasures"}, {"url": "Xmla.html#method_discoverMDMembers", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDMembers"}, {"url": "Xmla.html#method_discoverMDProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDProperties"}, {"url": "Xmla.html#method_discoverMDSets", "access": "", "host": "Xmla", "type": "method", "name": "discoverMDSets"}, {"url": "Xmla.html#property_DISCOVER_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_PROPERTIES"}, {"url": "Xmla.html#method_discoverProperties", "access": "", "host": "Xmla", "type": "method", "name": "discoverProperties"}, {"url": "Xmla.html#property_DISCOVER_SCHEMA_ROWSETS", "access": "", "host": "Xmla", "type": "property", "name": "DISCOVER_SCHEMA_ROWSETS"}, {"url": "Xmla.html#method_discoverSchemaRowsets", "access": "", "host": "Xmla", "type": "method", "name": "discoverSchemaRowsets"}, {"url": "Xmla.html#property_EVENT_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ALL"}, {"url": "Xmla.html#property_EVENT_DISCOVER_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_ERROR"}, {"url": "Xmla.html#property_EVENT_DISCOVER_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_DISCOVER_SUCCESS"}, {"url": "Xmla.html#property_EVENT_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ALL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ALL"}, {"url": "Xmla.html#property_EVENT_EXECUTE_ERROR", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_ERROR"}, {"url": "Xmla.html#property_EVENT_EXECUTE_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_EXECUTE_SUCCESS"}, {"url": "Xmla.html#property_EVENT_GENERAL", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_GENERAL"}, {"url": "Xmla.html#property_EVENT_REQUEST", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_REQUEST"}, {"url": "Xmla.html#property_EVENT_SUCCESS", "access": "", "host": "Xmla", "type": "property", "name": "EVENT_SUCCESS"}, {"url": "Xmla.html#method_execute", "access": "", "host": "Xmla", "type": "method", "name": "execute"}, {"url": "Xmla.html#method_executeMultiDimensional", "access": "", "host": "Xmla", "type": "method", "name": "executeMultiDimensional"}, {"url": "Xmla.html#method_executeTabular", "access": "", "host": "Xmla", "type": "method", "name": "executeTabular"}, {"url": "Xmla.html#property_listeners", "access": "protected", "host": "Xmla", "type": "property", "name": "listeners"}, {"url": "Xmla.html#property_MDSCHEMA_ACTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_ACTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_CUBES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_CUBES"}, {"url": "Xmla.html#property_MDSCHEMA_DIMENSIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_DIMENSIONS"}, {"url": "Xmla.html#property_MDSCHEMA_FUNCTIONS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_FUNCTIONS"}, {"url": "Xmla.html#property_MDSCHEMA_HIERARCHIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_HIERARCHIES"}, {"url": "Xmla.html#property_MDSCHEMA_LEVELS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_LEVELS"}, {"url": "Xmla.html#property_MDSCHEMA_MEASURES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEASURES"}, {"url": "Xmla.html#property_MDSCHEMA_MEMBERS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_MEMBERS"}, {"url": "Xmla.html#property_MDSCHEMA_PROPERTIES", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_PROPERTIES"}, {"url": "Xmla.html#property_MDSCHEMA_SETS", "access": "", "host": "Xmla", "type": "property", "name": "MDSCHEMA_SETS"}, {"url": "Xmla.html#property_METHOD_DISCOVER", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_DISCOVER"}, {"url": "Xmla.html#property_METHOD_EXECUTE", "access": "", "host": "Xmla", "type": "property", "name": "METHOD_EXECUTE"}, {"url": "Xmla.html#property_PROP_AXISFORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CLUSTER", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CLUSTER"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_CUSTOM", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_CUSTOM"}, {"url": "Xmla.html#property_PROP_AXISFORMAT_TUPLE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_AXISFORMAT_TUPLE"}, {"url": "Xmla.html#property_PROP_Catalog", "access": "", "host": "Xmla", "type": "property", "name": "PROP_Catalog"}, {"url": "Xmla.html#property_PROP_CONTENT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT"}, {"url": "Xmla.html#property_PROP_CONTENT_DATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_DATA"}, {"url": "Xmla.html#property_PROP_CONTENT_NONE", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_NONE"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMA"}, {"url": "Xmla.html#property_PROP_CONTENT_SCHEMADATA", "access": "", "host": "Xmla", "type": "property", "name": "PROP_CONTENT_SCHEMADATA"}, {"url": "Xmla.html#property_PROP_DATASOURCEINFO", "access": "", "host": "Xmla", "type": "property", "name": "PROP_DATASOURCEINFO"}, {"url": "Xmla.html#property_PROP_FORMAT", "access": "", "host": "Xmla", "type": "property", "name": "PROP_FORMAT"}, {"url": "Xmla.html#property_PROP_FORMAT_MULTIDIMENSIONAL", "access": "", "host": "Xmla", "type": "property", "name": "PROP_FORMAT_MULTIDIMENSIONAL"}, {"url": "Xmla.html#property_PROP_FORMAT_TABULAR", "access": "", "host": "Xmla", "type": "property", "name": "PROP_FORMAT_TABULAR"}, {"url": "Xmla.html#method_request", "access": "", "host": "Xmla", "type": "method", "name": "request"}, {"url": "Xmla.html#property_response", "access": "", "host": "Xmla", "type": "property", "name": "response"}, {"url": "Xmla.html#property_responseText", "access": "", "host": "Xmla", "type": "property", "name": "responseText"}, {"url": "Xmla.html#property_responseXml", "access": "", "host": "Xmla", "type": "property", "name": "responseXml"}, {"url": "Xmla.html#method_setOptions", "access": "", "host": "Xmla", "type": "method", "name": "setOptions"}, {"url": "Xmla.html#property_soapMessage", "access": "", "host": "Xmla", "type": "property", "name": "soapMessage"}];
 </script>
 </body>
 </html>

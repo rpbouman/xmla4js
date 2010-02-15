@@ -20,7 +20,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */    
-
+var Xmla;
 (function (){
 
 var _soap = "http://schemas.xmlsoap.org/soap/",
@@ -39,7 +39,7 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
     _xmlnsResultset = _xmlnsXmla + ":mddataset",
-    _useAX = window.ActiveXObject? true : false
+    _useAX = window.ActiveXObject ? true : false
 ;    
 
 /**
@@ -59,37 +59,44 @@ function _ajax(options){
     This is not a general ajax function, 
     just something that is good enough for Xmla.
 */
-    var xhr;
+    var xhr,
+        handlerCalled = false,
+        handler = function(){
+            handlerCalled = true;
+            switch (xhr.readyState){
+                case 0:
+                    options.aborted(xhr);                    
+                    break;
+                case 4:
+                    if (xhr.status===200){
+                        options.complete(xhr);
+                    }
+                    else {
+                        options.error(
+                            Xmla.Exception._newError(
+                                "HTTP_ERROR",
+                                "_ajax",
+                                options
+                            )
+                        );
+                    }
+                break;
+            }
+        };
     if (_useAX) {
         xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
     } 
     else {
         xhr = new XMLHttpRequest();
     }
-    xhr.open("POST", options.url, options.async);
-    var handlerCalled = false;
-    var handler = function(){
-        handlerCalled = true;
-        switch (xhr.readyState){
-            case 0:
-                options.aborted(xhr);                    
-                break;
-            case 4:
-                if (xhr.status===200){
-                    options.complete(xhr);
-                }
-                else {
-                    options.error(
-                        Xmla.Exception._newError(
-                            "HTTP_ERROR",
-                            "_ajax",
-                            options
-                        )
-                    );
-                }
-            break;
-        }
-    };
+    if (options.username && options.password) {
+        xhr.open(
+            "POST", options.url, options.async, 
+            options.username, options.password
+        );
+    } else {
+        xhr.open("POST", options.url, options.async);
+    }
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send(options.data);
@@ -99,68 +106,50 @@ function _ajax(options){
     return xhr;
 }
 
-function _isUndefined(arg){
+function _isUnd(arg){
     return typeof(arg)==="undefined";
 }
-function _isFunction(arg){
-    return typeof(arg)==="function";
-}
-function _isString(arg){
-    return typeof(arg)==="string";
-}
-function _isNumber(arg){
-    return typeof(arg)==="number";
-}
-function _isObject(arg){
-    return typeof(arg)==="object";
-}
-
 function _xmlEncodeListEntry(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
-    if (_isFunction(node.getElementsByTagNameNS)){
-        return node.getElementsByTagNameNS(ns, tagName);
-    }
-    else    
-    //the clusterfuck below tries to avoid failing fatally due to IE lack of getElementsByTagNameNS
-    if (prefix){        
-        return node.getElementsByTagName(prefix + ":" + tagName);
-    }
-    else {
-        return node.getElementsByTagName(tagName);
-    }
-};
+var _getElementsByTagNameNS = document.getElementsByTagNameNS ? function(node, ns, prefix, tagName){
+                                                                    return node.getElementsByTagNameNS(ns, tagName);
+                                                                }
+                                                              : function(node, ns, prefix, tagName){
+                                                                    if (prefix){        
+                                                                        return node.getElementsByTagName(prefix + ":" + tagName);
+                                                                    }
+                                                                    else {
+                                                                        return node.getElementsByTagName(tagName);
+                                                                    }
+                                                                };
 
-var _getAttributeNS = function(element, ns, prefix, attributeName){
-    if (_isFunction(element.getAttributeNS)){
-        return element.getAttributeNS(ns, attributeName);
-    }
-    else
-    if (prefix) {
-        return element.getAttribute(prefix + ":" + attributeName);
-    }
-    else {
-        return element.getAttribute(attributeName);
-    }
-};
-
+var _getAttributeNS = document.documentElement.getAttributeNS ? function(element, ns, prefix, attributeName){
+                                                                    return element.getAttributeNS(ns, attributeName);
+                                                                }
+                                                              : function(element, ns, prefix, attributeName){
+                                                                    if (prefix) {
+                                                                        return element.getAttribute(prefix + ":" + attributeName);
+                                                                    }
+                                                                    else {
+                                                                        return element.getAttribute(attributeName);
+                                                                    }
+                                                                };                                                              
 
 function _getXmlaSoapList(container, listType, items, indent){
     if (!indent){
         indent = "";
     }
-    var msg = "\n" + indent + "<" + container + ">";
+    var numItems, i, entry, property, item, msg = "\n" + indent + "<" + container + ">";
     if (items) {
-        var item;
         msg += "\n" + indent + " <" + listType + ">";
-        for (var property in items){
+        for (property in items){
             if (items.hasOwnProperty(property)) {
                 item = items[property];
                 msg += "\n" + indent + "  <" + property + ">";
                 if (typeof(item)==="array"){
-                    for (var entry, i=0, numItems = item.length; i<numItems; i++){
+                    for (entry, i=0, numItems = item.length; i<numItems; i += 1){
                         entry = item[i];
                         msg += "<Value>" + _xmlEncodeListEntry(entry) + "</Value>";
                     }
@@ -181,44 +170,42 @@ var _xmlRequestType = "RequestType";
 function _getXmlaSoapMessage(
     options
 ){
-    var msg = "";
-    var method = options.method;
+    var msg = "", method = options.method, exception = null;
     msg += "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
     "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
     "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
-    var exception = null;
     switch(method){
         case Xmla.METHOD_DISCOVER:
-            if (_isUndefined(options.requestType)) {
-                exception = Xmla.Exception._newError(
-                    "MISSING_REQUEST_TYPE",
-                    "Xmla._getXmlaSoapMessage",
-                    options
-                );
-            }
-            else {
+            if (options.requestType) {
                 msg += "\n   <" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" + 
                 _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions, "   ") + 
                 _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
             }
-            break;
-        case Xmla.METHOD_EXECUTE:
-            if (_isUndefined(options.statement)){
+            else {
                 exception = Xmla.Exception._newError(
                     "MISSING_REQUEST_TYPE",
                     "Xmla._getXmlaSoapMessage",
                     options
                 );
             }
-            else {
+            break;
+        case Xmla.METHOD_EXECUTE:
+            if (options.statement){
                 msg += "" + 
                 "\n   <Command>" +
                 "\n    <Statement>" + options.statement + "</Statement>" + 
                 "\n   </Command>" + 
                 _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
+            }
+            else {
+                exception = Xmla.Exception._newError(
+                    "MISSING_REQUEST_TYPE",
+                    "Xmla._getXmlaSoapMessage",
+                    options
+                );
             }
             break;
         default:
@@ -236,13 +223,13 @@ function _getXmlaSoapMessage(
     return msg;
 }
 
-function _applyProperties(object, properties, overwrite){
+function _applyProps(object, properties, overwrite){
     if (properties && (!object)) {
         object = {};
     }
     for (var property in properties){
         if (properties.hasOwnProperty(property)){
-            if (overwrite || _isUndefined(object[property])) {
+            if (overwrite || _isUnd(object[property])) {
                 object[property] = properties[property];
             }
         }
@@ -260,8 +247,8 @@ function _applyProperties(object, properties, overwrite){
 *   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>). 
 *   </p>
 *   @class Xmla
+*   @param options Object standard options
 *   @constructor
-*   @param {Object} options
 */
 Xmla = function(options){
 
@@ -278,8 +265,8 @@ Xmla = function(options){
     this.listeners[Xmla.EVENT_EXECUTE_SUCCESS] = [];
     this.listeners[Xmla.EVENT_EXECUTE_ERROR] = [];
     
-    this.options = _applyProperties(
-        _applyProperties(
+    this.options = _applyProps(
+        _applyProps(
             {},
             Xmla.defaultOptions,
             true
@@ -454,7 +441,7 @@ Xmla.DBSCHEMA_PROVIDER_TYPES = _xmlaDBSCHEMA + "PROVIDER_TYPES";
 *   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
 *   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_SCHEMATA</code> schema rowset.
 *   The <code>requestType</code> option applies only to Discover requests.
-*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBProviderTypes">discoverDBColumns()</a></code> method. 
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBSchemata">discoverDBSchemata()</a></code> method. 
 *   The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_SCHEMATA</code> as requestType.
 *
 *   @property DBSCHEMA_SCHEMATA
@@ -468,7 +455,7 @@ Xmla.DBSCHEMA_SCHEMATA =       _xmlaDBSCHEMA + "SCHEMATA";
 *   Can be used as value for the <code>requestType</code> option in the options object passed to the to 
 *   <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES</code> schema rowset.
 *   The <code>requestType</code> option applies only to Discover requests.
-*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBTables">discoverDBColumns()</a></code> method. 
+*   Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBTables">discoverDBTables()</a></code> method. 
 *   The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES</code> as requestType.
 *
 *   @property DBSCHEMA_TABLES
@@ -891,7 +878,7 @@ Xmla.EVENT_ALL = [].concat(
 *   by querying the <code>DataSourceInfo</code> and <code>URL</code> columns of the <code>DISCOVER_DATASOURCES</code> 
 *   rowset respectively (see <code><a href="method_discoverDataSources">discoverDataSources()</a></code>).
 *
-*   @property PROP_DataSourceInfo
+*   @property PROP_DATASOURCEINFO
 *   @static
 *   @final
 *   @type string
@@ -1186,8 +1173,29 @@ Xmla.prototype = {
 *   @default <code>null</code>
 */
     responseXml: null,
+/**
+*	This method can be used to set a number of default options for the Xmla instance.
+*	This is especially useful if you don't want to pass each and every option to each method call all the time. 
+*	Where appropriate, information that is missing from the parameter objects passed to the methods of the Xmla object
+*   may be augmented with the values set through this method. 
+*	For example, if you plan to do a series of requests pertaining to one particular datasource, 
+*	you can set the mandatory options like url, async, datasource and catalog just once:
+*	<pre>
+&nbsp;   xml.setOptions({
+&nbsp;       url: "http://localhost:8080/pentaho/Xmla",
+&nbsp;       async: true,
+&nbsp;       properties: {
+&nbsp;           DataSourceInfo: "Pentaho Analysis Services",
+&nbsp;           Catalog: "Foodmart"
+&nbsp;       }
+&nbsp;   });
+*	</pre>
+*	Then, a subsequent <code></code>
+*	@method setOptions
+*	@param Object
+*/	
     setOptions: function(options){
-        _applyProperties(
+        _applyProps(
             this.options,
             options,
             true
@@ -1247,14 +1255,14 @@ Xmla.prototype = {
 */    
     addListener: function(listener){
         var events = listener.events;
-        if (_isUndefined(events)){
+        if (!events){
             Xmla.Exception._newError(
                 "NO_EVENTS_SPECIFIED",
                 "Xmla.addListener",
                 listener
             )._throw();
         }
-        if (_isString(events)){
+        if (typeof(events)==="string"){
             if (events==="all"){
                 events = Xmla.EVENT_ALL;
             } else {
@@ -1270,7 +1278,7 @@ Xmla.prototype = {
         }
         var numEvents = events.length;
         var eventName, myListeners;
-        for (var i=0; i<numEvents; i++){
+        for (var i=0; i<numEvents; i += 1){
             eventName = events[i].replace(/\s+/g,"");
             myListeners = this.listeners[eventName];
             if (!myListeners) {
@@ -1280,8 +1288,8 @@ Xmla.prototype = {
                     listener
                 )._throw();
             }
-            if (_isFunction(listener.handler)){
-                if (!_isObject(listener.scope)) {
+            if (typeof(listener.handler)=="function"){
+                if (!listener.scope) {
                     listener.scope = window;
                 }
                 myListeners.push(listener);
@@ -1308,7 +1316,7 @@ Xmla.prototype = {
         var outcome = true;
         if (numListeners) {
             var listener, listenerResult;
-            for (var i=0; i<numListeners; i++){
+            for (var i=0; i<numListeners; i += 1){
                 listener = listeners[i];
                 listenerResult = listener.handler.call(
                     listener.scope,
@@ -1429,29 +1437,40 @@ Xmla.prototype = {
 *   @return {Xmla.Rowset|Xmla.Resultset} The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Resultset</code>.
 */
     request: function(options){
-        var xmla = this;
+        var ex, xmla = this;
 
-        if (this.response){
-            this.response.close();
-        }
         this.response = null;
         this.responseText = null;
         this.responseXml = null;
         
-        options.url = _isUndefined(options.url)? this.options.url : options.url;
-        if (_isUndefined(options.url)){
-            ex = Xmla.Exception._newError(
-                "MISSING_URL",
-                "Xmla.request",
-                options
-            );
-            ex._throw();
-        }
+		if (!options.url){
+			if (this.options.url){
+				options.url = this.options.url;
+			}
+			else {
+				ex = Xmla.Exception._newError(
+					"MISSING_URL",
+					"Xmla.request",
+					options
+				);
+				ex._throw();
+			}
+		}
 
-        options.properties = _applyProperties(options.properties, this.options.properties, false);
-        options.restrictions = _applyProperties(options.restrictions, this.options.restrictions, false);
-        options.async = _isUndefined(options.async) ? this.options.async : options.async;
-        options.requestTimeout = _isUndefined(options.requestTimeout) ? this.options.requestTimeout : options.requestTimeout;
+        options.properties = _applyProps(options.properties, this.options.properties, false);
+        options.restrictions = _applyProps(options.restrictions, this.options.restrictions, false);
+		if (_isUnd(options.async) && !_isUnd(this.options.async)){
+			options.async = this.options.async;
+		}
+		if (_isUnd(options.requestTimeout) && !_isUnd(this.options.requestTimeout)) {
+			options.requestTimeout = this.options.requestTimeout;
+		}
+        if (!options.username && this.options.username){
+            options.username = this.options.username;
+        }
+        if (!options.password && this.options.password){
+            options.password = this.options.password;
+        }
         
         var soapMessage = _getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
@@ -1462,14 +1481,14 @@ Xmla.prototype = {
             data: soapMessage,
             error:      function(exception){
                             options.exception = exception;
-                            xmla._requestError(options)
+                            xmla._requestError(options);
                         },
             complete:   function(xhr){
                             options.xhr = xhr;
                             xmla._requestSuccess(options);
                         },
             url: options.url
-        };
+        };        
         if (options.username){
             ajaxOptions.username = options.username;
         }
@@ -1602,17 +1621,18 @@ Xmla.prototype = {
 */
     execute: function(options) {
         var properties = options.properties;
-        if (_isUndefined(properties)){
+        if (!properties){
             properties = {};
             options.properties = properties;
         }
-        if (_isUndefined(properties[Xmla.PROP_CONTENT])){
+		_applyProps(properties, this.options.properties, false)
+        if (!properties[Xmla.PROP_CONTENT]){
             properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
         }
-        if (_isUndefined(properties[Xmla.PROP_FORMAT])){
+        if (!properties[Xmla.PROP_FORMAT]){
             options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
         }
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 method: Xmla.METHOD_EXECUTE
@@ -1732,13 +1752,16 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discover: function(options) {        
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 method: Xmla.METHOD_DISCOVER
             },
             true
         );
+		if (!request.requestType){
+			request.requestType = this.options.requestType;
+		}
         return this.request(request);         
     },
 /**
@@ -1892,7 +1915,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverDataSources: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DISCOVER_DATASOURCES
@@ -2028,7 +2051,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverProperties: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DISCOVER_PROPERTIES
@@ -2078,7 +2101,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverSchemaRowsets: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
            options,
             {
                 requestType: Xmla.DISCOVER_SCHEMA_ROWSETS
@@ -2149,7 +2172,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverEnumerators: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DISCOVER_ENUMERATORS
@@ -2185,7 +2208,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverKeywords: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DISCOVER_KEYWORDS
@@ -2249,7 +2272,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */    
     discoverLiterals: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DISCOVER_LITERALS
@@ -2305,7 +2328,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBCatalogs: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DBSCHEMA_CATALOGS
@@ -2318,7 +2341,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 *   <code><a href="#property_DBSCHEMA_COLUMNS"></a></code> as value for the <code>requestType</code>, 
 *   and retrieves the <code>DBSCHEMA_COLUMNS</code> schema rowset. 
-*   ...todo...
+*   Provides column information for all columns meeting the provided restriction criteria.
 *   The rowset has the following columns:
 *   <table border="1" class="schema-rowset">
 *       <tr>
@@ -2328,13 +2351,217 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*		<tr>
+*			<td>TABLE_CATALOG</td>
+*			<td>string</td>
+*			<td>The name of the Database.</td>
+*			<td>Yes</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>TABLE_SCHEMA</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>Yes</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>TABLE_NAME</td>
+*			<td>string</td>
+*			<td>The name of the cube.</td>
+*			<td>Yes</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_NAME</td>
+*			<td>string</td>
+*			<td>The name of the attribute hierarchy or measure.</td>
+*			<td>Yes</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_GUID</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_PROPID</td>
+*			<td>int</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>ORDINAL_POSITION</td>
+*			<td>int</td>
+*			<td>The position of the column, beginning with 1.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_HAS_DEFAULT</td>
+*			<td>boolean</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_DEFAULT</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_FLAGS</td>
+*			<td>int</td>
+*			<td>A DBCOLUMNFLAGS bitmask indicating column properties. See 'DBCOLUMNFLAGS Enumerated Type' in IColumnsInfo::GetColumnInfo</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>IS_NULLABLE</td>
+*			<td>boolean</td>
+*			<td>Always returns false.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>DATA_TYPE</td>
+*			<td>string</td>
+*			<td>The data type of the column. Returns a string for dimension columns and a variant for measures.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>TYPE_GUID
+*			<td>srring</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>CHARACTER_MAXIMUM_LENGTH</td>
+*			<td>int</td>
+*			<td>The maximum possible length of a value within the column. This is retrieved from the DataSize property in the DataItem.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>CHARACTER_OCTET_LENGTH</td>
+*			<td>int</td>
+*			<td>The maximum possible length of a value within the column, in bytes, for character or binary columns. A value of zero (0) indicates the column has no maximum length. NULL will be returned for columns that do not return binary or character data types.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>NUMERIC_PRECISION</td>
+*			<td>int</td>
+*			<td>The maximum precision of the column for numeric data types other than DBTYPE_VARNUMERIC.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>NUMERIC_SCALE</td>
+*			<td>int</td>
+*			<td>The number of digits to the right of the decimal point for DBTYPE_DECIMAL, DBTYPE_NUMERIC, DBTYPE_VARNUMERIC. Otherwise, this is NULL.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>DATETIME_PRECISION</td>
+*			<td>int</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>CHARACTER_SET_CATALOG</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>CHARACTER_SET_SCHEMA</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>CHARACTER_SET_NAME</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLLATION_CATALOG</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLLATION_SCHEMA</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLLATION_NAME</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>DOMAIN_CATALOG</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>DOMAIN_SCHEMA</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>DOMAIN_NAME</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>DESCRIPTION</td>
+*			<td>string</td>
+*			<td>Not supported.</td>
+*			<td>No</td>
+*			<td>No</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_OLAP_TYPE</td>
+*			<td>string</td>
+*			<td>The OLAP type of the object. MEASURE indicates the object is a measure. ATTRIBUTE indicates the object is a dimension attribute.</td>
+*			<td>Yes</td>
+*			<td>No</td>
+*		</tr>
 *   </table>
+*	The rowset is sorted on TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME.
 *   @method discoverDBColumns
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_COLUMNS</code> request. 
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBColumns: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DBSCHEMA_COLUMNS
@@ -2357,13 +2584,160 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
-*   </table>
+*		<tr>
+*			<td>TYPE_NAME</td>
+*			<td>string</td>
+*			<td>The provider-specific data type name.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>DATA_TYPE</td>
+*			<td>int</td>
+*			<td>The indicator of the data type.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>COLUMN_SIZE</td>
+*			<td>int</td>
+*			<td> The length of a non-numeric column or parameter that refers to either the maximum or the length defined for this type by the provider. For character data, this is the maximum or defined length in characters. For DateTime data types, this is the length of the string representation (assuming the maximum allowed precision of the fractional seconds component). If the data type is numeric, this is the upper bound on the maximum precision of the data type. </td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>LITERAL_PREFIX</td>
+*			<td>string</td>
+*			<td>The character or characters used to prefix a literal of this type in a text command.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>LITERAL_SUFFIX</td>
+*			<td>string</td>
+*			<td>The character or characters used to suffix a literal of this type in a text command.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>CREATE_PARAMS
+*			<td>string</td>
+*			<td>The creation parameters specified by the consumer when creating a column of this data type. For example, the SQL data type, DECIMAL, needs a precision and a scale. In this case, the creation parameters might be the string "precision,scale". In a text command to create a DECIMAL column with a precision of 10 and a scale of 2, the value of the TYPE_NAME column might be DECIMAL() and the complete type specification would be DECIMAL(10,2). The creation parameters appear as a comma-separated list of values, in the order they are to be supplied and with no surrounding parentheses. If a creation parameter is length, maximum length, precision, scale, seed, or increment, use "length", "max length", "precision", "scale", "seed", and "increment", respectively. If the creation parameter is some other value, the provider determines what text is to be used to describe the creation parameter. If the data type requires creation parameters, "()" usually appears in the type name. This indicates the position at which to insert the creation parameters. If the type name does not include "()", the creation parameters are enclosed in parentheses and appended to the data type name. </td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>IS_NULLABLE</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type is nullable. VARIANT_TRUE indicates that the data type is nullable. VARIANT_FALSE indicates that the data type is not nullable. NULL indicates that it is not known whether the data type is nullable.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>CASE_SENSITIVE</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type is a characters type and case-sensitive. VARIANT_TRUE indicates that the data type is a character type and is case-sensitive. VARIANT_FALSE indicates that the data type is not a character type or is not case-sensitive.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>SEARCHABLE</td>
+*			<td>int</td>
+*			<td>An integer indicating how the data type can be used in searches if the provider supports ICommandText; otherwise, NULL. This column can have the following values: DB_UNSEARCHABLE indicates that the data type cannot be used in a WHERE clause. DB_LIKE_ONLY indicates that the data type can be used in a WHERE clause only with the LIKE predicate.DB_ALL_EXCEPT_LIKE indicates that the data type can be used in a WHERE clause with all comparison operators except LIKE. DB_SEARCHABLE indicates that the data type can be used in a WHERE clause with any comparison operator.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>UNSIGNED_ATTRIBUTE</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type is unsigned.   VARIANT_TRUE indicates that the data type is unsigned. VARIANT_FALSE indicates that the data type is signed.NULL indicates that this is not applicable to the data type.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>FIXED_PREC_SCALE</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type has a fixed precision and scale.  VARIANT_TRUE indicates that the data type has a fixed precision and scale. VARIANT_FALSE indicates that the data type does not have a fixed precision and scale.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>AUTO_UNIQUE_VALUE</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type is autoincrementing. VARIANT_TRUE indicates that values of this type can be autoincrementing. VARIANT_FALSE indicates that values of this type cannot be autoincrementing. If this value is VARIANT_TRUE, whether or not a column of this type is always autoincrementing depends on the provider's DBPROP_COL_AUTOINCREMENT column property. If the DBPROP_COL_AUTOINCREMENT property is read/write, whether or not a column of this type is autoincrementing depends on the setting of the DBPROP_COL_AUTOINCREMENT property. If DBPROP_COL_AUTOINCREMENT is a read-only property, either all or none of the columns of this type are autoincrementing. </td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>LOCAL_TYPE_NAME</td>
+*			<td>string</td>
+*			<td>The localized version of TYPE_NAME. NULL is returned if a localized name is not supported by the data provider.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>MINIMUM_SCALE</td>
+*			<td>int</td>
+*			<td>If the type indicator is DBTYPE_VARNUMERIC, DBTYPE_DECIMAL, or DBTYPE_NUMERIC, the minimum number of digits allowed to the right of the decimal point. Otherwise, NULL.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>MAXIMUM_SCALE</td>
+*			<td>int</td>
+*			<td>The maximum number of digits allowed to the right of the decimal point if the type indicator is DBTYPE_VARNUMERIC, DBTYPE_DECIMAL, or DBTYPE_NUMERIC; otherwise, NULL.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>GUID</td>
+*			<td>string</td>
+*			<td>(Intended for future use) The GUID of the type, if the type is described in a type library. Otherwise, NULL.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>TYPELIB
+*			<td>string</td>
+*			<td>(Intended for future use) The type library containing the description of the type, if the type is described in a type library. Otherwise, NULL.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>VERSION</td>
+*			<td>string</td>
+*			<td>(Intended for future use) The version of the type definition. Providers might want to version type definitions. Different providers might use different versioning schemes, such as a timestamp or number (integer or float). NULL if not supported.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>IS_LONG</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type is a binary large object (BLOB) and has very long data. VARIANT_TRUE indicates that the data type is a BLOB that contains very long data; the definition of very long data is provider-specific. VARIANT_FALSE indicates that the data type is a BLOB that does not contain very long data or is not a BLOB. This value determines the setting of the DBCOLUMNFLAGS_ISLONG flag returned by GetColumnInfo in IColumnsInfo and GetParameterInfo in ICommandWithParameters.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>BEST_MATCH</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the data type is a best match. VARIANT_TRUE indicates that the data type is the best match between all data types in the data store and the OLE DB data type indicated by the value in the DATA_TYPE column. VARIANT_FALSE indicates that the data type is not the best match. For each set of rows in which the value of the DATA_TYPE column is the same, the BEST_MATCH column is set to VARIANT_TRUE in only one row.</td>
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*		<tr>
+*			<td>IS_FIXEDLENGTH</td>
+*			<td>boolean</td>
+*			<td>A Boolean that indicates whether the column is fixed in length. VARIANT_TRUE indicates that columns of this type created by the data definition language (DDL) will be of fixed length. VARIANT_FALSE indicates that columns of this type created by the DDL will be of variable length. If the field is NULL, it is not known whether the provider will map this field with a fixed-length or variable-length column.
+*			<td>false</td>
+*			<td>true</td>
+*		</tr>
+*	</table>
 *   @method discoverDBProviderTypes
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>DBSCHEMA_PROVIDER_TYPES</code> request. 
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBProviderTypes: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DBSCHEMA_PROVIDER_TYPES
@@ -2392,7 +2766,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBSchemata: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DBSCHEMA_SCHEMATA
@@ -2421,7 +2795,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBTables: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DBSCHEMA_TABLES
@@ -2450,7 +2824,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES_INFO</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverDBTablesInfo: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.DBSCHEMA_TABLES_INFO
@@ -2479,7 +2853,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDActions: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_ACTIONS
@@ -2634,7 +3008,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDCubes: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_CUBES
@@ -2782,7 +3156,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDDimensions: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_DIMENSIONS
@@ -2811,7 +3185,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDFunctions: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_FUNCTIONS
@@ -3015,7 +3389,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDHierarchies: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_HIERARCHIES
@@ -3038,13 +3412,215 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <th>Restriction</th>
 *           <th>Nullable</th>
 *       </tr>
+*       <tr>
+*       	<td>CATALOG_NAME</td>
+*           <td>string</td>
+The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>SCHEMA_NAME</td>
+*           <td>string</td>
+The name of the schema to which this level belongs. NULL if the provider does not support schemas.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>CUBE_NAME</td>
+*           <td>string</td>
+The name of the cube to which this level belongs.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>DIMENSION_UNIQUE_NAME</td>
+*           <td>string</td>
+The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>HIERARCHY_UNIQUE_NAME</td>
+*           <td>string</td>
+The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_NAME</td>
+*           <td>string</td>
+The name of the level.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_UNIQUE_NAME</td>
+*           <td>string</td>
+The properly escaped unique name of the level.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_GUID</td>
+*           <td>string</td>
+Not supported.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_CAPTION</td>
+*           <td>string</td>
+A label or caption associated with the hierarchy. Used primarily for display purposes. If a caption does not exist, LEVEL_NAME is returned.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_NUMBER</td>
+*           <td>int</td>
+The distance of the level from the root of the hierarchy. Root level is zero (0).
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_CARDINALITY</td>
+*           <td>int</td>
+The number of members in the level.
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_TYPE</td>
+*           <td>int</td>
+*           <td>Type of the level: 
+*				<ul>
+*                   <li>MDLEVEL_TYPE_GEO_CONTINENT (0x2001)</li>
+*                   <li>MDLEVEL_TYPE_GEO_REGION (0x2002)</li>
+*                   <li>MDLEVEL_TYPE_GEO_COUNTRY (0x2003)</li>
+*                   <li>MDLEVEL_TYPE_GEO_STATE_OR_PROVINCE (0x2004)</li>
+*                   <li>MDLEVEL_TYPE_GEO_COUNTY (0x2005)</li>
+*                   <li>MDLEVEL_TYPE_GEO_CITY (0x2006)</li>
+*                   <li>MDLEVEL_TYPE_GEO_POSTALCODE (0x2007)</li>
+*                   <li>MDLEVEL_TYPE_GEO_POINT (0x2008)</li>
+*                   <li>MDLEVEL_TYPE_ORG_UNIT (0x1011)</li>
+*                   <li>MDLEVEL_TYPE_BOM_RESOURCE (0x1012)</li>
+*                   <li>MDLEVEL_TYPE_QUANTITATIVE (0x1013)</li>
+*                   <li>MDLEVEL_TYPE_ACCOUNT (0x1014)</li>
+*                   <li>MDLEVEL_TYPE_CUSTOMER (0x1021)</li>
+*                   <li>MDLEVEL_TYPE_CUSTOMER_GROUP (0x1022)</li>
+*                   <li>MDLEVEL_TYPE_CUSTOMER_HOUSEHOLD (0x1023)</li>
+*                   <li>MDLEVEL_TYPE_PRODUCT (0x1031)</li>
+*                   <li>MDLEVEL_TYPE_PRODUCT_GROUP (0x1032)</li>
+*                   <li>MDLEVEL_TYPE_SCENARIO (0x1015)</li>
+*                   <li>MDLEVEL_TYPE_UTILITY (0x1016)</li>
+*                   <li>MDLEVEL_TYPE_PERSON (0x1041)</li>
+*                   <li>MDLEVEL_TYPE_COMPANY (0x1042)</li>
+*                   <li>MDLEVEL_TYPE_CURRENCY_SOURCE (0x1051)</li>
+*                   <li>MDLEVEL_TYPE_CURRENCY_DESTINATION (0x1052)</li>
+*                   <li>MDLEVEL_TYPE_CHANNEL (0x1061)</li>
+*                   <li>MDLEVEL_TYPE_REPRESENTATIVE (0x1062)</li>
+*                   <li>MDLEVEL_TYPE_PROMOTION (0x1071)</li>
+*				</ul>
+*           <td>No</td>
+*           <td>Yes</td>
+*       <tr>
+*       	<td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>A human-readable description of the level. NULL if no description exists.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>CUSTOM_ROLLUP_SETTINGS</td>
+*           <td>int</td>
+*           <td>A bitmap that specifies the custom rollup options: MDLEVELS_CUSTOM_ROLLUP_EXPRESSION (0x01) indicates an expression exists for this level. (Deprecated) MDLEVELS_CUSTOM_ROLLUP_COLUMN (0x02) indicates that there is a custom rollup column for this level. MDLEVELS_SKIPPED_LEVELS (0x04) indicates that there is a skipped level associated with members of this level.MDLEVELS_CUSTOM_MEMBER_PROPERTIES (0x08) indicates that members of the level have custom member properties. MDLEVELS_UNARY_OPERATOR (0x10) indicates that members on the level have unary operators.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_UNIQUE_SETTINGS</td>
+*           <td>int</td>
+*           <td>A bitmap that specifies which columns contain unique values, if the level only has members with unique names or keys. The Msmd.h file defines the following bit value constants for this bitmap: MDDIMENSIONS_MEMBER_KEY_UNIQUE (1) MDDIMENSIONS_MEMBER_NAME_UNIQUE (2)The key is always unique in Microsoft SQL Server 2005 Analysis Services (SSAS). The name will be unique if the setting on the attribute is UniqueInDimension or UniqueInAttribute</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_IS_VISIBLE</td>
+*           <td>bool</td>
+*           <td>A Boolean that indicates whether the level is visible. Always returns True. If the level is not visible, it will not be included in the schema rowset.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_ORDERING_PROPERTY</td>
+*           <td>string</td>
+*           <td>The ID of the attribute that the level is sorted on.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_DBTYPE</td>
+*           <td>int</td>
+*           <td>The DBTYPE enumeration of the member key column that is used for the level attribute. Null if concatenated keys are used as the member key column.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_MASTER_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>Always returns NULL.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_NAME_SQL_COLUMN_NAME</td>
+*           <td>string</td>
+*           <td>The SQL representation of the level member names.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_KEY_SQL_COLUMN_NAME</td>
+*           <td>string</td>
+*           <td>The SQL representation of the level member key values.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME</td>
+*           <td>string</td>
+*           <td>The SQL representation of the member unique names.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_ATTRIBUTE_HIERARCHY_NAME</td>
+*           <td>string</td>
+*			<td>The name of the attribute hierarchy providing the source of the level.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_KEY_CARDINALITY</td>
+*           <td>int</td>
+*			<td>The number of columns in the level key.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*       	<td>LEVEL_ORIGIN</td>
+*           <td>int</td>
+*			<td>A bit map that defines how the level was sourced:MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy.MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy.MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy.MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled.</td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
 *   </table>
 *   @method discoverMDLevels
 *   @param {Object} options An object whose properties convey the options for the XML/A a <code>MDSCHEMA_LEVELS</code> request. 
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDLevels: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_LEVELS
@@ -3213,7 +3789,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDMeasures: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_MEASURES
@@ -3242,7 +3818,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDMembers: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_MEMBERS
@@ -3271,7 +3847,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDProperties: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_PROPERTIES
@@ -3300,7 +3876,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events. 
 */        
     discoverMDSets: function(options){
-        var request = _applyProperties(
+        var request = _applyProps(
             options,
             {
                 requestType: Xmla.MDSCHEMA_SETS
@@ -3316,7 +3892,7 @@ function _getRowSchema(xmlDoc){
         numTypes = types.length,
         type,
         i;
-    for (i=0; i<numTypes; i++){
+    for (i=0; i<numTypes; i += 1){
         type = types.item(i);
         if (type.getAttribute("name")==="row"){
             return type;
@@ -3353,7 +3929,9 @@ function _getRowSchema(xmlDoc){
 *   @param {string} requestTtype The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.
 */
 Xmla.Rowset = function (node, requestType){
-    this._initData(node, requestType);
+	this._node = node;
+    this._type = requestType;
+    this._initData();
     return this;
 };
 
@@ -3586,35 +4164,36 @@ Xmla.Rowset.KEYS[Xmla.MDSCHEMA_PROPERTIES] = [];
 Xmla.Rowset.KEYS[Xmla.MDSCHEMA_SETS] = [];
 
 Xmla.Rowset.prototype = {
+	_node:  null,
     _type: null,
-    rows: null,
+    _row: null,
+    _rows: null,
     numRows: null,
     fieldOrder: null,
     fields: null,
     _fieldCount: null,
-    _initData: function(node, requestType){
-        this._type = requestType;
-        this.rows = _getElementsByTagNameNS(node, _xmlnsRowset, null, "row");
-        this.numRows = this.rows? this.rows.length : 0;
+    _initData: function(){
+        this._rows = _getElementsByTagNameNS(this._node, _xmlnsRowset, null, "row");
+        this.numRows = this._rows? this._rows.length : 0;
         this.reset();
         this.fieldOrder = [];
         this.fields = {};
         this._fieldCount = 0;
-        var rowSchema = _getRowSchema(node);
+        var rowSchema = _getRowSchema(this._node);
         if (rowSchema){    
             var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
                 seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
                 fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter;
-            for (var i=0; i<numChildren; i++){
+            for (var i=0; i<numChildren; i += 1){
                 seqChild = seqChildren.item(i);
-                if (seqChild.nodeType!=1) {
+                if (seqChild.nodeType !== 1) {  //element node
                     continue;
                 }
                 fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
                 fieldName = seqChild.getAttribute("name");
                 type = seqChild.getAttribute("type");   //get the type from the xsd
-                if (type==null && this.row) {           //bummer, not defined there try to get it from xsi:type in the row
-                    var val = this.row.getElementsByTagName(fieldName);
+                if (type===null && this._row) {           //bummer, not defined there try to get it from xsi:type in the row
+                    var val = this._row.getElementsByTagName(fieldName);
                     if (val.length){
                         type = _getAttributeNS(
                             val.item(0), 
@@ -3624,11 +4203,28 @@ Xmla.Rowset.prototype = {
                         );
                     }                    
                 }
-                if (!type && requestType==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName=="Restrictions") {
+                if (!type && this._type==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName==="Restrictions") {
                     type = "Restrictions";
                 }
                 minOccurs = seqChild.getAttribute("minOccurs");
+				if (minOccurs){
+					minOccurs=parseInt(minOccurs,10);
+				} 
+				else {
+					minOccurs = 1;
+				}
                 maxOccurs = seqChild.getAttribute("maxOccurs");
+				if (maxOccurs){
+					if (maxOccurs==="unbounded") {
+						maxOccurs = Infinity;
+					}
+					else {
+						minOccurs=parseInt(maxOccurs,10);
+					}
+				} 
+				else {
+					maxOccurs = 1;
+				}
                 valueConverter = this._getValueConverter(type);
                 this.fields[fieldLabel] = {
                     name: fieldName,
@@ -3636,8 +4232,8 @@ Xmla.Rowset.prototype = {
                     index: this._fieldCount++,
                     type: type,
                     jsType: valueConverter.jsType,
-                    minOccurs: _isUndefined(minOccurs)? 1: minOccurs,
-                    maxOccurs: _isUndefined(maxOccurs)? 1: (maxOccurs==="unbounded"?Infinity:maxOccurs),
+                    minOccurs: minOccurs,
+                    maxOccurs: maxOccurs,
                     getter: this._createFieldGetter(fieldName, valueConverter.func, minOccurs, maxOccurs)
                 };            
                 this.fieldOrder.push(fieldLabel);
@@ -3647,7 +4243,7 @@ Xmla.Rowset.prototype = {
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
                 "Xmla.Rowset",
-                node
+                this._node
             )._throw();
         }
     },
@@ -3671,7 +4267,7 @@ Xmla.Rowset.prototype = {
             numNodes = nodes.length,
             node
         ;
-        for (var i=0; i<numNodes; i++){
+        for (var i=0; i<numNodes; i += 1){
             node = nodes.item(i);
             arr.push(valueConverter(this._elementText(node)));
         }
@@ -3685,12 +4281,22 @@ Xmla.Rowset.prototype = {
         if (el.textContent) {       //ff
             return el.textContent;
         }
+		else 
+		if (el.normalize){
+			el.normalize();
+			if (el.firstChild){
+				return el.firstChild.data;
+			}
+			else {
+				return null;
+			}
+		}
         else {                      //generic
             var text = "",
                 childNodes = el.childNodes,
                 numChildNodes = childNodes.length
             ;
-            for (var i=0; i<numChildNodes; i++){
+            for (var i=0; i<numChildNodes; i += 1){
                 text += childNodes.item(i).data;
             }
             return text;
@@ -3741,50 +4347,44 @@ Xmla.Rowset.prototype = {
         return valueConverter;
     },
     _createFieldGetter: function(fieldName, valueConverter, minOccurs, maxOccurs){
-        if (minOccurs === null){
-            minOccurs = "1" ;
-        }
-        if (maxOccurs === null){
-            maxOccurs = "1";    
-        }
         var me = this;
         var getter;
-        if (maxOccurs==="1") {
-            if(minOccurs==="1") {
+        if (maxOccurs===1) {
+            if(minOccurs===1) {
                 getter = function(){
-                    var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
+                    var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                     return valueConverter(me._elementText(els.item(0)));
                 };
             }
             else 
-            if(minOccurs==="0") {
+            if(minOccurs===0) {
                 getter = function(){
-                    var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
-                    if (!els.length) {
-                        return null;
+                    var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
+                    if (els.length) {
+                        return valueConverter(me._elementText(els.item(0)));
                     }
                     else {
-                        return valueConverter(me._elementText(els.item(0)));
+                        return null;
                     }
                 };
             }
         }
         else 
-        if(minOccurs==="1") {
+        if(minOccurs===1) {
             getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
+                var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                 return me._arrayConverter(els, valueConverter);
             };
         }
         else 
-        if(minOccurs==="0") {
+        if(minOccurs===0) {
             getter = function(){
-                var els = _getElementsByTagNameNS (this.row, _xmlnsRowset, null, fieldName);
-                if (!els.length) {
-                    return null;
+                var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
+                if (els.length) {
+                    return me._arrayConverter(els, valueConverter);
                 }
                 else {
-                    return me._arrayConverter(els, valueConverter);
+                    return null;
                 }
             };
         }
@@ -3814,7 +4414,7 @@ Xmla.Rowset.prototype = {
             fieldCount = this._fieldCount,
             fieldOrder = this.fieldOrder
         ;
-        for (var i=0; i<fieldCount; i++){
+        for (var i=0; i<fieldCount; i += 1){
             f[i] = this.fieldDef(fieldOrder[i]);
         }
         return f;
@@ -3828,7 +4428,7 @@ Xmla.Rowset.prototype = {
 */    
     getFieldNames: function(){
         var fieldNames = [];
-        for (var i=0, count = this.fieldCount(); i<count; i++){
+        for (var i=0, count = this.fieldCount(); i<count; i += 1){
             fieldNames[i] = this.fieldOrder[i];
         }
         return fieldNames;
@@ -3859,7 +4459,8 @@ Xmla.Rowset.prototype = {
 *   @method next
 */    
     next: function(){
-        this.row = this.rows.item(++this.rowIndex);
+        this.rowIndex += 1;
+        this._row = this._rows.item(this.rowIndex);
     },
 /**
 *   Gets the value of the internal row index.
@@ -3889,7 +4490,7 @@ Xmla.Rowset.prototype = {
 */    
     reset: function(){
         this.rowIndex = 0;
-        this.row = (this.hasMoreRows()) ? this.rows.item(this.rowIndex) : null;
+        this._row = (this.hasMoreRows()) ? this._rows.item(this.rowIndex) : null;
     },
 /**
 *   Retrieves a <code>fieldDef</code> object by name.
@@ -3909,7 +4510,7 @@ Xmla.Rowset.prototype = {
 */    
     fieldDef: function(name){
         var field = this.fields[name];
-        if (_isUndefined(field)){
+        if (!field){
             Xmla.Exception._newError(
                 "INVALID_FIELD",
                 "Xmla.Rowset.fieldDef",
@@ -3938,7 +4539,7 @@ Xmla.Rowset.prototype = {
 */    
     fieldName: function(index){
         var fieldName = this.fieldOrder[index];
-        if (_isUndefined(fieldName)){
+        if (!fieldName){
             Xmla.Exception._newError(
                 "INVALID_FIELD",
                 "Xmla.Rowset.fieldDef",
@@ -3954,7 +4555,7 @@ Xmla.Rowset.prototype = {
 *   @return {array|boolean|float|int|string} From the current row, the value of the field that matches the argument.
 */    
     fieldVal: function(name){
-        if (_isNumber(name)){
+        if (typeof(name)==="number"){
             name = this.fieldName(name);
         }
         var field = this.fieldDef(name);
@@ -3974,8 +4575,9 @@ Xmla.Rowset.prototype = {
 *   @method close
 */    
     close: function(){
-        this.row = null;
-        this.rows = null;
+		this._node = null;
+        this._row = null;
+        this._rows = null;
     },
 /**
 *   Reads the current row and returns the result as a new array. 
@@ -4146,8 +4748,8 @@ while (rowObject = rowset.fetchAsObject()){
 *   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.
 */    
     mapAsObject: function(map, key, row){
-        var k, v, p, o, m = map;
-        for (var i=0, l=key.length, last = l-1; i<l; i++){
+        var k, v, p, i, len = key.length, last = len - 1, m = map;
+        for (i=0; i < len; i += 1){
             k = key[i]; //get the keypart
             v = row[k]; //get the value for the key part
             p = m[v];   //get the property from the map for this keypart.
@@ -4410,8 +5012,8 @@ Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp +
 Xmla.Exception.HTTP_ERROR_CDE = -10;
 Xmla.Exception.HTTP_ERROR_MSG = "HTTP Error"; 
 Xmla.Exception.HTTP_ERROR_HLP = _exceptionHlp + 
-                                    "#" + Xmla.Exception.INVALID_FIELD_CDE  + 
-                                    "_" + Xmla.Exception.INVALID_FIELD_MSG;
+                                    "#" + Xmla.Exception.HTTP_ERROR_CDE  + 
+                                    "_" + Xmla.Exception.HTTP_ERROR_MSG;
 
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(
