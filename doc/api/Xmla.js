@@ -1168,11 +1168,11 @@ Xmla.prototype = {
 *   Note that it is not safe to read this property immediately after doing an asynchronous request.
 *   For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).
 *
-*   @property responseXml
+*   @property responseXML
 *   @type {DOMDocument}
 *   @default <code>null</code>
 */
-    responseXml: null,
+    responseXML: null,
 /**
 *	This method can be used to set a number of default options for the Xmla instance.
 *	This is especially useful if you don't want to pass each and every option to each method call all the time. 
@@ -1441,7 +1441,7 @@ Xmla.prototype = {
 
         this.response = null;
         this.responseText = null;
-        this.responseXml = null;
+        this.responseXML = null;
         
 		if (!options.url){
 			if (this.options.url){
@@ -3090,7 +3090,27 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *       <tr>
 *           <td>DIMENSION_TYPE</td>
 *           <td>string</td>
-*           <td></td>
+*           <td>
+*				<ul>
+*					<li>MD_DIMTYPE_UNKNOWN (0)</li>
+*					<li>MD_DIMTYPE_TIME (1)</li>
+*					<li>MD_DIMTYPE_MEASURE (2)</li>
+*					<li>MD_DIMTYPE_OTHER (3)</li>
+*					<li>MD_DIMTYPE_QUANTITATIVE (5)</li>
+*					<li>MD_DIMTYPE_ACCOUNTS (6)</li>
+*					<li>MD_DIMTYPE_CUSTOMERS (7)</li>
+*					<li>MD_DIMTYPE_PRODUCTS (8)</li>
+*					<li>MD_DIMTYPE_SCENARIO (9)</li>
+*					<li>MD_DIMTYPE_UTILIY (10)</li>
+*					<li>MD_DIMTYPE_CURRENCY (11)</li>
+*					<li>MD_DIMTYPE_RATES (12)</li>
+*					<li>MD_DIMTYPE_CHANNEL (13)</li>
+*					<li>MD_DIMTYPE_PROMOTION (14)</li>
+*					<li>MD_DIMTYPE_ORGANIZATION (15)</li>
+*					<li>MD_DIMTYPE_BILL_OF_MATERIALS (16)</li>
+*					<li>MD_DIMTYPE_GEOGRAPHY (17)</li>
+*				</ul>
+*			</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
@@ -4139,27 +4159,103 @@ Xmla.Rowset.MD_DIMTYPE_BILL_OF_MATERIALS = 16;
 *   @default <code>17</code>
 */
 Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
+
+/**
+*	A possible value for the <code>STRUCTURE</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	@property MD_STRUCTURE_FULLYBALANCED
+*   @static
+*   @final
+*   @type int
+*   @default <code>0</code>
+*/
+Xmla.Rowset.MD_STRUCTURE_FULLYBALANCED = 0;
+/**
+*	A possible value for the <code>STRUCTURE</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	@property MD_STRUCTURE_RAGGEDBALANCED
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Rowset.MD_STRUCTURE_RAGGEDBALANCED = 1;
+/**
+*	A possible value for the <code>STRUCTURE</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	@property MD_STRUCTURE_UNBALANCED
+*   @static
+*   @final
+*   @type int
+*   @default <code>2</code>
+*/
+Xmla.Rowset.MD_STRUCTURE_UNBALANCED = 2;
+/**
+*	A possible value for the <code>STRUCTURE</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	@property MD_STRUCTURE_NETWORK
+*   @static
+*   @final
+*   @type int
+*   @default <code>3</code>
+*/
+Xmla.Rowset.MD_STRUCTURE_NETWORK = 3;
+
+/**
+*	A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	Identifies user defined hierarchies.
+*	@property MD_USER_DEFINED
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Rowset.MD_USER_DEFINED = 1
+/**
+*	A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	identifies attribute hierarchies.
+*	@property MD_SYSTEM_ENABLED
+*   @static
+*   @final
+*   @type int
+*   @default <code>2</code>
+*/
+Xmla.Rowset.MD_SYSTEM_ENABLED = 2
+/**
+*	A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*	identifies attributes with no attribute hierarchies.
+*	@property MD_SYSTEM_INTERNAL
+*   @static
+*   @final
+*   @type int
+*   @default <code>4</code>
+*/
+Xmla.Rowset.MD_SYSTEM_INTERNAL = 4
+
 Xmla.Rowset.KEYS = {};
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_CATALOGS] = ["CATALOG_NAME"];
-Xmla.Rowset.KEYS[Xmla.DBSCHEMA_COLUMNS] = [];
-Xmla.Rowset.KEYS[Xmla.DBSCHEMA_PROVIDER_TYPES] = [];
-Xmla.Rowset.KEYS[Xmla.DBSCHEMA_SCHEMATA] = [];
-Xmla.Rowset.KEYS[Xmla.DBSCHEMA_TABLES] = [];
-Xmla.Rowset.KEYS[Xmla.DBSCHEMA_TABLES_INFO] = [];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_COLUMNS] = ["TABLE_CATALOG", "TABLE_NAME", "COLUMN_NAME"];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_PROVIDER_TYPES] = ["TYPE_NAME"];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_SCHEMATA] = ["CATALOG_NAME", "SCHEMA_NAME"];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_TABLES] = ["TABLE_CATALOG", "TABLE_NAME"];
+Xmla.Rowset.KEYS[Xmla.DBSCHEMA_TABLES_INFO] = ["TABLE_CATALOG", "TABLE_NAME"];
 Xmla.Rowset.KEYS[Xmla.DISCOVER_DATASOURCES] = ["DataSourceName"];
 Xmla.Rowset.KEYS[Xmla.DISCOVER_ENUMERATORS] = ["EnumName", "ElementName"];
 Xmla.Rowset.KEYS[Xmla.DISCOVER_KEYWORDS] = ["Keyword"];
 Xmla.Rowset.KEYS[Xmla.DISCOVER_LITERALS] = ["LiteralName"];
 Xmla.Rowset.KEYS[Xmla.DISCOVER_PROPERTIES] = ["PropertyName"];
 Xmla.Rowset.KEYS[Xmla.DISCOVER_SCHEMA_ROWSETS] = ["SchemaName"];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_ACTIONS] = [];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_CUBES] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME"];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_DIMENSIONS] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME","DIMENSION_NAME"];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_FUNCTIONS] = [];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_HIERARCHIES] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME","HIERARCHY_NAME"];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_LEVELS] = [];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEASURES] = ["CATALOG_NAME","SCHEMA_NAME","CUBE_NAME","MEASURE_NAME"];
-Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEMBERS] = [];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_ACTIONS] = ["CATALOG_NAME", "CUBE_NAME", "ACTION_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_CUBES] = ["CATALOG_NAME","CUBE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_DIMENSIONS] = ["CATALOG_NAME","CUBE_NAME","DIMENSION_UNIQUE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_FUNCTIONS] = ["FUNCTION_NAME", "PARAMETER_LIST"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_HIERARCHIES] = ["CATALOG_NAME","CUBE_NAME","DIMENSION_UNIQUE_NAME","HIERARCHY_UNIQUE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_LEVELS] = ["CATALOG_NAME","CUBE_NAME","DIMENSION_UNIQUE_NAME","HIERARCHY_UNIQUE_NAME","LEVEL_UNIQUE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEASURES] = ["CATALOG_NAME","CUBE_NAME","MEASURE_NAME"];
+Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEMBERS] = ["CATALOG_NAME","CUBE_NAME","DIMENSION_UNIQUE_NAME","HIERARCHY_UNIQUE_NAME","LEVEL_UNIQUE_NAME","MEMBER_UNIQUE_NAME"];
 Xmla.Rowset.KEYS[Xmla.MDSCHEMA_PROPERTIES] = [];
 Xmla.Rowset.KEYS[Xmla.MDSCHEMA_SETS] = [];
 
@@ -4259,6 +4355,9 @@ Xmla.Rowset.prototype = {
     _textConverter: function(val){
         return val;
     },
+    _dateTimeConverter: function(val){
+        return Date.parse(val);
+    },
     _restrictionsConverter: function(val){
         return val;
     },
@@ -4334,6 +4433,10 @@ Xmla.Rowset.prototype = {
             case "xsd:string":
                 valueConverter.func = this._textConverter;
                 valueConverter.jsType = "string";
+                break;
+            case "xsd:dateTime":
+                valueConverter.func = this._dateTimeConverter;
+                valueConverter.jsType = "object";
                 break;
             case "Restrictions":
                 valueConverter.func = this._restrictionsConverter;

@@ -550,8 +550,11 @@
         <xsl:variable name="cell" select="$cells[@CellOrdinal = ($row * $colcount + ($col - 1))]"/>
         <td>
             <xsl:choose>
-                <xsl:when test="$cell">
-                    <xsl:value-of select="$cell/md:FmtValue/text()"/>
+                <xsl:when test="$cell/md:FmtValue">
+					<xsl:value-of select="$cell/md:FmtValue/text()"/>
+                </xsl:when>
+                <xsl:when test="$cell/md:Value">
+					<xsl:value-of select="$cell/md:Value/text()"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <br/>

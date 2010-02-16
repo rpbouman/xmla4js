@@ -1168,11 +1168,11 @@
 <span class="cm">*   Note that it is not safe to read this property immediately after doing an asynchronous request.</span>
 <span class="cm">*   For asynchronous requests, you can read this property by the time the &lt;code&gt;XXX_SUCCESS&lt;/code&gt; event handlers are notified (until it is set to &lt;code&gt;null&lt;/code&gt; again by a subsequent request).</span>
 <span class="cm">*</span>
-<span class="cm">*   @property responseXml</span>
+<span class="cm">*   @property responseXML</span>
 <span class="cm">*   @type {DOMDocument}</span>
 <span class="cm">*   @default &lt;code&gt;null&lt;/code&gt;</span>
 <span class="cm">*/</span>
-    <span class="nx">responseXml</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">responseXML</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 <span class="cm">/**</span>
 <span class="cm">*	This method can be used to set a number of default options for the Xmla instance.</span>
 <span class="cm">*	This is especially useful if you don&#39;t want to pass each and every option to each method call all the time. </span>
@@ -1441,7 +1441,7 @@
 
         <span class="k">this</span><span class="p">.</span><span class="nx">response</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">responseText</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">responseXml</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">responseXML</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         
 		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">){</span>
 			<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">url</span><span class="p">){</span>
@@ -3090,7 +3090,27 @@
 <span class="cm">*       &lt;tr&gt;</span>
 <span class="cm">*           &lt;td&gt;DIMENSION_TYPE&lt;/td&gt;</span>
 <span class="cm">*           &lt;td&gt;string&lt;/td&gt;</span>
-<span class="cm">*           &lt;td&gt;&lt;/td&gt;</span>
+<span class="cm">*           &lt;td&gt;</span>
+<span class="cm">*				&lt;ul&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_UNKNOWN (0)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_TIME (1)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_MEASURE (2)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_OTHER (3)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_QUANTITATIVE (5)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_ACCOUNTS (6)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_CUSTOMERS (7)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_PRODUCTS (8)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_SCENARIO (9)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_UTILIY (10)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_CURRENCY (11)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_RATES (12)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_CHANNEL (13)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_PROMOTION (14)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_ORGANIZATION (15)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_BILL_OF_MATERIALS (16)&lt;/li&gt;</span>
+<span class="cm">*					&lt;li&gt;MD_DIMTYPE_GEOGRAPHY (17)&lt;/li&gt;</span>
+<span class="cm">*				&lt;/ul&gt;</span>
+<span class="cm">*			&lt;/td&gt;</span>
 <span class="cm">*           &lt;td&gt;No&lt;/td&gt;</span>
 <span class="cm">*           &lt;td&gt;Yes&lt;/td&gt;</span>
 <span class="cm">*       &lt;/tr&gt;</span>
@@ -4139,27 +4159,103 @@
 <span class="cm">*   @default &lt;code&gt;17&lt;/code&gt;</span>
 <span class="cm">*/</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_DIMTYPE_GEOGRAPHY</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm">*	A possible value for the &lt;code&gt;STRUCTURE&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	@property MD_STRUCTURE_FULLYBALANCED</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;0&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_STRUCTURE_FULLYBALANCED</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*	A possible value for the &lt;code&gt;STRUCTURE&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	@property MD_STRUCTURE_RAGGEDBALANCED</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;1&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_STRUCTURE_RAGGEDBALANCED</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*	A possible value for the &lt;code&gt;STRUCTURE&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	@property MD_STRUCTURE_UNBALANCED</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;2&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_STRUCTURE_UNBALANCED</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="cm">/**</span>
+<span class="cm">*	A possible value for the &lt;code&gt;STRUCTURE&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	@property MD_STRUCTURE_NETWORK</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;3&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_STRUCTURE_NETWORK</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="cm">/**</span>
+<span class="cm">*	A  bitmap value for the &lt;code&gt;HIERARCHY_ORIGIN&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	Identifies user defined hierarchies.</span>
+<span class="cm">*	@property MD_USER_DEFINED</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;1&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_USER_DEFINED</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="cm">/**</span>
+<span class="cm">*	A  bitmap value for the &lt;code&gt;HIERARCHY_ORIGIN&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	identifies attribute hierarchies.</span>
+<span class="cm">*	@property MD_SYSTEM_ENABLED</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;2&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_SYSTEM_ENABLED</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="cm">/**</span>
+<span class="cm">*	A  bitmap value for the &lt;code&gt;HIERARCHY_ORIGIN&lt;/code&gt; column of the </span>
+<span class="cm">*   &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; (See: &lt;code&gt;&lt;a href=&quot;#method_discoverMDHierarchies&quot;&gt;discoverMDHierarchies()&lt;/a&gt;&lt;/code&gt;)rowset.</span>
+<span class="cm">*	identifies attributes with no attribute hierarchies.</span>
+<span class="cm">*	@property MD_SYSTEM_INTERNAL</span>
+<span class="cm">*   @static</span>
+<span class="cm">*   @final</span>
+<span class="cm">*   @type int</span>
+<span class="cm">*   @default &lt;code&gt;4&lt;/code&gt;</span>
+<span class="cm">*/</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">MD_SYSTEM_INTERNAL</span> <span class="o">=</span> <span class="mi">4</span>
+
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span> <span class="o">=</span> <span class="p">{};</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_CATALOGS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_COLUMNS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_PROVIDER_TYPES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_SCHEMATA</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES_INFO</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_COLUMNS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TABLE_CATALOG&quot;</span><span class="p">,</span> <span class="s2">&quot;TABLE_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;COLUMN_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_PROVIDER_TYPES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TYPE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_SCHEMATA</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TABLE_CATALOG&quot;</span><span class="p">,</span> <span class="s2">&quot;TABLE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DBSCHEMA_TABLES_INFO</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TABLE_CATALOG&quot;</span><span class="p">,</span> <span class="s2">&quot;TABLE_NAME&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_DATASOURCES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DataSourceName&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_ENUMERATORS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;EnumName&quot;</span><span class="p">,</span> <span class="s2">&quot;ElementName&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_KEYWORDS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Keyword&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_LITERALS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LiteralName&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_PROPERTIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PropertyName&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">DISCOVER_SCHEMA_ROWSETS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SchemaName&quot;</span><span class="p">];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_ACTIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_CUBES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_DIMENSIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;DIMENSION_NAME&quot;</span><span class="p">];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_FUNCTIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_HIERARCHIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;HIERARCHY_NAME&quot;</span><span class="p">];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_LEVELS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEASURES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;SCHEMA_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;MEASURE_NAME&quot;</span><span class="p">];</span>
-<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEMBERS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_ACTIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;ACTION_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_CUBES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_DIMENSIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;DIMENSION_UNIQUE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_FUNCTIONS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;FUNCTION_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;PARAMETER_LIST&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_HIERARCHIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;DIMENSION_UNIQUE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;HIERARCHY_UNIQUE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_LEVELS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;DIMENSION_UNIQUE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;HIERARCHY_UNIQUE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;LEVEL_UNIQUE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEASURES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;MEASURE_NAME&quot;</span><span class="p">];</span>
+<span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_MEMBERS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CATALOG_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;CUBE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;DIMENSION_UNIQUE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;HIERARCHY_UNIQUE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;LEVEL_UNIQUE_NAME&quot;</span><span class="p">,</span><span class="s2">&quot;MEMBER_UNIQUE_NAME&quot;</span><span class="p">];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_PROPERTIES</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="nx">Xmla</span><span class="p">.</span><span class="nx">Rowset</span><span class="p">.</span><span class="nx">KEYS</span><span class="p">[</span><span class="nx">Xmla</span><span class="p">.</span><span class="nx">MDSCHEMA_SETS</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
 
@@ -4259,6 +4355,9 @@
     <span class="nx">_textConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
         <span class="k">return</span> <span class="nx">val</span><span class="p">;</span>
     <span class="p">},</span>
+    <span class="nx">_dateTimeConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
+        <span class="k">return</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+    <span class="p">},</span>
     <span class="nx">_restrictionsConverter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
         <span class="k">return</span> <span class="nx">val</span><span class="p">;</span>
     <span class="p">},</span>
@@ -4334,6 +4433,10 @@
             <span class="k">case</span> <span class="s2">&quot;xsd:string&quot;</span><span class="o">:</span>
                 <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_textConverter</span><span class="p">;</span>
                 <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s2">&quot;xsd:dateTime&quot;</span><span class="o">:</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_dateTimeConverter</span><span class="p">;</span>
+                <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">jsType</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span><span class="p">;</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="k">case</span> <span class="s2">&quot;Restrictions&quot;</span><span class="o">:</span>
                 <span class="nx">valueConverter</span><span class="p">.</span><span class="nx">func</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_restrictionsConverter</span><span class="p">;</span>

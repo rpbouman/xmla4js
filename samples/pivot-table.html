@@ -319,9 +319,9 @@
                                 (config.checked? " selected=\"" + config.checked + "\"": "") +                         
                                 " value=\"" + choice + "\">" +
                                 choice +
-                                "</option>";
+                                "<\/option>";
                     }
-                    choices += "</select>"
+                    choices += "<\/select>"
                 }
                 else {
                     choices = "<input name=\"${name}\"" +
@@ -330,7 +330,7 @@
                 }
                 for (var text, str = "", i=0; i<config.options.length; i++){
                     text = config.options[i][config.text]
-                    str += "<div>" + choices + text + "</div>";
+                    str += "<div>" + choices + text + "<\/div>";
                 }
                 config.select.innerHTML = str;
             }
@@ -381,12 +381,13 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
 
                 var restrictions = {};
-                restrictions["CUBE_NAME"] = select_cube.value;
+                restrictions["CATALOG_NAME"] = getSelectValue(select_catalog);
+                restrictions["CUBE_NAME"] = getSelectValue(select_cube);
                 xmla.discoverMDHierarchies({
-                    url: datasource.URL,
+                    url: datasource.URL? datasource.URL : input_url.value,
                     properties: properties,
                     restrictions: restrictions
                 });                
@@ -405,29 +406,41 @@
             }                        
             
             function getMDXSet(select_hierarchies) {
-                var hierarchy, mdx = "{";
+                var hierarchy, tail = "", mdx = "";
                 
                 for (var i=0; i<select_hierarchies.length; i++){
                     hierarchy = hierarchies[select_hierarchies.options[i].value];
-                    if (i>0){
-                        mdx += "*";
+					if (i) {
+						mdx += ", ";
+					}
+                    if (select_hierarchies.length - i > 1){
+                        mdx += "CrossJoin(";
+						tail += ")";
                     }
                     if (hierarchy["DIMENSION_TYPE"]==Xmla.Rowset.MD_DIMTYPE_MEASURE) {
-                        mdx += "union(";
-                        for (var j=0; j<select_measures_used.length; j++){
-                            if (j >0){
-                                mdx += ",";
-                            }
-                            mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
-                                ".[" + select_measures_used.options[j].value +"])}";
-                        }
-                        mdx += ")";
+						if (select_measures_used.options.length > 1) { 
+							mdx += "union(";
+							for (var j=0; j<select_measures_used.length; j++){
+								if (j >0){
+									mdx += ",";
+								}
+								mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+									".[" + select_measures_used.options[j].value +"])}";
+							}
+							mdx += ")";
+						}
+						else {
+							mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+							      ".[" + select_measures_used.options[0].value +"])}";
+						}						
                     }
                     else {
-                        mdx += hierarchy["DEFAULT_MEMBER"];
+                        mdx += "{(" + hierarchy["DEFAULT_MEMBER"] + ")}";
                     }
                 }
-                mdx += "}";
+				if (i>1) {
+					mdx += tail;
+				} 
                 return mdx;
             }
             
@@ -587,7 +600,7 @@
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
 
                 xmla.discoverDBCatalogs({
-                    url: datasource.URL,
+                    url: datasource.URL? datasource.URL : input_url.value,
                     properties: properties
                 });
             }
@@ -600,11 +613,14 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
+                var restrictions = {};
+                restrictions["CATALOG_NAME"] = getSelectValue(select_catalog);
 
                 xmla.discoverMDCubes({
-                    url: datasource.URL,
-                    properties: properties
+                    url: datasource.URL? datasource.URL : input_url.value,
+                    properties: properties,
+                    restrictions: restrictions
                 });
             }
             
@@ -617,13 +633,14 @@
 
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
-                properties[Xmla.PROP_CATALOG] = select_catalog.value;
+                properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
 
                 var restrictions = {};
-                restrictions["CUBE_NAME"] = select_cube.value;
+                restrictions["CUBE_NAME"] = getSelectValue(select_cube);
+                restrictions["CATALOG_NAME"] = getSelectValue(select_catalog);
 
                 xmla.discoverMDMeasures({
-                    url: datasource.URL,
+                    url: datasource.URL? datasource.URL : input_url.value,
                     properties: properties,
                     restrictions: restrictions
                 });
@@ -709,7 +726,7 @@
                 var datasource = datasources[select_datasource.selectedIndex];
                 var catalog = getSelectValue(select_catalog);
                 xmla.executeMultiDimensional({
-                    url: datasource["URL"],
+                    url: datasource.URL? datasource.URL : input_url.value,
                     statement: mdx,
                     properties: {
                         DataSourceInfo: datasource["DataSourceInfo"],   
