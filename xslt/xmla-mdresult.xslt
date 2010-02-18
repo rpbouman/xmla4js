@@ -433,8 +433,9 @@
                     </xsl:call-template>
                 </xsl:variable>
                 <xsl:variable name="prev-member-path-length" select="string-length($prev-member-path)"/>
+                <xsl:variable name="prev-level-number" select="number($prev-tuple/md:Member[$hierarchy-number]/md:LNum)"/>
                 <xsl:if test="$num-remaining-levels &gt; 1">                    
-                    <xsl:if test="$hierarchy-level != number($prev-tuple/md:Member[$hierarchy-number]/md:LNum)">
+                    <xsl:if test="$hierarchy-level != $prev-level-number">
                         <xsl:variable name="descendants">
                             <xsl:for-each select="$axis-tuples[position()&gt;$axis-tuple-position]">
                                 <xsl:variable name="subsequent-member-path">
@@ -460,7 +461,7 @@
                                 <xsl:otherwise><xsl:value-of select="string-length($descendants)"/></xsl:otherwise>
                             </xsl:choose>
                         </xsl:variable>
-                        <xsl:if test="$count-descendants &gt;0">
+                        <xsl:if test="$count-descendants &gt; 0 or $prev-level-number &lt; $hierarchy-level">
                         <!--
                             This is the spacer right below the ro
                         -->
