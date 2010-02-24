@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+    Copyright 2009,2010 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    
+    execute-synchronous.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: Execute</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            #input_url {
+                width: 100%;
+            }
+            
+            #section_error {
+                border-style:outset;
+                border-width: 2px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+                background-color: red;
+                color: white;
+            }
+            
+            #textarea_statement {
+                width:100%;
+                height:10em;
+            }
+                        
+            table {
+                border-color: ThreeDFace;
+                border-style: outset;
+                border-width:2px;
+            }
+            td.th {
+                font-weight: bold;
+                text-align: center;
+                background-color: ThreeDFace;
+            }
+            td {
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="../index.html">Home</a>
+            |
+            <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+            |
+            <a href="index.html">Samples</a>
+            |
+            <a href="../doc/api/index.html">API Reference Documentation</a>
+        </div>
+        <h1>Sample: Execute</h1>
+        <fieldset>
+            <legend>XML/A Connection</legend>
+            <input type="text" id="input_url" name="input_url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="button_discover" name="button_discover">Discover Datasources...</button>            
+            <div>
+                <label>DataSource:</label>
+                <select id="select_datasources" name="select_datasources"></select>            
+            <div>
+            <div>
+                <label>Catalog:</label>
+                <select id="select_catalogs" name="select_catalgogs"></select>            
+            <div>
+        </fieldset>
+        <fieldset>
+            <legend>MDX Statement:</legend>
+            <textarea id="textarea_statement"></textarea>
+            <label>Format:</label>
+            <select id="select_format" name="select_fomat"></select>
+            <label>Axis Format:</label>
+            <select id="select_axisformat" name="select_axisfomat"></select>
+            <button id="button_execute" name="button_execute">Execute Statement...</button>            
+        </fieldset>
+
+        <fieldset>
+            <legend>Resultset:</legend>
+            <div id="section_result"></div>
+        </fieldset>
+
+        <div id="section_error"></div>
+
+        <fieldset>
+            <legend>Request:</legend>
+            <pre id="section_request"></pre>
+        </fieldset>
+
+        <fieldset>
+            <legend>Response:</legend>
+            <pre id="section_response"></pre>
+        </fieldset>
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+                
+        <script type="text/javascript">
+            var xmla = new Xmla({
+                async: false
+            });
+            var datasourceCache = [];
+
+            var input_url = document.getElementById("input_url");
+            var textarea_statement = document.getElementById("textarea_statement");
+            var select_datasources = document.getElementById("select_datasources");
+            var select_catalogs = document.getElementById("select_catalogs");
+            var button_discover = document.getElementById("button_discover");
+            var button_execute = document.getElementById("button_execute");
+            var section_error = document.getElementById("section_error");
+            var section_request = document.getElementById("section_request");
+            var section_response = document.getElementById("section_response");
+            var section_result = document.getElementById("section_result");
+
+            var select_format = document.getElementById("select_format");
+            select_format.innerHTML = "<option>" + Xmla.PROP_FORMAT_MULTIDIMENSIONAL + "</option>" +
+                "<option>" + Xmla.PROP_FORMAT_TABULAR + "</option>" 
+            ;
+            var select_axisformat = document.getElementById("select_axisformat");
+            select_axisformat.innerHTML = "<option>" + Xmla.PROP_AXISFORMAT_TUPLE + "</option>" +
+                "<option>" + Xmla.PROP_AXISFORMAT_CLUSTER + "</option>" +
+                "<option>" + Xmla.PROP_AXISFORMAT_CUSTOM + "</option>"
+            ;            
+            
+            function setGuiDisabled(disabled) {
+                input_url.disabled = disabled;
+                select_datasources.disabled = disabled;
+                select_catalogs.disabled = disabled;
+                button_discover.disabled = disabled;
+                if (!disabled && select_catalogs.selectedIndex) {                
+                    textarea_statement.disabled = disabled;
+                    button_execute.disabled = disabled;
+                }
+            }
+            
+            function getDatasource(){
+                return datasourceCache[select_datasources.selectedIndex];
+            }
+            
+            function clearError(){
+                section_error.innerHTML = "";
+            }
+            function escapeXML(xml) {
+                return xml.replace(
+                    /\&/g,"&amp;"
+                ).replace(
+                    /</g,"&lt;"
+                ).replace(
+                    />/g,"&gt;"
+                );
+            }
+            function setResponse(txt){                
+                section_response.innerHTML = escapeXML(txt);
+            }
+            function setRequest(txt){                
+                section_request.innerHTML = escapeXML(txt);
+            }
+
+            function showException(exception){
+                if (exception instanceof Xmla.Exception){
+                    section_error.innerHTML = "" +
+                    "<div>code: " + exception.code + "<\/div>" +
+                    "<div>message: " + exception.message + "<\/div>" +
+                    "<div>source: " + exception.source + "<\/div>" +
+                    "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "</a>"
+                    ;
+                }
+                else {                   
+                    section_error.innerHTML = exception;
+                }
+            }
+            
+            function populateDatasources(){
+                section_result.innerHTML = "";
+                clearError();
+                setGuiDisabled(true);
+                try {
+                    select_datasources.innerHTML = "";
+                    select_catalogs.innerHTML = "";
+                    var rowset = xmla.discoverDataSources({
+                        url: input_url.value
+                    });
+                    if (rowset.hasMoreRows()) {
+                        datasourceCache = rowset.fetchAllAsObject();
+                        for (var numDataSources = datasourceCache.length, i=0; i<numDataSources; i++){
+                            select_datasources.innerHTML += "<option>" +  datasourceCache[i].DataSourceName +"<\/option>";
+                        }
+                        populateCatalogs()
+                    } 
+                    else {
+                        section_error.innerHTML = "No datasources found";
+                    }
+                } catch (exception){
+                    showException(exception);
+                }
+                setGuiDisabled(false);
+            }
+
+            function populateCatalogs(){
+                clearError();
+                setResponse("");
+                setGuiDisabled(true);
+                try {
+                    select_catalogs.innerHTML = "";
+                    var datasource = getDatasource();
+                    var properties = {};
+                    properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                    var rowset = xmla.discoverDBCatalogs({
+                        url: datasource["URL"]?datasource["URL"]:input_url.value,
+                        properties: properties
+                    });
+                    if (rowset.hasMoreRows()) {
+                        var catalog;
+                        while (catalog = rowset.fetchAsObject()){
+                            select_catalogs.innerHTML += "<option>" +  catalog["CATALOG_NAME"] +"<\/option>";
+                        }                        
+                    } 
+                    else {
+                        section_error.innerHTML = "No catalogs found";
+                    }
+                } catch(exception) {
+                    showException(exception);
+                }
+                setGuiDisabled(false);
+            }
+            
+            function fillTableFromRowset(rowset){ 
+                var tab = document.createElement("table");
+                tab.setAttribute("border", "1");
+                section_result.appendChild(tab);
+                var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
+                for (i=0; i<fieldCount; i++){
+                    c = r.insertCell(i);
+                    c.innerHTML = rowset.fieldName(i);
+                    c.setAttribute("class", "th");
+                }
+                var rows = rowset.fetchAllAsArray();                
+                for (var rowCount = rows.length, j=0; j<rowCount; j++){
+                    r = tab.insertRow(j+1);
+                    for (i=0; i<fieldCount; i++){
+                        c = r.insertCell(i);
+                        c.innerHTML = rows[j][i];
+                    }
+                }
+            }
+            
+            function fillTableFromDataset(dataset){ 
+debugger;            
+                var tab = document.createElement("table");
+                tab.setAttribute("border", "1");
+                section_result.appendChild(tab);
+
+                var columnAxis = dataset.axes[Xmla.Dataset.AXIS_COLUMNS];
+                var columnHierarchyCount = columnAxis.hierarchyCount();
+
+                var rowAxis = dataset.axes[Xmla.Dataset.AXIS_ROWS];
+                var rowHierarchyCount;
+                if (rowAxis) {
+                    rowHierarchyCount = rowAxis.hierarchyCount();
+                }
+                else {
+                    rowHierarchyCount = 1;
+                }
+                                
+                for (var m, r, c, i=0; i<columnHierarchyCount; i++) {
+                    r = tab.insertRow(i);
+                    c = r.insertCell(0);
+                    c.colSpan = rowHierarchyCount;
+                    c.innerHTML = columnAxis.hierarchy(i);
+                    while (columnAxis.hasMoreTuples()) {
+                        c = r.insertCell(r.cells.length);
+                        m = columnAxis.member(i);
+                        c.innerHTML = m.Caption;
+                        columnAxis.next();
+                    }
+                }
+                
+            }
+
+            function executeQuery(){
+                clearError();
+                section_result.innerHTML = "";
+                setResponse("");
+                setGuiDisabled(true);
+                try {
+                    var datasource = getDatasource();
+                    var properties = {};
+                    properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                    properties[Xmla.PROP_CATALOG] = select_catalogs.value;
+                    properties[Xmla.PROP_FORMAT] = select_format.value;
+                    if (select_format.value === Xmla.PROP_FORMAT_MULTIDIMENSIONAL ){
+                        properties[Xmla.PROP_AXISFORMAT] = select_axisformat.value;
+                    }
+                    var result = xmla.execute({
+                        url: datasource["URL"]?datasource["URL"]:input_url.value,
+                        statement: textarea_statement.value,
+                        properties: properties
+                    });
+                    setRequest(xmla.soapMessage);
+                    setResponse(xmla.responseText);
+                    debugger;
+                    if (result instanceof Xmla.Rowset){
+                        fillTableFromRowset(result);
+                    }
+                    else
+                    if (result instanceof Xmla.Dataset){
+                        fillTableFromDataset(result);
+                    }
+                } catch (exception) { 
+                    showException(exception);
+                }
+                setGuiDisabled(false);
+            }
+            
+            select_datasources.onchange = populateCatalogs;        
+            button_discover.onclick = populateDatasources;
+            button_execute.onclick = executeQuery;
+            
+        </script>
+    </body>
+</html>

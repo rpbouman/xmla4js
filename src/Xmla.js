@@ -38,7 +38,7 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSchemaInstance = "http://www.w3.org/2001/XMLSchema-instance",
     _xmlnsSchemaInstancePrefix = "xsi", 
     _xmlnsRowset = _xmlnsXmla + ":rowset",
-    _xmlnsResultset = _xmlnsXmla + ":mddataset",
+    _xmlnsDataset = _xmlnsXmla + ":mddataset",
     _useAX = window.ActiveXObject ? true : false
 ;    
 
@@ -136,7 +136,36 @@ var _getAttributeNS = document.documentElement.getAttributeNS ? function(element
                                                                         return element.getAttribute(attributeName);
                                                                     }
                                                                 };                                                              
-
+function _getElementText(el){
+    if (el.innerText) {         //ie
+        return el.innerText;
+    }
+    else 
+    if (el.textContent) {       //ff
+        return el.textContent;
+    }
+    else 
+    if (el.normalize){
+        el.normalize();
+        if (el.firstChild){
+            return el.firstChild.data;
+        }
+        else {
+            return null;
+        }
+    }
+    else {                      //generic
+        var text = "",
+            childNodes = el.childNodes,
+            numChildNodes = childNodes.length
+        ;
+        for (var i=0; i<numChildNodes; i += 1){
+            text += childNodes.item(i).data;
+        }
+        return text;
+    }
+}
+                                                                
 function _getXmlaSoapList(container, listType, items, indent){
     if (!indent){
         indent = "";
@@ -1547,17 +1576,19 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, request);
                     break;
                 case Xmla.METHOD_EXECUTE:
-                    var resultset;
+                    var response, resultset = null, dataset = null;
                     var format = request.properties[Xmla.PROP_FORMAT];
                     switch(format){
                         case Xmla.PROP_FORMAT_TABULAR:
-                            resultset = new Xmla.Rowset(this.responseXML);
+                            response = resultset = new Xmla.Rowset(this.responseXML);
                             break;
                         case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
+                            response = dataset = new Xmla.Dataset(this.responseXML);
                             break;
-                    }                    
+                    }             
                     request.resultset = resultset;
-                    this.response = resultset;
+                    request.dataset = dataset;
+                    this.response = response;
                     this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, request);
                     break;
             }
@@ -4368,38 +4399,9 @@ Xmla.Rowset.prototype = {
         ;
         for (var i=0; i<numNodes; i += 1){
             node = nodes.item(i);
-            arr.push(valueConverter(this._elementText(node)));
+            arr.push(valueConverter(_getElementText(node)));
         }
         return arr;
-    },
-    _elementText: function(el){
-        if (el.innerText) {         //ie
-            return el.innerText;
-        }
-        else 
-        if (el.textContent) {       //ff
-            return el.textContent;
-        }
-		else 
-		if (el.normalize){
-			el.normalize();
-			if (el.firstChild){
-				return el.firstChild.data;
-			}
-			else {
-				return null;
-			}
-		}
-        else {                      //generic
-            var text = "",
-                childNodes = el.childNodes,
-                numChildNodes = childNodes.length
-            ;
-            for (var i=0; i<numChildNodes; i += 1){
-                text += childNodes.item(i).data;
-            }
-            return text;
-        }
     },
     _getValueConverter: function(type){
         var valueConverter = {};
@@ -4456,7 +4458,7 @@ Xmla.Rowset.prototype = {
             if(minOccurs===1) {
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
-                    return valueConverter(me._elementText(els.item(0)));
+                    return valueConverter(_getElementText(els.item(0)));
                 };
             }
             else 
@@ -4464,7 +4466,7 @@ Xmla.Rowset.prototype = {
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                     if (els.length) {
-                        return valueConverter(me._elementText(els.item(0)));
+                        return valueConverter(_getElementText(els.item(0)));
                     }
                     else {
                         return null;
@@ -4564,6 +4566,7 @@ Xmla.Rowset.prototype = {
     next: function(){
         this.rowIndex += 1;
         this._row = this._rows.item(this.rowIndex);
+        return this.rowIndex;
     },
 /**
 *   Gets the value of the internal row index.
@@ -4909,6 +4912,200 @@ while (rowObject = rowset.fetchAsObject()){
         return key;
     }
 };
+
+Xmla.Dataset = function(doc){
+    this._initDataset(doc);
+    return this;
+}
+
+Xmla.Dataset.AXIS_COLUMNS = "Axis0";
+Xmla.Dataset.AXIS_ROWS = "Axis1";
+Xmla.Dataset.AXIS_PAGES = "Axis2";
+Xmla.Dataset.AXIS_SECTIONS = "Axis3";
+Xmla.Dataset.AXIS_CHAPTERS = "Axis4";
+Xmla.Dataset.AXIS_SLICER = "SlicerAxis";
+
+Xmla.Dataset.prototype = {
+	_root:  null,
+    _initDataset: function(doc){
+        var root = _getElementsByTagNameNS(doc, _xmlnsDataset, "", "root");
+        if (root.length){
+            root = root.item(0);
+            this._root = root;
+        }
+        else {
+            Xmla.Exception._newError(
+                "ERROR_PARSING_RESPONSE",
+                "Xmla.Dataset._initData",
+                this._node
+            )._throw();        
+        }
+        this.cubeName = _getElementText(
+            _getElementsByTagNameNS(
+                root, _xmlnsDataset, "", "CubeName"
+            ).item(0)
+        );
+        this.axes = {};
+        var axis, 
+            axisNode, 
+            axisNodes = _getElementsByTagNameNS(root, _xmlnsDataset, "", "Axis"), 
+            numAxisNodes = axisNodes.length
+        ;            
+        for (var i=0; i<numAxisNodes; i++){
+            axisNode = axisNodes.item(i);
+            axis = new Xmla.Dataset.Axis(axisNode);
+            this.axes[axis.name] = axis;
+        }
+    },
+    close: function(){
+        this._root = null;
+    },
+};
+
+Xmla.Dataset.Axis = function(_axisNode){
+    this._initAxis(_axisNode);
+    return this;
+}
+
+Xmla.Dataset.Axis.prototype = {    
+    _tuples: null,
+    _members: null,
+    numTuples: null,
+    numHierarchies: null,
+    _tupleIndex: null,
+    _hierarchyOrder: null,
+    _hierachies: null,
+    _initAxis: function(_axisNode){
+        this.name = _axisNode.getAttribute("name");
+        this._tuples = _getElementsByTagNameNS(_axisNode, _xmlnsDataset, "", "Tuple");
+        this.numTuples = this._tuples.length;
+        this.reset();        
+        this._hierarchies = {};
+        this._hierarchyOrder = [];
+        var member, hierarchy,
+            numHierarchies = this._members.length
+        ;
+        this.numHierarchies = numHierarchies;
+        for (var i=0; i<numHierarchies; i++){
+            member = this._members.item(i);
+            hierarchy = member.getAttribute("Hierarchy");
+            this._hierarchies[hierarchy] = i;
+            this._hierarchyOrder[i] = hierarchy;
+        }
+    },
+    _getMembers: function(){
+        if (this.tupleIndex < this.numTuples) {
+            return _getElementsByTagNameNS(
+                this._tuples.item(this.tupleIndex), 
+                _xmlnsDataset, "", "Member"
+            );
+        } 
+        else {
+            return null;
+        }
+    },
+    reset: function(){
+        this.tupleIndex = 0;
+        this._members = (this.hasMoreTuples()) ? this._getMembers() : null;        
+    },
+    hasMoreTuples: function(){
+        return this.numTuples > this.tupleIndex;
+    },
+    next: function(){
+        this.tupleIndex += 1;
+        this._members = this._getMembers();
+        return this.tupleIndex;
+    },
+    tupleCount: function(){
+        return this.numTuples;
+    },
+    hierarchyCount: function(){
+        return this.numHierarchies;
+    },
+    hierarchyIndex: function(hierarchy){
+        return this._hierarchies[hierarchy];
+    },
+    hierarchy: function(index){
+        return this._hierarchyOrder[index];
+    },
+    member: function(indexOrHierarchy){
+        var index, hierarchy, member = {};
+        switch(typeof(indexOrHierarchy)){
+            case "string":
+                index = this.hierarchyIndex(indexOrHierarchy);
+                hierarchy = indexOrHierarchy;
+                break;
+            case "number":
+                hierarchy = this.hierarchy(indexOrHierarchy);
+                index = indexOrHierarchy;
+                break;
+        }
+        member.hierarchy = hierarchy; 
+        member.index = index;
+        var els = _getElementsByTagNameNS(
+            this._members.item(indexOrHierarchy), _xmlnsDataset, "", "*"
+        ), numEls = els.length, el;
+        for (var i=0; i<numEls; i++){
+            el = els.item(i);
+            member[el.tagName] = _getElementText(el);
+        }
+        return member;
+    },
+    readAsArray: function(){
+        var array = [];
+        for (var i=0; i<this.numHierarchies; i++){
+            array[i] = this.member(i);
+        }
+        return array;
+    },
+    readAsObject: function(){
+        var object = [];
+        for (var i=0; i<this.numHierarchies; i++){
+            object[this._hierarchyOrder[i]] = this.member(i);
+        }
+        return object;
+    },
+    fetchAsArray: function(){
+        var array;
+        if (this.hasMoreTuples()) {
+            array = this.readAsArray();
+            this.next();
+        } else {
+            array = false;
+        }
+        return array;
+    },
+    fetchAsObject: function(){
+        var object;
+        if (this.hasMoreTuples()){
+            object = this.readAsObject();
+            this.next();
+        } else {
+            object = false;
+        }
+        return object;
+    },
+    fetchAllAsArray: function(rows){
+        var row;
+        if (!rows){
+            rows = [];
+        }
+        while((row = this.fetchAsArray())){
+            rows.push(row);
+        }
+        return rows;
+    },
+    fetchAllAsObject: function(rows){
+        var row;
+        if (!rows){
+            rows = [];
+        }
+        while((row = this.fetchAsObject())){
+            rows.push(row);
+        }
+        return rows;
+    },
+}
 
 /**
 *   <p>
