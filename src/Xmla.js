@@ -109,6 +109,9 @@ function _ajax(options){
 function _isUnd(arg){
     return typeof(arg)==="undefined";
 }
+function _isNum(arg){
+    return typeof(arg)==="number";
+}
 function _xmlEncodeListEntry(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
@@ -3853,7 +3856,6 @@ The number of members in the level.
 *   Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 *   <code><a href="#property_MDSCHEMA_MEMBERS"></a></code> as value for the <code>requestType</code>, 
 *   and retrieves the <code>MDSCHEMA_MEMBERS</code> schema rowset. 
-*   ...todo...
 *   The rowset has the following columns:
 *   <table border="1" class="schema-rowset">
 *       <tr>
@@ -3862,6 +3864,141 @@ The number of members in the level.
 *           <th>Description</th>
 *           <th>Restriction</th>
 *           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>The name of the catalog</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>The name of the schema</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>The name of the cube</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the dimension</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the hierarchy</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LEVEL_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the level</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>LEVEL_NUMBERr</td>
+*           <td>int</td>
+*           <td>Distance of this level to the root</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_ORDINAL</td>
+*           <td>int</td>
+*           <td>Deprecated: always 0</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_NAME</td>
+*           <td>string</td>
+*           <td>The name of this member</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of this member</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_TYPE</td>
+*           <td>int</td>
+*           <td>An integer constant indicating the type of this member. Can take on one of the following values:
+*               <ul>
+*                   <li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_REGULAR">MDMEMBER_TYPE_REGULAR</a></li>
+*                   <li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_ALL">MDMEMBER_TYPE_ALL</a></li>
+*                   <li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_MEASURE">MDMEMBER_TYPE_MEASURE</a></li>
+*                   <li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_FORMULA">MDMEMBER_TYPE_FORMULA</a></li>
+*                   <li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_UNKNOWN">MDMEMBER_TYPE_UNKNOWN</a></li>
+*                   <li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_FORMULA">MDMEMBER_TYPE_FORMULA</a></li>
+*               </ul>
+*           </td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_GUID</td>
+*           <td>string</td>
+*           <td>The guid of this member</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_CAPTION</td>
+*           <td>string</td>
+*           <td>A label or caption associated with the member. Used primarily for display purposes. If a caption does not exist, MEMBER_NAME is returned.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>CHILDREN_CARDINALITY</td>
+*           <td>int</td>
+*           <td>The number of childrend for this member</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>PARENT_LEVEL</td>
+*           <td>int</td>
+*           <td>The distance of the member's parent from the root level of the hierarchy. The root level is zero (0).</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>This column always returns a NULL value. This column exists for backwards compatibility</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>EXPRESSION</td>
+*           <td>string</td>
+*           <td>The expression for calculations, if the member is of type MDMEMBER_TYPE_FORMULA.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_KEY</td>
+*           <td>string</td>
+*           <td>The value of the member's key column. Returns NULL if the member has a composite key.</td>
+*           <td>Yes</td>
+*           <td>No</td>
 *       </tr>
 *   </table>
 *   @method discoverMDMembers
@@ -3988,8 +4125,8 @@ Xmla.Rowset = function (node, requestType){
 
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_UNKNOWN
 *   @static
@@ -4000,8 +4137,8 @@ Xmla.Rowset = function (node, requestType){
 Xmla.Rowset.MD_DIMTYPE_UNKNOWN = 0;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_TIME
 *   @static
@@ -4012,8 +4149,8 @@ Xmla.Rowset.MD_DIMTYPE_UNKNOWN = 0;
 Xmla.Rowset.MD_DIMTYPE_TIME = 1;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_MEASURE
 *   @static
@@ -4024,8 +4161,8 @@ Xmla.Rowset.MD_DIMTYPE_TIME = 1;
 Xmla.Rowset.MD_DIMTYPE_MEASURE = 2;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_OTHER
 *   @static
@@ -4036,8 +4173,8 @@ Xmla.Rowset.MD_DIMTYPE_MEASURE = 2;
 Xmla.Rowset.MD_DIMTYPE_OTHER = 3;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_QUANTITATIVE
 *   @static
@@ -4048,8 +4185,8 @@ Xmla.Rowset.MD_DIMTYPE_OTHER = 3;
 Xmla.Rowset.MD_DIMTYPE_QUANTITATIVE = 5;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_ACCOUNTS
 *   @static
@@ -4060,8 +4197,8 @@ Xmla.Rowset.MD_DIMTYPE_QUANTITATIVE = 5;
 Xmla.Rowset.MD_DIMTYPE_ACCOUNTS = 6;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_CUSTOMERS
 *   @static
@@ -4072,8 +4209,8 @@ Xmla.Rowset.MD_DIMTYPE_ACCOUNTS = 6;
 Xmla.Rowset.MD_DIMTYPE_CUSTOMERS = 7;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_PRODUCTS
 *   @static
@@ -4084,8 +4221,8 @@ Xmla.Rowset.MD_DIMTYPE_CUSTOMERS = 7;
 Xmla.Rowset.MD_DIMTYPE_PRODUCTS = 8;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_SCENARIO
 *   @static
@@ -4096,8 +4233,8 @@ Xmla.Rowset.MD_DIMTYPE_PRODUCTS = 8;
 Xmla.Rowset.MD_DIMTYPE_SCENARIO = 9;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_UTILIY
 *   @static
@@ -4108,8 +4245,8 @@ Xmla.Rowset.MD_DIMTYPE_SCENARIO = 9;
 Xmla.Rowset.MD_DIMTYPE_UTILIY = 10;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_CURRENCY
 *   @static
@@ -4120,8 +4257,8 @@ Xmla.Rowset.MD_DIMTYPE_UTILIY = 10;
 Xmla.Rowset.MD_DIMTYPE_CURRENCY = 11;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_RATES
 *   @static
@@ -4132,8 +4269,8 @@ Xmla.Rowset.MD_DIMTYPE_CURRENCY = 11;
 Xmla.Rowset.MD_DIMTYPE_RATES = 12;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_CHANNEL
 *   @static
@@ -4144,8 +4281,8 @@ Xmla.Rowset.MD_DIMTYPE_RATES = 12;
 Xmla.Rowset.MD_DIMTYPE_CHANNEL = 13;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_PROMOTION
 *   @static
@@ -4156,8 +4293,8 @@ Xmla.Rowset.MD_DIMTYPE_CHANNEL = 13;
 Xmla.Rowset.MD_DIMTYPE_PROMOTION = 14;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_ORGANIZATION
 *   @static
@@ -4168,8 +4305,8 @@ Xmla.Rowset.MD_DIMTYPE_PROMOTION = 14;
 Xmla.Rowset.MD_DIMTYPE_ORGANIZATION = 15;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_BILL_OF_MATERIALS
 *   @static
@@ -4180,8 +4317,8 @@ Xmla.Rowset.MD_DIMTYPE_ORGANIZATION = 15;
 Xmla.Rowset.MD_DIMTYPE_BILL_OF_MATERIALS = 16;
 /**
 *   A possible value for the <code>DIMENSION_TYPE</code> column that appears in the 
-*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
+*   <code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and 
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.
 *
 *   @property MD_DIMTYPE_GEOGRAPHY
 *   @static
@@ -4193,7 +4330,7 @@ Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
 
 /**
 *	A possible value for the <code>STRUCTURE</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	@property MD_STRUCTURE_FULLYBALANCED
 *   @static
 *   @final
@@ -4203,7 +4340,7 @@ Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
 Xmla.Rowset.MD_STRUCTURE_FULLYBALANCED = 0;
 /**
 *	A possible value for the <code>STRUCTURE</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	@property MD_STRUCTURE_RAGGEDBALANCED
 *   @static
 *   @final
@@ -4213,7 +4350,7 @@ Xmla.Rowset.MD_STRUCTURE_FULLYBALANCED = 0;
 Xmla.Rowset.MD_STRUCTURE_RAGGEDBALANCED = 1;
 /**
 *	A possible value for the <code>STRUCTURE</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	@property MD_STRUCTURE_UNBALANCED
 *   @static
 *   @final
@@ -4223,7 +4360,7 @@ Xmla.Rowset.MD_STRUCTURE_RAGGEDBALANCED = 1;
 Xmla.Rowset.MD_STRUCTURE_UNBALANCED = 2;
 /**
 *	A possible value for the <code>STRUCTURE</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	@property MD_STRUCTURE_NETWORK
 *   @static
 *   @final
@@ -4234,7 +4371,7 @@ Xmla.Rowset.MD_STRUCTURE_NETWORK = 3;
 
 /**
 *	A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	Identifies user defined hierarchies.
 *	@property MD_USER_DEFINED
 *   @static
@@ -4245,7 +4382,7 @@ Xmla.Rowset.MD_STRUCTURE_NETWORK = 3;
 Xmla.Rowset.MD_USER_DEFINED = 1
 /**
 *	A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	identifies attribute hierarchies.
 *	@property MD_SYSTEM_ENABLED
 *   @static
@@ -4256,7 +4393,7 @@ Xmla.Rowset.MD_USER_DEFINED = 1
 Xmla.Rowset.MD_SYSTEM_ENABLED = 2
 /**
 *	A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the 
-*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+*   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 *	identifies attributes with no attribute hierarchies.
 *	@property MD_SYSTEM_INTERNAL
 *   @static
@@ -4265,6 +4402,62 @@ Xmla.Rowset.MD_SYSTEM_ENABLED = 2
 *   @default <code>4</code>
 */
 Xmla.Rowset.MD_SYSTEM_INTERNAL = 4
+
+/**
+*   A possible value for the <code>MEMBER_TYPE</code> column of the 
+*   <code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+*   indicating a regular member.
+*	@property MDMEMBER_TYPE_REGULAR
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Rowset.MDMEMBER_TYPE_REGULAR = 1;
+/**
+*   A possible value for the <code>MEMBER_TYPE</code> column of the 
+*   <code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+*   indicating an all member.
+*	@property MDMEMBER_TYPE_ALL
+*   @static
+*   @final
+*   @type int
+*   @default <code>2</code>
+*/
+Xmla.Rowset.MDMEMBER_TYPE_ALL = 2;
+/**
+*   A possible value for the <code>MEMBER_TYPE</code> column of the 
+*   <code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+*   indicating a formula member.
+*	@property MDMEMBER_TYPE_FORMULA
+*   @static
+*   @final
+*   @type int
+*   @default <code>3</code>
+*/
+Xmla.Rowset.MDMEMBER_TYPE_FORMULA = 3;
+/**
+*   A possible value for the <code>MEMBER_TYPE</code> column of the 
+*   <code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+*   indicating a measure member.
+*	@property MDMEMBER_TYPE_MEASURE
+*   @static
+*   @final
+*   @type int
+*   @default <code>4</code>
+*/
+Xmla.Rowset.MDMEMBER_TYPE_MEASURE = 4;
+/**
+*   A possible value for the <code>MEMBER_TYPE</code> column of the 
+*   <code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+*   indicating a member of unknown type
+*	@property MDMEMBER_TYPE_UNKNOWN
+*   @static
+*   @final
+*   @type int
+*   @default <code>0</code>
+*/
+Xmla.Rowset.MDMEMBER_TYPE_UNKNOWN = 0;
 
 Xmla.Rowset.KEYS = {};
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_CATALOGS] = ["CATALOG_NAME"];
@@ -4533,7 +4726,7 @@ Xmla.Rowset.prototype = {
 */    
     getFieldNames: function(){
         var fieldNames = [];
-        for (var i=0, count = this.fieldCount(); i<count; i += 1){
+        for (var i=0, count = this._fieldCount; i<count; i += 1){
             fieldNames[i] = this.fieldOrder[i];
         }
         return fieldNames;
@@ -4633,8 +4826,7 @@ Xmla.Rowset.prototype = {
 *   @return {int} The ordinal position (starting at 0) of the field that matches the argument.
 */    
     fieldIndex: function(name){
-        var fieldDef = this.fieldDef(name);
-        return fieldDef.index;
+        return this.fieldDef(name).index;
     },
 /**
 *   Retrieves the name of a field by field Index.
@@ -4661,11 +4853,10 @@ Xmla.Rowset.prototype = {
 *   @return {array|boolean|float|int|string} From the current row, the value of the field that matches the argument.
 */    
     fieldVal: function(name){
-        if (typeof(name)==="number"){
+        if (_isNum(name)){
             name = this.fieldName(name);
         }
-        var field = this.fieldDef(name);
-        return field.getter.call(this);
+        return this.fieldDef(name).getter.call(this);
     },
 /**
 *   Returns the number of fields in this rowset.
@@ -4697,8 +4888,11 @@ Xmla.Rowset.prototype = {
 *   @method readAsArray
 *   @return {array}
 */    
-    readAsArray: function(){
-        var array = [], fields = this.fields, fieldName, fieldDef;
+    readAsArray: function(array){
+        var fields = this.fields, fieldName, fieldDef;
+        if (!array){
+            array = [];
+        }
         for (fieldName in fields){
             if (fields.hasOwnProperty(fieldName)){
                 fieldDef = fields[fieldName];
@@ -4721,10 +4915,9 @@ while (rowArray = rowset.fetchAsArray()){
 *   @method fetchAsArray 
 *   @return {array}
 */    
-    fetchAsArray: function(){
-        var array;
+    fetchAsArray: function(array){
         if (this.hasMoreRows()) {
-            array = this.readAsArray();
+            array = this.readAsArray(array);
             this.next();
         } else {
             array = false;
@@ -4743,8 +4936,11 @@ while (rowArray = rowset.fetchAsArray()){
 *   @method readAsObject
 *   @return {object}
 */    
-    readAsObject: function(){
-        var object = {}, fields = this.fields, fieldName, fieldDef;
+    readAsObject: function(object){
+        var fields = this.fields, fieldName, fieldDef;
+        if (!object){
+            object = {};
+        }
         for (fieldName in fields){
             if (fields.hasOwnProperty(fieldName)) {
                 fieldDef = fields[fieldName];
@@ -4767,10 +4963,9 @@ while (rowObject = rowset.fetchAsObject()){
 *   @method fetchAsObject 
 *   @return {Object|boolean}
 */    
-    fetchAsObject: function(){
-        var object;
+    fetchAsObject: function(object){
         if (this.hasMoreRows()){
-            object = this.readAsObject();
+            object = this.readAsObject(object);
             this.next();
         } else {
             object = false;
@@ -4945,27 +5140,60 @@ Xmla.Dataset.prototype = {
                 root, _xmlnsDataset, "", "CubeName"
             ).item(0)
         );
+        
         this.axes = {};
-        var axis, 
-            axisNode, 
-            axisNodes = _getElementsByTagNameNS(root, _xmlnsDataset, "", "Axis"), 
-            numAxisNodes = axisNodes.length
-        ;            
-        for (var i=0; i<numAxisNodes; i++){
+
+        var i, axis, axisNode, axisNodes, numAxisNodes, tmpAxes = {};
+        //collect the axisInfo nodes
+        axisNodes = _getElementsByTagNameNS(root, _xmlnsDataset, "", "AxisInfo");
+        numAxisNodes = axisNodes.length;
+        for (i=0; i<numAxisNodes; i++){
             axisNode = axisNodes.item(i);
-            axis = new Xmla.Dataset.Axis(axisNode);
+            tmpAxes[axisNode.getAttribute("name")] = axisNode;
+        }
+        //collect the axis nodes
+        axisNodes = _getElementsByTagNameNS(root, _xmlnsDataset, "", "Axis");
+        numAxisNodes = axisNodes.length;
+        for (i=0; i<numAxisNodes; i++){
+            axisNode = axisNodes.item(i);
+            axis = new Xmla.Dataset.Axis(tmpAxes[axisNode.getAttribute("name")], axisNode);
             this.axes[axis.name] = axis;
         }
+        this._numAxes = numAxisNodes - 1; //don't include the slicer.
+    },
+    getAxisCount: function(){
+        return this._numAxes;
+    },
+    getAxis: function(nameOrIndex){
+        if (isNum(nameOrIndex)){
+            nameOrIndex = "Axis" + nameOrIndex;
+        }
+        return this.axes[nameOrIndex];
+    },
+    getColumns: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_COLUMNS);
+    },
+    getRows: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_ROWS);
+    },
+    getSlicer: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_SLICER);
     },
     close: function(){
         this._root = null;
-    },
+    }
 };
 
-Xmla.Dataset.Axis = function(_axisNode){
-    this._initAxis(_axisNode);
+Xmla.Dataset.Axis = function(_axisInfoNode, _axisNode){
+    this._initAxis(_axisInfoNode, _axisNode);
     return this;
 }
+
+Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME = "UName";
+Xmla.Dataset.Axis.MEMBER_CAPTION = "Caption";
+Xmla.Dataset.Axis.MEMBER_LEVEL_NAME = "LName";
+Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER = "LNum";
+Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO = "DisplayInfo";
 
 Xmla.Dataset.Axis.prototype = {    
     _tuples: null,
@@ -4974,24 +5202,53 @@ Xmla.Dataset.Axis.prototype = {
     numHierarchies: null,
     _tupleIndex: null,
     _hierarchyOrder: null,
-    _hierachies: null,
-    _initAxis: function(_axisNode){
+    _hierarchyDefs: null,
+    _initHierarchies: function(_axisInfoNode){
+        var hierarchyInfoNodes = _getElementsByTagNameNS(
+                _axisInfoNode,
+                _xmlnsDataset, 
+                "", 
+                "HierarchyInfo"
+            ),
+            numHierarchies = hierarchyInfoNodes.length, 
+            i, j, hierarchyInfoNode, hierarchyName, hierarchyDef, 
+            properties, numPropertyNodes, propertyNodes, propertyNode
+        ;        
+        this._hierarchyDefs = {};
+        this._hierarchyOrder = [];
+        this.numHierarchies = numHierarchies;
+        for (i=0; i<numHierarchies; i++){
+            hierarchyInfoNode = hierarchyInfoNodes.item(i);
+            hierarchyName = hierarchyInfoNode.getAttribute("name");
+            this._hierarchyOrder[i] = hierarchyName;
+            properties = {};
+            propertyNodes = _getElementsByTagNameNS(
+                _axisInfoNode,
+                _xmlnsDataset, 
+                "", 
+                "*"
+            );
+            numPropertyNodes = propertyNodes.length;
+            for (j=0; j<numPropertyNodes; j++){
+                propertyNode = propertyNodes.item(j);
+                properties[propertyNode.tagName] = null;
+            }
+            hierarchyDef = {
+                index: i,
+                name: hierarchyName,
+                properties: properties
+            };
+            this._hierarchyDefs[hierarchyName] = hierarchyDef;
+        }
+    },
+    _initAxis: function(_axisInfoNode, _axisNode){
         this.name = _axisNode.getAttribute("name");
+
+        this._initHierarchies(_axisInfoNode);
+
         this._tuples = _getElementsByTagNameNS(_axisNode, _xmlnsDataset, "", "Tuple");
         this.numTuples = this._tuples.length;
-        this.reset();        
-        this._hierarchies = {};
-        this._hierarchyOrder = [];
-        var member, hierarchy,
-            numHierarchies = this._members.length
-        ;
-        this.numHierarchies = numHierarchies;
-        for (var i=0; i<numHierarchies; i++){
-            member = this._members.item(i);
-            hierarchy = member.getAttribute("Hierarchy");
-            this._hierarchies[hierarchy] = i;
-            this._hierarchyOrder[i] = hierarchy;
-        }
+        this.reset();
     },
     _getMembers: function(){
         if (this.tupleIndex < this.numTuples) {
@@ -5006,7 +5263,7 @@ Xmla.Dataset.Axis.prototype = {
     },
     reset: function(){
         this.tupleIndex = 0;
-        this._members = (this.hasMoreTuples()) ? this._getMembers() : null;        
+        this._members = (this.hasMoreTuples()) ? this._getMembers() : null;
     },
     hasMoreTuples: function(){
         return this.numTuples > this.tupleIndex;
@@ -5019,47 +5276,82 @@ Xmla.Dataset.Axis.prototype = {
     tupleCount: function(){
         return this.numTuples;
     },
+    getHierarchyNames: function(){
+        var hierarchyNames = [];
+        for (var i=0, count = this.numHierarchies; i<count; i += 1){
+            hierarchyNames[i] = this._hierarchyOrder[i];
+        }
+        return hierarchyNames;
+    },
     hierarchyCount: function(){
         return this.numHierarchies;
     },
-    hierarchyIndex: function(hierarchy){
-        return this._hierarchies[hierarchy];
+    hierarchyIndex: function(hierarchyName){
+        return this._hierarchiesNames[hierarchyName];
     },
-    hierarchy: function(index){
+    hierarchyName: function(index){
         return this._hierarchyOrder[index];
     },
+    hierarchyDef: function(name){
+        var hierarchyDef = this._hierarchyDefs[name];
+        if (!hierarchyDef){
+            Xmla.Exception._newError(
+                "INVALID_HIERARCHY",
+                "Xmla.Dataset.Axis.hierarchyDef",
+                name
+            )._throw();
+        }
+        return hierarchyDef;
+    },
     member: function(indexOrHierarchy){
-        var index, hierarchy, member = {};
+        var index, hierarchyName, hierarchyDef, properties, property, memberNode, member = {};
         switch(typeof(indexOrHierarchy)){
             case "string":
                 index = this.hierarchyIndex(indexOrHierarchy);
-                hierarchy = indexOrHierarchy;
+                hierarchyName = indexOrHierarchy;
                 break;
             case "number":
-                hierarchy = this.hierarchy(indexOrHierarchy);
+                hierarchyName = this.hierarchyName(indexOrHierarchy);
                 index = indexOrHierarchy;
                 break;
         }
-        member.hierarchy = hierarchy; 
+        hierarchyDef = this.hierarchyDef(hierarchyName);
+        properties = hierarchyDef.properties;
+        memberNode = this._members.item(index);
+        member.hierarchy = hierarchyName; 
         member.index = index;
-        var els = _getElementsByTagNameNS(
-            this._members.item(indexOrHierarchy), _xmlnsDataset, "", "*"
-        ), numEls = els.length, el;
-        for (var i=0; i<numEls; i++){
-            el = els.item(i);
-            member[el.tagName] = _getElementText(el);
+        for (property in properties){
+            el = _getElementsByTagNameNS(memberNode, _xmlnsDataset, "", property);
+            switch (el.length) {
+                case 0: //no element found for property, use the default
+                    member[property] = properties[property]
+                    break;
+                case 1: //this is expected, single element for property, get value
+                    member[property] = _getElementText(el.item(0));
+                    break;
+                default:
+                    Xmla.Exception._newError(
+                        "UNEXPECTED_ERROR_READING_MEMBER",
+                        "Xmla.Dataset.Axis.member",
+                        property
+                    )._throw();
+            }
         }
         return member;
     },
-    readAsArray: function(){
-        var array = [];
+    readAsArray: function(array){
+        if(!array){
+            array = [];
+        }
         for (var i=0; i<this.numHierarchies; i++){
             array[i] = this.member(i);
         }
         return array;
     },
-    readAsObject: function(){
-        var object = [];
+    readAsObject: function(object){
+        if (!object){
+            object = {};
+        }
         for (var i=0; i<this.numHierarchies; i++){
             object[this._hierarchyOrder[i]] = this.member(i);
         }
@@ -5104,9 +5396,8 @@ Xmla.Dataset.Axis.prototype = {
             rows.push(row);
         }
         return rows;
-    },
+    }
 }
-
 /**
 *   <p>
 *   This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.
@@ -5314,6 +5605,37 @@ Xmla.Exception.HTTP_ERROR_MSG = "HTTP Error";
 Xmla.Exception.HTTP_ERROR_HLP = _exceptionHlp + 
                                     "#" + Xmla.Exception.HTTP_ERROR_CDE  + 
                                     "_" + Xmla.Exception.HTTP_ERROR_MSG;
+
+/**
+*   Exception code indicating the hierarchy name is not valid.
+*
+*   @property INVALID_HIERARCHY_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-11</code>
+*/
+Xmla.Exception.INVALID_HIERARCHY_CDE = -11;
+Xmla.Exception.INVALID_HIERARCHY_MSG = "Invalid_Hierarchy"; 
+Xmla.Exception.INVALID_HIERARCHY_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.INVALID_HIERARCHY_CDE  + 
+                                    "_" + Xmla.Exception.INVALID_HIERARCHY_MSG;
+
+/**
+*   Exception code indicating a problem reading a member property
+*
+*   @property UNEXPECTED_ERROR_READING_MEMBER_CDE
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-12</code>
+*/
+Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_CDE = -12;
+Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_MSG = "Invalid_Hierarchy"; 
+Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_CDE  + 
+                                    "_" + Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_MSG;
+
 
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(

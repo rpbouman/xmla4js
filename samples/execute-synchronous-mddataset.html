@@ -261,7 +261,6 @@
             }
             
             function fillTableFromDataset(dataset){ 
-debugger;            
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
@@ -282,11 +281,11 @@ debugger;
                     r = tab.insertRow(i);
                     c = r.insertCell(0);
                     c.colSpan = rowHierarchyCount;
-                    c.innerHTML = columnAxis.hierarchy(i);
+                    c.innerHTML = columnAxis.hierarchyName(i);
                     while (columnAxis.hasMoreTuples()) {
                         c = r.insertCell(r.cells.length);
                         m = columnAxis.member(i);
-                        c.innerHTML = m.Caption;
+                        c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
                         columnAxis.next();
                     }
                 }
