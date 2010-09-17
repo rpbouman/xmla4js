@@ -74,8 +74,7 @@
             <xsl:choose>
                 <xsl:when test="$expanded">-</xsl:when>
                 <xsl:otherwise>+</xsl:otherwise>
-            </xsl:choose>
-        </span>
+            </xsl:choose></span>
     </xsl:if>
 </xsl:template>
 

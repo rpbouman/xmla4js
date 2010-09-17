@@ -45,4 +45,6 @@ table.pivot td {
 table.pivot span.driller {
     font-family: monospace;
     cursor: pointer;
+    padding: 2px;
+    
 }

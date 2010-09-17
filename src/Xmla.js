@@ -1,11 +1,18 @@
 /*
-    Copyright 2009,2010 Roland Bouman 
-    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    Copyright 2009,2010 Roland Bouman
+    contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
     
+    This is xmla4js - a stand-alone, cross-browser javascript library for working with "XML for Analysis".
+    XML for Analysis (XML/A) is a vendor-neutral industry-standard protocol for OLAP services over HTTP.
+    xmla4js enables web-browser-based analytical business intelligence applications.
+        
+    This file contains human-readable javascript source along with the YUI Doc compatible annotations.
     Note: some portions of the API documentation were adopted from the original XML/A specification. 
-    I believe that this constitutes fair use, 
-    but if you have reason to believe that the documentation violates any copyright, 
-    or is otherwise incompatible with the LGPL license please contact me.
+    I believe that this constitutes fair use, but if you have reason to believe that the documentation 
+    violates any copyright, or is otherwise incompatible with the LGPL license please contact me.
+
+    Include this in your web-pages for debug and development purposes only.
+    For production purposes, consider using the minified/obfuscated versions in the /js directory.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -112,7 +119,7 @@ function _isUnd(arg){
 function _isNum(arg){
     return typeof(arg)==="number";
 }
-function _xmlEncodeListEntry(value){
+function _xmlEncode(value){
     return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
@@ -183,10 +190,10 @@ function _getXmlaSoapList(container, listType, items, indent){
                 if (typeof(item)==="array"){
                     for (entry, i=0, numItems = item.length; i<numItems; i += 1){
                         entry = item[i];
-                        msg += "<Value>" + _xmlEncodeListEntry(entry) + "</Value>";
+                        msg += "<Value>" + _xmlEncode(entry) + "</Value>";
                     }
                 } else {
-                    msg += _xmlEncodeListEntry(item);
+                    msg += _xmlEncode(item);
                 }
                 msg += "</" + property + ">";
             }
@@ -227,7 +234,7 @@ function _getXmlaSoapMessage(
             if (options.statement){
                 msg += "" + 
                 "\n   <Command>" +
-                "\n    <Statement>" + options.statement + "</Statement>" + 
+                "\n    <Statement>" + _xmlEncode(options.statement) + "</Statement>" + 
                 "\n   </Command>" + 
                 _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
                 ;
@@ -4075,14 +4082,14 @@ The number of members in the level.
     }
 };
 
-function _getRowSchema(xmlDoc){
-    var types = _getElementsByTagNameNS(xmlDoc, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"), 
-        numTypes = types.length,
-        type,
-        i;
+function _getComplexType(node, name){
+    var types = _getElementsByTagNameNS(
+        node, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"
+    ),  numTypes = types.length, type, i
+    ;
     for (i=0; i<numTypes; i += 1){
         type = types.item(i);
-        if (type.getAttribute("name")==="row"){
+        if (type.getAttribute("name")===name){
             return type;
         }
     }
@@ -4483,6 +4490,111 @@ Xmla.Rowset.KEYS[Xmla.MDSCHEMA_MEMBERS] = ["CATALOG_NAME","CUBE_NAME","DIMENSION
 Xmla.Rowset.KEYS[Xmla.MDSCHEMA_PROPERTIES] = [];
 Xmla.Rowset.KEYS[Xmla.MDSCHEMA_SETS] = [];
 
+
+function _boolConverter(val){
+    return val==="true"?true:false;
+}
+
+function _intConverter(val){
+    return parseInt(val, 10);
+}
+
+function _floatConverter(val){
+    return parseFloat(val, 10);
+}
+
+function _textConverter (val){
+    return val;
+}
+
+function _dateTimeConverter (val){
+    return Date.parse(val);
+}
+
+function _restrictionsConverter(val){
+    return val;
+}
+
+function _arrayConverter(nodes, valueConverter){
+    var arr = [],
+        numNodes = nodes.length,
+        node
+    ;
+    for (var i=0; i<numNodes; i += 1){
+        node = nodes.item(i);
+        arr.push(valueConverter(_getElementText(node)));
+    }
+    return arr;
+}
+
+function _getValueConverter(type){
+    var valueConverter = {};
+    switch (type){
+        case "xsd:boolean":
+            valueConverter.func = _boolConverter;
+            valueConverter.jsType = "boolean";
+            break;
+        case "xsd:decimal": //FIXME: not sure if you can use parseFloat for this.
+        case "xsd:double":
+        case "xsd:float":
+            valueConverter.func = _floatConverter;
+            valueConverter.jsType = "number";
+            break;
+        case "xsd:int":
+        case "xsd:integer":
+        case "xsd:nonPositiveInteger":
+        case "xsd:negativeInteger":
+        case "xsd:nonNegativeInteger":
+        case "xsd:positiveInteger":
+        case "xsd:short":
+        case "xsd:byte":
+        case "xsd:long":
+        case "xsd:unsignedLong":
+        case "xsd:unsignedInt":
+        case "xsd:unsignedShort":
+        case "xsd:unsignedByte":
+            valueConverter.func = _intConverter;
+            valueConverter.jsType = "number";
+            break;
+        case "xsd:string":
+            valueConverter.func = _textConverter;
+            valueConverter.jsType = "string";
+            break;
+        case "xsd:dateTime":
+            valueConverter.func = _dateTimeConverter;
+            valueConverter.jsType = "object";
+            break;
+        case "Restrictions":
+            valueConverter.func = _restrictionsConverter;
+            valueConverter.jsType = "object";
+            break;
+        default:
+            valueConverter.func = _textConverter;
+            valueConverter.jsType = "object";
+            break;
+    }
+    return valueConverter;
+}
+
+function _getElementValue(el) {
+    var txt = _getElementText(el),
+        type = el.getAttribute("type")
+        converter
+        ;
+    if (type){
+        converter = _getValueConverter(type);
+        if (converter){
+            return converter.func(txt);
+        }
+        else {
+            return txt;
+        }
+    }
+    else {
+        return txt;
+    }
+}
+
 Xmla.Rowset.prototype = {
 	_node:  null,
     _type: null,
@@ -4499,7 +4611,7 @@ Xmla.Rowset.prototype = {
         this.fieldOrder = [];
         this.fields = {};
         this._fieldCount = 0;
-        var rowSchema = _getRowSchema(this._node);
+        var rowSchema = _getComplexType(this._node, "row");
         if (rowSchema){    
             var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
                 seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
@@ -4545,7 +4657,7 @@ Xmla.Rowset.prototype = {
 				else {
 					maxOccurs = 1;
 				}
-                valueConverter = this._getValueConverter(type);
+                valueConverter = _getValueConverter(type);
                 this.fields[fieldLabel] = {
                     name: fieldName,
                     label: fieldLabel,
@@ -4566,83 +4678,6 @@ Xmla.Rowset.prototype = {
                 this._node
             )._throw();
         }
-    },
-    _boolConverter: function(val){
-        return val==="true"?true:false;
-    },
-    _intConverter: function(val){
-        return parseInt(val, 10);
-    },
-    _floatConverter: function(val){
-        return parseFloat(val, 10);
-    },
-    _textConverter: function(val){
-        return val;
-    },
-    _dateTimeConverter: function(val){
-        return Date.parse(val);
-    },
-    _restrictionsConverter: function(val){
-        return val;
-    },
-    _arrayConverter: function(nodes, valueConverter){
-        var arr = [],
-            numNodes = nodes.length,
-            node
-        ;
-        for (var i=0; i<numNodes; i += 1){
-            node = nodes.item(i);
-            arr.push(valueConverter(_getElementText(node)));
-        }
-        return arr;
-    },
-    _getValueConverter: function(type){
-        var valueConverter = {};
-        switch (type){
-            case "xsd:boolean":
-                valueConverter.func = this._boolConverter;
-                valueConverter.jsType = "boolean";
-                break;
-            case "xsd:decimal": //FIXME: not sure if you can use parseFloat for this.
-            case "xsd:double":
-            case "xsd:float":
-                valueConverter.func = this._floatConverter;
-                valueConverter.jsType = "number";
-                break;
-            case "xsd:int":
-            case "xsd:integer":
-            case "xsd:nonPositiveInteger":
-            case "xsd:negativeInteger":
-            case "xsd:nonNegativeInteger":
-            case "xsd:positiveInteger":
-            case "xsd:short":
-            case "xsd:byte":
-            case "xsd:long":
-            case "xsd:unsignedLong":
-            case "xsd:unsignedInt":
-            case "xsd:unsignedShort":
-            case "xsd:unsignedByte":
-                valueConverter.func = this._intConverter;
-                valueConverter.jsType = "number";
-                break;
-            case "xsd:string":
-                valueConverter.func = this._textConverter;
-                valueConverter.jsType = "string";
-                break;
-            case "xsd:dateTime":
-                valueConverter.func = this._dateTimeConverter;
-                valueConverter.jsType = "object";
-                break;
-            case "Restrictions":
-                valueConverter.func = this._restrictionsConverter;
-                valueConverter.jsType = "object";
-                break;
-            default:
-                valueConverter.func = this._textConverter;
-                valueConverter.jsType = "object";
-                break;
-        }
-        return valueConverter;
     },
     _createFieldGetter: function(fieldName, valueConverter, minOccurs, maxOccurs){
         var me = this;
@@ -4671,7 +4706,7 @@ Xmla.Rowset.prototype = {
         if(minOccurs===1) {
             getter = function(){
                 var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
-                return me._arrayConverter(els, valueConverter);
+                return _arrayConverter(els, valueConverter);
             };
         }
         else 
@@ -4679,7 +4714,7 @@ Xmla.Rowset.prototype = {
             getter = function(){
                 var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                 if (els.length) {
-                    return me._arrayConverter(els, valueConverter);
+                    return _arrayConverter(els, valueConverter);
                 }
                 else {
                     return null;
@@ -5113,62 +5148,102 @@ Xmla.Dataset = function(doc){
     return this;
 }
 
-Xmla.Dataset.AXIS_COLUMNS = "Axis0";
-Xmla.Dataset.AXIS_ROWS = "Axis1";
-Xmla.Dataset.AXIS_PAGES = "Axis2";
-Xmla.Dataset.AXIS_SECTIONS = "Axis3";
-Xmla.Dataset.AXIS_CHAPTERS = "Axis4";
+Xmla.Dataset.AXIS_COLUMNS = 0;
+Xmla.Dataset.AXIS_ROWS = 1;
+Xmla.Dataset.AXIS_PAGES = 2;
+Xmla.Dataset.AXIS_SECTIONS = 3;
+Xmla.Dataset.AXIS_CHAPTERS = 4;
 Xmla.Dataset.AXIS_SLICER = "SlicerAxis";
 
 Xmla.Dataset.prototype = {
 	_root:  null,
+    _axes: null,
+    _axesOrder: null,
+    _numAxes: null,
+    _slicer: null,
+    _cellset:null,
     _initDataset: function(doc){
+        this._initRoot(doc);
+        this.cubeName = _getElementText(
+            _getElementsByTagNameNS(
+                this._root, _xmlnsDataset, "", "CubeName"
+            ).item(0)
+        );
+        this._initAxes();
+        this._initCells();
+    },
+    _initRoot: function(doc){
         var root = _getElementsByTagNameNS(doc, _xmlnsDataset, "", "root");
         if (root.length){
-            root = root.item(0);
-            this._root = root;
+            this._root = root.item(0);
         }
         else {
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
                 "Xmla.Dataset._initData",
-                this._node
+                doc
             )._throw();        
         }
-        this.cubeName = _getElementText(
-            _getElementsByTagNameNS(
-                root, _xmlnsDataset, "", "CubeName"
-            ).item(0)
-        );
-        
-        this.axes = {};
+    },
+    _initAxes: function(){
+        var i, axis, axisNode, axisName, axisNodes, numAxisNodes, tmpAxes = {};
 
-        var i, axis, axisNode, axisNodes, numAxisNodes, tmpAxes = {};
+        this._axes = {};
+        this._axesOrder = [];
+
         //collect the axisInfo nodes
-        axisNodes = _getElementsByTagNameNS(root, _xmlnsDataset, "", "AxisInfo");
+        axisNodes = _getElementsByTagNameNS(this._root, _xmlnsDataset, "", "AxisInfo");
         numAxisNodes = axisNodes.length;
         for (i=0; i<numAxisNodes; i++){
             axisNode = axisNodes.item(i);
-            tmpAxes[axisNode.getAttribute("name")] = axisNode;
+            axisName = axisNode.getAttribute("name");
+            tmpAxes[axisName] = axisNode;            
         }
         //collect the axis nodes
-        axisNodes = _getElementsByTagNameNS(root, _xmlnsDataset, "", "Axis");
+        axisNodes = _getElementsByTagNameNS(this._root, _xmlnsDataset, "", "Axis");
         numAxisNodes = axisNodes.length;
         for (i=0; i<numAxisNodes; i++){
             axisNode = axisNodes.item(i);
-            axis = new Xmla.Dataset.Axis(tmpAxes[axisNode.getAttribute("name")], axisNode);
-            this.axes[axis.name] = axis;
+            axisName = axisNode.getAttribute("name");
+            axis = new Xmla.Dataset.Axis(tmpAxes[axisName], axisNode);
+            if (axisName==Xmla.Dataset.AXIS_SLICER) {
+                this._slicer = axis;
+            }
+            else {
+                this._axes[axisName] = axis;
+                this._axesOrder.push(axis);
+            }            
         }
-        this._numAxes = numAxisNodes - 1; //don't include the slicer.
+        this._numAxes = this._axesOrder.length;
+    },
+    _initCells: function(){
+        this._cellset = new Xmla.Dataset.Cellset(this);
     },
     getAxisCount: function(){
         return this._numAxes;
     },
     getAxis: function(nameOrIndex){
+        var name, axis;
         if (isNum(nameOrIndex)){
-            nameOrIndex = "Axis" + nameOrIndex;
+            name = this._axesOrder[nameOrIndex];
+            if (_isUnd(nameOrIndex)){
+                Xmla.Exception._newError(
+                    "INVALID_AXIS",
+                    "Xmla.Dataset.getAxis",
+                    name
+                )._throw();            
+            }
         }
-        return this.axes[nameOrIndex];
+        else {
+            name = nameOrIndex;
+        }
+        if (name==Xmla.Dataset.AXIS_SLICER) {
+            axis = this._slicer;
+        }
+        else {        
+            axis = this._axes[name];
+        }
+        return axis;
     },
     getColumns: function(){
         return this.getAxis(Xmla.Dataset.AXIS_COLUMNS);
@@ -5177,10 +5252,21 @@ Xmla.Dataset.prototype = {
         return this.getAxis(Xmla.Dataset.AXIS_ROWS);
     },
     getSlicer: function(){
-        return this.getAxis(Xmla.Dataset.AXIS_SLICER);
+        return this._slicer;
     },
     close: function(){
+        if (this._slicer){
+            this._slicer.close();
+        }
+        for (var i=0; i<this._namAxes; i++){
+            this.getAxis(i).close();
+        }
+        this._cellset.close();
         this._root = null;
+        this._axes = null;
+        this._axesOrder = null;
+        this._numAxes = null;
+        this._slicer = null;
     }
 };
 
@@ -5240,12 +5326,12 @@ Xmla.Dataset.Axis.prototype = {
             };
             this._hierarchyDefs[hierarchyName] = hierarchyDef;
         }
+        
     },
     _initAxis: function(_axisInfoNode, _axisNode){
         this.name = _axisNode.getAttribute("name");
 
         this._initHierarchies(_axisInfoNode);
-
         this._tuples = _getElementsByTagNameNS(_axisNode, _xmlnsDataset, "", "Tuple");
         this.numTuples = this._tuples.length;
         this.reset();
@@ -5398,6 +5484,154 @@ Xmla.Dataset.Axis.prototype = {
         return rows;
     }
 }
+
+Xmla.Dataset.Cellset = function(dataset){
+    this._dataset = dataset;
+    this._initCellset();
+    return this;
+}
+
+Xmla.Dataset.Cellset.prototype = {
+    _dataset: null,
+    _cellNodes: null,
+    _cellCount: null,
+    _cellNode: null,
+    _cellDefs: null,
+    _idx: null,
+    _ord: null,
+    _cellOrd: null,
+    _initCellset: function(){
+        var root = this._dataset._root,
+            cellSchema, cellSchemaElements, numCellSchemaElements, cellSchemaElement, 
+            cellInfoNodes, cellInfoNode, cellNodes, type, valueConverter, cellDef,
+            propertyNodes, propertyNode, propertyNodeTagName, numPropertyNodes, i, j
+        ;
+        cellSchema = _getComplexType(root, "CellData");
+        if (!cellSchema){
+            Xmla.Exception._newError(
+                "ERROR_PARSING_RESPONSE",
+                "Xmla.Rowset",
+                root
+            )._throw();
+        }        
+        cellSchemaElements = _getElementsByTagNameNS(
+            cellSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "element"
+        );
+        numCellSchemaElements = cellSchemaElements.length;
+        cellInfoNodes = _getElementsByTagNameNS(
+            root, _xmlnsDataset, "", "CellInfo"
+        ); 
+        if (!cellInfoNodes || cellInfoNodes.length==0){
+            Xmla.Exception._newError(
+                "ERROR_PARSING_RESPONSE",
+                "Xmla.Rowset",
+                root
+            )._throw();
+        }
+        cellInfoNode = cellInfoNodes.item(0);
+        propertyNodes = _getElementsByTagNameNS(
+            cellInfoNode, _xmlnsDataset, "", "*"
+        );        
+        this._cellDefs = {};
+        //examine cell property info so we can parse them
+        numPropertyNodes = propertyNodes.length;
+        for(i=0; i<numPropertyNodes; i+=1){
+            propertyNode = propertyNodes.item(i);
+            propertyNodeTagName = propertyNode.tagName;
+            //find the xsd:element node that describes this property
+            for (var j=0; j<numCellSchemaElements; j++){
+                cellSchemaElement = cellSchemaElements.item(j);
+                if (cellSchemaElement.getAttribute("name")!==propertyNodeTagName){
+                    continue;
+                }
+                cellDef = {
+                    name: propertyNodeTagName
+                };
+                this._cellDefs[propertyNodeTagName] = cellDef;
+                type = cellSchemaElement.getAttribute("type");
+                if (type){
+                    cellDef.type = type;
+                    valueConverter = _getValueConverter(type);
+                    if (valueConverter){
+                        cellDef.jsType = valueConverter.jsType;
+                        cellDef.converter = valueConverter.func;
+                    }
+                }
+                break;
+            }            
+        }        
+        this._cellNodes = _getElementsByTagNameNS(
+            root, _xmlnsDataset, "", "Cell"
+        );
+        this._cellCount = this._cellNodes.length;
+    },
+    _getCellNode: function(){
+        this._cellNode = this._cellNodes.item(this._idx);
+        this._cellOrd = parseInt(this._cellNode.getAttribute("CellOrdinal"), 10);
+    },
+    reset: function(){
+        this._idx = 0;
+        this._getCellNode();
+        this._ord = 0;
+    },
+    hasMoreCells: function(){
+        return this._idx < this._cellCount;
+    },
+    next: function(){     
+        this._idx += 1;
+        if (this._cellOrd === this._ord
+        &&  this.hasMoreCells()
+        ) {
+            this._getCellNode();
+        }
+    },
+    curr: function(){
+        return this._idx;
+    },
+    cellValue: function(){
+        return _getElementValue(
+            _getElementsByTagNameNS(
+                this._cellNode, _xmlnsDataset, "", "Value"
+            ).item(0)
+        );
+    },
+    readAsObject: function(){
+        var cell, cellProp, cellDef, converter;
+        if (this._cellOrd === this._ord){
+            cell = {
+                ordinal: this._ord
+            };
+            for (var p in this._cellDefs){
+                cellDef = this._cellDefs[p];
+                cellProp = _getElementsByTagNameNS(
+                    this._cellNode, _xmlnsDataset, "", p
+                ).item(0);
+                if (cellDef.type){
+                    converter = cellDef.converter;
+                    cell[p] = converter(_getElementText(cellProp));
+                }
+                else if (p==="Value"){
+                    cell[p] = _getElementValue(cellProp);
+                }
+                else {
+                }
+                cell[p] = _getElementText(cellProp);
+            }
+        }
+        else 
+        if (this._cellOrd > this._ord){
+            cell = null;
+        }
+        return cell;
+    },
+    close: function(){
+        this._dataset = null;
+        this._cellNodes = null;
+        this._cellNode = null;
+    }
+}
+
+
 /**
 *   <p>
 *   This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.
@@ -5425,13 +5659,14 @@ Xmla.Dataset.Axis.prototype = {
 *   @class Xmla.Exception
 *   @constructor
 */
-Xmla.Exception = function(type, code, message, helpfile, source, data){
+Xmla.Exception = function(type, code, message, helpfile, source, data, args){
     this.type = type;
     this.code = code;
     this.message = message;
     this.source = source;
     this.helpfile = helpfile;
     this.data = data;
+    this.args = args;
     return this;
 };
 
@@ -5631,7 +5866,7 @@ Xmla.Exception.INVALID_HIERARCHY_HLP = _exceptionHlp +
 *   @default <code>-12</code>
 */
 Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_CDE = -12;
-Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_MSG = "Invalid_Hierarchy"; 
+Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_MSG = "Error_Reading_Member"; 
 Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_HLP = _exceptionHlp + 
                                     "#" + Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_CDE  + 
                                     "_" + Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_MSG;
@@ -5697,6 +5932,26 @@ Xmla.Exception.prototype = {
     data: null,
     _throw: function(){
         throw this;
+    },
+/**
+*   A reference to the built-in <code>arguments</code> array of the function that is throwing the exception
+*   This can be used to get a "stack trace" 
+*/    
+    args: null,
+/**
+*   @method getStackTrace
+*   @return an array of objects describing the function on the stack
+*/    
+    getStackTrace: function(){
+        var funcstring, stack = "", regexp = /^\sfunction\s*([^\(]+)?\s*\(\)$/;
+        if (this.args) {
+            var func = this.args.callee;
+            while (func){
+                funcstring = String(func);
+                func = func.caller;
+            }
+        }
+        return stack;
     }
 };
 
