@@ -97,7 +97,6 @@
                 <a href="../doc/api/index.html">API Reference Documentation</a>
             </div>
             <h1>Sample: YUI Chart wizard<img style="display:none" id="image_ajax_loader" src="../css/ajax-loader.gif"/></h1>
-
             <fieldset>
                 <legend>XML/A Service</legend>
                 <label>URL:</label>
@@ -220,6 +219,9 @@
                     option.innerHTML = text;
                     option.value = text;
                     config.select.appendChild(option);
+                }
+                if (i) {
+                    config.select.selectedIndex = 0;
                 }
             }
             

@@ -105,6 +105,7 @@ function _ajax(options){
         xhr.open("POST", options.url, options.async);
     }
     xhr.onreadystatechange = handler;
+    xhr.setRequestHeader("Accept", "text/xml, application/xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send(options.data);
     if (!options.async && !handlerCalled){
@@ -209,10 +210,13 @@ var _xmlRequestType = "RequestType";
 function _getXmlaSoapMessage(
     options
 ){
-    var msg = "", method = options.method, exception = null;
-    msg += "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope " + _xmlnsIsSOAPenvelope + " " + _SOAPencodingStyle + ">" + 
-    "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
-    "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
+    var method = options.method, exception = null,
+        msg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope" + 
+        " " + _xmlnsIsSOAPenvelope + 
+        " " + _SOAPencodingStyle + ">" + 
+        "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" + 
+        "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
     ;
     switch(method){
         case Xmla.METHOD_DISCOVER:
