@@ -121,7 +121,10 @@ function _isNum(arg){
     return typeof(arg)==="number";
 }
 function _xmlEncode(value){
-    return value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    if (typeof(value) === "string") {
+        value = value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+    return value;
 }
 
 var _getElementsByTagNameNS = document.getElementsByTagNameNS ? function(node, ns, prefix, tagName){
