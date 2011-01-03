@@ -3470,7 +3470,6 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 *   <code><a href="#property_MDSCHEMA_LEVELS"></a></code> as value for the <code>requestType</code>, 
 *   and retrieves the <code>MDSCHEMA_LEVELS</code> schema rowset. 
-*   ...todo...
 *   The rowset has the following columns:
 *   <table border="1" class="schema-rowset">
 *       <tr>
@@ -3483,77 +3482,77 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *       <tr>
 *       	<td>CATALOG_NAME</td>
 *           <td>string</td>
-The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.
+*           <td>The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>SCHEMA_NAME</td>
 *           <td>string</td>
-The name of the schema to which this level belongs. NULL if the provider does not support schemas.
+*           <td>The name of the schema to which this level belongs. NULL if the provider does not support schemas.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>CUBE_NAME</td>
 *           <td>string</td>
-The name of the cube to which this level belongs.
+*           <td>The name of the cube to which this level belongs.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>DIMENSION_UNIQUE_NAME</td>
 *           <td>string</td>
-The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+*           <td>The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>HIERARCHY_UNIQUE_NAME</td>
 *           <td>string</td>
-The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+*           <td>The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>LEVEL_NAME</td>
 *           <td>string</td>
-The name of the level.
+*           <td>The name of the level.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>LEVEL_UNIQUE_NAME</td>
 *           <td>string</td>
-The properly escaped unique name of the level.
+*           <td>The properly escaped unique name of the level.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>LEVEL_GUID</td>
 *           <td>string</td>
-Not supported.
+*           <td>Not supported.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>LEVEL_CAPTION</td>
 *           <td>string</td>
-A label or caption associated with the hierarchy. Used primarily for display purposes. If a caption does not exist, LEVEL_NAME is returned.
+*           <td>A label or caption associated with the hierarchy. Used primarily for display purposes. If a caption does not exist, LEVEL_NAME is returned.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>LEVEL_NUMBER</td>
 *           <td>int</td>
-The distance of the level from the root of the hierarchy. Root level is zero (0).
+*           <td>The distance of the level from the root of the hierarchy. Root level is zero (0).</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *       	<td>LEVEL_CARDINALITY</td>
 *           <td>int</td>
-The number of members in the level.
+*           <td>The number of members in the level.</td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
