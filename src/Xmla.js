@@ -127,58 +127,85 @@ function _xmlEncode(value){
     return value;
 }
 
-var _getElementsByTagNameNS = document.getElementsByTagNameNS ? function(node, ns, prefix, tagName){
-                                                                    return node.getElementsByTagNameNS(ns, tagName);
-                                                                }
-                                                              : function(node, ns, prefix, tagName){
-                                                                    if (prefix){        
-                                                                        return node.getElementsByTagName(prefix + ":" + tagName);
-                                                                    }
-                                                                    else {
-                                                                        return node.getElementsByTagName(tagName);
-                                                                    }
-                                                                };
+var docEl = document.documentElement;
 
-var _getAttributeNS = document.documentElement.getAttributeNS ? function(element, ns, prefix, attributeName){
-                                                                    return element.getAttributeNS(ns, attributeName);
-                                                                }
-                                                              : function(element, ns, prefix, attributeName){
-                                                                    if (prefix) {
-                                                                        return element.getAttribute(prefix + ":" + attributeName);
-                                                                    }
-                                                                    else {
-                                                                        return element.getAttribute(attributeName);
-                                                                    }
-                                                                };                                                              
+var _getElementsByTagNameNS = docEl.getElementsByTagNameNS ? function(node, ns, prefix, tagName){
+                                                                 return node.getElementsByTagNameNS(ns, tagName);
+                                                             }
+                                                           : function(node, ns, prefix, tagName){
+                                                                 if (prefix){        
+                                                                     return node.getElementsByTagName(prefix + ":" + tagName);
+                                                                 }
+                                                                 else {
+                                                                     return node.getElementsByTagName(tagName);
+                                                                 }
+                                                             };
+
+var _getAttributeNS = docEl.getAttributeNS ? function(element, ns, prefix, attributeName){
+                                                 return element.getAttributeNS(ns, attributeName);
+                                             }
+                                           : function(element, ns, prefix, attributeName){
+                                                 if (prefix) {
+                                                     return element.getAttribute(prefix + ":" + attributeName);
+                                                 }
+                                                 else {
+                                                     return element.getAttribute(attributeName);
+                                                 }
+                                             };                                                              
 function _getElementText(el){
-    if (el.innerText) {         //ie
-        return el.innerText;
+    //on first call, we examine the properies of the argument element 
+    //to try and find a native (and presumably optimized) method to grab 
+    //the text value of the element.
+    //We then overwrite the original _getElementText 
+    //to use the optimized one in any subsequent calls
+    var func;
+    if (!_isUnd(el.innerText)) {         //ie
+        func = function(el){
+            return el.innerText;
+        };
     }
     else 
-    if (el.textContent) {       //ff
-        return el.textContent;
+    if (!_isUnd(el.textContent)) {       //ff, chrome
+        func = function(el){
+            return el.textContent;
+        };
+    }
+    else 
+    if (!_isUnd(el.nodeTypedValue)) {    //ie8
+        func = function(el){
+            return el.nodeTypedValue;
+        };
     }
     else 
     if (el.normalize){
-        el.normalize();
-        if (el.firstChild){
-            return el.firstChild.data;
-        }
-        else {
-            return null;
+        func = function(el) {
+            el.normalize();
+            if (el.firstChild){
+                return el.firstChild.data;
+            }
+            else {
+                return null;
+            }
         }
     }
     else {                      //generic
-        var text = "",
-            childNodes = el.childNodes,
-            numChildNodes = childNodes.length
-        ;
-        for (var i=0; i<numChildNodes; i += 1){
-            text += childNodes.item(i).data;
+        func = function(el) {
+            var text = [], childNode,
+                childNodes = el.childNodes, i,
+                numChildNodes = childNodes.length
+            ;
+            for (i=0; i<numChildNodes; i += 1){
+                childNode = childNodes.item(i);                                                        
+                if (childNode.data!==null) {
+                    text.push(childNode.data);
+                }                                                      
+            }
+            return text.length ? text.join("") : null;
         }
-        return text;
     }
-}
+    _getElementText = func;
+    return func(el);
+};
                                                                 
 function _getXmlaSoapList(container, listType, items, indent){
     if (!indent){
