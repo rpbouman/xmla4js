@@ -79,6 +79,636 @@
         <script type="text/javascript" src="../src/Xmla.js"></script>
                 
         <script type="text/javascript">
+            //using this to check standards compliance.
+            var schemaRowsetMeta = {
+                DISCOVER_DATASOURCES: {
+                    columns: {
+                        DataSourceName: {
+                            type: "",
+                            nullable: false
+                        },
+                        DataSourceDescription: {
+                            type: "",
+                            nullable: true
+                        },
+                        URL: {
+                            type: "",
+                            nullable: true
+                        },
+                        DataSourceInfo: {
+                            type: "",
+                            nullable: true
+                        },
+                        ProviderName: {
+                            type: "",
+                            nullable: true
+                        },
+                        ProviderType: {
+                            type: [],
+                            nullable: false
+                        },
+                        AuthenticationMode: {
+                            type: {
+                                "Unauthenticated": true,
+                                "Authenticated": true,
+                                "Integrated": true
+                            },
+                            nullable: false
+                        }
+                    }
+                },
+                DISCOVER_ENUMERATORS: {
+                    columns: {
+                        EnumName: {
+                            type: "",
+                            nullable: false
+                        },
+                        EnumDescription: {
+                            type: "",
+                            nullable: true
+                        },
+                        EnumType: {
+                            type: "",
+                            nullable: false
+                        },
+                        ElementName: {
+                            type: "",
+                            nullable: false
+                        },
+                        ElementDescription: {
+                            type: "",
+                            nullable: true
+                        },
+                        ElementValue: {
+                            type: "",
+                            nullable: true
+                        }
+                    }
+                },
+                DISCOVER_KEYWORDS: {
+                    columns: {
+                        Keyword: {
+                            type: "",
+                            nullable: false
+                        }
+                    }
+                },
+                DISCOVER_LITERALS: {
+                    columns: {
+                        LiteralName: {
+                            type: "",
+                            nullable: false
+                        },
+                        LiteralValue: {
+                            type: "",
+                            nullable: true
+                        },
+                        LiteralInvalidChars: {
+                            type: "",
+                            nullable: true
+                        },
+                        LiteralInvalidStartingChars: {
+                            type: "",
+                            nullable: true
+                        },
+                        LiteralMaxLength: {
+                            type: 0,
+                            nullable: true
+                        }
+                    }
+                },
+                DISCOVER_PROPERTIES: {
+                    columns: {
+                        PropertyName: {
+                            type: "",
+                            nullable: false
+                        },
+                        PropertyDescription: {
+                            type: "",
+                            nullable: true
+                        },
+                        PropertyType: {
+                            type: "",
+                            nullable: true
+                        },
+                        PropertyAccessType: {
+                            type: {
+                                Read: true,
+                                Write: true,
+                                ReadWrite: true
+                            },
+                            nullable: false
+                        },
+                        IsRequired: {
+                            type: true,
+                            nullable: true
+                        },
+                        Value: {
+                            type: "",
+                            nullable: true
+                        }
+                    }
+                },
+                DISCOVER_SCHEMA_ROWSETS: {
+                    columns: {
+                        SchemaName: {
+                            type: [],
+                            nullable: false
+                        },
+                        Restrictions: {
+                            type: [],
+                            nullable: true
+                        },
+                        Description: {
+                            type: "",
+                            nullable: true
+                        }
+                    }
+                },
+                DBSCHEMA_CATALOGS: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        ROLES: {
+                            type: ""
+                        },
+                        DATE_MODIFIED: {
+                            type: new Date()
+                        }
+                    }
+                },
+                MDSCHEMA_ACTIONS: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },
+                        ACTION_NAME: {
+                            type: ""
+                        },
+                        ACTION_TYPE: {
+                            type: 0
+                        },
+                        COORDINATE: {
+                            type: ""
+                        },
+                        COORDINATE_TYPE: {
+                            type: 0
+                        },
+                        ACTION_CAPTION: {
+                            type: ""
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        CONTENT: {
+                            type: ""
+                        },
+                        APPLICATION: {
+                            type: ""
+                        },
+                        INVOCATION: {
+                            type: ""
+                        }
+                    }
+                },
+                MDSCHEMA_CUBES: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },
+                        CUBE_TYPE: {
+                            type: ""
+                        },
+                        CUBE_GUID: {
+                            type: ""
+                        },
+                        CREATED_ON: {
+                            type: new Date()
+                        },
+                        LAST_SCHEMA_UPDATE: {
+                            type: new Date()
+                        },
+                        SCHEMA_UPDATED_BY: {
+                            type: ""
+                        },
+                        LAST_DATA_UPDATE: {
+                            type: new Date()
+                        },
+                        DATA_UPDATED_BY: {
+                            type: ""
+                        },
+                        LAST_UPDATED_BY: {
+                            type: ""
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        IS_DRILLTHROUGH_ENABLED: {
+                            type: true
+                        },
+                        IS_LINKABLE: {
+                            type: true
+                        },
+                        IS_WRITE_ENABLED: {
+                            type: true
+                        },
+                        IS_SQL_ENABLED: {
+                            type: true
+                        },
+                        CUBE_CAPTION: {
+                            type: ""
+                        },
+                        BASE_CUBE_NAME: {
+                            type: ""
+                        },
+                        CUBE_SOURCE: {
+                            type: ""
+                        },
+                        PREFERRED_QUERY_PATTERNS: {
+                            type: ""
+                        }
+                    }
+                },
+                MDSCHEMA_DIMENSIONS: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },
+                        DIMENSION_NAME: {
+                            type: ""
+                        },
+                        DIMENSION_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        DIMENSION_GUID: {
+                            type: ""
+                        },
+                        DIMENSION_CAPTION: {
+                            type: ""
+                        },
+                        DIMENSION_ORDINAL: {
+                            type: 0
+                        },
+                        DIMENSION_TYPE: {
+                            type: 0
+                        },
+                        DIMENSION_CARDINALITY: {
+                            type: 0
+                        },
+                        DEFAULT_HIERARCHY: {
+                            type: ""
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        IS_VIRTUAL: {
+                            type: true
+                        },
+                        IS_READWRITE: {
+                            type: true
+                        },
+                        DIMENSION_UNIQUE_SETTINGS: {
+                            type: 0
+                        },
+                        DIMENSION_MASTER_NAME: {
+                            type: ""
+                        }
+                    }
+                },
+                MDSCHEMA_FUNCTIONS: {
+                    columns: {
+                    }
+                },
+                MDSCHEMA_HIERARCHIES: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },
+                        DIMENSION_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        HIERARCHY_NAME: {
+                            type: ""
+                        },
+                        HIERARCHY_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        HIERARCHY_GUID: {
+                            type: ""
+                        },
+                        HIERARCHY_CAPTION: {
+                            type: ""
+                        },                        
+                        DIMENSION_TYPE: {
+                            type: 0
+                        },
+                        HIERARCHY_CARDINALITY: {
+                            type: 0
+                        },
+                        DEFAULT_MEMBER: {
+                            type: ""
+                        },
+                        ALL_MEMBER: {
+                            type: ""
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        STRUCTURE: {
+                            type: 0
+                        },
+                        IS_VIRTUAL: {
+                            type: true
+                        },
+                        IS_READWRITE: {
+                            type: true
+                        },
+                        DIMENSION_UNIQUE_SETTINGS: {
+                            type: 0
+                        },
+                        DIMENSION_MASTER_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        DIMENSION_IS_VISIBLE: {
+                            type: true
+                        },
+                        HIERARCHY_ORDINAL: {
+                            type: 0
+                        },
+                        DIMENSION_IS_SHARED: {
+                            type: true
+                        },
+                        HIERARCHY_IS_VISIBLE: {
+                            type: true
+                        },
+                        HIERARCHY_ORIGIN: {
+                            type: 0
+                        },
+                        HIERARCHY_DISPLAY_FOLDER: {
+                            type: ""
+                        },
+                        INSTANCE_SELECTION: {
+                            type: ""
+                        }
+                    }
+                },
+                MDSCHEMA_LEVELS: {
+                    optional: true,
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },
+                        DIMENSION_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        HIERARCHY_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        LEVEL_NAME: {
+                            type: ""
+                        },
+                        LEVEL_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        LEVEL_GUID: {
+                            type: ""
+                        },
+                        LEVEL_CAPTION: {
+                            type: ""
+                        },
+                        LEVEL_NUMBER: {
+                            type: 0
+                        },
+                        LEVEL_CARDINALITY: {
+                            type: ""
+                        },
+                        LEVEL_TYPE: {
+                            type: 0
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        CUSTOM_ROLLUP_SETTINGS: {
+                            type: 0
+                        },
+                        LEVEL_IS_VISIBLE: {
+                            type: true
+                        },
+                        LEVEL_ORDERING_PROPERTY: {
+                            type: ""
+                        },
+                        LEVEL_DBTYPE: {
+                            type: ""
+                        },
+                        LEVEL_MASTER_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        LEVEL_NAME_SQL_COLUMN_NAME: {
+                            type: ""
+                        },
+                        LEVEL_KEY_SQL_COLUMN_NAME: {
+                            type: ""
+                        },
+                        LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME: {
+                            type: ""
+                        },
+                        LEVEL_ATTRIBUTE_HIERARCHY_NAME: {
+                            type: ""
+                        },
+                        LEVEL_KEY_CARDINALITY: {
+                            type: 0
+                        },
+                        LEVEL_ORIGIN: {
+                            type: 0
+                        }
+                    }
+                },
+                MDSCHEMA_MEASURES: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },
+                        MEASURE_NAME: {
+                            type: ""
+                        },
+                        MEASURE_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        MEASURE_CAPTION: {
+                            type: ""
+                        },
+                        MEASURE_GUID: {
+                            type: ""
+                        },
+                        MEASURE_AGGREGATOR: {
+                            type: 0
+                        },
+                        DATA_TYPE: {
+                            type: 0
+                        },
+                        NUMERIC_PRECISION: {
+                            type: 0
+                        },
+                        NUMERIC_SCALE: {
+                            type: 0
+                        },
+                        MEASURE_UNITS: {
+                            type: ""
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        EXPRESSION: {
+                            type: ""
+                        },
+                        MEASURE_IS_VISIBLE: {
+                            type: true
+                        },
+                        LEVELS_LIST: {
+                            type: ""
+                        },
+                        MEASURE_NAME_SQL_COLUMN_NAME: {
+                            type: ""
+                        },
+                        MEASURE_UNQUALIFIED_CAPTION: {
+                            type: ""
+                        },
+                        MEASUREGROUP_NAME: {
+                            type: ""
+                        },
+                        MEASURE_DISPLAY_FOLDER: {
+                            type: ""
+                        },
+                        DEFAULT_FORMAT_STRING: {
+                            type: ""
+                        },
+                    }
+                },
+                MDSCHEMA_MEMBERS: {
+                    columns: {
+                        CATALOG_NAME: {
+                            type: ""
+                        },
+                        SCHEMA_NAME: {
+                            type: ""
+                        },
+                        CUBE_NAME: {
+                            type: ""
+                        },                    
+                        DIMENSION_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        HIERARCHY_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        LEVEL_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        LEVEL_NUMBER: {
+                            type: ""
+                        },
+                        MEMBER_ORDINAL: {
+                            type: 0
+                        },
+                        MEMBER_NAME: {
+                            type: ""
+                        },
+                        MEMBER_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        MEMBER_TYPE: {
+                            type: 0
+                        },
+                        MEMBER_GUID: {
+                            type: ""
+                        },
+                        MEMBER_CAPTION: {
+                            type: ""
+                        },
+                        CHILDREN_CARDINALITY: {
+                            type: 0
+                        },
+                        PARENT_LEVEL: {
+                            type: 0
+                        },
+                        PARENT_UNIQUE_NAME: {
+                            type: ""
+                        },
+                        PARENT_COUNT: {
+                           type: 0
+                        },
+                        DESCRIPTION: {
+                            type: ""
+                        },
+                        EXPRESSOIN: {
+                            type: ""
+                        },
+                        MEMBER_KEY: {
+                            type: 0
+                        },
+                        IS_MEMBER_KEY: {
+                            type: ""
+                        },
+                        IS_PLACEHOLDERMEMBER: {
+                            type: true
+                        },
+                        IS_DATAMEMBER: {
+                            type: true
+                        },
+                        SCOPE: {
+                            type: 0
+                        }
+                    }
+                },
+                MDSCHEMA_PROPERTIES: {
+                    columns: {
+                    }
+                },
+                MDSCHEMA_SETS: {
+                    columns: {
+                    }
+                }
+            };
             var discover = document.getElementById("discover");
             var xmla = new Xmla({});
 			var datasourceIndependentRowsets = {};
@@ -129,11 +759,14 @@
 					var schemaRowsetsEl = document.getElementById("schemaRowsets");
 					var datasource, datasources = xmla.discoverDataSources();
 					while (datasource = datasources.fetchAsObject()) {
-						schemaRowsetsEl.innerHTML += "<hr />";
 						var url = datasource.URL;
 						if (!url){
 							url = fallbackUrl;
 						}
+						schemaRowsetsEl.innerHTML += "<h2>Rowsets for " + url + "</h2>";
+                        var div = document.createElement("div");
+                        schemaRowsetsEl.appendChild(div);
+
 						xmla.setOptions({
 							async: false,
 							url: url,
@@ -141,6 +774,8 @@
 								DataSourceInfo: datasource.DataSourceInfo
 							}
 						});
+                        
+                        
 						var schemaRowset, schemaRowsets = xmla.discoverSchemaRowsets();
 						while (schemaRowset = schemaRowsets.fetchAsObject()){
 							if (!datasourceIndependentRowsets[schemaRowset.SchemaName]){
@@ -148,7 +783,7 @@
 								fillTable(schemaRowset.SchemaName, xmla, xmla.discover);
 							}
 						}
-						schemaRowsets.close();
+						schemaRowsets.close();                        
 					}
 					datasources.close();
 				} catch (exception){
@@ -157,21 +792,73 @@
 			}
 			
             function fillTable(name, obj, func){ 
+                var schemaRowsetsEl = document.getElementById("schemaRowsets");
+
+                var h3 = document.createElement("h3");
+                schemaRowsetsEl.appendChild(h3);
+                h3.innerHTML = name;
+
+                var div = document.createElement("div");
+                schemaRowsetsEl.appendChild(div);
+                
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
-                var caption = tab.createCaption();
-				caption.innerHTML = name;
-                var schemaRowsetsEl = document.getElementById("schemaRowsets");
                 schemaRowsetsEl.appendChild(tab);
 				
 				try {
-					var rowset = func.apply(xmla);
+                    var found = {}, extensions = {};
+                    var referenceMeta = schemaRowsetMeta[name];
+                    if (referenceMeta) {
+                        referenceMeta.found = true;
+                        referenceMeta = referenceMeta.columns;
+                    }
+                    else {
+                        //this must be an extension
+                        //todo: highlight it.
+                    }
+					var rowset = func.apply(xmla), fieldName;
 					var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
 					for (i=0; i<fieldCount; i++){
 						c = r.insertCell(i);
-						c.innerHTML = rowset.fieldName(i);
+                        fieldName = rowset.fieldName(i);
+                        if (referenceMeta && referenceMeta[fieldName]){
+                            found[fieldName] = true;
+                        }
+                        else {
+                            extensions[fieldName] = true;
+                        }
+						c.innerHTML = fieldName;
 						c.setAttribute("class", "th");
 					}
+                    
+                    var omitted = "", extra = "";
+                    if (referenceMeta) {
+                        for (fieldName in referenceMeta){
+                            if (typeof(found[fieldName])==="undefined"){
+                                omitted += "<li>" + fieldName + "</li>";
+                            }
+                        }
+                        if (omitted !== "") {
+                            omitted = "This rowset omits these fields: " +
+                                        "<ul>" + omitted + "</ul>";
+                        }
+                        for (fieldName in extensions){
+                            extra += "<li>" + fieldName + "</li>";                            
+                        }
+                        if (extra !== ""){ 
+                            extra = "This rowset has these non-standard fields: " +
+                                        "<ul>" + extra + "</ul>";
+                        }
+                        report = omitted + extra;
+                        if (report === ""){
+                            report = "This is a standard rowset.";
+                        }
+                    }
+                    else {
+                        report = "This rowset is a non-standard extension.";
+                    }
+                    div.innerHTML = report;
+                        
 					var rows = rowset.fetchAllAsArray();                
 					for (var rowCount = rows.length, j=0; j<rowCount; j++){
 						r = tab.insertRow(j+1);
@@ -182,7 +869,7 @@
 					}
 					rowset.close();
 				} catch (exception){
-					showException(exception, caption);
+					showException(exception, name);
 				}
             }
             
