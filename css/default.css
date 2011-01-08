@@ -1,6 +1,7 @@
 /*
-    Copyright 2009,2010 Roland Bouman 
-    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    Copyright 2009, 2010, 2011 Roland Bouman 
+    Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
+    Twitter: @rolandbouman
     
     default.css - this software is part of xmla4js
 
@@ -19,6 +20,10 @@
 */    
 * {
     font-family: Arial, sans;
+}
+
+pre, pre *, code {
+    font-family: Courier, monospace;
 }
 
 legend {

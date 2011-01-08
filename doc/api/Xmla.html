@@ -20,11 +20,11 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<title>API: xmla  Xmla   (xmla4js library)</title>
 
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1266315979.48" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1266315979.48" />
+	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css?stamp=1294512884.91" />
+	<link rel="stylesheet" type="text/css" href="assets/api.css?stamp=1294512884.91" />
 
-    <script type="text/javascript" src="assets/api-js?stamp=1266315979.48"></script>
-    <script type="text/javascript" src="assets/ac-js?stamp=1266315979.48"></script>
+    <script type="text/javascript" src="assets/api-js?stamp=1294512884.91"></script>
+    <script type="text/javascript" src="assets/ac-js?stamp=1294512884.91"></script>
 </head>
 
 <body id="yahoo-com">
@@ -32,7 +32,7 @@
 <div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://code.google.com/p/xmla4js/" title="xmla4js">xmla4js</a></h1>
-        <h3>Xmla utility&nbsp; <span class="subtitle">r65</span></h3>
+        <h3>Xmla utility&nbsp; <span class="subtitle">r85</span></h3>
         <a href="./index.html" title="xmla4js">xmla4js</a> 
             &gt; <a href="./module_xmla.html" title="xmla">xmla</a>
                  &gt; Xmla 
@@ -3673,7 +3673,6 @@ The rowset has the following columns:
                                             Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 <code><a href="#property_MDSCHEMA_LEVELS"></a></code> as value for the <code>requestType</code>, 
 and retrieves the <code>MDSCHEMA_LEVELS</code> schema rowset. 
-...todo...
 The rowset has the following columns:
 <table border="1" class="schema-rowset">
 <tr>
@@ -3686,77 +3685,77 @@ The rowset has the following columns:
 <tr>
 <td>CATALOG_NAME</td>
 <td>string</td>
-The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.
+<td>The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>SCHEMA_NAME</td>
 <td>string</td>
-The name of the schema to which this level belongs. NULL if the provider does not support schemas.
+<td>The name of the schema to which this level belongs. NULL if the provider does not support schemas.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>CUBE_NAME</td>
 <td>string</td>
-The name of the cube to which this level belongs.
+<td>The name of the cube to which this level belongs.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>DIMENSION_UNIQUE_NAME</td>
 <td>string</td>
-The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+<td>The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>HIERARCHY_UNIQUE_NAME</td>
 <td>string</td>
-The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.
+<td>The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LEVEL_NAME</td>
 <td>string</td>
-The name of the level.
+<td>The name of the level.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LEVEL_UNIQUE_NAME</td>
 <td>string</td>
-The properly escaped unique name of the level.
+<td>The properly escaped unique name of the level.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LEVEL_GUID</td>
 <td>string</td>
-Not supported.
+<td>Not supported.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LEVEL_CAPTION</td>
 <td>string</td>
-A label or caption associated with the hierarchy. Used primarily for display purposes. If a caption does not exist, LEVEL_NAME is returned.
+<td>A label or caption associated with the hierarchy. Used primarily for display purposes. If a caption does not exist, LEVEL_NAME is returned.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LEVEL_NUMBER</td>
 <td>int</td>
-The distance of the level from the root of the hierarchy. Root level is zero (0).
+<td>The distance of the level from the root of the hierarchy. Root level is zero (0).</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>LEVEL_CARDINALITY</td>
 <td>int</td>
-The number of members in the level.
+<td>The number of members in the level.</td>
 <td>No</td>
 <td>Yes</td>
 </tr>
@@ -4143,7 +4142,6 @@ The rowset has the following columns:
                                             Invokes the <code><a href="#method_discover">discover()</a></code> method using 
 <code><a href="#property_MDSCHEMA_MEMBERS"></a></code> as value for the <code>requestType</code>, 
 and retrieves the <code>MDSCHEMA_MEMBERS</code> schema rowset. 
-...todo...
 The rowset has the following columns:
 <table border="1" class="schema-rowset">
 <tr>
@@ -4152,6 +4150,141 @@ The rowset has the following columns:
 <th>Description</th>
 <th>Restriction</th>
 <th>Nullable</th>
+</tr>
+<tr>
+<td>CATALOG_NAME</td>
+<td>string</td>
+<td>The name of the catalog</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>SCHEMA_NAME</td>
+<td>string</td>
+<td>The name of the schema</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CUBE_NAME</td>
+<td>string</td>
+<td>The name of the cube</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DIMENSION_UNIQUE_NAME</td>
+<td>string</td>
+<td>The unique name of the dimension</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>HIERARCHY_UNIQUE_NAME</td>
+<td>string</td>
+<td>The unique name of the hierarchy</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>LEVEL_UNIQUE_NAME</td>
+<td>string</td>
+<td>The unique name of the level</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>LEVEL_NUMBERr</td>
+<td>int</td>
+<td>Distance of this level to the root</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_ORDINAL</td>
+<td>int</td>
+<td>Deprecated: always 0</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_NAME</td>
+<td>string</td>
+<td>The name of this member</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_UNIQUE_NAME</td>
+<td>string</td>
+<td>The unique name of this member</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_TYPE</td>
+<td>int</td>
+<td>An integer constant indicating the type of this member. Can take on one of the following values:
+<ul>
+<li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_REGULAR">MDMEMBER_TYPE_REGULAR</a></li>
+<li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_ALL">MDMEMBER_TYPE_ALL</a></li>
+<li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_MEASURE">MDMEMBER_TYPE_MEASURE</a></li>
+<li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_FORMULA">MDMEMBER_TYPE_FORMULA</a></li>
+<li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_UNKNOWN">MDMEMBER_TYPE_UNKNOWN</a></li>
+<li><a href="Xmla.Rowset.html#property_MDMEMBER_TYPE_FORMULA">MDMEMBER_TYPE_FORMULA</a></li>
+</ul>
+</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_GUID</td>
+<td>string</td>
+<td>The guid of this member</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_CAPTION</td>
+<td>string</td>
+<td>A label or caption associated with the member. Used primarily for display purposes. If a caption does not exist, MEMBER_NAME is returned.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CHILDREN_CARDINALITY</td>
+<td>int</td>
+<td>The number of childrend for this member</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PARENT_LEVEL</td>
+<td>int</td>
+<td>The distance of the member's parent from the root level of the hierarchy. The root level is zero (0).</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>DESCRIPTION</td>
+<td>string</td>
+<td>This column always returns a NULL value. This column exists for backwards compatibility</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>EXPRESSION</td>
+<td>string</td>
+<td>The expression for calculations, if the member is of type MDMEMBER_TYPE_FORMULA.</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>MEMBER_KEY</td>
+<td>string</td>
+<td>The value of the member's key column. Returns NULL if the member has a composite key.</td>
+<td>Yes</td>
+<td>No</td>
 </tr>
 </table>
                                         </div>
@@ -4738,7 +4871,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
                                         </code>
                                         
                                         <div class="description" property="yui:description">
-                                            Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute</a></code> method using <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT_TABULAR</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. This has the effect of obtaining the multi-dimensional resultset as a <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code>.
+                                            Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute">execute()</a></code> method using <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT_TABULAR</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. This has the effect of obtaining the multi-dimensional resultset as a <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code>.
                                         </div>
 
                                         <div class="description">
@@ -5127,7 +5260,7 @@ Then, a subsequent <code></code>
 	</div>
 	<div id="ft">
         <hr />
-        Copyright &copy; 2010 <a href="http://rpbouman.blogspot.com/">Roland Bouman</a>. 
+        Copyright &copy; 2011 <a href="http://rpbouman.blogspot.com/">Roland Bouman</a>. 
         (This documentation is part of the <a href="http://code.google.com/p/xmla4js/">xmla4js</a> project.)
 	</div>
 </div>

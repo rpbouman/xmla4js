@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+    Copyright 2011 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    twitter: @rolandbouman
+    
+    rowset-examples.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: Iterating Rowsets examples</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            #url {
+                width: 100%;
+            }
+            
+            .error {
+                border-style:outset;
+                border-width: 2px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+                background-color: red;
+                color: white;
+            }
+            
+            table {
+                border-color: ThreeDFace;
+                border-style: outset;
+                border-width:2px;
+            }
+            td.th {
+                font-weight: bold;
+                text-align: center;
+                background-color: ThreeDFace;
+            }
+            td {
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="../index.html">Home</a>
+            |
+            <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+            |
+            <a href="index.html">Samples</a>
+            |
+            <a href="../doc/api/index.html">API Reference Documentation</a>
+        </div>
+        <h1>Sample: Iterating Rowsets</h1>
+        <p>
+            The <code>Rowset</code> represents a tabular (relational) dataset.
+            XML/A providers return metadata in the form of <code>Rowsets</code> (see the <code>Xmla.discover()</code> method. 
+            There is also an option (see the <code>Xmla.executeTabular()</code> method) 
+            to return the result of MDX queries as a <code>Rowset</code>. 
+            (Although this is supported by most XML/A providers (including Mondrian), 
+            Palo does not seem to support this option)
+        </p>
+        <p>
+            This sample illustrates the various mehods iterate through a <code>Xmla.Rowset</code>.
+        </p>
+        <div>
+            URL:
+            <input type="text" id="url" name="url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="discover">Discover...</button>            
+            <div id="select_datasources_group" style="display: none">
+                <label>DataSource:</label>
+                <select id="select_datasources" name="select_datasources"></select>            
+            </div>
+            <div id="iterationMethod_group" style="display:none">
+                <label>Iteration Method:</label>
+                <select id="iterationMethod" name="iterationMethod" style="font-family: monospace">
+                    <option value="">Choose a method...</option>
+                    <option value="fieldValByName">fieldVal(name)</option>
+                    <option value="fieldValByIndex">fieldVal(index)</option>
+                    <option value="getXXX">getXXX()</option>
+                    <option value="fetchAsArray">fetchAsArray()</option>
+                    <option value="fetchAsObject">fetchAsObject()</option>
+                    <option value="fetchAllAsArray">fetchAllAsArray()</option>
+                    <option value="fetchAllAsObject">fetchAllAsObject()</option>
+                    <option value="mapAllAsObject">mapAllAsObject()</option>
+                </select>            
+            </div>
+        </div>
+
+        <pre id="source"></pre>
+        <pre id="result"></pre>
+        <div id="section_error" class="error">
+        </div>
+
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+                        
+        <script type="text/javascript">
+            var xmla = new Xmla();
+            var datasourceCache;
+                                
+            function clearError(){
+                var section_error = document.getElementById("section_error");
+                section_error.innerHTML = "";
+            }
+            
+            function showException(exception){
+                var section_error = document.getElementById("section_error");
+                if (exception instanceof Xmla.Exception){
+                    section_error.innerHTML = "" +
+                    "<div>code: " + exception.code + "<\/div>" +
+                    "<div>message: " + exception.message + "<\/div>" +
+                    "<div>source: " + exception.source + "<\/div>" +
+                    "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "</a>"
+                    ;
+                }
+                else {                   
+                    section_error.innerHTML = exception;
+                }
+            }
+
+            function populateDatasources(){
+                var datasource, option,
+                    select_datasources = document.getElementById("select_datasources");
+                clearError();
+                var select_datasources_group = document.getElementById("select_datasources_group");
+                select_datasources_group.style.display = "none";
+                try {                
+                    datasourceCache = [];
+                    select_datasources.innerHTML = "";
+                    var rowset = xmla.discoverDataSources({
+                        url: document.getElementById("url").value
+                    });
+                    
+                    option = document.createElement("option");
+                    option.value = "";
+                    option.text = "Select a datasource";
+                    option.label = "Select a datasource";
+                    select_datasources.appendChild(option);
+
+                    while (datasource = rowset.fetchAsObject()) {
+                        datasourceCache.push(datasource);
+
+                        option = document.createElement("option");
+                        option.value = datasource.DataSourceName;
+                        option.text = datasource.DataSourceName;
+                        option.label = datasource.DataSourceName;
+                        select_datasources.appendChild(option);
+                    } 
+
+                    if(datasourceCache.length) {
+                        select_datasources_group.style.display = "";
+                    } else {
+                        document.getElementById("section_error").innerHTML = "No datasources found";
+                    }
+                } catch (exception){
+                    showException(exception);
+                }
+            }
+            
+            var rowset = null;
+            function datasourceSelected(){
+                var iterationMethod_group = document.getElementById("iterationMethod_group");
+                var display;
+                if (this.selectedIndex) {
+                    display = "";
+                }
+                else {
+                    display = "none";
+                }
+                iterationMethod_group.style.display = display;
+                document.getElementById("iterationMethod").selectedIndex = 0;
+            }
+
+            function iterationMethodSelected(){
+                var text, script, datasource, rowset, result, request;
+                if (this.selectedIndex){
+                    datasource = datasourceCache[document.getElementById("select_datasources").selectedIndex - 1];
+                    script = this.options[this.selectedIndex].value;
+                    text = document.getElementById(script).innerHTML;
+                    if (JSON){
+                        request = {
+                            url: datasource.URL ? datasource.URL : document.getElementById("url").value,
+                            properties: {}
+                        }
+                        request.properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
+                        rowset = xmla.discoverMDLevels(request);
+                        result = self[script](rowset);
+                        if (result) {
+                            document.getElementById("result").innerHTML = JSON.stringify(result, "\n", 2);
+                        }
+                    }
+                }
+                else {
+                    text = "";
+                }
+                document.getElementById("source").innerHTML = text;
+            }
+            
+            document.getElementById("discover").onclick = populateDatasources;
+            document.getElementById("select_datasources").onchange = datasourceSelected;
+            document.getElementById("iterationMethod").onchange = iterationMethodSelected;
+        </script>
+
+        <script>
+            function getRowset(){
+                var rowset = xmla.discoverMDDimensions();                                
+            }
+        </script>
+        
+        <script type="text/javascript" id="fieldValByName">
+            function fieldValByName(rowset) {            
+                var catalogName, schemaName, cubeName, dimensionUniqueName, levelName;
+
+                //reset to ensure we can iterate through the set again.
+                rowset.reset();
+                //iterate row by row, reference by name
+                while (rowset.hasMoreRows()){
+                    catalogName = rowset.fieldVal("CATALOG_NAME");
+                    schemaName = rowset.fieldVal("SCHEMA_NAME");
+                    cubeName = rowset.fieldVal("CUBE_NAME");
+                    dimensionUniqueName = rowset.fieldVal("DIMENSION_UNIQUE_NAME");
+                    levelName = rowset.fieldVal("LEVEL_NAME");
+                    rowset.next();
+                }
+            }
+        </script>
+        
+        <script type="text/javascript" id="fieldValByIndex">
+            function fieldValByIndex(rowset) {            
+                var catalogName, schemaName, cubeName, dimensionUniqueName, levelName;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //iterate row by row, reference by index
+                while (rowset.hasMoreRows()){
+                    catalogName = rowset.fieldVal(0);
+                    schemaName = rowset.fieldVal(1);
+                    cubeName = rowset.fieldVal(2);
+                    dimensionUniqueName = rowset.fieldVal(3);
+                    levelName = rowset.fieldVal(4);
+                    rowset.next();
+                }
+            }
+        </script>
+        
+        <script type="text/javascript" id="getXXX">
+            function getXXX(rowset) {            
+                var catalogName, schemaName, cubeName, dimensionUniqueName, levelName;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //iterate row by row, using automatically generated getterowset
+                while (rowset.hasMoreRows()){
+                    catalogName = rowset.getCatalogName();
+                    schemaName = rowset.getSchemaName();
+                    cubeName = rowset.getCubeName();
+                    dimensionUniqueName = rowset.getDimensionUniqueName();
+                    levelName = rowset.getLevelName();
+                    rowset.next();
+                }
+            }
+        </script>
+        
+        <script type="text/javascript" id="fetchAsArray">
+            function fetchAsArray(rowset) {            
+                var array;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //iterate row by row, fetch all columns as array
+                while (rowset.hasMoreRows()){
+                    array = rowset.fetchAsArray();
+                }
+                return array;
+            }
+        </script>
+        
+        <script type="text/javascript" id="fetchAsObject">
+            function fetchAsObject(rowset) {
+                var object;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //iterate row by row, fetch all columns as object
+                while (rowset.hasMoreRows()){
+                    object = rowset.fetchAsObject();
+                }
+                return object;
+            }
+        </script>
+        
+        <script type="text/javascript" id="fetchAllAsArray">
+            function fetchAllAsArray(rowset) {            
+                var array;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //fetch everything in one go as an array of arrays:
+                array = rowset.fetchAllAsArray();
+                return array;
+            }
+        </script>
+        
+        <script type="text/javascript" id="fetchAllAsObject">
+            function fetchAllAsObject(rowset) {
+                var array;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //fetch everything in one go as an array of objects:
+                array = rowset.fetchAllAsObject();
+                return array;
+            }
+        </script>
+        
+        <script type="text/javascript" id="mapAllAsObject">
+            function mapAllAsObject(rowset) {            
+                var object;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //fetch everything in one go as an array of objects:
+                object = rowset.mapAllAsObject();
+                return object;
+            }
+        </script>
+    </body>
+</html>
