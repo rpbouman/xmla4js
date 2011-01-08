@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009,2010 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman 
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    Twitter: @rolandbouman
     
     execute-synchronous.html - this software is part of xmla4js
 
@@ -127,17 +128,24 @@
             var section_request = document.getElementById("section_request");
             var section_response = document.getElementById("section_response");
             var section_result = document.getElementById("section_result");
-
-            var select_format = document.getElementById("select_format");
-            select_format.innerHTML = "<option>" + Xmla.PROP_FORMAT_MULTIDIMENSIONAL + "</option>" +
-                "<option>" + Xmla.PROP_FORMAT_TABULAR + "</option>" 
-            ;
-            var select_axisformat = document.getElementById("select_axisformat");
-            select_axisformat.innerHTML = "<option>" + Xmla.PROP_AXISFORMAT_TUPLE + "</option>" +
-                "<option>" + Xmla.PROP_AXISFORMAT_CLUSTER + "</option>" +
-                "<option>" + Xmla.PROP_AXISFORMAT_CUSTOM + "</option>"
-            ;            
             
+            function addOption(select, value){
+                var option = document.createElement("option");
+                option.text = value;
+                option.label = value;
+                option.value = value;
+                select.appendChild(option);
+            }
+            
+            var select_format = document.getElementById("select_format");
+            addOption(select_format, Xmla.PROP_FORMAT_MULTIDIMENSIONAL);
+            addOption(select_format, Xmla.PROP_FORMAT_TABULAR);
+
+            var select_axisformat = document.getElementById("select_axisformat");
+            addOption(select_axisformat, Xmla.PROP_AXISFORMAT_TUPLE);
+            addOption(select_axisformat, Xmla.PROP_AXISFORMAT_CLUSTER);
+            addOption(select_axisformat, Xmla.PROP_AXISFORMAT_CUSTOM);
+
             function setGuiDisabled(disabled) {
                 input_url.disabled = disabled;
                 select_datasources.disabled = disabled;
@@ -152,7 +160,7 @@
             function getDatasource(){
                 return datasourceCache[select_datasources.selectedIndex];
             }
-            
+                
             function clearError(){
                 section_error.innerHTML = "";
             }
@@ -193,13 +201,11 @@
                 try {
                     select_datasources.innerHTML = "";
                     select_catalogs.innerHTML = "";
-                    var rowset = xmla.discoverDataSources({
-                        url: input_url.value
-                    });
+                    var rowset = xmla.discoverDataSources({url: input_url.value});
                     if (rowset.hasMoreRows()) {
                         datasourceCache = rowset.fetchAllAsObject();
                         for (var numDataSources = datasourceCache.length, i=0; i<numDataSources; i++){
-                            select_datasources.innerHTML += "<option>" +  datasourceCache[i].DataSourceName +"<\/option>";
+                            addOption(select_datasources, datasourceCache[i].DataSourceName);
                         }
                         populateCatalogs()
                     } 
@@ -227,8 +233,9 @@
                     });
                     if (rowset.hasMoreRows()) {
                         var catalog;
-                        while (catalog = rowset.fetchAsObject()){
-                            select_catalogs.innerHTML += "<option>" +  catalog["CATALOG_NAME"] +"<\/option>";
+                        while (rowset.hasMoreRows()){
+                            addOption(select_catalogs, rowset.getCatalogName());
+                            rowset.next();
                         }                        
                     } 
                     else {
