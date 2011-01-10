@@ -247,7 +247,7 @@
                 setGuiDisabled(false);
             }
             
-            function fillTable(rowset){ 
+            function fillTableFromRowset(rowset){ 
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
@@ -257,12 +257,61 @@
                     c.innerHTML = rowset.fieldName(i);
                     c.setAttribute("class", "th");
                 }
-                var rows = rowset.fetchAllAsArray();                
-                for (var rowCount = rows.length, j=0; j<rowCount; j++){
-                    r = tab.insertRow(j+1);
+                while(row = rowset.fetchAsArray()){
+                    r = tab.insertRow(tab.rows.length);
                     for (i=0; i<fieldCount; i++){
                         c = r.insertCell(i);
-                        c.innerHTML = rows[j][i];
+                        c.innerHTML = rowset.fieldVal(i);
+                    }
+                }
+            }
+            
+            function fillTableFromDataset(dataset){
+                var tab = document.createElement("table");
+                tab.setAttribute("border", "1");
+                section_result.appendChild(tab);
+                var axisCount = dataset.getAxisCount(),
+                    axis, tuple, 
+                    hierarchies, hierarchyName, hierarchy,
+                    i, j, r, c, rows = {}, m;
+                if (axisCount>=1) {
+                    axis = dataset.getColumns();
+                    hierarchies = axis.getHierarchies();
+                    for (hierarchyName in hierarchies){
+                        hierarchy = hierarchies[hierarchyName];
+                        r = tab.insertRow(tab.rows.length);
+                        c = r.insertCell(r.cells.length);
+                        c.innerHTML = "<b>" + hierarchyName + "</b>";
+                        rows[hierarchyName] = r;
+                    }
+                    while (tuple = axis.fetchAsObject()){
+                        for (hierarchyName in hierarchies){
+                            m = tuple[hierarchyName];
+                            r = rows[hierarchyName];
+                            c = r.insertCell(r.cells.length);
+                            c.innerHTML = m.Caption;
+                        }
+                    }
+                    axis.reset();
+                }
+                if (axisCount>=2){
+                    axis = dataset.getRows();
+                    hierarchies = axis.getHierarchies();
+                    j = 0;
+                    for (hierarchyName in hierarchies) {
+                        for (i=0; i<rows.length; i++) {
+                            r = rows[i];
+                            c = r.insertCell(j);
+                        }
+                        j += 1;
+                    }
+                    while (tuple = axis.fetchAsObject()){
+                        r = tab.insertRow(tab.rows.length);
+                        for (hierarchyName in hierarchies) {
+                            m = tuple[hierarchyName];
+                            c = r.insertCell(r.cells.length);
+                            c.innerHTML = m.Caption;
+                        }
                     }
                 }
             }
@@ -281,15 +330,19 @@
                     if (select_format.value === Xmla.PROP_FORMAT_MULTIDIMENSIONAL ){
                         properties[Xmla.PROP_AXISFORMAT] = select_axisformat.value;
                     }
-                    var resultset = xmla.execute({
+                    var result = xmla.execute({
                         url: datasource["URL"]?datasource["URL"]:input_url.value,
                         statement: textarea_statement.value,
                         properties: properties
                     });
                     setRequest(xmla.soapMessage);
                     setResponse(xmla.responseText);
-                    if (resultset instanceof Xmla.Rowset){
-                        fillTable(resultset);
+                    if (result instanceof Xmla.Rowset){
+                        fillTableFromRowset(result);
+                    }
+                    else 
+                    if (result instanceof Xmla.Dataset) {
+                        fillTableFromDataset(result);
                     }
                 } catch (exception) { 
                     showException(exception);
