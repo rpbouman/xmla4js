@@ -1597,7 +1597,7 @@ Xmla.prototype = {
         this._fireEvent(Xmla.EVENT_ERROR, options);
     },
     _requestSuccess: function(request) {
-        var xhr = request.xhr;
+        var xhr = request.xhr, response;
         this.responseXML = xhr.responseXML;
         this.responseText = xhr.responseText;
 
@@ -1642,16 +1642,14 @@ Xmla.prototype = {
             }
             this._fireEvent(Xmla.EVENT_ERROR, request);
         }
-        else {        
+        else {
             switch(method){
                 case Xmla.METHOD_DISCOVER:
-                    var rowset = new Xmla.Rowset(this.responseXML, request.requestType, this);
-                    request.rowset = rowset;
-                    this.response = rowset;
+                    request.rowset = this.response = response = new Xmla.Rowset(this.responseXML, request.requestType, this);
                     this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, request);
                     break;
                 case Xmla.METHOD_EXECUTE:
-                    var response, resultset = null, dataset = null;
+                    var resultset = null, dataset = null;
                     var format = request.properties[Xmla.PROP_FORMAT];
                     switch(format){
                         case Xmla.PROP_FORMAT_TABULAR:
@@ -4881,6 +4879,20 @@ Xmla.Rowset.prototype = {
         this.rowIndex += 1;
         this._row = this._rows.item(this.rowIndex);
         return this.rowIndex;
+    },
+/**
+*   Walks through all rows, and calls the callback for each row
+*   
+*   @method next
+*/    
+    each: function(rowCallback){
+        while (this.hasMoreRows()){
+            if (rowCallback.call(null, this.readAsObject({}))===false) {
+                return false;
+            }
+            this.next();
+        }
+        return true;
     },
 /**
 *   Gets the value of the internal row index.
