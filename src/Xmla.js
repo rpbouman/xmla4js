@@ -123,7 +123,7 @@ function _isNum(arg){
 }
 function _xmlEncode(value){
     if (typeof(value) === "string") {
-        value = value.replace(/\&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        value = value.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
     return value;
 }
@@ -1397,7 +1397,11 @@ Xmla.prototype = {
             }
         }
         else 
-        if (eventName==="error") {
+        if (eventName===Xmla.EVENT_ERROR && 
+            typeof(eventData.error)!=="function" &&
+            typeof(eventData.callback)!=="function"
+        ) { //if there is neither a listener nor an error nor a general callback 
+            //we explicitly throw the exception.
             eventData.exception._throw();
         }
         return outcome;
@@ -1573,7 +1577,24 @@ Xmla.prototype = {
         return this.response;
     },
     _requestError: function(options) {
-        this._fireEvent("error", options);
+        if (options.error) {
+            options.error.call(
+                options.scope ? options.scope : null, 
+                this,
+                options,
+                null
+            );
+        }
+        if (options.callback) {
+            options.callback.call(
+                options.scope ? options.scope : null, 
+                Xmla.EVENT_ERROR,
+                this,
+                options,
+                null
+            );
+        }
+        this._fireEvent(Xmla.EVENT_ERROR, options);
     },
     _requestSuccess: function(request) {
         var xhr = request.xhr;
@@ -1602,6 +1623,23 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_EXECUTE_ERROR, request);
                     break;
             }
+            if (request.error) {
+                request.error.call(
+                    request.scope ? request.scope : null, 
+                    this,
+                    request,
+                    request.exception
+                );
+            }
+            if (request.callback) {
+                request.callback.call(
+                    request.scope ? request.scope : null, 
+                    Xmla.EVENT_ERROR,
+                    this,
+                    request,
+                    request.exception
+                );
+            }
             this._fireEvent(Xmla.EVENT_ERROR, request);
         }
         else {        
@@ -1628,6 +1666,23 @@ Xmla.prototype = {
                     this.response = response;
                     this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, request);
                     break;
+            }
+            if (request.success) {
+                request.success.call(
+                    request.scope ? request.scope : null, 
+                    this,
+                    request,
+                    response
+                );
+            }
+            if (request.callback) {
+                request.callback.call(
+                    request.scope ? request.scope : null, 
+                    Xmla.EVENT_SUCCESS,
+                    this,
+                    request,
+                    response
+                );
             }
             this._fireEvent(Xmla.EVENT_SUCCESS, request);
         }
@@ -6001,6 +6056,13 @@ Xmla.Exception.prototype = {
 *   This can be used to get a "stack trace" 
 */    
     args: null,
+/**
+*   @method toString
+*   @return a string representing this exception
+*/    
+    toString: function(){
+        return this.type + " " + this.code + ": " + this.message;
+    },
 /**
 *   @method getStackTrace
 *   @return an array of objects describing the function on the stack
