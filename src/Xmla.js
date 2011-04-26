@@ -4522,26 +4522,32 @@ Xmla.Rowset.KEYS[Xmla.MDSCHEMA_SETS] = ["CATALOG_NAME", "SCHEMA_NAME", "CUBE_NAM
 function _boolConverter(val){
     return val==="true"?true:false;
 }
+_boolConverter.jsType = "boolean";
 
 function _intConverter(val){
     return parseInt(val, 10);
 }
+_intConverter.jsType = "number";
 
 function _floatConverter(val){
     return parseFloat(val, 10);
 }
+_floatConverter.jsType = "number";
 
 function _textConverter (val){
     return val;
 }
+_textConverter.jsType = "string";
 
 function _dateTimeConverter (val){
     return Date.parse(val);
 }
+_dateTimeConverter.jsType = "object";
 
 function _restrictionsConverter(val){
     return val;
 }
+_restrictionsConverter.jsType = "object";
 
 function _arrayConverter(nodes, valueConverter){
     var arr = [],
@@ -4554,54 +4560,37 @@ function _arrayConverter(nodes, valueConverter){
     }
     return arr;
 }
+_arrayConverter.jsType = "object";
+
+var _typeConverterMap = {
+    "xsd:boolean": _boolConverter,
+    "xsd:decimal": _floatConverter,
+    "xsd:double": _floatConverter,
+    "xsd:float": _floatConverter,
+    "xsd:int": _intConverter,
+    "xsd:integer": _intConverter,
+    "xsd:nonPositiveInteger": _intConverter,
+    "xsd:negativeInteger": _intConverter,
+    "xsd:nonNegativeInteger": _intConverter,
+    "xsd:positiveInteger": _intConverter,
+    "xsd:short": _intConverter,
+    "xsd:byte": _intConverter,
+    "xsd:long": _intConverter,
+    "xsd:unsignedLong": _intConverter,
+    "xsd:unsignedInt": _intConverter,
+    "xsd:unsignedShort": _intConverter,
+    "xsd:unsignedByte": _intConverter,
+    "xsd:string": _textConverter,
+    "xsd:dateTime": _dateTimeConverter,
+    "Restrictions": _restrictionsConverter
+}
 
 function _getValueConverter(type){
-    var valueConverter = {};
-    switch (type){
-        case "xsd:boolean":
-            valueConverter.func = _boolConverter;
-            valueConverter.jsType = "boolean";
-            break;
-        case "xsd:decimal": //FIXME: not sure if you can use parseFloat for this.
-        case "xsd:double":
-        case "xsd:float":
-            valueConverter.func = _floatConverter;
-            valueConverter.jsType = "number";
-            break;
-        case "xsd:int":
-        case "xsd:integer":
-        case "xsd:nonPositiveInteger":
-        case "xsd:negativeInteger":
-        case "xsd:nonNegativeInteger":
-        case "xsd:positiveInteger":
-        case "xsd:short":
-        case "xsd:byte":
-        case "xsd:long":
-        case "xsd:unsignedLong":
-        case "xsd:unsignedInt":
-        case "xsd:unsignedShort":
-        case "xsd:unsignedByte":
-            valueConverter.func = _intConverter;
-            valueConverter.jsType = "number";
-            break;
-        case "xsd:string":
-            valueConverter.func = _textConverter;
-            valueConverter.jsType = "string";
-            break;
-        case "xsd:dateTime":
-            valueConverter.func = _dateTimeConverter;
-            valueConverter.jsType = "object";
-            break;
-        case "Restrictions":
-            valueConverter.func = _restrictionsConverter;
-            valueConverter.jsType = "object";
-            break;
-        default:
-            valueConverter.func = _textConverter;
-            valueConverter.jsType = "object";
-            break;
+    var func = _typeConverterMap[type], valueConverter;
+    if (!func) {
+        func = _textConverter;
     }
-    return valueConverter;
+    return func;
 }
 
 function _getElementValue(el) {
@@ -4610,9 +4599,9 @@ function _getElementValue(el) {
         converter
         ;
     if (type){
-        converter = _getValueConverter(type);
+        converter = _typeConverterMap[type];
         if (converter){
-            return converter.func(txt);
+            return converter(txt);
         }
     }
     return txt;
@@ -4696,7 +4685,7 @@ Xmla.Rowset.prototype = {
                     maxOccurs = 1;
                 }
                 valueConverter = _getValueConverter(type);
-                getter = this._createFieldGetter(fieldName, valueConverter.func, minOccurs, maxOccurs);
+                getter = this._createFieldGetter(fieldName, valueConverter, minOccurs, maxOccurs);
                 if (addFieldGetters){
                     this[_getterNameForColumnName(fieldName)] = getter;
                 }
@@ -5566,7 +5555,7 @@ Xmla.Dataset.Cellset.prototype = {
     _initCellset: function(){
         var root = this._dataset._root,
             cellSchema, cellSchemaElements, numCellSchemaElements, cellSchemaElement, 
-            cellInfoNodes, cellInfoNode, cellNodes, type, valueConverter, cellDef,
+            cellInfoNodes, cellInfoNode, cellNodes, type, 
             propertyNodes, propertyNode, propertyNodeTagName, numPropertyNodes, i, j
         ;
         cellSchema = _getComplexType(root, "CellData");
@@ -5595,7 +5584,7 @@ Xmla.Dataset.Cellset.prototype = {
         propertyNodes = _getElementsByTagNameNS(
             cellInfoNode, _xmlnsDataset, "", "*"
         );        
-        this._cellDefs = {};
+        this._cellProperties = {};
         //examine cell property info so we can parse them
         numPropertyNodes = propertyNodes.length;
         for(i=0; i<numPropertyNodes; i+=1){
@@ -5607,19 +5596,8 @@ Xmla.Dataset.Cellset.prototype = {
                 if (cellSchemaElement.getAttribute("name")!==propertyNodeTagName){
                     continue;
                 }
-                cellDef = {
-                    name: propertyNodeTagName
-                };
-                this._cellDefs[propertyNodeTagName] = cellDef;
                 type = cellSchemaElement.getAttribute("type");
-                if (type){
-                    cellDef.type = type;
-                    valueConverter = _getValueConverter(type);
-                    if (valueConverter){
-                        cellDef.jsType = valueConverter.jsType;
-                        cellDef.converter = valueConverter.func;
-                    }
-                }
+                this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
                 break;
             }            
         }        
@@ -5651,12 +5629,34 @@ Xmla.Dataset.Cellset.prototype = {
     curr: function(){
         return this._idx;
     },
+    cellProperty: function(propertyName){
+        var text, type, valueEl = _getElementsByTagNameNS(
+            this._cellNode, _xmlnsDataset, "", propertyName
+        ).item(0);
+        text = _getElementValue(valueEl);
+        valueConverter = this._cellProperties[propertyName];
+        if (!valueConverter) {
+            type = _getAttributeNS(
+                valueEl, 
+                _xmlnsSchemaInstance, 
+                _xmlnsSchemaInstancePrefix, 
+                "type"
+            );
+            valueConverter = _getValueConverter(type);
+        }
+        return valueConverter(text);
+    },
     cellValue: function(){
-        return _getElementValue(
-            _getElementsByTagNameNS(
-                this._cellNode, _xmlnsDataset, "", "Value"
-            ).item(0)
-        );
+        return this.cellProperty("Value");
+    },
+    cellFmtValue: function(){
+        return this.cellProperty("FmtValue");
+    },
+    cellForeColor: function(){
+        return this.cellProperty("ForeColor");
+    },
+    cellBackColor: function(){
+        return this.cellProperty("BackColor");
     },
     readAsObject: function(){
         var cell, cellProp, cellDef, converter;

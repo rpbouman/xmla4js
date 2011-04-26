@@ -299,8 +299,8 @@
                     hierarchies = axis.getHierarchies();
                     j = 0;
                     for (hierarchyName in hierarchies) {
-                        for (i=0; i<rows.length; i++) {
-                            r = rows[i];
+                        for (r in rows) {
+                            r = rows[r];
                             c = r.insertCell(j);
                         }
                         j += 1;
