@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <!--
-    Copyright 2009,2010 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman 
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     
     xmla-without-xmla4js.html - this software is part of xmla4js
@@ -26,12 +26,11 @@
         <link rel="stylesheet" type="text/css" href="../css/default.css"/>
     </head>
     <body>
-        Raw Output
+        <div>Raw Output</div>
         <pre id="raw"></pre>
-        Xmla Output
+        <div>Xmla Output</div>
         <pre id="xmla"></pre>
         <script type="text/javascript">            
-        debugger;
             var output = document.getElementById("output");
             var url = "http://localhost:8080/pentaho/Xmla?userid=joe&password=password";            
             var datasource = "Pentaho Analysis Services";

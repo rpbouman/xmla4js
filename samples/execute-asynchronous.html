@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+    Copyright 2009,2010,2011 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    Twitter: @rolandbouman
+    
+    execute-synchronous.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: Execute</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            #input_url {
+                width: 100%;
+            }
+            
+            #section_error {
+                border-style:outset;
+                border-width: 2px;
+                margin-top: 1em;
+                margin-bottom: 1em;
+                background-color: red;
+                color: white;
+            }
+            
+            #textarea_statement {
+                width:100%;
+                height:10em;
+                font-family:monospace;
+            }
+                        
+            table {
+                border-color: ThreeDFace;
+                border-style: outset;
+                border-width:2px;
+            }
+            td.th {
+                font-weight: bold;
+                text-align: center;
+                background-color: ThreeDFace;
+            }
+            td {
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="../index.html">Home</a>
+            |
+            <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+            |
+            <a href="index.html">Samples</a>
+            |
+            <a href="../doc/api/index.html">API Reference Documentation</a>
+        </div>
+        <h1>Sample: Execute</h1>
+        <fieldset>
+            <legend>XML/A Connection</legend>
+            <input type="text" id="input_url" name="input_url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="button_discover" name="button_discover">Discover Datasources...</button>            
+            <div>
+                <label>DataSource:</label>
+                <select id="select_datasources" name="select_datasources"></select>            
+            <div>
+            <div>
+                <label>Catalog:</label>
+                <select id="select_catalogs" name="select_catalgogs"></select>            
+            <div>
+        </fieldset>
+        <fieldset>
+            <legend>MDX Statement:</legend>
+            <textarea id="textarea_statement"></textarea>
+            <label>Format:</label>
+            <select id="select_format" name="select_fomat"></select>
+            <label>Axis Format:</label>
+            <select id="select_axisformat" name="select_axisfomat"></select>
+            <button id="button_execute" name="button_execute">Execute Statement...</button>            
+        </fieldset>
+
+        <fieldset>
+            <legend>Resultset:</legend>
+            <div id="section_result"></div>
+        </fieldset>
+
+        <div id="section_error"></div>
+
+        <fieldset>
+            <legend>Request:</legend>
+            <pre id="section_request"></pre>
+        </fieldset>
+
+        <fieldset>
+            <legend>Response:</legend>
+            <pre id="section_response"></pre>
+        </fieldset>
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+                
+        <script type="text/javascript">
+            var button_discover = document.getElementById("button_discover"),
+                input_url = document.getElementById("input_url"),
+                select_datasources = document.getElementById("select_datasources"),
+                select_catalogs = document.getElementById("select_catalogs"),
+                button_execute = document.getElementById("button_execute"),
+                textarea_statement = document.getElementById("textarea_statement")
+            ;
+            
+            /*
+                Utilities
+            */
+            function addOption(select, o){
+                var option = document.createElement("option");
+                option.text = o.value;
+                option.label = o.label || option.value;
+                option.value = o.value;
+                option.title = o.title || option.label;
+                select.appendChild(option);
+            }
+            
+            function addOptions(select, rowset, mapping){
+                rowset.each(function(object){                    
+                    addOption(select, {
+                        value: object[mapping.value],
+                        label: object[mapping.label],
+                        title: object[mapping.title]
+                    });
+                })
+            }
+            
+            function removeOptions(select){
+                while (select.options.length) {
+                    select.remove(0);
+                }
+            }                        
+                
+            /*
+                Bind UI
+            */
+            button_discover.onclick = function() {
+                var button = this;
+                button.value = "Discovering...";
+                discoverDataSources();
+            };
+            
+            select_datasources.onchange = function(){
+                discoverCatalogs();
+            };
+            
+            button_execute.onclick = function(){                
+                executeMDX();
+            };
+            
+            /*
+                Xmla
+            */
+            var xmla = new Xmla({
+                async: true,
+                listeners: {
+                    events: Xmla.EVENT_ERROR,
+                    handler: function(eventName, eventData, xmla){
+                        alert(
+                            "Snap, an error occurred: " + eventData.exception.message + " (" + eventData.exception.code + ")" +
+                            (eventData.exception.code ===  Xmla.Exception.HTTP_ERROR_CDE
+                            ? "\nstatus: " + eventData.exception.data.status + "; statusText: " + eventData.exception.data.statusText
+                            : "")
+                        );
+                    }
+                }
+            });
+
+            function discoverDataSources() {
+                xmla.discoverDataSources({
+                    url: input_url.value,
+                    success: function(xmla, options, response){
+                        removeOptions(select_datasources);
+                        removeOptions(select_catalogs);
+                        addOptions(select_datasources, response, {
+                            value: "DataSourceInfo",
+                            label: "DataSourceName",
+                            title: "DataSourceDescription"
+                        });
+                        discoverCatalogs();
+                    },
+                    callback: function(event, xmla, input, output){
+                        var color;
+                        switch (event) {
+                            case Xmla.EVENT_SUCCESS:
+                                color = "";
+                                break;
+                            case Xmla.EVENT_ERROR:
+                                color = "red";
+                                break;
+                        }
+                        input_url.style.backgroundColor = color;
+                        button_discover.value = "Discover...";
+                    }
+                });
+            }
+            
+            function discoverCatalogs() {
+                xmla.discoverDBCatalogs({
+                    url: input_url.value,
+                    properties: {
+                        DataSourceInfo: select_datasources.options[select_datasources.selectedIndex].value
+                    },
+                    success: function(xmla, options, response){
+                        addOptions(select_catalogs, response, {
+                            value: "CATALOG_NAME",
+                            label: "CATALOG_NAME",
+                            title: "CATALOG_NAME"
+                        });
+                    },
+                });
+            }
+            
+            function executeMDX(){
+                xmla.execute({
+                    url: input_url.value,
+                    statement: textarea_statement.value,
+                    properties: {
+                        DataSourceInfo: select_datasources.options[select_datasources.selectedIndex].value,
+                        Catalog: select_catalogs.options[select_catalogs.selectedIndex].value
+                    },
+                    success: function(xmla, options, response){
+                        debugger;
+                    },
+                });
+            }
+        </script>
+    </body>
+</html>

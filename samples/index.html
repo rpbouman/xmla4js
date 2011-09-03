@@ -43,23 +43,38 @@
         </p>
         <ul>
             <li>
-                <a href="discover-schema-rowsets.html">discover-schema-rowsets.html</a> - A basic example showing how to use Xmla.js to do synchronous retrieval of OLAP metadata.
-                This sample uses various flavours of the Discover method and renders the results as HTML tables.
+                Synchronous examples:
+                <ul>
+                    <li>
+                        <a href="discover-schema-rowsets.html">discover-schema-rowsets.html</a> - A basic example showing how to use Xmla.js to do synchronous retrieval of OLAP metadata.
+                        This sample uses various flavours of the Discover method and renders the results as HTML tables.
+                    </li>
+                    <li>
+                        <a href="discover-synchronous.html">discover-synchronous.html</a> - 
+                        The sample lets you enter a URL for a XML/A webservice, and then visualizes the metadata in a dynamic treeview, allowing you to hierarchically explore datasources, catalogs, cubes, dimensions, hierarchies, levels, members and properties.
+                        This sample illustrates how to apply Restrictions to the XML/A Discover method. 
+                    </li>
+                    <li>
+                        <a href="rowset-examples.html">rowset-examples.html</a> - Xmla4js offers great flexibility in the ways to obtain data from the Xmla provider.
+                        The goal is to make it as easy as possible to directly use that data for third party visualization libraries and the like, with no or little hand-written processing and/or iteration.
+                        This sample illustrates various methods for iterating through and extracting data from a Xmla.Rowset
+                    </li>
+                    <li>
+                        <a href="execute-synchronous.html">execute-synchronous.html</a> - 
+                        This sample illustrates how to select a XML/A datasource, send MDX queries, and retrieve and traverse the multidimensional resultset. 
+                        This sample uses synchronous requests.
+                    </li>
+                </ul>
             </li>
             <li>
-                <a href="discover-synchronous.html">discover-synchronous.html</a> - 
-                The sample lets you enter a URL for a XML/A webservice, and then visualizes the metadata in a dynamic treeview, allowing you to hierarchically explore datasources, catalogs, cubes, dimensions, hierarchies, levels, members and properties.
-                This sample illustrates how to apply Restrictions to the XML/A Discover method. 
-            </li>
-            <li>
-                <a href="rowset-examples.html">rowset-examples.html</a> - Xmla4js offers great flexibility in the ways to obtain data from the Xmla provider.
-                The goal is to make it as easy as possible to directly use that data for third party visualization libraries and the like, with no or little hand-written processing and/or iteration.
-                This sample illustrates various methods for iterating through and extracting data from a Xmla.Rowset
-            </li>
-            <li>
-                <a href="execute-synchronous.html">execute-synchronous.html</a> - 
-                This sample illustrates how to select a XML/A datasource, send MDX queries, and retrieve and traverse the multidimensional resultset. 
-                This sample uses synchronous requests.
+                Asynchronous examples
+                <ul>
+                    <li>
+                        <a href="execute-asynchronous.html">execute-asynchronous.html</a> - 
+                        This sample illustrates how to select a XML/A datasource, send MDX queries, and retrieve and traverse the multidimensional resultset. 
+                        This sample uses synchronous requests.
+                    </li>
+                </ul>
             </li>
 <!--             
 
@@ -74,12 +89,17 @@ These samples will be done at a later time
             </li>
 -->            
             <li>
-                <a href="yui-chart-wizard.html">yui-chart-wizard.html</a> - 
-                This sample illustrates how to render a YUI chart using data obtained from an XML/A execute request.
-            </li>
-            <li>
-                <a href="pivot-table.html">pivot-table.html</a> - 
-                This sample illustrates how to handle raw XML response and apply an XSLT stylesheet to it to render a pivot table.
+                Combination Examples
+                <ul>
+                    <li>
+                        <a href="yui-chart-wizard.html">yui-chart-wizard.html</a> - 
+                        This sample illustrates how to render a YUI chart using data obtained from an XML/A execute request.
+                    </li>
+                    <li>
+                        <a href="pivot-table.html">pivot-table.html</a> - 
+                        This sample illustrates how to handle raw XML response and apply an XSLT stylesheet to it to render a pivot table.
+                    </li>
+                </ul>
             </li>
         </ul>
     </body>

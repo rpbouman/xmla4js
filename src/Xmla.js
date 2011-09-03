@@ -84,7 +84,11 @@ function _ajax(options){
                             Xmla.Exception._newError(
                                 "HTTP_ERROR",
                                 "_ajax",
-                                options
+                                {
+                                    request: options,
+                                    status: this.status,
+                                    statusText: this.statusText
+                                }
                             )
                         );
                     }
@@ -106,7 +110,7 @@ function _ajax(options){
         xhr.open("POST", options.url, options.async);
     }
     xhr.onreadystatechange = handler;
-    xhr.setRequestHeader("Accept", "text/xml, application/xml");
+    xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send(options.data);
     if (!options.async && !handlerCalled){
@@ -117,6 +121,9 @@ function _ajax(options){
 
 function _isUnd(arg){
     return typeof(arg)==="undefined";
+}
+function _isArr(arg){
+    return arg && arg.constructor === Array;
 }
 function _isNum(arg){
     return typeof(arg)==="number";
@@ -339,6 +346,9 @@ Xmla = function(options){
         options,
         true
     );
+    if (options.listeners) {
+        this.addListener(options.listeners);
+    }
     return this;
 };
 
@@ -1268,12 +1278,13 @@ Xmla.prototype = {
         );
     },
 /**
-*   This method can be used to register a listener to one or more events.
-*   The <code>listener</code> argument should have the following structure: <pre>{
+*   This method can be used to register one or more listeners. On such listener can listen for one or more events.
+*   For a single listener, the <code>listener</code> argument should have the following structure: <pre>{
 *       events: [...event names...],
 *       handler: function(eventName, eventData, xmla) {...code to run upon notification...},
 *       scope: object
 *   }</pre>
+*   To register multiple listeners, pass an array of such listener objects.
 *   <dl>
 *       <dt><code>events</code></dt>
 *       <dd><code>string</code>|<code>string[]</code> REQUIRED. 
@@ -1317,9 +1328,15 @@ Xmla.prototype = {
 *       </dd>
 *   </dl>
 *   @method addListener
-*   @param {Object} listener An object that defines the events and the notification function to be called.
+*   @param {Object|Array} listener An object that defines the events and the notification function to be called, or an array of such objects.
 */    
     addListener: function(listener){
+        if (_isArr(listener)) {
+            for (var i=0, l=listener.length; i<l; i += 1){
+                this.addListener(listener[i]);
+            }
+            return;
+        }
         var events = listener.events;
         if (!events){
             Xmla.Exception._newError(
@@ -1473,6 +1490,21 @@ Xmla.prototype = {
 *               then these will still be notified of any events (such as receiving the response).
 *               </li>
 *           </ul>
+*       </li>
+*       <li><code>success</code> (function)
+*           A function that is to be called after the requests is executed and a successful response is receieved.
+*           Any listeners appropriate for the request are called before this handler is executed.
+*       </li>
+*       <li><code>error</code> (function)
+*           A function that is to be called after the requests is executed and an error was encountered.
+*           Any listeners appropriate for the request are called before this handler is executed.
+*       </li>
+*       <li><code>callback</code> (function)
+*           A function that is to be called after the requests is executed and the response is receieved,
+*           and after calling any listeners that are appropriate for the request.
+*           This function will be called both in case of success and of error.
+*           If the options also contain a <code>success</code> and/or <code>error</code> handler, then 
+*           <code>callback</code> will be called after those more specific handlers are called.
 *       </li>
 *   </ul>
 *   Other parts of the <code>options</code> object are method-specific.
@@ -4883,7 +4915,8 @@ Xmla.Rowset.prototype = {
 /**
 *   Walks through all rows, and calls the callback for each row
 *   
-*   @method next
+*   @method each
+*   @return {bool} true if all rows were itereated. If the callback returns false, iteration stops and false is returned.
 */    
     each: function(rowCallback){
         while (this.hasMoreRows()){
@@ -5958,8 +5991,13 @@ Xmla.Exception.INVALID_FIELD_HLP = _exceptionHlp +
                                     
 /**
 *   Exception code indicating a general XMLHttpRequest error.
-*
-*   @property HTTP_ERROR
+*   If this error occurs, the data object of the exception will have these members:
+*   <ul>
+*       <li>request: the options that make up the original HTTP request</li>
+*       <li>status: the HTTP status code</li>
+*       <li>statusText: the HTTP status text</li>
+*   </ul>
+*   @property HTTP_ERROR_CDE
 *   @static
 *   @final
 *   @type {int}

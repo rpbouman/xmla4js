@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009,2010 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman 
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     
     discover-synchronous.html - this software is part of xmla4js
@@ -148,7 +148,20 @@
         
         <script type="text/javascript">
             var xmla = new Xmla({
-                async: false
+                async: false,
+                listeners: [
+                    {
+                        events: Xmla.EVENT_ERROR,
+                        handler: function(eventName, eventData, xmla){
+                            alert(
+                                "Snap, an error occurred: " + eventData.exception.message + " (" + eventData.exception.code + ")" +
+                                (eventData.exception.code ===  Xmla.Exception.HTTP_ERROR_CDE
+                                ? "\nstatus: " + eventData.exception.data.status + "; statusText: " + eventData.exception.data.statusText
+                                : "")
+                            );
+                        }
+                    }
+                ]
             });
             
             function getUrl(){
@@ -169,11 +182,11 @@
                 if (!url){
                     url = getUrl();
                 }
-                var rowset = xmla.discoverDataSources({
-                    url: url
-                });
-
-                var loader, id, dataSourceInfo, dataSourceName, url;
+                var rowset, loader, id, dataSourceInfo, dataSourceName, url;
+                rowset = xmla.discoverDataSources({url: url});
+                if (!rowset) {
+                    return;
+                }
                 while (rowset.hasMoreRows()) {
                     dataSourceInfo = rowset.fieldVal("DataSourceInfo");
                     dataSourceName = rowset.fieldVal("DataSourceName");
