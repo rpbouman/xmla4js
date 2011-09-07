@@ -4883,14 +4883,14 @@ Xmla.Rowset.prototype = {
         return fieldNames;
     },
 /**
-*   Indicates wheter the rowset that can be traversed.
+*   Indicates wheter the rowset can still be traversed.
 *   You can use this method together with the 
-*   <code><a href="#method_next">next()</a></code> method
+*   <code><a href="#method_nextRow">nextRow()</a></code> method
 *   to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
     <pre>
 &nbsp;while(rowset.hasMoreRows()){
 &nbsp;    ...process row...
-&nbsp;    rowsete.next();
+&nbsp;    rowsete.nextRow();
 &nbsp;}
     </pre>
 *   @method hasMoreRows
@@ -4907,23 +4907,29 @@ Xmla.Rowset.prototype = {
 *
 *   @method next
 */    
-    next: function(){
+    nextRow: function(){
         this.rowIndex += 1;
         this._row = this._rows.item(this.rowIndex);
         return this.rowIndex;
     },
 /**
 *   Walks through all rows, and calls the callback for each row
-*   
-*   @method each
+*
+*   @method eachRow
+*   @param {function} callback Function to be called for each row.
+*   @param {Object} scope Optional. Scope in which the callback is called. Defaults to this, that is, the Rowset.
+*   @param {Object} args Optional. Object that is passed to the callback. 
 *   @return {bool} true if all rows were itereated. If the callback returns false, iteration stops and false is returned.
 */    
-    each: function(rowCallback){
+    eachRow: function(rowCallback, scope, args){
+        if (_isUnd(scope)){
+            scope = this;
+        }
         while (this.hasMoreRows()){
-            if (rowCallback.call(null, this.readAsObject({}))===false) {
+            if (rowCallback.call(scope, args)===false) {
                 return false;
             }
-            this.next();
+            this.nextRow();
         }
         return true;
     },
@@ -4936,7 +4942,7 @@ Xmla.Rowset.prototype = {
 *   @method curr
 *   @return int
 */    
-    curr: function(){
+    currRow: function(){
         return this.rowIndex;
     },
 /**
@@ -5084,7 +5090,7 @@ while (rowArray = rowset.fetchAsArray()){
     fetchAsArray: function(array){
         if (this.hasMoreRows()) {
             array = this.readAsArray(array);
-            this.next();
+            this.nextRow();
         } else {
             array = false;
         }
@@ -5132,7 +5138,7 @@ while (rowObject = rowset.fetchAsObject()){
     fetchAsObject: function(object){
         if (this.hasMoreRows()){
             object = this.readAsObject(object);
-            this.next();
+            this.nextRow();
         } else {
             object = false;
         }
@@ -5153,7 +5159,7 @@ while (rowObject = rowset.fetchAsObject()){
         var object;
         if (this.hasMoreRows()){
             object = func.call(this, args);
-            this.next();
+            this.nextRow();
         } else {
             object = false;
         }
@@ -5361,7 +5367,7 @@ Xmla.Dataset.prototype = {
     _initCells: function(){
         this._cellset = new Xmla.Dataset.Cellset(this);
     },
-    getAxisCount: function(){
+    axisCount: function(){
         return this._numAxes;
     },
     getAxis: function(nameOrIndex){
@@ -5387,14 +5393,26 @@ Xmla.Dataset.prototype = {
         }
         return axis;
     },
-    getColumns: function(){
+    getColumnAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_COLUMNS);
     },
-    getRows: function(){
+    getRowAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_ROWS);
     },
-    getSlicer: function(){
+    getPageAxis: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_PAGES);
+    },
+    getSectionAxis: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_SECTIONS);
+    },
+    getChapterAxis: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_CHAPTERS);
+    },
+    getSlicerAxis: function(){
         return this._slicer;
+    },
+    getCellset: function(){
+        return new Xmla.Dataset.Cellset(this);
     },
     close: function(){
         if (this._slicer){
@@ -5498,13 +5516,25 @@ Xmla.Dataset.Axis.prototype = {
     hasMoreTuples: function(){
         return this.numTuples > this.tupleIndex;
     },
-    next: function(){
-        this.tupleIndex += 1;
+    nextTuple: function(){
         this._members = this._getMembers();
+        this.tupleIndex += 1;
         return this.tupleIndex;
     },
     tupleCount: function(){
         return this.numTuples;
+    },
+    eachTuple: function(tupleCallback, scope, args){
+        if (_isUnd(scope)){
+            scope = this;
+        }
+        while (this.hasMoreTuples()){
+            if (tupleCallback.call(scope, args)===false) {
+                return false;
+            }
+            this.nextTuple();
+        }
+        return true;
     },
     getHierarchies: function(){
         return this._hierarchyDefs;
@@ -5600,7 +5630,7 @@ Xmla.Dataset.Axis.prototype = {
     fetchAsArray: function(array){
         if (this.hasMoreTuples()) {
             array = this.readAsArray(array);
-            this.next();
+            this.nextTuple();
         } else {
             array = false;
         }
@@ -5609,7 +5639,7 @@ Xmla.Dataset.Axis.prototype = {
     fetchAsObject: function(object){
         if (this.hasMoreTuples(object)){
             object = this.readAsObject();
-            this.next();
+            this.nextTuple();
         } else {
             object = false;
         }
@@ -5705,8 +5735,9 @@ Xmla.Dataset.Cellset.prototype = {
             root, _xmlnsDataset, "", "Cell"
         );
         this._cellCount = this._cellNodes.length;
+        this.reset();
     },
-    _getCellNode: function(){
+    _getCellNode: function(index){
         this._cellNode = this._cellNodes.item(this._idx);
         this._cellOrd = parseInt(this._cellNode.getAttribute("CellOrdinal"), 10);
     },
@@ -5718,13 +5749,14 @@ Xmla.Dataset.Cellset.prototype = {
     hasMoreCells: function(){
         return this._idx < this._cellCount;
     },
-    next: function(){     
-        this._idx += 1;
+    nextCell: function(){     
         if (this._cellOrd === this._ord
         &&  this.hasMoreCells()
         ) {
             this._getCellNode();
         }
+        this._ord += 1;
+        this._idx += 1;
     },
     curr: function(){
         return this._idx;
@@ -5758,34 +5790,52 @@ Xmla.Dataset.Cellset.prototype = {
     cellBackColor: function(){
         return this.cellProperty("BackColor");
     },
-    readAsObject: function(){
-        var cell, cellProp, cellDef, converter;
+    readAsObject: function(cell){
+        var cellProp, cellDef, converter;
         if (this._cellOrd === this._ord){
-            cell = {
-                ordinal: this._ord
-            };
-            for (var p in this._cellDefs){
-                cellDef = this._cellDefs[p];
-                cellProp = _getElementsByTagNameNS(
-                    this._cellNode, _xmlnsDataset, "", p
-                ).item(0);
-                if (cellDef.type){
-                    converter = cellDef.converter;
-                    cell[p] = converter(_getElementText(cellProp));
-                }
-                else if (p==="Value"){
-                    cell[p] = _getElementValue(cellProp);
-                }
-                else {
-                }
-                cell[p] = _getElementText(cellProp);
+            if (_isUnd(cell)) {
+                cell = {};
             }
+            cell.ordinal = this._ord;
+            this._readCell(this._cellNode, cell);
         }
         else 
         if (this._cellOrd > this._ord){
             cell = null;
         }
         return cell;
+    },
+    fetchAsObject: function(object){
+        if (this.hasMoreCells()) {
+            object = this.readAsObject(object);
+            this.nextCell();
+        } else {
+            object = false;
+        }
+        return object;
+    },
+    _readCell: function(node, object){
+        for (var p in this._cellDefs){
+            cellDef = this._cellDefs[p];
+            cellProp = _getElementsByTagNameNS(
+                node, _xmlnsDataset, "", p
+            ).item(0);
+            if (cellDef.type){
+                converter = cellDef.converter;
+                object[p] = converter(_getElementText(cellProp));
+            }
+            else if (p==="Value"){
+                object[p] = _getElementValue(cellProp);
+            }
+            else {
+                object[p] = _getElementText(cellProp);
+            }
+        }
+    },
+    getByIndex: function(index) {
+        this._cellNodes.item(index);
+    },
+    getByOrdinal: function(ordinal) {
     },
     close: function(){
         this._dataset = null;

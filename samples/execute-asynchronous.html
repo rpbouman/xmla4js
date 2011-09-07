@@ -56,6 +56,10 @@
             }
             td {
             }
+            
+            .node-body {
+                padding-left: 1em;
+            }
         </style>
     </head>
     <body>
@@ -86,7 +90,9 @@
         </fieldset>
         <fieldset>
             <legend>MDX Statement:</legend>
-            <textarea id="textarea_statement"></textarea>
+            <textarea id="textarea_statement">SELECT {([Measures].[Actual])} ON COLUMNS
+,{([Region].[All Regions])} ON ROWS
+FROM [Quadrant Analysis]</textarea>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>
@@ -135,7 +141,8 @@
             }
             
             function addOptions(select, rowset, mapping){
-                rowset.each(function(object){                    
+                rowset.eachRow(function(){                    
+                    var object = this.readAsObject();
                     addOption(select, {
                         value: object[mapping.value],
                         label: object[mapping.label],
@@ -239,9 +246,54 @@
                         Catalog: select_catalogs.options[select_catalogs.selectedIndex].value
                     },
                     success: function(xmla, options, response){
-                        debugger;
+                        renderDatasetAsTree(response);
                     },
                 });
+            }
+            
+            function renderDatasetAsTree(dataset){                
+                var section_result = document.getElementById("section_result");
+                var cellset = dataset.getCellset();
+
+                function renderAxes(parent, axisIndex){
+                    if (typeof(axisIndex)==="undefined"){
+                        parent = section_result;
+                        axisIndex = dataset.axisCount() - 1;
+                    }
+                    var axis = dataset.getAxis(axisIndex),
+                        hierarchyCount = axis.hierarchyCount(),
+                        member, i, tupleHTML = "",
+                        node, nodeHead, nodeBody, cell
+                    ;
+                    axis.eachTuple(function(){
+                        node = document.createElement("DIV");
+                        node.className = "node";
+                        node.appendChild(nodeHead = document.createElement("DIV"));
+                        nodeHead.className = "node-head";
+                        for (i=0; i<hierarchyCount; i++){
+                            member = axis.member(i);
+                            if (tupleHTML!=="") {
+                                tupleHTML += " - ";
+                            }
+                            tupleHTML += member.Caption;
+                        }
+                        nodeHead.innerHTML = tupleHTML;
+                        node.appendChild(nodeBody = document.createElement("DIV"));
+                        nodeBody.className = "node-body";
+                        parent.appendChild(node);
+                        if (axisIndex) {
+                            renderAxes(nodeBody, axisIndex-1);
+                        }
+                        else {
+                            nodeBody.innerHTML = cellset.cellValue();
+                            cellset.nextCell();                            
+                        }
+                    });
+                    axis.reset();
+                }
+                
+                section_result.innerHTML = "";
+                renderAxes();
             }
         </script>
     </body>
