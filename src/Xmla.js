@@ -1353,7 +1353,7 @@ Xmla.prototype = {
                 events = events.split(",");
             }
         }
-        if (!(events instanceof Array)){
+        if (!(_isArr(events))){
             Xmla.Exception._newError(
                 "WRONG_EVENTS_FORMAT",
                 "Xmla.addListener",
@@ -5545,8 +5545,16 @@ Xmla.Dataset.Axis.prototype = {
         if (_isUnd(scope)){
             scope = this;
         }
+        var mArgs = [null];
+        if (!_isUnd(args)) {
+            if (!_isArr(args)) {
+                args = [args];
+            }
+            mArgs = mArgs.concat(args);
+        }
         while (this.hasMoreTuples()){
-            if (tupleCallback.call(scope, args)===false) {
+            mArgs[0] = this.readAsObject();
+            if (tupleCallback.apply(scope, mArgs)===false) {
                 return false;
             }
             this.nextTuple();
