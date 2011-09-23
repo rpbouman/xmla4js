@@ -346,8 +346,9 @@ Xmla = function(options){
         options,
         true
     );
-    if (options.listeners) {
-        this.addListener(options.listeners);
+    var listeners = this.options.listeners;
+    if (listeners) {
+        this.addListener(listeners);
     }
     return this;
 };
@@ -4905,12 +4906,20 @@ Xmla.Rowset.prototype = {
 *   <code><a href="#method_next">hasMoreRows()</a></code> method
 *   to drive a <code>while</code> loop to traverse all rows in the rowset.
 *
-*   @method next
+*   @method nextRow
 */    
     nextRow: function(){
         this.rowIndex += 1;
         this._row = this._rows.item(this.rowIndex);
         return this.rowIndex;
+    },
+/**
+*   This method is deprecated and may be removed in the future. 
+*   Use <code><a href="#method_nextRow">nextRow()</a></code> instead.
+*   @method next
+*/    
+    next: function(){
+        return this.nextRow();
     },
 /**
 *   Walks through all rows, and calls the callback for each row
