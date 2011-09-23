@@ -4934,8 +4934,16 @@ Xmla.Rowset.prototype = {
         if (_isUnd(scope)){
             scope = this;
         }
+        var mArgs = [null];
+        if (!_isUnd(args)) {
+            if (!_isArr(args)) {
+                args = [args];
+            }
+            mArgs = mArgs.concat(args);
+        }
         while (this.hasMoreRows()){
-            if (rowCallback.call(scope, args)===false) {
+            mArgs[0] = this.readAsObject();
+            if (rowCallback.apply(scope, mArgs)===false) {
                 return false;
             }
             this.nextRow();

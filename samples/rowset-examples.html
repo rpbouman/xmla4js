@@ -88,14 +88,6 @@
                 <label>Iteration Method:</label>
                 <select id="iterationMethod" name="iterationMethod" style="font-family: monospace">
                     <option value="">Choose a method...</option>
-                    <option value="fieldValByName">fieldVal(name)</option>
-                    <option value="fieldValByIndex">fieldVal(index)</option>
-                    <option value="getXXX">getXXX()</option>
-                    <option value="fetchAsArray">fetchAsArray()</option>
-                    <option value="fetchAsObject">fetchAsObject()</option>
-                    <option value="fetchAllAsArray">fetchAllAsArray()</option>
-                    <option value="fetchAllAsObject">fetchAllAsObject()</option>
-                    <option value="mapAllAsObject">mapAllAsObject()</option>
                 </select>            
             </div>
         </div>
@@ -173,13 +165,30 @@
             
             var rowset = null;
             function datasourceSelected(){
-                var iterationMethod_group = document.getElementById("iterationMethod_group");
+                var iterationMethod_group = document.getElementById("iterationMethod_group"),
+                    iterationMethod = document.getElementById("iterationMethod")
+                ;
                 var display;
                 if (this.selectedIndex) {
                     display = "";
                 }
                 else {
                     display = "none";
+                }
+                if (iterationMethod.options.length===1) {
+                    var scripts = document.body.getElementsByTagName("SCRIPT"),
+                        i, numScripts = scripts.length, script, id, option
+                    ;
+                    for (i=0; i<numScripts; i++){
+                        script = scripts.item(i);
+                        if (id = script.getAttribute("id")) {
+                            option = document.createElement("option");
+                            option.value = id;
+                            option.text = id;
+                            option.label = id;
+                            iterationMethod.appendChild(option);                            
+                        }
+                    }
                 }
                 iterationMethod_group.style.display = display;
                 document.getElementById("iterationMethod").selectedIndex = 0;
@@ -215,7 +224,7 @@
             document.getElementById("iterationMethod").onchange = iterationMethodSelected;
         </script>
 
-        <script>
+        <script type="text/javascript">
             function getRowset(){
                 var rowset = xmla.discoverMDDimensions();                                
             }
@@ -299,6 +308,19 @@
             }
         </script>
         
+        <script type="text/javascript" id="eachRow">
+            function eachRow(rowset) {
+                var object;
+                //reset so we can iterate through the set again.
+                rowset.reset();
+                //iterate by callback
+                rowset.eachRow(function(row){
+                    object = row;
+                });
+                return object;
+            }
+        </script>
+
         <script type="text/javascript" id="fetchAllAsArray">
             function fetchAllAsArray(rowset) {            
                 var array;

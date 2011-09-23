@@ -141,12 +141,11 @@ FROM [Quadrant Analysis]</textarea>
             }
             
             function addOptions(select, rowset, mapping){
-                rowset.eachRow(function(){                    
-                    var object = this.readAsObject();
+                rowset.eachRow(function(row){
                     addOption(select, {
-                        value: object[mapping.value],
-                        label: object[mapping.label],
-                        title: object[mapping.title]
+                        value: row[mapping.value],
+                        label: row[mapping.label],
+                        title: row[mapping.title]
                     });
                 })
             }
