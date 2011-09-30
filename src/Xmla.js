@@ -5775,9 +5775,7 @@ Xmla.Dataset.Cellset.prototype = {
         return this._idx < this._cellCount;
     },
     nextCell: function(){     
-        if (this._cellOrd === this._ord
-        &&  this.hasMoreCells()
-        ) {
+        if (this.hasMoreCells()) {
             this._getCellNode();
         }
         this._ord += 1;
@@ -5858,7 +5856,7 @@ Xmla.Dataset.Cellset.prototype = {
         }
     },
     getByIndex: function(index) {
-        this._cellNodes.item(index);
+        return this._cellNodes.item(index);
     },
     getByOrdinal: function(ordinal) {
     },
