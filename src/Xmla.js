@@ -5813,30 +5813,42 @@ Xmla.Dataset.Cellset.prototype = {
     cellBackColor: function(){
         return this.cellProperty("BackColor");
     },
-    readAsObject: function(cell){
-        var cellProp, cellDef, converter;
-        if (this._cellOrd === this._ord){
-            if (_isUnd(cell)) {
-                cell = {};
-            }
-            cell.ordinal = this._ord;
-            this._readCell(this._cellNode, cell);
-        }
-        else 
-        if (this._cellOrd > this._ord){
-            cell = null;
-        }
-        return cell;
-    },
-    fetchAsObject: function(object){
-        if (this.hasMoreCells()) {
-            object = this.readAsObject(object);
+    fetchAsArrayOfValues: function(){
+        var colArray = [];
+        
+        for (var c=0, cols=this._dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS).numTuples;c<cols;c++){
+            colArray[colArray.length] = this.cellValue();
             this.nextCell();
-        } else {
-            object = false;
         }
-        return object;
+        return colArray;
+    },        
+    fetchAllAsArrayOfValues: function(){
+        var row, rows=[];
+        while((row = this.fetchAsArrayOfValues()) && (this.hasMoreCells())){
+            rows.push(row);
+        }
+        return rows;
     },
+    eachRow: function(rowCallback, scope, args){
+        if (_isUnd(scope)){
+            scope = this;
+        }
+        var mArgs = [null];
+        if (!_isUnd(args)) {
+            if (!_isArr(args)) {
+                args = [args];
+            }
+            mArgs = mArgs.concat(args);
+        }
+        var row, rows=[];
+        while((row = this.fetchAsArrayOfValues()) && (this.hasMoreCells())){
+            mArgs[0] = row;
+            if (rowCallback.apply(scope, mArgs)===false) {
+                return false;
+            }
+        }        
+        return true;
+    },   
     _readCell: function(node, object){
         for (var p in this._cellDefs){
             cellDef = this._cellDefs[p];
