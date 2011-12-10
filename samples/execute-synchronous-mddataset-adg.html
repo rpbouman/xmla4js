@@ -308,31 +308,41 @@ from [Quadrant Analysis]
                 var columnAxis = dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS);
                 var columnHierarchyCount = columnAxis.hierarchyCount();
                 
-                var m, r, c, i=0;
-                for (i=0; i<columnHierarchyCount; i++) {
+                var m, mName, oldmName, span, r, c;
+                columnAxis.eachHierarchy(function(hierarchy){
                     r = tab.insertRow(rows.length);
-                    if (!i) {
+                    if (!hierarchy.index) {
                         c = r.insertCell(r.cells.length);
                         c.colSpan = rowHierarchyCount;
-                        c.rowSpan = columnHierarchyCount;                   
+                        c.rowSpan = columnHierarchyCount;
                     }                    
-                    c = r.insertCell(r.cells.length);
-                    c.innerHTML = columnAxis.hierarchyName(i);
-                    columnAxis.eachTuple(function(){
-                        c = r.insertCell(r.cells.length);
-                        m = columnAxis.member(i);
-                        c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
-                        console.log(m[Xmla.Dataset.Axis.MEMBER_CAPTION])
+                    this.eachTuple(function(tuple){
+                        m = this.member();
+                        mName = m[Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+                        if (mName !== oldmName) {
+                            c = r.insertCell(r.cells.length);
+                            c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
+                            span = 1;
+                            oldmName = mName;
+                        }
+                        c.colSpan = span++;
                     });
-                }
+                });
                 
-                rowAxis.eachTuple(function(tuple){
-                    r = tab.insertRow(rows.length);
-                    for (i=0; i<rowHierarchyCount; i++) {
-                        c = r.insertCell(r.cells.length);
-                        m = rowAxis.member(i);
-                        c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
-                    }
+                rowAxis.eachHierarchy(function(hierarchy){
+                    this.eachTuple(function(tuple){
+                        r = rows.item(columnHierarchyCount + tuple.index);
+                        if (!r) r = tab.insertRow(rows.length);
+                        m = this.member();
+                        mName = m[Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+                        if (mName !== oldmName) {
+                            c = r.insertCell(r.cells.length);
+                            c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
+                            span = 1;
+                            oldmName = mName;
+                        }
+                        c.rowSpan = span++;
+                    });
                 });
             }
             
@@ -340,12 +350,8 @@ from [Quadrant Analysis]
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
-                
-
 
                 var columnAxis = dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS);
-                //columnAxis.reset();
-                //columnAxis.nextTuple();
                 var columnHierarchyCount = columnAxis.hierarchyCount();
 
                 var rowAxis = dataset.getAxis(Xmla.Dataset.AXIS_ROWS);

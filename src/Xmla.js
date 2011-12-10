@@ -50,6 +50,16 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _useAX = window.ActiveXObject ? true : false
 ;    
 
+function _xml2obj(xml) {
+    //        1     2    3                 4   5       6            
+    var re = /(\s+)|(<!--([^-]|-[^-])*-->)|(<\?(\w+)\s+([^\?]|\?[^>])+\?>)|(<(\w+)(:(\w+))?(\s+((\w+)=()))*>)/g,
+        items
+    ;
+    while (items = re.exec(xml)) {
+        
+    }
+};
+
 /**
 *   Xmla implements a XML for Analysis (XML/A) client in javascript.
 *   Using this utility you can communicate with XML/A enabled OLAP servers 
@@ -5464,6 +5474,7 @@ Xmla.Dataset.Axis.prototype = {
     numTuples: null,
     numHierarchies: null,
     _tupleIndex: null,
+    _hierarchyIndex: null,
     _hierarchyOrder: null,
     _hierarchyDefs: null,
     _hierarchyIndexes: null,
@@ -5487,7 +5498,10 @@ Xmla.Dataset.Axis.prototype = {
             hierarchyName = hierarchyInfoNode.getAttribute("name");
             this._hierarchyOrder[i] = hierarchyName;
             this._hierarchyIndexes[hierarchyName] = i;
-            properties = {};
+            properties = {
+                index: i,
+                name: hierarchyName,
+            };
             propertyNodes = _getElementsByTagNameNS(
                 _axisInfoNode,
                 _xmlnsDataset, 
@@ -5499,11 +5513,7 @@ Xmla.Dataset.Axis.prototype = {
                 propertyNode = propertyNodes.item(j);
                 properties[propertyNode.tagName] = null;
             }
-            this._hierarchyDefs[hierarchyName] = {
-                index: i,
-                name: hierarchyName,
-                properties: properties
-            };
+            this._hierarchyDefs[hierarchyName] = properties;
         }
         
     },
@@ -5516,9 +5526,9 @@ Xmla.Dataset.Axis.prototype = {
         this.reset();
     },
     _getMembers: function(){
-        if (this.tupleIndex < this.numTuples) {
+        if (this._tupleIndex < this.numTuples) {
             return _getElementsByTagNameNS(
-                this._tuples.item(this.tupleIndex), 
+                this._tuples.item(this._tupleIndex), 
                 _xmlnsDataset, "", "Member"
             );
         } 
@@ -5527,19 +5537,16 @@ Xmla.Dataset.Axis.prototype = {
         }
     },
     reset: function(){
-        this.tupleIndex = 0;
+        this._hierarchyIndex = 0;
+        this._tupleIndex = 0;
     },
-    hasMoreTuples: function(){
-        return this.tupleIndex < this.numTuples;
+    hasMoreHierarchies: function(){
+        return this._hierarchyIndex < this.numHierarchies;
     },
-    nextTuple: function(){
-        this._members = this._getMembers();
-        return (this.tupleIndex += 1);
+    nextHierarchy: function(){
+        return (this._hierarchyIndex += 1);
     },
-    tupleCount: function(){
-        return this.numTuples;
-    },
-    eachTuple: function(tupleCallback, scope, args){
+    eachHierarchy: function(callback, scope, args){
         if (_isUnd(scope)){
             scope = this;
         }
@@ -5550,14 +5557,49 @@ Xmla.Dataset.Axis.prototype = {
             }
             mArgs = mArgs.concat(args);
         }
+        while (this.hasMoreHierarchies()){
+            mArgs[0] = this._hierarchyDefs[this._hierarchyOrder[this._hierarchyIndex]];
+            if (callback.apply(scope, mArgs)===false) {
+                return false;
+            }
+            this.nextHierarchy();
+        }
+        this._hierarchyIndex = 0;
+        return true;
+    },
+    hasMoreTuples: function(){
+        return this._tupleIndex < this.numTuples;
+    },
+    nextTuple: function(){
+        this._members = this._getMembers();
+        return (this._tupleIndex += 1);
+    },
+    tupleCount: function(){
+        return this.numTuples;
+    },
+    tupleIndex: function() {
+        return this._tupleIndex;
+    },
+    eachTuple: function(callback, scope, args){
+        if (_isUnd(scope)){
+            scope = this;
+        }
+        var mArgs = [null], tuple;
+        if (!_isUnd(args)) {
+            if (!_isArr(args)) {
+                args = [args];
+            }
+            mArgs = mArgs.concat(args);
+        }
         while (this.hasMoreTuples()){
+            tuple = {index: this._tupleIndex};
             this.nextTuple();
-            mArgs[0] = this.readAsObject();
-            if (tupleCallback.apply(scope, mArgs)===false) {
+            mArgs[0] = this.readAsObject(tuple);
+            if (callback.apply(scope, mArgs)===false) {
                 return false;
             }
         }
-        this.reset();
+        this._tupleIndex = 0;
         return true;
     },
     getHierarchies: function(){
@@ -5574,31 +5616,84 @@ Xmla.Dataset.Axis.prototype = {
         return this.numHierarchies;
     },
     hierarchyIndex: function(hierarchyName){
-        return this._hierarchyIndexes[hierarchyName];
-    },
-    hierarchyName: function(index){
-        return this._hierarchyOrder[index];
-    },
-    hierarchyDef: function(name){
-        var hierarchyDef = this._hierarchyDefs[name];
-        if (!hierarchyDef){
+        if (_isUnd(hierarchyName)) {
+            return this._hierarchyIndex;
+        }
+        var index = this._hierarchyIndexes[hierarchyName];
+        if (_isUnd(index)) {
             Xmla.Exception._newError(
                 "INVALID_HIERARCHY",
                 "Xmla.Dataset.Axis.hierarchyDef",
-                name
+                hierarchyName
             )._throw();
         }
-        return hierarchyDef;
+        return index;
     },
-    member: function(indexOrHierarchy){
-        var index, hierarchyName, hierarchyDef, properties, property, memberNode, member = {};
-        switch(typeof(indexOrHierarchy)){
+    hierarchyName: function(index){
+        if (_isUnd(index)) {
+            index = this._hierarchyIndex;
+        }
+        if (index !== parseInt(index, 10)
+        ||  index >= this.numHierarchies
+        ) {
+            Xmla.Exception._newError(
+                "INVALID_HIERARCHY",
+                "Xmla.Dataset.Axis.hierarchyDef",
+                index
+            )._throw();
+        }
+        return this._hierarchyOrder[index];
+    },
+    hierarchy: function(hierarchyIndexOrName){
+        if (_isUnd(hierarchyIndexOrName)) {
+            index = this._hierarchyIndex;
+        }
+        var index, hierarchyName, hierarchy;
+        if (_isNum(hierarchyIndexOrName)) {
+            if (hierarchyIndexOrName !== parseInt(hierarchyIndexOrName, 10)
+            ||  hierarchyIndexOrName >= this.numHierarchies
+            ) {
+                Xmla.Exception._newError(
+                    "INVALID_HIERARCHY",
+                    "Xmla.Dataset.Axis.hierarchyDef",
+                    hierarchyIndexOrName
+                )._throw();
+            }
+            hierarchyName = this.hierarchyName(hierarchyIndexOrName);
+        }
+        else {
+            hierarchyName = hierarchyIndexOrName;
+        }
+        hierarchy = this._hierarchyDefs[hierarchyName];
+        if (_isUnd(hierarchy)) {
+            Xmla.Exception._newError(
+                "INVALID_HIERARCHY",
+                "Xmla.Dataset.Axis.hierarchyDef",
+                hierarchyName
+            )._throw();
+        }
+        return hierarchy;
+    },
+    member: function(hierarchyIndexOrName){
+        if (_isUnd(hierarchyIndexOrName)) {
+            index = this._hierarchyIndex;
+        }
+        var index, hierarchyName, hierarchy;
+        switch(typeof(hierarchyIndexOrName)){
             case "string":
-                index = this.hierarchyIndex(indexOrHierarchy);
-                hierarchyName = indexOrHierarchy;
+                index = this.hierarchyIndex(hierarchyIndexOrName);
+                hierarchyName = hierarchyIndexOrName;
                 break;
             case "number":
-                hierarchyName = this.hierarchyName(indexOrHierarchy);
+                if (hierarchyIndexOrName !== parseInt(hierarchyIndexOrName, 10)
+                ||  hierarchyIndexOrName >= this.numHierarchies
+                ) {
+                    Xmla.Exception._newError(
+                        "INVALID_HIERARCHY",
+                        "Xmla.Dataset.Axis.hierarchyDef",
+                        name
+                    )._throw();
+                }
                 index = indexOrHierarchy;
                 break;
         }        
@@ -5607,18 +5702,19 @@ Xmla.Dataset.Axis.prototype = {
     _member: function(index){
         var memberNode = this._members.item(index),
             hierarchyName = this.hierarchyName(index),
-            hierarchyDef = this.hierarchyDef(hierarchyName),
-            properties = hierarchyDef.properties, property, 
+            hierarchy = this.hierarchy(hierarchyName),
+            property, 
             member = {
                 index: index,
                 hierarchy: hierarchyName
             }
         ;
-        for (property in properties){ 
+        for (property in hierarchy){ 
+            if (property === "index" || property === "name") continue;
             el = _getElementsByTagNameNS(memberNode, _xmlnsDataset, "", property);
             switch (el.length) {
                 case 0: //no element found for property, use the default
-                    member[property] = properties[property]
+                    member[property] = hierarchy[property]
                     break;
                 case 1: //this is expected, single element for property, get value
                     member[property] = _getElementText(el.item(0));
