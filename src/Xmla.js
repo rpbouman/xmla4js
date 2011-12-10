@@ -5528,15 +5528,13 @@ Xmla.Dataset.Axis.prototype = {
     },
     reset: function(){
         this.tupleIndex = 0;
-        this._members = (this.hasMoreTuples()) ? this._getMembers() : null;
     },
     hasMoreTuples: function(){
-        return this.numTuples > this.tupleIndex;
+        return this.tupleIndex < this.numTuples;
     },
     nextTuple: function(){
         this._members = this._getMembers();
-        this.tupleIndex += 1;
-        return this.tupleIndex;
+        return (this.tupleIndex += 1);
     },
     tupleCount: function(){
         return this.numTuples;
@@ -5553,12 +5551,13 @@ Xmla.Dataset.Axis.prototype = {
             mArgs = mArgs.concat(args);
         }
         while (this.hasMoreTuples()){
+            this.nextTuple();
             mArgs[0] = this.readAsObject();
             if (tupleCallback.apply(scope, mArgs)===false) {
                 return false;
             }
-            this.nextTuple();
         }
+        this.reset();
         return true;
     },
     getHierarchies: function(){

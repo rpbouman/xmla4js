@@ -18,12 +18,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */    
-* {
+body {
+    background-color: white;
     font-family: Arial, sans;
 }
 
-pre, pre *, code {
-    font-family: Courier, monospace;
+pre, pre *, code, textarea {
+    font-family: Courier, monospace !important;
 }
 
 legend {

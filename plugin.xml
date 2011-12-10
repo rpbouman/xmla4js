@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="xmla4js - XML/A for javascript, OLAP for client-side web applications">
+    <menu-items>
+        <menu-item 
+            id="xmla4js"
+            anchor="tools-submenu"
+            label="Xmla4Js"
+            command="content/xmla4js/index.html"
+            type="MENU_ITEM" 
+            how="LAST_CHILD"
+        />
+    </menu-items>
+
+    <static-paths>
+        <static-path url="/xmla4js" localFolder="."/>
+    </static-paths> 
+    
+</plugin>
