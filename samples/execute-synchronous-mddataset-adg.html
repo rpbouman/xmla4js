@@ -298,15 +298,25 @@ from [Quadrant Analysis]
             
             function fillTableSimple(dataset){
                 var tab = document.createElement("table");
+                var rows = tab.rows;
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
+
+                var rowAxis = dataset.getAxis(Xmla.Dataset.AXIS_ROWS);
+                var rowHierarchyCount = rowAxis.hierarchyCount();
+
                 var columnAxis = dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS);
                 var columnHierarchyCount = columnAxis.hierarchyCount();
                 
                 var m, r, c, i=0;
                 for (i=0; i<columnHierarchyCount; i++) {
-                    r = tab.insertRow(i);
-                    c = r.insertCell(0);
+                    r = tab.insertRow(rows.length);
+                    if (!i) {
+                        c = r.insertCell(r.cells.length);
+                        c.colSpan = rowHierarchyCount;
+                        c.rowSpan = columnHierarchyCount;                   
+                    }                    
+                    c = r.insertCell(r.cells.length);
                     c.innerHTML = columnAxis.hierarchyName(i);
                     columnAxis.eachTuple(function(){
                         c = r.insertCell(r.cells.length);
@@ -315,6 +325,15 @@ from [Quadrant Analysis]
                         console.log(m[Xmla.Dataset.Axis.MEMBER_CAPTION])
                     });
                 }
+                
+                rowAxis.eachTuple(function(tuple){
+                    r = tab.insertRow(rows.length);
+                    for (i=0; i<rowHierarchyCount; i++) {
+                        c = r.insertCell(r.cells.length);
+                        m = rowAxis.member(i);
+                        c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
+                    }
+                });
             }
             
             function fillTableFromDataset(dataset){ 
