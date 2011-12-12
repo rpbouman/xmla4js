@@ -605,7 +605,7 @@ Xmla.MDSCHEMA_CUBES =          _xmlaMDSCHEMA + "CUBES";
 *   <code>MDSCHEMA_DIMENSIONS</code> schema rowset.
 *   The <code>requestType</code> option applies only to Discover requests.
 *   Instead of passing this <code>requestType</code> yourself, consider calling the 
-*   <code><a href="#method_discoverMDDimensions">discoverMDCubes()</a></code> method. 
+*   <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code> method. 
 *   The <code>discoverMDDimensions()</code> method issues a request to invoke the Discover method using
 *   <code>MDSCHEMA_DIMENSIONS</code> as requestType.
 *
@@ -1490,8 +1490,12 @@ Xmla.prototype = {
 *           Determines how the request is performed:<ul>
 *               <li><code>true</code>: The request is performed asynchronously: the call to <code>request()</code> will not block and return immediately.
 *               In this case, the return value of the <code>request()</code> method is not defined, 
-*               and the response must be received by registering a listener 
+*               and the response must be received by registering a listener.
 *               (see <code><a href="#method_addListener">addListener()</a></code>).
+* 
+*               As an alternative to using listeners, you can also pass 
+*               <code>success</code>, <code>error</code> and <code>callback</code> callback functions.
+*               Callbacks are described in more detail below.     
 *               </li>
 *               <li><code>false</code>: The request is performed synchronously: the call to <code>request()</code> will block until it receives a response from the XML/A server or times out.
 *               In this case, the <code>request()</code> method returns 
@@ -1504,11 +1508,11 @@ Xmla.prototype = {
 *       </li>
 *       <li><code>success</code> (function)
 *           A function that is to be called after the requests is executed and a successful response is receieved.
-*           Any listeners appropriate for the request are called before this handler is executed.
+*           Any listeners appropriate for the request are called after this handler is executed.
 *       </li>
 *       <li><code>error</code> (function)
 *           A function that is to be called after the requests is executed and an error was encountered.
-*           Any listeners appropriate for the request are called before this handler is executed.
+*           Any listeners appropriate for the request are called after this handler is executed.
 *       </li>
 *       <li><code>callback</code> (function)
 *           A function that is to be called after the requests is executed and the response is receieved,
@@ -5694,7 +5698,7 @@ Xmla.Dataset.Axis.prototype = {
                         name
                     )._throw();
                 }
-                index = indexOrHierarchy;
+                index = hierarchyIndexOrName;
                 break;
         }        
         return this._member(index);

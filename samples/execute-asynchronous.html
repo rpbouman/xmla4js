@@ -4,7 +4,7 @@
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     Twitter: @rolandbouman
     
-    execute-synchronous.html - this software is part of xmla4js
+    execute-asynchronous.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -260,22 +260,24 @@ FROM [Quadrant Analysis]</textarea>
                         axisIndex = dataset.axisCount() - 1;
                     }
                     var axis = dataset.getAxis(axisIndex),
-                        hierarchyCount = axis.hierarchyCount(),
-                        member, i, tupleHTML = "",
+                        member, tupleHTML,
                         node, nodeHead, nodeBody, cell
                     ;
-                    axis.eachTuple(function(){
+                    axis.eachTuple(function(tuple){
+                        tupleHTML = "";
                         node = document.createElement("DIV");
                         node.className = "node";
                         node.appendChild(nodeHead = document.createElement("DIV"));
                         nodeHead.className = "node-head";
-                        for (i=0; i<hierarchyCount; i++){
-                            member = axis.member(i);
+                        
+                        this.eachHierarchy(function(hierarchy){
+                            member = this.member();
                             if (tupleHTML!=="") {
                                 tupleHTML += " - ";
                             }
                             tupleHTML += member.Caption;
-                        }
+                        })
+
                         nodeHead.innerHTML = tupleHTML;
                         node.appendChild(nodeBody = document.createElement("DIV"));
                         nodeBody.className = "node-body";

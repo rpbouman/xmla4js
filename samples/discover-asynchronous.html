@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!--
+    Copyright 2009,2010,2011 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    Twitter: @rolandbouman
+    
+    execute-asynchronous.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <title>xmla4js: discover asynchronous</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            .node {
+            }
+            
+            span.toggle {
+                font-family: monospace;
+                font-size: 12pt;
+            }
+            
+            div.collapsed > div > span.toggle:before {
+                content: "+";
+            } 
+            div.expanded > div > span.toggle:before {
+                content: "-";
+            } 
+            
+            div.nodebody {
+                padding-left: 1em;
+            }
+            
+            div.collapsed > div.nodebody {
+                display: none;
+            } 
+            div.collapsed > div.nodebody {
+                display: block;
+            } 
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="../index.html">Home</a>
+            |
+            <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+            |
+            <a href="index.html">Samples</a>
+            |
+            <a href="../doc/api/index.html">API Reference Documentation</a>
+        </div>
+        <h1>Sample: Discover asynchronous</h1>
+        <div>
+            URL:
+            <input type="text" id="url" name="url" 
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="discover">Discover...</button>
+            <div>Tree:</div>
+            <div id="node0"></div>
+        </div>
+        
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript">
+            (function() {
+                (TreeNode = function(conf){
+                    this.conf = conf;
+                    this.id = ++TreeNode.id;
+                    TreeNode.nodes[this.getId()] = this;
+                    this.conf.state = conf.state || "collapsed";
+                    if (conf.loadChildren) this.loadChildren = conf.loadChildren;
+                }).prototype = {
+                    createDom: function() {
+                        var node = document.createElement("div");
+                        node.className = "node " + this.conf.state;
+                        node.id = this.getId();
+                        node.innerHTML= "<div class=\"nodehead\">" +
+                                            "<span class=\"toggle\"></span>" +
+                                            "<span>" + this.conf.title + "</span>" +
+                                        "</div>" +
+                                        "<div class=\"nodebody\"></div>"
+                        ;
+                        return node;
+                    },
+                    getId: function() {
+                        return "node" + this.id;
+                    },
+                    getDom: function(){
+                        return document.getElementById(this.getId());
+                    },
+                    toggle: function() {
+                        var state = this.conf.state;
+                        switch (state) {
+                            case "collapsed":
+                                state = "expanded";
+                                break;
+                            case "expanded":                            
+                                state = "collapsed";
+                                break;
+                            default:
+                                return;
+                        }
+                        this.setState(state);
+                    },
+                    setState: function(state) {
+                        this.conf.state = state;
+                        var dom = this.getDom();
+                        dom.className = "node " + state;
+                        dom = dom.getElementsByTagName("DIV").item(1);  //
+                        if (state === "collapsed" || dom.childNodes.length) return
+                        this.loadChildren();
+                    },
+                    loadChildren: function() {
+                    }
+                };
+                TreeNode.id = 0;
+                TreeNode.nodes = {};
+                TreeNode.clickHandler = function(e) {
+                    if (e) e = window.event;
+                    var target = e.target || e.srcElement;
+                    if (target.tagName !== "SPAN" || target.className !== "toggle") return;
+                    var node = TreeNode.nodes[target.parentNode.parentNode.id];
+                    node.toggle();
+                };
+                TreeNode.addNodesForRowset = function(conf){
+                    var xmla = conf.xmla, 
+                        request = conf.request,
+                        rowset = conf.rowset, 
+                        titleColumn,
+                        childRequestType,
+                        loadChildren,
+                    ;
+                    switch (request.requestType) {
+                        case Xmla.DISCOVER_DATASOURCES:
+                            titleColumn = Xmla.PROP_DATASOURCEINFO;
+                            childRequestType = Xmla.DISCOVER_CATALOGS;
+                            break;
+                        case Xmla.DISCOVER_CATALOGS:
+                            titleColumn = Xmla.PROP_CATALOG;
+                            childRequestType = Xmla.MDSCHEMA_CUBES;
+                            break;
+                        case Xmla.MDSCHEMA_CUBES:
+                            titleColumn = CUBE_NAME;
+                            childRequestType = Xmla.MDSCHEMA_DIMENSIONS;
+                            break;
+                        case Xmla.MDSCHEMA_DIMENSIONS:
+                            titleColumn = DIMENSION_CAPTION;
+                            childRequestType = Xmla.MDSCHEMA_HIERARCHIES;
+                            break;
+                        case Xmla.MDSCHEMA_HIERARCHIES:
+                            titleColumn = HIERARCHY_CAPTION;
+                            childRequestType = Xmla.MDSCHEMA_LEVELS;
+                            break;
+                        case Xmla.MDSCHEMA_LEVELS:
+                            titleColumn = LEVEL_CAPTION;
+                            childRequestType = Xmla.MDSCHEMA_MEMBERS;
+                            break;
+                    }
+                    rowset.eachRow(function(row){
+                        row.title = row[titleColumn];
+                        row.childRequestType = childRequestType;
+                        row.loadChildren: function() {
+                            xmla.discover({
+                                requestType: childRequestType
+                                success: function(xmla, request, response) {
+                                    TreeNode.addNodesForRowset(
+                                        xmla: xmla,
+                                        parent: this.getId(),
+                                        rowset: response
+                                    )
+                                }
+                            });
+                        }; 
+                        var node = new TreeNode(row);
+                        conf.parent.appendChild(node.createDom());
+                    });
+                }
+            })();
+        </script>
+        <script type="text/javascript">
+            var xmla = new Xmla({
+                async: true,
+                listeners: [
+                    {events: "error", handler: function(){
+                        debugger;
+                    }},
+                    {events: "request", handler: function(){
+                    }}
+                ]
+            });
+            function getTree() {
+                return document.getElementById("node0");
+            }
+            document.getElementById("discover").onclick = function() {
+                getTree().innerHTML = "";
+                xmla.discoverDataSources({
+                    url: document.getElementById("url").value,
+                    success: function(xmla, request, response){
+                        TreeNode.addNodesForRowset({
+                            parent: getTree(), 
+                            xmla: xmla, 
+                            request: request, 
+                            rowset: response,
+                            titleColumn: Xmla.PROP_DATASOURCEINFO
+                        });
+                    }
+                });
+            };
+            getTree().onclick = TreeNode.clickHandler;
+        </script>
+    </body>
+</html>
