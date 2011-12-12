@@ -265,10 +265,10 @@
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
 
-                var columnAxis = dataset.axes[Xmla.Dataset.AXIS_COLUMNS];
+                var columnAxis = dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS);
                 var columnHierarchyCount = columnAxis.hierarchyCount();
 
-                var rowAxis = dataset.axes[Xmla.Dataset.AXIS_ROWS];
+                var rowAxis = dataset.getAxis(Xmla.Dataset.AXIS_ROWS);
                 var rowHierarchyCount;
                 if (rowAxis) {
                     rowHierarchyCount = rowAxis.hierarchyCount();

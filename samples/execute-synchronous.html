@@ -85,7 +85,10 @@
         </fieldset>
         <fieldset>
             <legend>MDX Statement:</legend>
-            <textarea id="textarea_statement"></textarea>
+            <textarea id="textarea_statement">with member [Measures].[Variance Percent] as '([Measures].[Variance] / [Measures].[Budget])', format_string = IIf(((([Measures].[Variance] / [Measures].[Budget]) * 100.0) > 2.0), "|#.00%|style='green'", IIf(((([Measures].[Variance] / [Measures].[Budget]) * 100.0) < 0.0), "|#.00%|style='red'", "#.00%"))
+select NON EMPTY {[Measures].[Actual], [Measures].[Budget], [Measures].[Variance], [Measures].[Variance Percent]} ON COLUMNS,
+  NON EMPTY Hierarchize(Union(Crossjoin({[Region].[All Regions]}, Union(Crossjoin({[Department].[All Departments]}, {[Positions].[All Positions]}), Crossjoin({[Department].[All Departments]}, [Positions].[All Positions].Children))), Crossjoin({[Region].[All Regions]}, Union(Crossjoin([Department].[All Departments].Children, {[Positions].[All Positions]}), Crossjoin([Department].[All Departments].Children, [Positions].[All Positions].Children))))) ON ROWS
+from [Quadrant Analysis]</textarea>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>
@@ -270,12 +273,12 @@
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
-                var axisCount = dataset.getAxisCount(),
+                var axisCount = dataset.axisCount(),
                     axis, tuple, 
                     hierarchies, hierarchyName, hierarchy,
                     i, j, r, c, rows = {}, m;
-                if (axisCount>=1) {
-                    axis = dataset.getColumns();
+                if (axisCount >=1 ) {
+                    axis = dataset.getColumnAxis();
                     hierarchies = axis.getHierarchies();
                     for (hierarchyName in hierarchies){
                         hierarchy = hierarchies[hierarchyName];
@@ -294,8 +297,8 @@
                     }
                     axis.reset();
                 }
-                if (axisCount>=2){
-                    axis = dataset.getRows();
+                if (axisCount >=2 ){
+                    axis = dataset.getRowAxiss();
                     hierarchies = axis.getHierarchies();
                     j = 0;
                     for (hierarchyName in hierarchies) {
