@@ -85,10 +85,10 @@
         </fieldset>
         <fieldset>
             <legend>MDX Statement:</legend>
-            <textarea id="textarea_statement">with member [Measures].[Variance Percent] as '([Measures].[Variance] / [Measures].[Budget])', format_string = IIf(((([Measures].[Variance] / [Measures].[Budget]) * 100.0) > 2.0), "|#.00%|style='green'", IIf(((([Measures].[Variance] / [Measures].[Budget]) * 100.0) < 0.0), "|#.00%|style='red'", "#.00%"))
-select NON EMPTY {[Measures].[Actual], [Measures].[Budget], [Measures].[Variance], [Measures].[Variance Percent]} ON COLUMNS,
-  NON EMPTY Hierarchize(Union(Crossjoin({[Region].[All Regions]}, Union(Crossjoin({[Department].[All Departments]}, {[Positions].[All Positions]}), Crossjoin({[Department].[All Departments]}, [Positions].[All Positions].Children))), Crossjoin({[Region].[All Regions]}, Union(Crossjoin([Department].[All Departments].Children, {[Positions].[All Positions]}), Crossjoin([Department].[All Departments].Children, [Positions].[All Positions].Children))))) ON ROWS
-from [Quadrant Analysis]</textarea>
+            <textarea id="textarea_statement">select NON EMPTY Crossjoin({[Measures].[Actual]}, Union({[Region].[All Regions]}, [Region].[All Regions].Children)) ON COLUMNS,
+  NON EMPTY Crossjoin(Hierarchize(Union({[Department].[All Departments]}, [Department].[All Departments].Children)), {[Positions].[All Positions]}) ON ROWS
+from [Quadrant Analysis]
+</textarea>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>
@@ -271,50 +271,65 @@ from [Quadrant Analysis]</textarea>
             
             function fillTableFromDataset(dataset){
                 var tab = document.createElement("table");
+                var rows = tab.rows;
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
-                var axisCount = dataset.axisCount(),
-                    axis, tuple, 
-                    hierarchies, hierarchyName, hierarchy,
-                    i, j, r, c, rows = {}, m;
-                if (axisCount >=1 ) {
-                    axis = dataset.getColumnAxis();
-                    hierarchies = axis.getHierarchies();
-                    for (hierarchyName in hierarchies){
-                        hierarchy = hierarchies[hierarchyName];
-                        r = tab.insertRow(tab.rows.length);
-                        c = r.insertCell(r.cells.length);
-                        c.innerHTML = "<b>" + hierarchyName + "</b>";
-                        rows[hierarchyName] = r;
+                
+                function getTupleName(tuple, hierarchy) {
+                    for (var mName = "", i = 0; i <= hierarchy.index; i++) {
+                        mName += tuple[hierarchy.name][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
                     }
-                    while (tuple = axis.fetchAsObject()){
-                        for (hierarchyName in hierarchies){
-                            m = tuple[hierarchyName];
-                            r = rows[hierarchyName];
-                            c = r.insertCell(r.cells.length);
-                            c.innerHTML = m.Caption;
-                        }
-                    }
-                    axis.reset();
+                    return mName;
                 }
-                if (axisCount >=2 ){
-                    axis = dataset.getRowAxiss();
-                    hierarchies = axis.getHierarchies();
-                    j = 0;
-                    for (hierarchyName in hierarchies) {
-                        for (r in rows) {
-                            r = rows[r];
-                            c = r.insertCell(j);
-                        }
-                        j += 1;
+
+                var rowAxis = dataset.getAxis(Xmla.Dataset.AXIS_ROWS);
+                var rowHierarchyCount = rowAxis.hierarchyCount();
+
+                var columnAxis = dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS);
+                var columnHierarchyCount = columnAxis.hierarchyCount();
+                
+                var m, mName, oldmName, span, r, c;
+                columnAxis.eachHierarchy(function(hierarchy){
+                    r = tab.insertRow(rows.length);
+                    if (!hierarchy.index) {
+                        //very first cell: empty dummy cell
+                        c = r.insertCell(r.cells.length);
+                        c.colSpan = rowHierarchyCount;
+                        c.rowSpan = columnHierarchyCount;
                     }
-                    while (tuple = axis.fetchAsObject()){
-                        r = tab.insertRow(tab.rows.length);
-                        for (hierarchyName in hierarchies) {
-                            m = tuple[hierarchyName];
+                    //loop over all logical columns
+                    this.eachTuple(function(tuple){
+                        if ((mName = getTupleName(tuple, hierarchy)) !== oldmName) {
                             c = r.insertCell(r.cells.length);
-                            c.innerHTML = m.Caption;
+                            c.innerHTML = tuple[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
+                            span = 1;
+                            oldmName = mName;
                         }
+                        c.colSpan = span++;
+                    });
+                });
+                
+                rowAxis.eachHierarchy(function(hierarchy){
+                    this.eachTuple(function(tuple){
+                        r = rows.item(columnHierarchyCount + tuple.index);
+                        if (!r) r = tab.insertRow(rows.length);
+                        if ((mName = getTupleName(tuple, hierarchy)) !== oldmName) {
+                            c = r.insertCell(r.cells.length);
+                            c.innerHTML = tuple[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
+                            span = 1;
+                            oldmName = mName;
+                        }
+                        c.rowSpan = span++;
+                    });
+                });
+                
+                var cellset = dataset.getCellset(), o = 0;
+                for (var i = columnAxis.hierarchyCount(), maxI = i + rowAxis.tupleCount(); i < maxI; i++){
+                    r = rows.item(i);
+                    for (var j = rowAxis.hierarchyCount(), maxJ = j + columnAxis.tupleCount(); j < maxJ; j++) {
+                        c = r.insertCell(r.cells.length);
+                        cellset.nextCell();
+                        c.innerHTML  = cellset.cellValue();
                     }
                 }
             }
