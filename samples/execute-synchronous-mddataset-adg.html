@@ -301,6 +301,13 @@ from [Quadrant Analysis]
                 var rows = tab.rows;
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
+                
+                function getTupleName(tuple, hierarchy) {
+                    for (var mName = "", i = 0; i <= hierarchy.index; i++) {
+                        mName += tuple.members[i][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+                    }
+                    return mName;
+                }
 
                 var rowAxis = dataset.getAxis(Xmla.Dataset.AXIS_ROWS);
                 var rowHierarchyCount = rowAxis.hierarchyCount();
@@ -312,16 +319,17 @@ from [Quadrant Analysis]
                 columnAxis.eachHierarchy(function(hierarchy){
                     r = tab.insertRow(rows.length);
                     if (!hierarchy.index) {
+                        //very first cell: empty dummy cell
                         c = r.insertCell(r.cells.length);
                         c.colSpan = rowHierarchyCount;
                         c.rowSpan = columnHierarchyCount;
-                    }                    
+                    }
+                    //loop over all logical columns
                     this.eachTuple(function(tuple){
-                        m = this.member();
-                        mName = m[Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
-                        if (mName !== oldmName) {
+                        if ((mName = getTupleName(tuple, hierarchy)) !== oldmName) {
                             c = r.insertCell(r.cells.length);
-                            c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
+                            c.className = "th";
+                            c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
                             span = 1;
                             oldmName = mName;
                         }
@@ -333,19 +341,28 @@ from [Quadrant Analysis]
                     this.eachTuple(function(tuple){
                         r = rows.item(columnHierarchyCount + tuple.index);
                         if (!r) r = tab.insertRow(rows.length);
-                        m = this.member();
-                        mName = m[Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
-                        if (mName !== oldmName) {
+                        if ((mName = getTupleName(tuple, hierarchy)) !== oldmName) {
                             c = r.insertCell(r.cells.length);
-                            c.innerHTML = m[Xmla.Dataset.Axis.MEMBER_CAPTION];
+                            c.className = "th";
+                            c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
                             span = 1;
                             oldmName = mName;
                         }
                         c.rowSpan = span++;
                     });
                 });
+                
+                var cellset = dataset.getCellset(), o = 0;
+                for (var i = columnAxis.hierarchyCount(), maxI = i + rowAxis.tupleCount(); i < maxI; i++){
+                    r = rows.item(i);
+                    for (var j = rowAxis.hierarchyCount(), maxJ = j + columnAxis.tupleCount(); j < maxJ; j++) {
+                        c = r.insertCell(r.cells.length);
+                        cellset.nextCell();
+                        c.innerHTML  = cellset.cellValue();
+                    }
+                }
             }
-            
+
             function fillTableFromDataset(dataset){ 
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");

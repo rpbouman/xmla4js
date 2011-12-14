@@ -5419,7 +5419,7 @@ Xmla.Dataset.prototype = {
     axisCount: function(){
         return this._numAxes;
     },
-    getAxis: function(nameOrIndex){
+    _getAxis: function(nameOrIndex) {
         var name, axis;
         if (_isNum(nameOrIndex)){
             axis = this._axesOrder[nameOrIndex];
@@ -5433,29 +5433,52 @@ Xmla.Dataset.prototype = {
                 axis = this._axes[name];
             }
         }
-        if (_isUnd(axis)){
+        return axis;
+    },
+    getAxis: function(nameOrIndex){
+        var axis = this._getAxis(nameOrIndex);
+        if (!axis){
             Xmla.Exception._newError(
                 "INVALID_AXIS",
                 "Xmla.Dataset.getAxis",
-                name
+                name || nameOrIndex
             )._throw();            
         }
         return axis;
     },
+    hasAxis: function(nameOrIndex) {
+        var axis = this._getAxis(nameOrIndex);
+        return !_isUnd(axis);
+    },
     getColumnAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_COLUMNS);
+    },
+    hasColumnAxis: function(){
+        return this.hasAxis(Xmla.Dataset.AXIS_COLUMNS);
     },
     getRowAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_ROWS);
     },
+    hasRowAxis: function(){
+        return this.hasAxis(Xmla.Dataset.AXIS_ROWS);
+    },
     getPageAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_PAGES);
+    },
+    hasPageAxis: function(){
+        return this.hasAxis(Xmla.Dataset.AXIS_PAGES);
     },
     getSectionAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_SECTIONS);
     },
+    hasSectionAxis: function(){
+        return this.hasAxis(Xmla.Dataset.AXIS_SECTIONS);
+    },
     getChapterAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_CHAPTERS);
+    },
+    hasChapterAxis: function(){
+        return this.hasAxis(Xmla.Dataset.AXIS_CHAPTERS);
     },
     getSlicerAxis: function(){
         return this._slicer;
@@ -5599,16 +5622,21 @@ Xmla.Dataset.Axis.prototype = {
         return this._tupleIndex;
     },
     eachTuple: function(callback, scope, args){
-        var mArgs = [null], tuple;
+        var mArgs = [null], tuple, hierarchies, members;
         if (!scope) scope = this;
         if (args) {
-            if (!_isArr(args)) args = [args];
-            mArgs = mArgs.concat(args);
+            if (_isArr(args)) mArgs.concat(args)
+            else mArgs.push(args);
         }
         while (this.hasMoreTuples()){
-            tuple = {index: this._tupleIndex};
+            hierarchies = {};
+            members = [];
+            tuple = {index: this._tupleIndex, hierarchies: hierarchies, members: members};
             this.nextTuple();
-            mArgs[0] = this.readAsObject(tuple);
+            for (var i=0; i<this.numHierarchies; i++){
+                members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
+            }
+            mArgs[0] = tuple;
             if (callback.apply(scope, mArgs)===false) {
                 return false;
             }
@@ -6253,6 +6281,20 @@ Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_HLP = _exceptionHlp +
                                     "#" + Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_CDE  + 
                                     "_" + Xmla.Exception.UNEXPECTED_ERROR_READING_MEMBER_MSG;
 
+/**
+*   Exception code indicating the requested axis does not exist
+*
+*   @property INVALID_AXIS
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-13</code>
+*/
+Xmla.Exception.INVALID_AXIS_CDE = -13;
+Xmla.Exception.INVALID_AXIS_MSG = "The requested axis does not exist."; 
+Xmla.Exception.INVALID_AXIS_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.INVALID_AXIS_CDE  + 
+                                    "_" + Xmla.Exception.INVALID_AXIS_MSG;
 
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(
