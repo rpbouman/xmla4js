@@ -1,0 +1,570 @@
+<!DOCTYPE HTML>
+<!--
+    This program is part of xmla4js, a xmla shell for html5 browsers.
+    It uses woosh, a webshell.
+
+    Copyright 2011 Roland Bouman
+    http://rpbouman.blogspot.com/ - roland.bouman@gmail.com - @rolandbouman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>XML/A Shell</title>
+        <style type="text/css">
+            table, td {
+                border-collapse: collapse;
+                border-color: white;
+                border-width: 1px;
+                padding: 2px .5em 2px .5em;
+            }
+            table {
+                margin: 1em;
+            }            
+            table, thead td, thead th {
+                border-style: dashed;
+            }
+            tbody td {
+                border-style: none dashed none dashed;
+            }
+        </style>
+    </head>
+    <body
+        style="
+            padding: 0px;
+            margin: 0px;
+            position: absolute;
+            width:100%;
+            height:100%;
+            overflow: hidden
+        "
+    >
+        <div id="editor" 
+            style="
+                width:100%;
+                height:100%;
+                padding-bottom:2em;
+                border-style: outset;
+            "
+        ></div>        
+        <script type="text/javascript" src="wsh.js"></script>
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript">
+        (function(){
+                        
+            var prompt = "xmla> ", buffer = [], xmla = new Xmla();
+            
+            function addLineToBuffer(){
+                var line = ed.getLine();
+                var text = ed.getLineText(line);
+                buffer.push(text);
+            }
+            
+            function clear() {
+                buffer = [];
+                ed.config.prompt = prompt;
+                ed.createLine(ed.config.prompt);
+            }
+            
+            //ESC handler: clear the buffer
+            wsh.WebShell.defaultNonCharKeyHandlers["27"] = function(event){
+                ed.createLine("buffer cleared.");
+                clear();
+            };
+
+            function displayError(error){
+                ed.createLine("Error " + error.code + ": " + error.message);
+                clear();
+            }
+            
+            function renderRowset(rowset, fieldNames) {
+                var line = ed.createLine(), result,
+                    thead = "", cols = "", tbody = "",
+                    fieldCount, fieldName, field, i
+                ;
+                if (rowset.hasMoreRows()) {
+                    if (!fieldNames) {
+                        fieldNames = rowset.getFieldNames();
+                    }
+                    fieldCount = fieldNames.length;
+                    for (i = 0; i < fieldCount; i++){
+                        fieldName = fieldNames[i];
+                        field = rowset.fieldDef(fieldName);
+                        cols += "<col />"
+                        thead += "<td>" + field.label + "</td>"
+                    }
+                    thead = "<thead><tr>" + thead + "</tr></thead>";
+                    while (rowset.hasMoreRows()){
+                        for (i = 0; i < fieldCount; i++){
+                            fieldName = fieldNames[i];
+                            field = rowset.fieldVal(fieldName);
+                            tbody += "<td>" + field + "</td>";
+                        }
+                        tbody = "<tr>" + tbody + "</tr>";
+                        rowset.nextRow();
+                    }
+                    tbody = "<tbody>" + tbody + "</tbody>";
+                    result = "<table>" + cols + thead + tbody + "</table>";
+                    line.className = "";
+                }
+                else {
+                     result = "No rows to display.";
+                }
+                line.innerHTML = result;
+            }
+            
+            function renderDataset(dataset) {
+                
+                var axisCount = dataset.axisCount(),
+                    cellset = dataset.getCellset()
+                ;
+
+                function getTupleName(tuple, hierarchy) {
+                    var n = hierarchy ? hierarchy.index : tuple.members.length-1;
+                    for (var mName = "", i = 0; i <= n; i++) {
+                        if (mName!=="") mName += ",";
+                        mName += tuple.members[i][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+                    }
+                    return mName;
+                }
+                
+                function renderAxisHorizontally(axis) {
+                    var thead = "",
+                        tupleCount = axis.tupleCount(), 
+                        lastTuple = tupleCount-1,
+                        hierarchyCount = axis.hierarchyCount(),
+                        name, oldName, member, span, td
+                    ;
+                    thead += "<thead>";
+                    axis.eachHierarchy(function(hierarchy){
+                        oldName = null;
+                        thead += "<tr>";
+                        axis.eachTuple(function(tuple){
+                            name = getTupleName(tuple, hierarchy);
+                            if (name !== oldName || tuple.index === lastTuple) {
+                                if (oldName) {
+                                    thead += "<td colspan=\"" + span + "\">" + td;
+                                }
+                                td = tuple.members[hierarchy.index][Xmla.Dataset.Axis.MEMBER_CAPTION] + "</td>";
+                                span = 1;
+                                oldName = name;
+                            }
+                            else {
+                                span++;
+                            }
+                            if (tuple.index === lastTuple) {
+                                thead += "<td colspan=\"" + span + "\">" + td;
+                            }
+                        });
+                        thead += "</tr>";
+                    });
+                    thead += "</thead>";
+                    return thead;
+                }
+                
+                function renderCells(offset, count){
+                    var td = "";
+                    for (var i = 0; i < count; i++) {
+                        if (cellset.cellOrdinal() === offset + i) {
+                            value = cellset.cellValue();
+                            cellset.nextCell();
+                        }
+                        else {
+                            value = "";
+                        }
+                        td += "<td>" + value + "</td>";
+                    }
+                    return td;
+                }
+                
+                function renderAxis(dataset, axisId) {
+                    var axis = dataset.getAxis(axisId),
+                        line, tupleCount = axis.tupleCount(), 
+                        lastTuple = tupleCount-1;
+                    ;
+                    switch (axisId) {
+                        case 0:
+                            var thead, tbody;
+                            
+                            thead = renderAxisHorizontally(axis);
+                            tbody = "<tbody>" +
+                                        "<tr>" + renderCells(tupleCount, 0) + "</tr>" +
+                                    "</tbody>"
+                            ;
+                            line = ed.createLine()
+                            line.className = "";
+                            line.innerHTML = "<table>" + thead + tbody + "</table>";
+                            break;
+                        case 1:
+                            renderPivotTable(dataset);
+                            break;
+                        default:
+                            axis.eachTuple(function(tuple){
+                                var line = ed.createLine(),
+                                    members = tuple.members,
+                                    member, 
+                                    i, n = members.length,
+                                    thead = "", tbody = "", caption = "Axis: " + axisId;
+                                line.className = "";
+                                for (i = 0; i<n; i++) {
+                                    member = members[i];
+                                    thead += "<td>" +  member[Xmla.Dataset.Axis.MEMBER_CAPTION] + "</td>";
+                                    tbody += "<td>" +  member[Xmla.Dataset.Axis.MEMBER_CAPTION] + "</td>";
+                                }
+                                caption = "<caption>" + caption + "</caption>";
+                                thead = "<thead><tr>" + thead + "</tr></thead>";
+                                tbody = "<tbody><tr>" + thead + "</tr></tbody>";
+                                line.innerHTML = "<table>" + caption + thead + tbody + "</table>"
+                                renderAxis(dataset, axisId-1);
+                            });
+                    }
+                }
+                
+                if (axisCount) {
+                    renderAxis(dataset, axisCount - 1);
+                }
+                else {
+                    ed.createLine(cellset.cellValue());
+                }
+            }
+
+            function renderDataset(dataset) {
+                var axisCount = dataset.axisCount(),
+                    cellset = dataset.getCellset(),
+                    cellIndex = 0;
+                ;
+
+                function getTupleName(tuple, hierarchy) {
+                    var n = hierarchy ? hierarchy.index : tuple.members.length-1;
+                    for (var mName = "", i = 0; i <= n; i++) {
+                        if (mName!=="") mName += ",";
+                        mName += tuple.members[i][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+                    }
+                    return mName;
+                }
+                
+                function renderTuple(tuple) {
+                    ed.createLine();
+                    ed.createLine(getTupleName(tuple));
+                    ed.createLine();
+                }
+
+                function renderHeader(axis, dummy) {
+                    var thead = "<thead><tr>";
+                    if (dummy) thead += "<td><br/></td>";
+                    axis.eachTuple(function(tuple){
+                        thead += "<td>" + getTupleName(tuple) + "</td>";
+                    })
+                    thead += "</tr></thead>";
+                    return thead;
+                }
+
+                function renderCells(axis) {
+                    var td = "";
+                    axis.eachTuple(function(){
+                        if (cellset.cellOrdinal() === cellIndex++) {
+                            value = cellset.cellValue();
+                            cellset.nextCell();
+                        }
+                        else {
+                            value = "";
+                        }
+                        td += "<td>" + value + "</td>";
+                    });
+                    return td;
+                }
+
+                function renderTable() {
+                    var tbody, thead, value,
+                        columnAxis = dataset.getColumnAxis()
+                    ;
+                    thead = renderHeader(columnAxis, true);
+                    tbody = "<tbody>";
+                    dataset.getRowAxis().eachTuple(function(tuple){
+                        tbody += "<tr>";
+                        tbody += "<td>" + getTupleName(tuple) + "</td>";
+                        tbody += renderCells(columnAxis);
+                        tbody += "</tr>";
+                    });
+                    tbody += "</tbody>";
+                    var line = ed.createLine();
+                    line.className = "";
+                    line.innerHTML = "<table>" + thead + tbody + "</table>";
+                }
+                
+                function renderAxis(axisId) {
+                    var axis 
+                    if (axisId !==-1) axis = dataset.getAxis(axisId);
+                    switch (axisId) {
+                        case -1:
+                            ed.createLine();
+                            ed.createLine(cellset.cellValue());
+                            ed.createLine();
+                            break;
+                        case 0:                            
+                            var line = ed.createLine();
+                            line.className = "";
+                            line.innerHTML = "<table>" + 
+                                                renderHeader(axis, false) +
+                                                 "<tr>" +
+                                                    renderCells(axis) +
+                                                 "</tr>" + 
+                                            "</table>"
+                            ;
+                            break;
+                        case 1:
+                            renderTable();
+                            break;
+                        default:
+                            axis.eachTuple(function(tuple){
+                                renderTuple(tuple);
+                                renderAxis(axisId-1);
+                            });
+                    }
+                }
+                
+                renderAxis(axisCount - 1);
+            }
+            
+            var commands = {
+                connect: {
+                    handler: function(command) {
+                        var url = trim(command.substr("connect".length)),
+                            ch = url.substr(0,1)
+                        ;
+                        if (ch==="\'" || ch === "\"\"") {
+                            if (url.substr(url.length-1)!==ch) throw {
+                                code: 0,
+                                message: "Unterminated quoted string"
+                            }
+                            url = url.substr(1, url.length-2);
+                        }
+                        xmla.discoverDataSources({
+                            url: url,
+                            success: function(xmla, req, resp) {
+                                renderRowset(resp);
+                                xmla.options.url = req.url;
+                            },
+                            error: function(xmla, options) {
+                                displayError(options.exception);
+                            },
+                        });
+                    },
+                    arguments: {
+                        url: "The url where the XML/A service resides."
+                    },
+                    help: "Establish a connection with an XML/A server."
+                },
+                help: {
+                    handler: function(){
+                        var name, command, args, a;
+                        ed.createLine();
+                        for (name in commands) {
+                            command = commands[name];
+                            args = "";
+                            if (command.arguments) {
+                                for (a in command.arguments) {
+                                    args += " <" + a + ">";
+                                }
+                            }
+                            ed.createLine(name + args + " - " + command.help);
+                        }
+                        ed.createLine();
+                    },
+                    help: "Displays the available commands." 
+                },
+                select: {
+                    handler: function(command) {
+                        xmla.execute({
+                            statement: command,
+                            success: function(xmla, req, resp) {
+                                if (resp instanceof Xmla.Rowset) {
+                                    renderRowset(resp);
+                                }
+                                else
+                                if (resp instanceof Xmla.Dataset) {
+                                    renderDataset(resp);
+                                }
+                            },
+                            error: function(xmla, options) {
+                                displayError(options.exception);
+                            }                            
+                        });
+                    },
+                    help: "Execute the mdx SELECT command against the current connection."
+                },
+                set: {
+                    handler: function(command){
+                        var settings = trim(command.substr("set".length)),
+                            setting, i, n, indexOfEquals, name, value, 
+                            names, j, m, options, obj
+                        ;
+                        settings = settings.split(",");
+                        n = settings.length;
+                        for (i = 0; i < n; i++) {
+                            options = xmla.options;
+                            if ((setting = trim(settings[i])) === "") continue;
+                            if ((indexOfEquals = setting.indexOf("="))===-1) throw {
+                                code: 0,
+                                message: "Invalid setting: " + setting
+                            };
+                            name = trim(setting.substr(0, indexOfEquals));
+                            names = name.split(".");
+                            m = names.length-1;
+                            for (j = 0; j < m; j++){
+                                name = names[j];
+                                obj = options[name];
+                                if (!obj) {
+                                    options[name] = obj = {};
+                                }
+                                options = obj;
+                            }
+                            value = trim(setting.substr(indexOfEquals + 1));
+                            name = names.length ? names[m] : name;
+                            if (value === "null") {
+                                delete options[name];
+                            }
+                            else {
+                                options[name] = value;
+                            }
+                        }
+                    },
+                    help: "Set options to be used for subsequent requets."
+                },
+                show: {
+                    handler: function(command){
+                        var command = trim(command.substr("show".length)),
+                            lowerCaseCommand = command.toLowerCase(),
+                            keyword
+                        ;
+                        if (!lowerCaseCommand.indexOf(keyword = "options")) {
+                            var line = ed.createLine();
+                            line.className = "";
+                            line.innerHTML = "<pre>" + JSON.stringify(xmla.options, null, 2) + "</pre>";
+                            return;
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "catalogs")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "cubes")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "dimensions")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "measures")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "hierarchies")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "levels")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else 
+                        if (!lowerCaseCommand.indexOf(keyword = "members")) {
+                            command = trim(command.substr(keyword.length));
+                        }
+                        else {
+                            displayError({
+                                code: 0,
+                                message: "Invalid show command."
+                            });
+                        }
+                        xmla.discover({
+                            requestType: ({
+                                "catalogs": Xmla.DBSCHEMA_CATALOGS,
+                                "cubes": Xmla.MDSCHEMA_CUBES,
+                                "dimensions": Xmla.MDSCHEMA_DIMENSIONS,
+                                "measures": Xmla.MDSCHEMA_MEASURES,
+                                "hierarchies": Xmla.MDSCHEMA_HIERARCHIES,
+                                "levels": Xmla.MDSCHEMA_LEVELS,
+                                "members": Xmla.MDSCHEMA_MEMBERS
+                            })[keyword],
+                            success: function(xmla, req, resp){
+                                renderRowset(resp);
+                            },
+                            error: function(xmla, options) {
+                                displayError(options.exception);
+                            },
+                        })
+                    },
+                    help: "Show metadata."
+                }
+            };
+            //F10 handler: execute lines in the buffer
+            wsh.WebShell.defaultNonCharKeyHandlers["121"] = function(event){
+                addLineToBuffer();
+                var commandText = buffer.join("\n"), 
+                    cleanCommand = trim(commandText).toLowerCase(),
+                    command,
+                    result
+                ;
+                for (command in commands) {
+                    if (cleanCommand.indexOf(command)) continue;
+                    command = commands[command];
+                    try {
+                        command.handler(commandText);
+                        clear();
+                    }
+                    catch (exception) {
+                        displayError(exception);
+                    }
+                    return;
+                }
+                displayError({
+                    code: 0,
+                    message: "Unknown command. " +
+                            "Type \"help\" and F10 to get a list of available commands."  
+                })
+            };
+            
+            function trim(str) {
+                return str.replace(/^\s+/, "").replace(/\s+$/, "");
+            }
+
+            var ed = new wsh.WebShell({
+                el: "editor",
+                caret: "_",
+                fontSize: 16,
+                prompt: prompt,
+                lines: [
+                    "Copyright 2011 Roland Bouman",
+                    "This program is LGPL licensed free software.",
+                    "",
+                    "Welcome to the XML/A shell.",
+                    "Type some mdx and press F10 to execute.",
+                    "Press ESC to clear the buffer."
+                ],
+                hasFocus: true,
+            });
+
+            ed.addListener("enterline", function(event, ed, text){
+                addLineToBuffer();
+                ed.config.prompt = "   -> ";                
+            });
+
+            ed.render();
+        })();
+        </script>
+    </body>
+</html>

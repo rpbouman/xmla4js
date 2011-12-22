@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+    Copyright 2009, 2010, 2011 Roland Bouman 
+    Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
+    Twitter: @rolandbouman
+    
+    index.html - this documentation is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+        <style type="text/css" id="main">
+            body {
+                font: message-box;
+                font-size: 10pt;
+            }
+            #workarea {
+                float: left;
+                left: 20%;
+                width: 79%
+            }
+            #metadata {
+                float: left;
+                width: 19%;
+            }
+            
+            .component {
+                border-style: solid;
+                border-radius: 10px;
+                border-width: 2px;
+                border-color: grey;
+                background-color: white;
+                padding: 2px;
+            }
+            
+            .main-component {
+                height: 95%;
+                position: absolute;
+            }
+            
+            #discover: {
+                right: 0px;
+                float:right;
+                width: 10%;
+            }
+            #url-label {
+                margin-left:5px;
+                float:left;
+                width: 2em;
+                border-style: none;
+                margin: 2px;
+                font-weight:bold;
+            }
+            #url-label:after {
+                content: ": "
+            }
+            #url {
+                left: 3em;
+                margin-left:5px;
+                float:left;
+                width: 93%;
+                border-style: none;
+            }
+            #url:active {
+                border-style: none;
+            }
+            
+            #toolbar {
+                margin-bottom:8px;
+                border-style: solid;
+                border-width: 2px;
+                border-radius: 5px;
+                border-color: grey;
+                background-color: white;
+            }
+            
+        </style>
+        <style type="text/css" id="tree-section">
+            .section-header {
+                background-repeat: no-repeat;
+                background-color: ThreeDFace;
+                border-radius: 5px;
+                padding: 3px;
+                font-weight: bold;
+                border-width: 2px;
+                border-style: outset;
+                text-indent: 2em;
+            }
+            
+            #datasources-head:hover {
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+            
+            #cube-head {
+                background-image: url('cube24.gif');
+                background-position: 0px -1px;
+            } 
+        </style>
+        <style type="text/css" id="tree">
+            div.node > div.head > span.toggle {
+                font-family: monospace;
+                height: 26px!important;
+            }
+            
+            div.node > div.body {
+                margin-left: 1em;
+            }
+
+            div.node > div.head {
+                cursor: default;
+            }
+
+            div.node > div.head > span.toggle:before { 
+                background-repeat: no-repeat;
+                background-position: 13px -1px;
+                font-family: monospace;
+                font-size: 13pt;
+            }
+            
+            div.leaf > div.head > span.toggle:before {
+                content: "\00A0\00A0\00A0\00A0";
+            } 
+
+            div.collapsed > div.head > span.toggle:before {
+                content: "+\00A0\00A0\00A0";
+            } 
+
+            div.expanded > div.head > span.toggle:before {
+                content: "-\00A0\00A0\00A0";
+            } 
+                        
+            div.collapsed > div.body {
+                display: none;
+            } 
+
+            div.expanded > div.body {
+                display: block;
+            } 
+        </style>
+        <style type="text/css" id="olap">
+            div.DBSCHEMA_CATALOGS > div.head > span.toggle:before {
+                background-image: url('schema24.gif');
+            }
+
+            div.MDSCHEMA_CUBES > div.head > span.toggle:before {
+                background-image: url('cube24.gif');
+            }
+
+            div.MDSCHEMA_CUBES > div.head > span.label:hover {
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        
+            div.MDSCHEMA_MEASURES > div.head > span.toggle:before {
+                background-image: url('measure24.gif');
+            }
+
+            div.MDSCHEMA_HIERARCHIES > div.head > span.toggle:before {
+                background-image: url('hierarchy24.gif');
+            }
+
+            div.MDSCHEMA_LEVELS > div.head > span.toggle:before {
+                background-image: url('level24.gif');
+            }
+            
+            div.MDSCHEMA_MEMBERS > div.head > span.toggle:before {
+                background-image: url('property24.gif');
+            }
+
+            #ddDragProxy.MDSCHEMA_MEASURES {
+                background-image: url('measure24.gif');
+                background-color: white;
+                border-style: solid; 
+                border-width: 1px;
+            }
+
+            #ddDragProxy.MDSCHEMA_HIERARCHIES {
+                background-image: url('hierarchy24.gif');
+                background-color: white;
+                border-style: solid; 
+                border-width: 1px;
+            }
+
+            #ddDragProxy.MDSCHEMA_LEVELS {
+                background-image: url('level24.gif');
+                background-color: white;
+                border-style: solid; 
+                border-width: 1px;
+            }
+
+            #ddDragProxy.MDSCHEMA_MEMBERS {
+                background-image: url('property24.gif');
+                background-color: white;
+                border-style: solid; 
+                border-width: 1px;
+            }
+        </style>
+        <style type="text/css" id="pivot-table-designer">
+            #workspace {
+              -moz-user-select: none;
+              -khtml-user-select: none;
+              -webkit-user-select: none;
+              user-select: none;
+            }
+            #ddDragProxy {
+                position: absolute;
+                background-repeat: no-repeat;
+                padding: 2px;
+                height: 20px;
+                text-indent: 2em;
+            }
+            #workarea > table {
+                margin: .5em;
+                border-style: solid;
+                border-width: 1px;
+            }
+            .query-designer {
+            }
+            .query-designer-axis {
+                margin: .5em;
+                border-style: solid;
+                border-width: 1px;
+            }
+            
+            .query-designer-axis td {
+                border-style: solid;
+                border-width: 1px;
+                background-repeat: no-repeat;
+                background-position: 2px -1px;
+            }
+
+            .query-designer-axis td.query-designer-axis-header,
+            .query-designer-axis td.query-designer-axis-spacer {
+                border-style: none;
+                vertical-align: top;
+                align: left;
+            }
+            
+            td.query-designer-axis-header:after {
+                content: ": ";
+            }
+            
+            .query-designer-hierarchy {
+                border-style: solid;
+                border-width: 1px;
+                padding: 2px;
+                text-indent: 2em;
+                background-image: url('hierarchy24.gif');
+                background-color: lightgrey;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="toolbar">
+            <label id="url-label">URL</label>
+            <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
+            <button id="discover">Discover</button>
+        </div>
+        <div id="workspace">
+            <div id="metadata" class="component main-component">
+                <div id="datasources">
+                    <div id="datasources-head" class="section-header">Data Sources</div>
+                    <div id="datasources-body"></div>
+                </div>
+                <div id="cube">
+                    <div id="cube-head" class="section-header"></div>
+                    <div id="cube-body"></div>
+                </div>
+            </div>
+            <div id="workarea" class="component main-component">
+                <div id="query-designer"></div>
+                <div id="query-results"></div>
+            </div>
+            <div id="ddDragProxy"></div>
+        </div>
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript" src="treeview-pivottable-combination.js"></script>
+    </body>
+</html>

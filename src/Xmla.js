@@ -4931,7 +4931,7 @@ Xmla.Rowset.prototype = {
 *   @return {bool} true in case there are more rows to traverse. false if all rows have been traversed.
 */    
     hasMoreRows: function(){
-        return this.rowIndex < this.numRows;
+        return this.numRows > this.rowIndex;
     },
 /**
 *   Moves the internal row index to the next row.
@@ -4942,8 +4942,9 @@ Xmla.Rowset.prototype = {
 *   @method nextRow
 */    
     nextRow: function(){
+        this.rowIndex += 1
         this._row = this._rows.item(this.rowIndex);
-        return this.rowIndex += 1;
+        return this.rowIndex;
     },
 /**
 *   This method is deprecated and may be removed in the future. 
@@ -4974,11 +4975,11 @@ Xmla.Rowset.prototype = {
             mArgs = mArgs.concat(args);
         }
         while (this.hasMoreRows()){
-            this.nextRow();
             mArgs[0] = this.readAsObject();
             if (rowCallback.apply(scope, mArgs)===false) {
                 return false;
             }
+            this.nextRow();
         }
         return true;
     },
@@ -5402,7 +5403,7 @@ Xmla.Dataset.prototype = {
         for (i=0; i<numAxisNodes; i++){
             axisNode = axisNodes.item(i);
             axisName = axisNode.getAttribute("name");
-            axis = new Xmla.Dataset.Axis(tmpAxes[axisName], axisNode);
+            axis = new Xmla.Dataset.Axis(tmpAxes[axisName], axisNode, axisName, i);
             if (axisName==Xmla.Dataset.AXIS_SLICER) {
                 this._slicer = axis;
             }
@@ -5502,8 +5503,10 @@ Xmla.Dataset.prototype = {
     }
 };
 
-Xmla.Dataset.Axis = function(_axisInfoNode, _axisNode){
+Xmla.Dataset.Axis = function(_axisInfoNode, _axisNode, name, id){
     this._initAxis(_axisInfoNode, _axisNode);
+    this.name = name;
+    this.id = id;
     return this;
 }
 
@@ -5571,25 +5574,22 @@ Xmla.Dataset.Axis.prototype = {
         this.reset();
     },
     _getMembers: function(){
-        if (this._tupleIndex < this.numTuples) {
-            return _getElementsByTagNameNS(
-                this._tuples.item(this._tupleIndex), 
-                _xmlnsDataset, "", "Member"
-            );
-        } 
-        else {
-            return null;
-        }
+        if (!this.hasMoreTuples()) return null;
+        return _getElementsByTagNameNS(
+            this._tuples.item(this._tupleIndex), 
+            _xmlnsDataset, "", "Member"
+        );
     },
     reset: function(){
         this._hierarchyIndex = 0;
         this._tupleIndex = 0;
+        this._members = this._getMembers();
     },
     hasMoreHierarchies: function(){
-        return this._hierarchyIndex < this.numHierarchies;
+        return this.numHierarchies > this._hierarchyIndex;
     },
     nextHierarchy: function(){
-        return (this._hierarchyIndex += 1);
+        return this._hierarchyIndex += 1;
     },
     eachHierarchy: function(callback, scope, args){
         var mArgs = [null];
@@ -5609,11 +5609,12 @@ Xmla.Dataset.Axis.prototype = {
         return true;
     },
     hasMoreTuples: function(){
-        return this._tupleIndex < this.numTuples;
+        return this.numTuples > this._tupleIndex;
     },
     nextTuple: function(){
+        this._tupleIndex += 1
         this._members = this._getMembers();
-        return (this._tupleIndex += 1);
+        return this._tupleIndex;
     },
     tupleCount: function(){
         return this.numTuples;
@@ -5621,27 +5622,34 @@ Xmla.Dataset.Axis.prototype = {
     tupleIndex: function() {
         return this._tupleIndex;
     },
+    getTuple: function() {
+        var i, n = this.numHierarchies,
+            hierarchies = {}, members = [], tuple = {
+            index: this._tupleIndex, 
+            hierarchies: hierarchies, 
+            members: members
+        };
+        for (i=0; i < n; i++){
+            members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
+        }
+        return tuple;
+    },
     eachTuple: function(callback, scope, args){
-        var mArgs = [null], tuple, hierarchies, members;
+        var mArgs = [null];
         if (!scope) scope = this;
         if (args) {
             if (_isArr(args)) mArgs.concat(args)
             else mArgs.push(args);
         }
         while (this.hasMoreTuples()){
-            hierarchies = {};
-            members = [];
-            tuple = {index: this._tupleIndex, hierarchies: hierarchies, members: members};
-            this.nextTuple();
-            for (var i=0; i<this.numHierarchies; i++){
-                members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
-            }
-            mArgs[0] = tuple;
+            mArgs[0] = this.getTuple();
             if (callback.apply(scope, mArgs)===false) {
                 return false;
             }
+            this.nextTuple();
         }
         this._tupleIndex = 0;
+        this._members = this._getMembers();
         return true;
     },
     getHierarchies: function(){
@@ -5914,11 +5922,15 @@ Xmla.Dataset.Cellset.prototype = {
         return this._idx < this._cellCount;
     },
     nextCell: function(){     
+        this._idx += 1;
         if (this.hasMoreCells()) {
             this._getCellNode();
+            return this._cellOrd;
         }
-        this._idx += 1;
-        return this._cellOrd;
+        else {
+            this._idx = 0;
+            return -1;
+        }
     },
     curr: function(){
         return this._idx;
