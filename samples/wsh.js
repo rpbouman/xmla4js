@@ -251,6 +251,7 @@ wsh.WebShell.prototype = {
             me.hasFocus = false;
         };
 
+        this.dom.linestart = document.createElement("span");
         this.dom.caret = document.createElement("span");
         ed.appendChild(this.dom.caret);
                 
@@ -338,6 +339,7 @@ wsh.WebShell.prototype = {
         if (this.dom.line){
             caretStyle.top = this.dom.line.offsetTop + "px";
         }
+        caret.scrollIntoView(true);
     },
     setLineText: function(line, text){
         var textNode = document.createTextNode(text);
@@ -381,16 +383,20 @@ wsh.WebShell.prototype = {
         }
         this.fireEvent("beforeaddline", text);
         var line = this.dom.historyLine = this.dom.line = document.createElement("div");
+        var linestart = this.dom.linestart;
+        line.appendChild(linestart); 
+        this.dom.editor.appendChild(line);
+        line.removeChild(linestart);
+        
         line.setAttribute("class", "wshLine");
         if (typeof(text)!=="undefined"){
             this.setLineText(line, text);
         }
-        this.dom.editor.appendChild(line);
         this.lineNr++;
         this.colNr = 0;
         this.moveCaret();
-        this.dom.caret.scrollIntoView(true);
         this.fireEvent("afteraddline", text);
+        window.scrollBy(-100, 0);
         return line;
     },
     getLineHeight: function(){

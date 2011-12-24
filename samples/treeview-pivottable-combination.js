@@ -520,6 +520,9 @@ var QueryDesigner;
     this.axes = {};
     this.createAxes();
 }).prototype = {
+    setCube: function(cube) {
+        this.cube = cube;
+    },
     reset: function() {
         for (var p in this.axes) {
             this.axes[p].reset();
@@ -564,8 +567,9 @@ var QueryDesigner;
         ;
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
-        c.rowSpan = "100%";
+        sAtt(c, "colspan",  "100%");
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
+        
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
         c = r.insertCell(1);
@@ -589,6 +593,29 @@ var QueryDesigner;
     getContainer: function() {
         return gEl(this.conf.container);
     },
+    getMdx: function() {
+        var mdx = "", axis, axisMdx;
+        if ((axisMdx = this.getAxis(Xmla.Dataset.AXIS_COLUMNS).getMdx()).length) {
+            mdx += " " + axisMdx;
+            if ((axisMdx = this.getAxis(Xmla.Dataset.AXIS_ROWS).getMdx()).length) {
+                mdx += "\n,      " + axisMdx;
+                if ((axisMdx = this.getAxis(Xmla.Dataset.AXIS_PAGES).getMdx()).length) {
+                    mdx += "\n,      " + axisMdx;
+                }
+            }
+        }
+        if (mdx.length) {
+            mdx = "SELECT" + mdx + 
+                "\nFROM   [" + this.cube.cube.CUBE_NAME + "]"
+            ;
+        }
+        return mdx;
+    },
+    axisChanged: function(axis) {
+        if (iFun(this.queryChanged)){
+            this.queryChanged(this);
+        }
+    }
 };
 QueryDesigner.id = 0;
 QueryDesigner.prefix = "query-designer";
@@ -598,14 +625,15 @@ var QueryDesignerAxis;
     this.conf = conf;
     this.dimensions = null;
     this.hierarchies = null;
-    this.hierarchyOrder  = null;
     this.setDefs = null;
     QueryDesignerAxis.instances[this.getId()] = this;
 }).prototype = {
+    getQueryDesigner: function() {
+        return this.conf.queryDesigner;
+    },
     reset: function() {
-        this.hierarchies = {};
+        this.hierarchies = [];
         this.dimensions = {};
-        this.hierarchyOrder  = [];
         this.setDefs = [];
     },
     getLayout: function() {
@@ -649,10 +677,19 @@ var QueryDesignerAxis;
         return el;
     },
     hasHierarchy: function(hierarchy) {
-        return !iUnd(this.getHierarchyIndex(hierarchy));
+        return this.getHierarchyIndex(hierarchy)!==-1;
     },
-    getHierarchyIndex: function(hierarchy) {
-        return this.hierarchies[hierarchy];
+    getHierarchyIndex: function(name) {
+        for (var h = this.hierarchies, i = 0, n = h.length; i < n; i++){
+            if (h[i].HIERARCHY_UNIQUE_NAME === name) return i;
+        }
+        return -1;
+    },
+    getHierarchyByName: function(name) {
+        for (var h = this.hierarchies, i = 0, n = h.length; i < n; i++){
+            if (h[i].HIERARCHY_UNIQUE_NAME === name) return h[i];
+        }
+        return null;
     },
     canDropItem: function(target, requestType, metadata) {
         var dimensionName = metadata.DIMENSION_UNIQUE_NAME,
@@ -664,125 +701,145 @@ var QueryDesignerAxis;
         switch (requestType) {
             case "MDSCHEMA_HIERARCHIES":
                 //if this axis already has this hierarchy then we can't drop it again.
-                if (this.hierarchies[hierarchyName]) return false;
+                if (this.hasHierarchy(hierarchyName)) return false;
                 //if this axis already has a hierarchy with this dimension, then we can only replace
-                if (this.dimensions[dimensionName] && target.className.indexOf("query-designer-hierarchy")) return false;
+                if (this.dimensions[dimensionName] && target.className.indexOf("MDSCHEMA_HIERARCHIES")) return false;
                 break;
             case "MDSCHEMA_LEVELS":
             case "MDSCHEMA_MEMBERS":
+            case "MDSCHEMA_MEASURES":
                 break;
             default:
                 return false;
         }
         return true;
     },
-    replaceHierarchy: function(existingHierarchyIndex, metadata) {
-        var oldHierarchy = this.hierarchyOrder[existingHierarchyIndex],
-            oldHierarchyName = oldHierarchy.HIERARCHY_UNIQUE_NAME,
-            hierarchyName = metadata.HIERARCHY_UNIQUE_NAME,
-            defaultMember = metadata.DEFAULT_MEMBER,
-            layout = this.getLayout(), 
-            dom = this.getDom(),
-            r, c
-        ;
-        this.hierarchyOrder[existingHierarchyIndex] = metadata;
-        delete this.hierarchies[oldHierarchyName];
-        this.hierarchies[hierarchyName] = existingHierarchyIndex;
-        this.dimensions[metadata.DIMENSION_UNIQUE_NAME] = hierarchyName;
-        switch (layout) {
-            case "horizontal":
-                r = dom.rows.item(existingHierarchyIndex+1);
-                c = r.cells(0);
-                break;
-            case "vertical":
-                r = dom.rows.item(1);
-                c = r.cells.item(1 + existingHierarchyIndex*2);
-                break;
-        }
-        c.innerHTML = metadata.HIERARCHY_CAPTION;
-        var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef;
-        for (i=0; i < numSetDefs; i++) {
-            setDef = setDefs[i];
-            delete setDef[oldHierarchyName];
-            setDef[hierarchyName] = {
-                member: defaultMember,
-                type: "MDSCHEMA_MEMBERS"
-            }
-            switch(layout) {
-                case "horizontal":
-                    r.cells.item(1 + i*2).innerHTML = defaultMember;
-                    break;
-                case "vertical":
-                    r = dom.rows.item(3+(i*2));
-                    c = r.cells.item(existingHierarchyIndex*2);
-                    break;
-            }
-            c.innerHTML = defaultMember;
-            c.className = "query-designer-member";
-        }
-    },
     getIndexesForTableCell: function(td) {
         var hierarchyIndex, tupleIndex;
         switch (this.getLayout()) {
             case "horizontal":
-                hierarchyIndex = td.parentNode.rowIndex;
-                tupleIndex = 
+                hierarchyIndex = Math.floor(td.parentNode.rowIndex / 2);
+                tupleIndex = Math.floor((td.cellIndex - 2) / 2);
                 break;
             case "vertical":
-                hierarchyIndex = td.cellIndex;
-                tupleIndex = 
+                hierarchyIndex = Math.floor(td.cellIndex / 2);
+                tupleIndex = Math.floor((td.parentNode.rowIndex - 2) / 2);
                 break;
             default:
                 return null;
         }
-        return Math.floor(index / 2);
+        return {
+            hierarchyIndex: hierarchyIndex,
+            tupleIndex: tupleIndex
+        };
     },
     itemDropped: function(target, requestType, metadata) {
         var hierarchy = metadata.HIERARCHY_UNIQUE_NAME,
             hierarchyIndex = this.getHierarchyIndex(hierarchy),
             layout = this.getLayout(),
-            dropTupleIndex, dropHierarchyIndex
+            dropIndexes,
+            memberType, memberExpression, memberCaption
         ;
-        if (iUnd(hierarchyIndex)) {
-            if (!target.className.indexOf("query-designer-hierarchy")) {
-                this.replaceHierarchy(this.getHierarchyIndexForTableCell(target), metadata);
-            }
-            else {
-                this.addHierarchy(metadata)
-            }
+        if (target.tagName === "TD") {
+            dropIndexes = this.getIndexesForTableCell(target);
+        }
+        if (hierarchyIndex !== -1) return;
+        memberType = requestType;
+        switch (requestType) {
+            case "MDSCHEMA_HIERARCHIES":
+                memberExpression = metadata.DEFAULT_MEMBER;
+                memberCaption = this.getDefaultMemberCaption(metadata);
+                memberType = "MDSCHEMA_MEMBERS";
+                break;
+            case "MDSCHEMA_LEVELS":
+                memberExpression = metadata.LEVEL_UNIQUE_NAME + ".Members";
+                memberCaption = metadata.LEVEL_CAPTION;
+                break;
+            case "MDSCHEMA_MEMBERS":
+                memberExpression = metadata.MEMBER_UNIQUE_NAME;
+                memberCaption = metadata.MEMBER_CAPTION;
+                break;
+            case "MDSCHEMA_MEASURES":
+                memberExpression = metadata.MEASURE_UNIQUE_NAME;
+                memberCaption = metadata.MEASURE_CAPTION;
+                break;
+        }
+        if (!target.className.indexOf("MDSCHEMA_HIERARCHIES")) {
+            this.replaceHierarchy(metadata, dropIndexes.hierarchyIndex, memberType, memberExpression, memberCaption);
+        }
+        else {
+            this.addHierarchy(metadata, dropIndexes.hierarchyIndex, memberType, memberExpression, memberCaption);
         }
     },
-    addHierarchy: function(hierarchy, customSetDef, hierarchyIndex) {
-        var hierarchyName = hierarchy.HIERARCHY_UNIQUE_NAME,
+    getDefaultMemberCaption: function(hierarchy) {
+        var defaultMember = hierarchy.DEFAULT_MEMBER;
+        if (!defaultMember.indexOf(hierarchy.HIERARCHY_UNIQUE_NAME) + ".") {
+            defaultMember = defaultMember.substr(hierarchy.HIERARCHY_UNIQUE_NAME.length + 1);
+        }
+        if (defaultMember[0]==="[" && defaultMember[defaultMember.length-1]==="]") {
+            defaultMember = defaultMember.substr(1, defaultMember.length-2);
+        }
+        return defaultMember;
+    },
+    getHierarchyCaption: function(hierarchy) {
+        return hierarchy.HIERARCHY_CAPTION ? hierarchy.HIERARCHY_CAPTION : "Measures";
+    },
+    getHierarchyName: function(hierarchy) {
+        return hierarchy.HIERARCHY_UNIQUE_NAME ? hierarchy.HIERARCHY_UNIQUE_NAME : "Measures";
+    },
+    getDimensionName: function(hierarchy) {
+        return hierarchy.DIMENSION_UNIQUE_NAME ? hierarchy.DIMENSION_UNIQUE_NAME : "Measures";
+    },
+    getHierarchyByIndex: function(index) {
+        return this.hierarchies[index];
+    },
+    getHierarchyCount: function(){
+        return this.hierarchies.length;
+    },
+    addHierarchy: function(hierarchy, hierarchyIndex, memberType, memberExpression, memberCaption) {
+        var hierarchyName = this.getHierarchyName(hierarchy),
             layout = this.getLayout()
         ;
-        if (iUnd(hierarchyIndex)) {
-            hierarchyIndex = this.hierarchyOrder.length;
-            this.hierarchyOrder.push(hierarchy);
+        if (hierarchyIndex === -1) {
+            hierarchyIndex = this.getHierarchyCount();
+            this.hierarchies[hierarchyIndex] = hierarchy;
         }
-        this.hierarchies[hierarchyName] = hierarchyIndex;
-        this.dimensions[hierarchy.DIMENSION_UNIQUE_NAME] = hierarchyName;
+        else {
+            this.hierarchies.splice(hierarchyIndex, 0, hierarchy);
+        }
+        this.dimensions[this.getDimensionName(hierarchy)] = hierarchyName;
         var dom = this.getDom(), r, c;
 
         switch(layout) {
             case "horizontal":
-                r = hierarchyIndex ? dom.insertRow(hierarchyIndex*2) : dom.rows.item(0);
-                c = r.insertCell(r.cells.length);
-                c.className = "query-designer-axis-spacer";
+                if (hierarchyIndex) {
+                    r = dom.insertRow(hierarchyIndex*2);
+                    c = r.insertCell(r.cells.length);
+                    c.className = "query-designer-axis-spacer";
+                }
+                else {
+                    if (this.hierarchies.length) {
+                        r = dom.insertRow(1 + hierarchyIndex*2);
+                    }
+                    else {
+                        r = dom.rows.item(0);
+                    }
+                    c = r.insertCell(r.cells.length);
+                    c.className = "query-designer-axis-spacer";
+                }
                 r = dom.insertRow(1 + hierarchyIndex*2);
                 c = r.insertCell(0);
                 break;
             case "vertical":
-                r = dom.rows.item(1);
-                if (!r) r = dom.insertRow(1);
-                c = r.insertCell(r.cells.length);
+                if (!(r = dom.rows.item(1))) r = dom.insertRow(1);
+                c = r.insertCell(hierarchyIndex*2);
                 c.className = "query-designer-axis-spacer";
-                c = r.insertCell(r.cells.length);
+                c = r.insertCell(hierarchyIndex*2+1);
                 break;
         }
-        c.innerHTML = cubeMetaData.hierarchies[hierarchyName].HIERARCHY_CAPTION;
-        c.className = "query-designer-hierarchy";
-
+        c.innerHTML = this.getHierarchyCaption(hierarchy);
+        c.className = "MDSCHEMA_HIERARCHIES";
+                
         var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef, 
             defaultMember = hierarchy.DEFAULT_MEMBER
         ;
@@ -790,8 +847,8 @@ var QueryDesignerAxis;
             for (i=0; i < numSetDefs; i++) {
                 setDef = setDefs[i];
                 setDef[hierarchyName] = {
-                    member: defaultMember,
-                    type: "MDSCHEMA_MEMBERS"
+                    member: memberExpression,
+                    type: memberType
                 }
                 switch(layout) {
                     case "horizontal":
@@ -801,22 +858,22 @@ var QueryDesignerAxis;
                         break;
                     case "vertical":
                         r = dom.rows.item(3+(i*2));
-                        c = r.insertCell(r.cells.length);
+                        c = r.insertCell(hierarchyIndex*2);
                         c.className = "query-designer-axis-spacer";
-                        c.rowSpan = "2";
-                        c = r.insertCell(r.cells.length);
+                            c.rowSpan = "2";
+                        c = r.insertCell(hierarchyIndex*2);
                         c.className = "query-designer-axis-spacer";                        
                         break;
                 }
-                c.innerHTML = defaultMember;
-                c.className = "query-designer-member";
+                c.innerHTML = memberCaption;
+                c.className = memberType;
             }
         }
         else {
             setDef = {};
             setDef[hierarchyName] = {
-                member: hierarchy.DEFAULT_MEMBER,
-                type: "MDSCHEMA_MEMBERS"
+                member: memberExpression,
+                type: memberType
             };
             setDefs.push(setDef);
             switch(layout) {
@@ -840,13 +897,117 @@ var QueryDesignerAxis;
                     
                     break;
             }
-            c.innerHTML = hierarchy.DEFAULT_MEMBER;
-            c.className = "query-designer-member";
+            c.innerHTML = memberCaption;
+            c.className = memberType;
         }
+        this.getQueryDesigner().axisChanged(this);
+    },
+    replaceHierarchy: function(metadata, existingHierarchyIndex, memberType, memberExpression, memberCaption) {
+        var oldHierarchy = this.getHierarchyByIndex(existingHierarchyIndex),
+            oldHierarchyName = this.getHierarchyName(oldHierarchy),
+            hierarchyName = this.getHierarchyName(metadata),
+            defaultMember = metadata.DEFAULT_MEMBER,
+            layout = this.getLayout(), 
+            dom = this.getDom(),
+            r, c
+        ;
+        this.hierarchies[existingHierarchyIndex] = metadata;
+        this.dimensions[this.getDimensionName(metadata)] = hierarchyName;
+        switch (layout) {
+            case "horizontal":
+                r = dom.rows.item(existingHierarchyIndex * 2 +1);
+                c = r.cells(0);
+                break;
+            case "vertical":
+                r = dom.rows.item(1);
+                c = r.cells.item(1 + existingHierarchyIndex*2);
+                break;
+        }
+        c.innerHTML = this.getHierarchyCaption(metadata);
+        var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef;
+        for (i=0; i < numSetDefs; i++) {
+            setDef = setDefs[i];
+            delete setDef[oldHierarchyName];
+            setDef[hierarchyName] = {
+                member: memberExpression,
+                type: memberType
+            }
+            switch(layout) {
+                case "horizontal":
+                    c = r.cells.item(2 + i*2);
+                    break;
+                case "vertical":
+                    r = dom.rows.item(3+(i*2));
+                    c = r.cells.item(existingHierarchyIndex*2);
+                    break;
+            }
+            c.innerHTML = memberCaption;
+            c.className = memberType;
+        }
+        this.getQueryDesigner().axisChanged(this);
     },
     addLevel: function(level, hierarchyIndex, tupleIndex) {
     },
     addMember: function(member, hierarchyIndex, tupleIndex) {
+    },
+    getMdx: function() {
+        var hierarchies = this.hierarchies, 
+            numHierarchies = hierarchies.length, 
+            hierarchy, i,
+            setDefs = this.setDefs, member,
+            numSetDefs = setDefs.length, 
+            setDef, i,
+            mdx = "", tuple = "", set = "";
+        ;
+        for (i = 0; i < numSetDefs; i++) {
+            setDef = setDefs[i];
+            for (j = 0; j < numHierarchies; j++) {
+                hierarchy = hierarchies[j];
+                member = setDef[this.getHierarchyName(hierarchy)];
+                switch (member.type) {
+                    case "MDSCHEMA_MEASURES":
+                    case "MDSCHEMA_MEMBERS":
+                        if (tuple.length) tuple += ", ";
+                        tuple += member.member;
+                        break;
+                    case "MDSCHEMA_LEVELS":
+                        if (tuple.length) {
+                            tuple = "CrossJoin({(" + tuple + ")}, " + member.member + ")";
+                        }
+                        else {
+                            tuple = member.member;
+                        }
+                        if (set.length) {
+                            set = "CrossJoin(" + set + ", " + tuple + ")";
+                        }
+                        else {
+                            set = tuple;
+                        }
+                        tuple = "";
+                        break;
+                }
+            }
+            if (tuple.length) {
+                tuple = "{(" + tuple + ")}";
+            }
+            if (set.length && tuple.length) {
+                set = "CrossJoin(" + set + ", " + tuple + ")";
+            }
+            else 
+            if (tuple.length) {
+                set = tuple;
+            }
+            if (mdx.length) {
+                mdx = "Union(" + mdx + ", " + set + ")";
+            }
+            else {
+                mdx = set;
+            }
+            set = "";
+            tuple = "";
+        }
+        if (numSetDefs) mdx += " ON Axis(" + this.conf.id + ")";
+        return mdx;
     }
 };
 QueryDesignerAxis.instances = {};
@@ -884,10 +1045,12 @@ function clearCubeTree() {
 }
 function initWorkarea() {
     queryDesigner.reset();
+    gEl("query-text").innerHTML = "";
     gEl("query-results").innerHTML = "No results to display.";
 }
 function clearWorkarea() {
     gEl("query-designer").innerHTML = "";
+    gEl("query-text").innerHTML = "";
     gEl("query-results").innerHTML = "";
 }
 function clearUI() {
@@ -985,6 +1148,7 @@ function discoverClicked(){
         }
     });
 }
+
 function selectCube(cubeTreeNode) {
     cubeMetaData = {
         cube: cubeTreeNode.conf.metadata,
@@ -993,11 +1157,14 @@ function selectCube(cubeTreeNode) {
         hierarchies: {
         }
     };
+    queryDesigner.setCube(cubeMetaData);
     clearCubeTree();
     initWorkarea();
     showCube(true);
     showDataSources(false);
     var conf = cubeTreeNode.getConf();
+    xmla.options.url = conf.xmla.url;
+    xmla.options.properties = conf.xmla.properties;
     gEl("cube-head").innerHTML = conf.title;
     xmla.discoverMDMeasures({
         url: conf.xmla.url,
@@ -1016,7 +1183,7 @@ function selectCube(cubeTreeNode) {
                 });
             });
             xmla.discoverMDHierarchies({
-                url: req.url,
+                url: req.url,                
                 properties: req.properties,
                 restrictions: req.restrictions,
                 success: function(xmla, req, resp) {
@@ -1039,6 +1206,7 @@ function selectCube(cubeTreeNode) {
                             loadChildren: function(callback) {
                                 xmla.discoverMDLevels({
                                     url: req.url,
+                                    metadata: row,
                                     properties: req.properties,
                                     restrictions: restrictions,
                                     nodeId: nodeId,
@@ -1056,13 +1224,13 @@ function selectCube(cubeTreeNode) {
                                                 customClass: req.requestType,
                                                 title: row.LEVEL_CAPTION,
                                                 tooltip: row.LEVEL_UNIQUE_NAME,
-                                                metadata: row,
+                                                metadata: merge(row, req.metadata),
                                                 loadChildren: function(callback){
                                                     xmla.discoverMDMembers({
                                                         url: req.url,
+                                                        metadata: this.conf.metadata,
                                                         properties: req.properties,
                                                         restrictions: restrictions,
-                                                        
                                                         nodeId: this.getId(),
                                                         success: function(xmla, req, resp) {
                                                             var loadChildren = function(callback){
@@ -1124,7 +1292,7 @@ function selectCube(cubeTreeNode) {
                                                                     title: row.MEMBER_CAPTION,
                                                                     tooltip: row.MEMBER_UNIQUE_NAME,
                                                                     state: row.CHILDREN_CARDINALITY ? TreeNode.states.collapsed : TreeNode.states.leaf,
-                                                                    metadata: row,
+                                                                    metadata: merge(row, req.metadata),
                                                                     loadChildren: loadChildren
                                                                 }).getId());
                                                             });
@@ -1146,89 +1314,215 @@ function selectCube(cubeTreeNode) {
     });
 }
 
-showCube(false);
-listen("discover", "click", discoverClicked);
-listen("metadata", "click", metadataClicked);
-ddHandler.listen({
-    startDrag: function(event, ddHandler) {
-        var target = event.getTarget(), startDragEvent,
-            tagName = target.tagName,
-            className = target.className,
-            treeNode, customClass, dragProxy, xy
-        ;
-        if (tagName !== "SPAN" || className !== "label") return; 
-        treeNode = TreeNode.lookupTreeNode(target);
-        if (!treeNode) return;
-        customClass = treeNode.getCustomClass();
-        switch (customClass) {
-            case "MDSCHEMA_MEASURES":
+function getTupleName(tuple, hierarchy) {
+    for (var mName = "", i = 0; i <= hierarchy.index; i++) {
+        mName += tuple.members[i][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+    }
+    return mName;
+}
 
-                break;
-            case "MDSCHEMA_HIERARCHIES": 
-            case "MDSCHEMA_LEVELS":
-            case "MDSCHEMA_MEMBERS":
 
-                break;
-            default: 
-                return;
-        }
-        startDragEvent = ddHandler.startDragEvent;
-        startDragEvent.treeNode = treeNode;  
-        xy = event.getXY();
-        dragProxy = ddHandler.dragProxy;
-        dragProxy.style.position = "absolute";
-        dragProxy.className = customClass;
-        dragProxy.innerHTML = treeNode.getTitle();
-        dragProxy.style.left = (xy.x + 2) + "px";
-        dragProxy.style.top = (xy.y + 2) + "px";
-        return true;
-    },
-    whileDrag: function(event, ddHandler) {
-        var dragProxy = ddHandler.dragProxy,
-            xy = event.getXY(),
-            startDragEvent = ddHandler.startDragEvent,
-            treeNode = startDragEvent.treeNode,
-            customClass,
-            dropTarget = event.getTarget(),
-            tagName = dropTarget.tagName, 
-            className = target.className
-        ;
-        dragProxy.style.left = (xy.x + 2) + "px";
-        dragProxy.style.top = (xy.y + 2) + "px";
-    },
-    endDrag: function(event, ddHandler) {
-        var dragProxy = ddHandler.dragProxy,
-            startDragEvent = ddHandler.startDragEvent,
-            treeNode = startDragEvent.treeNode,
-            requestType, metadata, customClass,
-            dropTarget = event.getTarget(),
-            tagName = dropTarget.tagName, 
-            className = target.className,
-            queryDesignerAxis, queryDesigner
-        ;
-        if (treeNode) {
-            metadata = treeNode.getConf().metadata;
+function renderTable(columnAxis, rowAxis){
+    var t = cEl("TABLE", {
+        "class": "pivot-table",
+        cellpadding: 0,
+        cellspacing: 0
+    }), numRowHierarchies = rowAxis ? rowAxis.hierarchyCount() : 0,
+        numColumnHierarchies = columnAxis ? columnAxis.hierarchyCount() : 0,
+        numColumnTuples = columnAxis ? columnAxis.tupleCount() : 0,
+        rows = t.rows, r, c, cName, oName, span
+    ;
+    if (numColumnHierarchies) {
+        columnAxis.eachHierarchy(function(hierarchy){
+            r = t.insertRow(rows.length);
+            if (!r.rowIndex && numRowHierarchies) {
+                c = r.insertCell(r.cells.length);
+                sAtts(c, {
+                    rowspan: numColumnHierarchies,
+                    colspan: numRowHierarchies,
+                    "class": "th"
+                });
+            }
+            columnAxis.eachTuple(function(tuple){
+                if ((cName = getTupleName(tuple, hierarchy)) !== oName) {
+                    c = r.insertCell(r.cells.length);
+                    c.className = "th";
+                    c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
+                    span = 1;
+                    oName = cName;
+                }
+                c.colSpan = span++;
+            });
+        });
+    }
+    if (numRowHierarchies) {
+        rowAxis.eachHierarchy(function(hierarchy){
+            this.eachTuple(function(tuple){
+                r = rows.item(numColumnHierarchies + tuple.index);
+                if (!r) r = t.insertRow(rows.length);
+                if ((cName = getTupleName(tuple, hierarchy)) !== oName) {
+                    c = r.insertCell(r.cells.length);
+                    c.className = "th";
+                    c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
+                    span = 1;
+                    oName = cName;
+                }
+                c.rowSpan = span++;
+                if (hierarchy.index === numRowHierarchies - 1) {
+                    for (var i = numRowHierarchies, n = numRowHierarchies + numColumnTuples; i < n; i++) {
+                        r.insertCell(r.cells.length);
+                    }
+                }
+            });
+        });        
+    }
+    else 
+    if (!numColumnHierarchies) {
+        t.insertRow().insertCell(0);
+    }
+    return t;
+}
+
+function renderColumnAxis(axis){
+}
+
+function renderCellset(cellset, table){ 
+}
+
+function renderDataset(dataset) {
+    var container = gEl("query-results"), 
+        table, cellset = dataset.getCellset()
+    ;
+    container.innerHTML = "";
+    if (dataset.hasPageAxis()) {
+        table = renderTable(dataset.getPageAxis());
+        container.appendChild(table);
+    }
+    table = renderTable(
+        dataset.hasColumnAxis() ? dataset.getColumnAxis() : null, 
+        dataset.hasRowAxis() ? dataset.getRowAxis() : null
+    );
+    container.appendChild(table);
+    renderCellset(cellset, table);
+}
+
+function init() {
+    //set up listeners
+    listen("discover", "click", discoverClicked);
+    listen("metadata", "click", metadataClicked);
+    ddHandler.listen({
+        startDrag: function(event, ddHandler) {
+            var target = event.getTarget(), startDragEvent,
+                tagName = target.tagName,
+                className = target.className,
+                treeNode, customClass, dragProxy, xy
+            ;
+            if (tagName !== "SPAN" || className !== "label") return; 
+            treeNode = TreeNode.lookupTreeNode(target);
+            if (!treeNode) return;
             customClass = treeNode.getCustomClass();
-            if (tagName === "TD") {
-                var table = dropTarget.parentNode.parentNode.parentNode;
-                if (!table.className.indexOf("query-designer-axis")){
-                    queryDesignerAxis = QueryDesignerAxis.getInstance(table.id);
-                    switch (customClass) { 
-                        case "MDSCHEMA_HIERARCHIES": 
-                        case "MDSCHEMA_LEVELS": 
-                        case "MDSCHEMA_MEMBERS":
-                            if (queryDesignerAxis.canDropItem(target, customClass, metadata)) {
-                                queryDesignerAxis.itemDropped(target, customClass, metadata);
-                            }
-                            break;
-                        default: 
+            switch (customClass) {
+                case "MDSCHEMA_MEASURES":
+                case "MDSCHEMA_HIERARCHIES": 
+                case "MDSCHEMA_LEVELS":
+                case "MDSCHEMA_MEMBERS":
+                    break;
+                default: 
+                    return;
+            }
+            startDragEvent = ddHandler.startDragEvent;
+            startDragEvent.treeNode = treeNode;  
+            xy = event.getXY();
+            dragProxy = ddHandler.dragProxy;
+            dragProxy.style.position = "absolute";
+            dragProxy.className = customClass;
+            dragProxy.innerHTML = treeNode.getTitle();
+            dragProxy.style.left = (xy.x + 2) + "px";
+            dragProxy.style.top = (xy.y + 2) + "px";
+            return true;
+        },
+        whileDrag: function(event, ddHandler) {
+            var dragProxy = ddHandler.dragProxy,
+                xy = event.getXY(),
+                startDragEvent = ddHandler.startDragEvent,
+                treeNode = startDragEvent.treeNode,
+                customClass,
+                dropTarget = event.getTarget(),
+                tagName = dropTarget.tagName, 
+                className = target.className
+            ;
+            dragProxy.style.left = (xy.x + 2) + "px";
+            dragProxy.style.top = (xy.y + 2) + "px";
+        },
+        endDrag: function(event, ddHandler) {
+            var dragProxy = ddHandler.dragProxy,
+                startDragEvent = ddHandler.startDragEvent,
+                treeNode = startDragEvent.treeNode,
+                requestType, metadata, customClass,
+                dropTarget = event.getTarget(),
+                tagName = dropTarget.tagName, 
+                className = target.className,
+                queryDesignerAxis, queryDesigner
+            ;
+            if (treeNode) {
+                metadata = treeNode.getConf().metadata;
+                customClass = treeNode.getCustomClass();
+                if (tagName === "TD") {
+                    var table = dropTarget.parentNode.parentNode.parentNode;
+                    if (!table.className.indexOf("query-designer-axis")){
+                        queryDesignerAxis = QueryDesignerAxis.getInstance(table.id);
+                        switch (customClass) { 
+                            case "MDSCHEMA_HIERARCHIES": 
+                            case "MDSCHEMA_LEVELS": 
+                            case "MDSCHEMA_MEMBERS":
+                            case "MDSCHEMA_MEASURES":
+                                if (queryDesignerAxis.canDropItem(target, customClass, metadata)) {
+                                    queryDesignerAxis.itemDropped(target, customClass, metadata);
+                                }
+                                break;
+                            default: 
+                        }
                     }
                 }
             }
+            dragProxy.className = "";
+            dragProxy.innerHTML = "";
         }
-        dragProxy.className = "";
-        dragProxy.innerHTML = "";
+    });
+    queryDesigner.queryChanged = function(queryDesigner) {
+        var mdx = queryDesigner.getMdx();
+        gEl("query-text").innerHTML = mdx;
+        if (!mdx.length) return;
+        xmla.execute({
+            statement: mdx,
+            success: function(xmla, req, resp) {
+                renderDataset(resp);
+            },
+            error: function(a, b, c) {
+                debugger;
+            }
+        });
     }
-});
+    
+    //init the ui
+    showCube(false);
+    var search = window.location.search;
+    if (search.length) {
+        search = search.substr(1).split("&");
+        for (var i=0, n = search.length, item; i < n; i++) {
+            item = search[i].split("=");
+            switch (item[0]) {
+                case "url":
+                    gEl("url").value = decodeURIComponent(item[1]);
+                    gEl("discover").click();
+                    break;
+                default: 
+                    
+            }
+        }
+    }
+}
+
+init();
 
 })();

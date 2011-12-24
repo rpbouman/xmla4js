@@ -52,10 +52,8 @@
                 position: absolute;
             }
             
-            #discover: {
-                right: 0px;
-                float:right;
-                width: 10%;
+            #discover {
+                float:left;
             }
             #url-label {
                 margin-left:5px;
@@ -80,6 +78,7 @@
             }
             
             #toolbar {
+                height:26px;
                 margin-bottom:8px;
                 border-style: solid;
                 border-width: 2px;
@@ -92,11 +91,11 @@
         <style type="text/css" id="tree-section">
             .section-header {
                 background-repeat: no-repeat;
-                background-color: ThreeDFace;
+                background-color: lightgrey;
                 border-radius: 5px;
                 padding: 3px;
                 font-weight: bold;
-                border-width: 2px;
+                border-width: 1px;
                 border-style: outset;
                 text-indent: 2em;
             }
@@ -108,7 +107,7 @@
             }
             
             #cube-head {
-                background-image: url('cube24.gif');
+                background-image: url('cube24.png');
                 background-position: 0px -1px;
             } 
         </style>
@@ -159,7 +158,7 @@
             }
 
             div.MDSCHEMA_CUBES > div.head > span.toggle:before {
-                background-image: url('cube24.gif');
+                background-image: url('cube24.png');
             }
 
             div.MDSCHEMA_CUBES > div.head > span.label:hover {
@@ -253,11 +252,18 @@
                 align: left;
             }
             
+            .query-designer-axis td.query-designer-axis-spacer{
+                font-size:3px;
+            }
+            .query-designer-axis td.query-designer-axis-spacer:after {
+                content: "\00A0\00A0";
+            }
+            
             td.query-designer-axis-header:after {
                 content: ": ";
             }
             
-            .query-designer-hierarchy {
+            td.MDSCHEMA_HIERARCHIES {
                 border-style: solid;
                 border-width: 1px;
                 padding: 2px;
@@ -265,13 +271,53 @@
                 background-image: url('hierarchy24.gif');
                 background-color: lightgrey;
             }
+            
+            td.MDSCHEMA_LEVELS {
+                border-style: solid;
+                border-width: 1px;
+                padding: 2px;
+                text-indent: 2em;
+                background-image: url('level24.gif');
+            }
+
+            td.MDSCHEMA_MEMBERS {
+                border-style: solid;
+                border-width: 1px;
+                padding: 2px;
+                text-indent: 2em;
+                background-image: url('property24.gif');
+            }
+
+            td.MDSCHEMA_MEASURES {
+                border-style: solid;
+                border-width: 1px;
+                padding: 2px;
+                text-indent: 2em;
+                background-image: url('measure24.gif');
+            }
+        </style>
+        <style type="text/css" id="pivot-table">
+            table.pivot-table {
+                border-collapse: collapse;
+                margin: 1em;
+            }
+            
+            table.pivot-table td {
+                border-width: 1px;
+                border-style: solid;
+                padding: 2px;
+                border-color: lightgrey
+            }
+            table.pivot-table td.th {
+                background-color: lightgrey;
+                border-color: grey;
+            }
         </style>
     </head>
     <body>
         <div id="toolbar">
-            <label id="url-label">URL</label>
-            <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
             <button id="discover">Discover</button>
+            <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
         </div>
         <div id="workspace">
             <div id="metadata" class="component main-component">
@@ -286,6 +332,7 @@
             </div>
             <div id="workarea" class="component main-component">
                 <div id="query-designer"></div>
+                <pre id="query-text"></pre>
                 <div id="query-results"></div>
             </div>
             <div id="ddDragProxy"></div>
