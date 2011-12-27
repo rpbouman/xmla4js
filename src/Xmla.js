@@ -4714,7 +4714,7 @@ function _getValueConverter(type){
 
 function _getElementValue(el) {
     var txt = _getElementText(el),
-        type = el.getAttribute("type"),
+        type = _getAttributeNS(el, _xmlnsSchemaInstance, _xmlnsSchemaInstancePrefix, "type"),
         converter
         ;
     if (type){
@@ -5369,6 +5369,21 @@ Xmla.Dataset.prototype = {
         );
         this._initAxes();
         this._initCells();
+        
+        var a, i, j, axis, func, funcBody = "", mul;
+        func = "var ordinal = 0, a;" + 
+            "\nif (arguments.length !== " + this._numAxes + ") new Xmla.Exception._newError(\"ERROR_ILLEGAL_ARGUMENT\", \"cellOrdinalForTupleIndexes\", this)._throw();"
+        for (a = 0, i = this._numAxes-1; i >= 0; i--, a++) {
+            func += "\nif (typeof(a = arguments[" + a + "])!==\"number\") new Xmla.Exception._newError(\"ERROR_ILLEGAL_ARGUMENT\", \"cellOrdinalForTupleIndexes\", this)._throw();";
+            mul = 1;
+            for (j = i-1; j >= 0; j--) {
+                mul *= this._axesOrder[j].tupleCount();
+            }
+            func += "\nordinal += a ";
+            if (i) func += "* " + mul + ";";
+        }
+        func += funcBody + "\nreturn ordinal;"
+        this._cellset.cellOrdinalForTupleIndexes = this.cellOrdinalForTupleIndexes = new Function(func);
     },
     _initRoot: function(doc){
         var root = _getElementsByTagNameNS(doc, _xmlnsDataset, "", "root");
@@ -5485,7 +5500,10 @@ Xmla.Dataset.prototype = {
         return this._slicer;
     },
     getCellset: function(){
-        return new Xmla.Dataset.Cellset(this);
+        return this._cellset;
+    },
+    cellOrdinalForTupleIndexes: function() {
+        throw "Not implemented"
     },
     close: function(){
         if (this._slicer){
@@ -5848,7 +5866,7 @@ Xmla.Dataset.Cellset.prototype = {
     _cellNodes: null,
     _cellCount: null,
     _cellNode: null,
-    _cellDefs: null,
+    _cellProperties: null,
     _idx: null,
     _cellOrd: null,
     _initCellset: function(){
@@ -5908,14 +5926,20 @@ Xmla.Dataset.Cellset.prototype = {
         this.reset();
     },
     _getCellNode: function(index){
+        if (!_isUnd(index)) {
+            this._idx = index;
+        }
         this._cellNode = this._cellNodes.item(this._idx);
         this._cellOrd = this._getCellOrdinal(this._cellNode);
     },
     _getCellOrdinal: function(node){
         return parseInt(node.getAttribute("CellOrdinal"), 10);
     },
-    reset: function(){
-        this._idx = 0;
+    cellCount: function() {
+        return this._cellNodes.length;
+    },
+    reset: function(idx){
+        this._idx = idx ? idx : 0;
         this._getCellNode();
     },
     hasMoreCells: function(){
@@ -5995,14 +6019,14 @@ Xmla.Dataset.Cellset.prototype = {
         return true;
     },   
     _readCell: function(node, object){
-        for (var p in this._cellDefs){
-            cellDef = this._cellDefs[p];
+        for (var p in this._cellProperties){
             cellProp = _getElementsByTagNameNS(
                 node, _xmlnsDataset, "", p
             ).item(0);
-            if (cellDef.type){
-                converter = cellDef.converter;
-                object[p] = converter(_getElementText(cellProp));
+            if (!cellProp) continue;
+            cellProperty = this._cellProperties[p];
+            if (cellProperty){
+                object[p] = cellProperty(_getElementText(cellProp));
             }
             else if (p==="Value"){
                 object[p] = _getElementValue(cellProp);
@@ -6010,12 +6034,13 @@ Xmla.Dataset.Cellset.prototype = {
             else {
                 object[p] = _getElementText(cellProp);
             }
-            object.ordinal = this._getCellOrdinal(node);
         }
+        object.ordinal = this._getCellOrdinal(node);
         return object;
     },
-    readCell: function() {
-        return this._readCell(this.cellNode, {});
+    readCell: function(object) {
+        if (!object) object = {};
+        return this._readCell(this._cellNode, object);
     },
     eachCell: function(callback, scope, args) {
         var mArgs = [null];
@@ -6036,10 +6061,33 @@ Xmla.Dataset.Cellset.prototype = {
         this._idx = 0;
         return true;
     },
-    getByIndex: function(index) {
-        return this._cellNodes.item(index);
+    getByIndex: function(index, object) {
+        this._getCellNode(index);
+        return this.readCell(object);
     },
-    getByOrdinal: function(ordinal) {
+    getByOrdinal: function(ordinal, object) {
+        var node, ord, idx, lastIndex = this.cellCount() - 1;
+        idx = ordinal > lastIndex ? lastIndex : ordinal;
+        while(true) {
+            node = this._cellNodes.item(idx);
+            ord = this._getCellOrdinal(node);
+            if (ord === ordinal) {
+                return this.getByIndex(idx, object);
+            }
+            else
+            if (ord > ordinal) {
+                idx--;
+            }
+            else {
+                return null;
+            }
+        }
+    },
+    cellOrdinalForTupleIndexes: function() {
+        throw "Not implemented";
+    },
+    getByTupleIndexes: function() {
+        return this.getByOrdinal(this.cellOrdinalForTupleIndexes.apply(this, arguments));
     },
     close: function(){
         this._dataset = null;
@@ -6308,6 +6356,21 @@ Xmla.Exception.INVALID_AXIS_HLP = _exceptionHlp +
                                     "#" + Xmla.Exception.INVALID_AXIS_CDE  + 
                                     "_" + Xmla.Exception.INVALID_AXIS_MSG;
 
+/**
+*   Exception code indicating illegal number of axis arguments 
+*
+*   @property ILLEGAL_ARGUMENT
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-14</code>
+*/
+Xmla.Exception.ILLEGAL_ARGUMENT_CDE = -14;
+Xmla.Exception.ILLEGAL_ARGUMENT_MSG = "Illegal arguments"; 
+Xmla.Exception.ILLEGAL_ARGUMENT_HLP = _exceptionHlp + 
+                                    "#" + Xmla.Exception.ILLEGAL_ARGUMENT_CDE  + 
+                                    "_" + Xmla.Exception.ILLEGAL_ARGUMENT_MSG;
+                                    
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(
         Xmla.Exception.TYPE_ERROR,

@@ -1321,6 +1321,31 @@ function getTupleName(tuple, hierarchy) {
     return mName;
 }
 
+function renderAxisHorizontally(axis, t) {
+    var r, c, rows, cName, oName, span;
+    if (!t) {
+        t = cEl("TABLE", {
+            "class": "pivot-table",
+            cellpadding: 0,
+            cellspacing: 0
+        });
+    }
+    rows = t.rows;
+    axis.eachHierarchy(function(hierarchy){
+        r = t.insertRow(rows.length);
+        axis.eachTuple(function(tuple){
+            if ((cName = getTupleName(tuple, hierarchy)) !== oName) {
+                c = r.insertCell(r.cells.length);
+                c.className = "th";
+                c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
+                span = 1;
+                oName = cName;
+            }
+            c.colSpan = span++;
+        });
+    });
+    return t;
+}
 
 function renderTable(columnAxis, rowAxis){
     var t = cEl("TABLE", {
@@ -1333,29 +1358,16 @@ function renderTable(columnAxis, rowAxis){
         rows = t.rows, r, c, cName, oName, span
     ;
     if (numColumnHierarchies) {
-        columnAxis.eachHierarchy(function(hierarchy){
-            r = t.insertRow(rows.length);
-            if (!r.rowIndex && numRowHierarchies) {
-                c = r.insertCell(r.cells.length);
-                sAtts(c, {
-                    rowspan: numColumnHierarchies,
-                    colspan: numRowHierarchies,
-                    "class": "th"
-                });
-            }
-            columnAxis.eachTuple(function(tuple){
-                if ((cName = getTupleName(tuple, hierarchy)) !== oName) {
-                    c = r.insertCell(r.cells.length);
-                    c.className = "th";
-                    c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
-                    span = 1;
-                    oName = cName;
-                }
-                c.colSpan = span++;
-            });
-        });
+        renderAxisHorizontally(columnAxis, t);
     }
     if (numRowHierarchies) {
+        r = rows.item(0);
+        c = r.insertCell(0);
+        sAtts(c, {
+            rowspan: numColumnHierarchies,
+            colspan: numRowHierarchies,
+            "class": "th"
+        });
         rowAxis.eachHierarchy(function(hierarchy){
             this.eachTuple(function(tuple){
                 r = rows.item(numColumnHierarchies + tuple.index);
@@ -1376,34 +1388,75 @@ function renderTable(columnAxis, rowAxis){
             });
         });        
     }
-    else 
-    if (!numColumnHierarchies) {
-        t.insertRow().insertCell(0);
+    else {
+        r = t.insertRow(numColumnHierarchies);
+        if (!numColumnTuples) {
+            numColumnTuples = 1;
+        }
+        for (var i = 0; i < numColumnTuples; i++) {
+            r.insertCell(i);
+        }
     }
     return t;
 }
 
-function renderColumnAxis(axis){
-}
-
-function renderCellset(cellset, table){ 
+function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){ 
+    var rows = table.rows, i, j, r, c, cell,
+        rowOffset = columnAxis ? columnAxis.hierarchyCount() : 0,
+        columnCount = columnAxis ? columnAxis.tupleCount() : 1,
+        rowCount = rowAxis ? rowAxis.tupleCount() : 1,
+        cellProperty = cellset.hasCellProperty("FmtValue") ? "FmtValue" : "Value",
+        getCell
+    ;
+    if (pageTuple!==-1) {
+        getCell = function() {return cellset.getByTupleIndexes(pageTuple, i, j);}
+    }
+    else 
+    if (rowAxis) {
+        getCell = function() {return cellset.getByTupleIndexes(i, j);}
+    }
+    else
+    if (columnAxis) {
+        getCell = function() {return cellset.getByTupleIndexes(j);}
+    }
+    else {
+        getCell = function() {return cellset.getByTupleIndexes();}
+    }
+    for (i = 0; i < rowCount; i++) {
+        r = rows.item(i + rowOffset);
+        columnOffset = 0;
+        while ((c = r.cells.item(columnOffset)).className === "th") {
+            columnOffset++;
+        };
+        for (j = 0; j < columnCount; j++) {
+            c = r.cells(j + columnOffset);
+            cell = getCell();
+            c.innerHTML = cell ? cell[cellProperty] : "";
+        }
+    }
 }
 
 function renderDataset(dataset) {
-    var container = gEl("query-results"), 
-        table, cellset = dataset.getCellset()
+    var start = new Date(), end,
+        container = gEl("query-results"), 
+        table, cellset = dataset.getCellset(),
+        columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
+        rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
+        pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null
     ;
     container.innerHTML = "";
-    if (dataset.hasPageAxis()) {
-        table = renderTable(dataset.getPageAxis());
+    if (pageAxis) {
+        table = renderAxisHorizontally(pageAxis);
         container.appendChild(table);
     }
-    table = renderTable(
-        dataset.hasColumnAxis() ? dataset.getColumnAxis() : null, 
-        dataset.hasRowAxis() ? dataset.getRowAxis() : null
-    );
+    table = renderTable(columnAxis, rowAxis);
     container.appendChild(table);
-    renderCellset(cellset, table);
+    end = new Date();
+    container.appendChild(cEl("div", null, "Time to render headers: " + (end.getTime() - start.getTime()) + "ms"));
+    start = new Date();
+    renderCellset(cellset, table, rowAxis, columnAxis, pageAxis ? 0 : -1);
+    end = new Date();
+    container.appendChild(cEl("div", null, "Time to render cells: " + (end.getTime() - start.getTime()) + "ms"));
 }
 
 function init() {
@@ -1417,6 +1470,7 @@ function init() {
                 className = target.className,
                 treeNode, customClass, dragProxy, xy
             ;
+            gEl("workspace").className = "no-user-select";
             if (tagName !== "SPAN" || className !== "label") return; 
             treeNode = TreeNode.lookupTreeNode(target);
             if (!treeNode) return;
@@ -1464,6 +1518,7 @@ function init() {
                 className = target.className,
                 queryDesignerAxis, queryDesigner
             ;
+            gEl("workspace").className = "";
             if (treeNode) {
                 metadata = treeNode.getConf().metadata;
                 customClass = treeNode.getCustomClass();
