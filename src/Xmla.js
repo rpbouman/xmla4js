@@ -135,12 +135,17 @@ function _ajax(options){
             "POST", options.url, options.async, 
             options.username, options.password
         );
-    } else {
+    } 
+    else {
         xhr.open("POST", options.url, options.async);
     }
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
+    if (options.headers) {
+        var headers = options.headers, header;
+        for (header in headers) xhr.setRequestHeader(header, headers[header]);
+    }
     xhr.send(options.data);
     if (!options.async && !handlerCalled){
         handler.call(xhr);
@@ -1607,6 +1612,9 @@ Xmla.prototype = {
         if (!options.password && this.options.password){
             options.password = this.options.password;
         }
+        if (!options.headers && this.options.headers){
+            options.headers = this.options.headers;
+        }
         
         var soapMessage = _getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
@@ -1630,6 +1638,9 @@ Xmla.prototype = {
         }
         if (options.password){
             ajaxOptions.password = options.password;
+        }
+        if (options.headers) {
+            ajaxOptions.headers = options.headers;
         }
         
         if  (this._fireEvent(Xmla.EVENT_REQUEST, options, true) &&
