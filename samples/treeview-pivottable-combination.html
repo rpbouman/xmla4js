@@ -219,6 +219,7 @@
               user-select: none;
             }
             #workspace {
+                cursor: default;
             }
             #ddDragProxy {
                 position: absolute;
@@ -247,20 +248,12 @@
                 background-position: 2px -1px;
             }
 
-            .query-designer-axis td.query-designer-axis-header,
-            .query-designer-axis td.query-designer-axis-spacer {
+            .query-designer-axis td.query-designer-axis-header {
                 border-style: none;
                 vertical-align: top;
                 align: left;
             }
-            
-            .query-designer-axis td.query-designer-axis-spacer{
-                font-size:3px;
-            }
-            .query-designer-axis td.query-designer-axis-spacer:after {
-                content: "\00A0\00A0";
-            }
-            
+                        
             td.query-designer-axis-header:after {
                 content: ": ";
             }
@@ -296,6 +289,18 @@
                 padding: 2px;
                 text-indent: 2em;
                 background-image: url('measure24.gif');
+            }
+            
+            div.query-designer-horizontal-drag-proxy {
+                position: absolute;
+                height: 1px;
+                background-color:black;
+            }
+             
+            div.query-designer-vertical-drag-proxy {
+                position: absolute;
+                width: 1px;
+                background-color:black;
             }
         </style>
         <style type="text/css" id="pivot-table">

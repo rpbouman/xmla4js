@@ -128,6 +128,26 @@ function dEl(el) {
     var el = gEl(el);
     el.parentNode.removeChild(el);
 }
+
+function pos(e1, e2){
+    var left = 0, top = 0;
+    e1 = gEl(e1);
+    do {
+        left += e1.offsetLeft;
+        top += e1.offsetTop;
+    } while (e1 = e1.offsetParent);
+    
+    if (e2) {
+        var p = pos(e2);
+        left -= p.left;
+        top -= p.top;
+    }
+    
+    return {
+        left: left,
+        top: top
+    };
+}
 /***************************************************************
 *   
 *   TreeNode
@@ -567,7 +587,6 @@ var QueryDesigner;
         ;
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
-        sAtt(c, "colspan",  "100%");
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
         
         r = dom.insertRow(dom.rows.length);
@@ -587,8 +606,15 @@ var QueryDesigner;
         return el;
     },
     render: function() {
-        this.getContainer().innerHTML = "";
-        this.getContainer().appendChild(this.getDom());
+        var container = this.getContainer();
+        container.innerHTML = "";
+        aCh(container, this.getDom());
+        this.horizontalDragProxy = cEl("DIV", {"class": "query-designer-horizontal-drag-proxy"}, null, container);
+        this.verticalDragProxy = cEl("DIV", {"class": "query-designer-vertical-drag-proxy"}, null, container);
+    },
+    hideProxies: function() {
+        if (this.horizontalDragProxy) this.horizontalDragProxy.style.display = "none";
+        if (this.verticalDragProxy) this.verticalDragProxy.style.display = "none";
     },
     getContainer: function() {
         return gEl(this.conf.container);
@@ -646,7 +672,7 @@ var QueryDesignerAxis;
         var dom = this.dom = cEl("TABLE", {
                 id: this.getId(),
                 "class": "query-designer-axis query-designer-axis" + this.conf.id,
-                cellspacing: 0
+                cellspacing: 5
             }),
             r = dom.insertRow(0),
             c = r.insertCell(0),
@@ -659,14 +685,6 @@ var QueryDesignerAxis;
             case 2: t = "Pages"; break;
         }
         c.innerHTML = t;
-        switch (this.getLayout()) {
-            case "horizontal":
-                c.setAttribute("rowspan", "100%");
-                break;
-            case "vertical":
-                c.setAttribute("colspan", "100%");
-                break;
-        }
         return dom;
     },
     getDom: function() {
@@ -718,12 +736,12 @@ var QueryDesignerAxis;
         var hierarchyIndex, tupleIndex;
         switch (this.getLayout()) {
             case "horizontal":
-                hierarchyIndex = Math.floor(td.parentNode.rowIndex / 2);
-                tupleIndex = Math.floor((td.cellIndex - 2) / 2);
+                hierarchyIndex = Math.floor(td.parentNode.rowIndex -1);
+                tupleIndex = Math.floor((td.cellIndex - 2));
                 break;
             case "vertical":
-                hierarchyIndex = Math.floor(td.cellIndex / 2);
-                tupleIndex = Math.floor((td.parentNode.rowIndex - 2) / 2);
+                hierarchyIndex = Math.floor(td.cellIndex);
+                tupleIndex = Math.floor((td.parentNode.rowIndex - 2));
                 break;
             default:
                 return null;
@@ -812,29 +830,12 @@ var QueryDesignerAxis;
 
         switch(layout) {
             case "horizontal":
-                if (hierarchyIndex) {
-                    r = dom.insertRow(hierarchyIndex*2);
-                    c = r.insertCell(r.cells.length);
-                    c.className = "query-designer-axis-spacer";
-                }
-                else {
-                    if (this.hierarchies.length) {
-                        r = dom.insertRow(1 + hierarchyIndex*2);
-                    }
-                    else {
-                        r = dom.rows.item(0);
-                    }
-                    c = r.insertCell(r.cells.length);
-                    c.className = "query-designer-axis-spacer";
-                }
-                r = dom.insertRow(1 + hierarchyIndex*2);
+                r = dom.insertRow(1 + hierarchyIndex);
                 c = r.insertCell(0);
                 break;
             case "vertical":
                 if (!(r = dom.rows.item(1))) r = dom.insertRow(1);
-                c = r.insertCell(hierarchyIndex*2);
-                c.className = "query-designer-axis-spacer";
-                c = r.insertCell(hierarchyIndex*2+1);
+                c = r.insertCell(hierarchyIndex);
                 break;
         }
         c.innerHTML = this.getHierarchyCaption(hierarchy);
@@ -853,16 +854,10 @@ var QueryDesignerAxis;
                 switch(layout) {
                     case "horizontal":
                         c = r.insertCell(r.cells.length);
-                        c.className = "query-designer-axis-spacer";
-                        c = r.insertCell(r.cells.length);
                         break;
                     case "vertical":
-                        r = dom.rows.item(3+(i*2));
-                        c = r.insertCell(hierarchyIndex*2);
-                        c.className = "query-designer-axis-spacer";
-                            c.rowSpan = "2";
-                        c = r.insertCell(hierarchyIndex*2);
-                        c.className = "query-designer-axis-spacer";                        
+                        r = dom.rows.item(2+i);
+                        c = r.insertCell(hierarchyIndex);
                         break;
                 }
                 c.innerHTML = memberCaption;
@@ -879,19 +874,8 @@ var QueryDesignerAxis;
             switch(layout) {
                 case "horizontal":
                     c = r.insertCell(r.cells.length);
-                    c.className = "query-designer-axis-spacer";
-                    c = r.insertCell(r.cells.length);
-                    r.insertCell(r.cells.length).className = "query-designer-axis-spacer";
                     break;
                 case "vertical":
-                    r = dom.insertRow(dom.rows.length);
-                    c = r.insertCell(r.cells.length);
-                    c.className = "query-designer-axis-spacer";
-                    c.rowSpan = 2;
-
-                    c = r.insertCell(r.cells.length);
-                    c.className = "query-designer-axis-spacer";
-
                     r = dom.insertRow(dom.rows.length);
                     c = r.insertCell(0);
                     
@@ -915,12 +899,12 @@ var QueryDesignerAxis;
         this.dimensions[this.getDimensionName(metadata)] = hierarchyName;
         switch (layout) {
             case "horizontal":
-                r = dom.rows.item(existingHierarchyIndex * 2 +1);
+                r = dom.rows.item(existingHierarchyIndex+1);
                 c = r.cells(0);
                 break;
             case "vertical":
                 r = dom.rows.item(1);
-                c = r.cells.item(1 + existingHierarchyIndex*2);
+                c = r.cells.item(existingHierarchyIndex);
                 break;
         }
         c.innerHTML = this.getHierarchyCaption(metadata);
@@ -934,11 +918,11 @@ var QueryDesignerAxis;
             }
             switch(layout) {
                 case "horizontal":
-                    c = r.cells.item(2 + i*2);
+                    c = r.cells.item(1 + i);
                     break;
                 case "vertical":
-                    r = dom.rows.item(3+(i*2));
-                    c = r.cells.item(existingHierarchyIndex*2);
+                    r = dom.rows.item(2 + i);
+                    c = r.cells.item(existingHierarchyIndex);
                     break;
             }
             c.innerHTML = memberCaption;
@@ -1429,7 +1413,7 @@ function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){
             columnOffset++;
         };
         for (j = 0; j < columnCount; j++) {
-            c = r.cells(j + columnOffset);
+            c = r.cells.item(j + columnOffset);
             cell = getCell();
             c.innerHTML = cell ? cell[cellProperty] : "";
         }
@@ -1503,10 +1487,50 @@ function init() {
                 customClass,
                 dropTarget = event.getTarget(),
                 tagName = dropTarget.tagName, 
-                className = target.className
+                className = target.className,
+                axisTable
             ;
+            if (!treeNode) return;
+            //dragProxy.innerHTML = tagName + "." + className;
             dragProxy.style.left = (xy.x + 2) + "px";
             dragProxy.style.top = (xy.y + 2) + "px";
+            switch (tagName) {
+                case "TD":
+                    axisTable = dropTarget.parentNode.parentNode.parentNode;
+                    break;
+                case "TR":
+                    axisTable = dropTarget.parentNode.parentNode;
+                    break;
+                case "TBODY":
+                    axisTable = dropTarget.parentNode;
+                    break;
+                case "TABLE":
+                    axisTable = dropTarget;
+                    break;
+            }
+            if (axisTable && !axisTable.className.indexOf("query-designer-axis ")) {
+                var p1 = pos(axisTable), p2 = pos(queryDesigner.getDom().parentNode);
+                sAtts(queryDesigner.horizontalDragProxy, {
+                    style: {
+                        display: "block",
+                        width: axisTable.clientWidth + "px",
+                        left: (p1.left - p2.left) + "px",
+                        top: (xy.y - p2.top + 2) + "px"
+                    }
+                });               
+                sAtts(queryDesigner.verticalDragProxy, {
+                    style: {
+                        display: "block",
+                        height: axisTable.clientHeight + "px",
+                        top: (p1.top - p2.top) + "px",
+                        left: (xy.x - p2.left + 2) + "px"
+                    }
+                });
+            }
+            else
+            if (queryDesigner) {
+                queryDesigner.hideProxies();
+            }
         },
         endDrag: function(event, ddHandler) {
             var dragProxy = ddHandler.dragProxy,
@@ -1516,29 +1540,43 @@ function init() {
                 dropTarget = event.getTarget(),
                 tagName = dropTarget.tagName, 
                 className = target.className,
-                queryDesignerAxis, queryDesigner
+                queryDesignerAxis, table
             ;
             gEl("workspace").className = "";
             if (treeNode) {
                 metadata = treeNode.getConf().metadata;
                 customClass = treeNode.getCustomClass();
-                if (tagName === "TD") {
-                    var table = dropTarget.parentNode.parentNode.parentNode;
-                    if (!table.className.indexOf("query-designer-axis")){
-                        queryDesignerAxis = QueryDesignerAxis.getInstance(table.id);
-                        switch (customClass) { 
-                            case "MDSCHEMA_HIERARCHIES": 
-                            case "MDSCHEMA_LEVELS": 
-                            case "MDSCHEMA_MEMBERS":
-                            case "MDSCHEMA_MEASURES":
-                                if (queryDesignerAxis.canDropItem(target, customClass, metadata)) {
-                                    queryDesignerAxis.itemDropped(target, customClass, metadata);
-                                }
-                                break;
-                            default: 
-                        }
+                switch (tagName) {
+                    case "TD":
+                        table = dropTarget.parentNode.parentNode.parentNode;
+                        break;
+                    case "TR":
+                        table = dropTarget.parentNode.parentNode;
+                        break;
+                    case "TBODY":
+                        table = dropTarget.parentNode;
+                        break;
+                    case "TABLE":
+                        table = dropTarget;
+                        break;
+                }
+                if (!table.className.indexOf("query-designer-axis")){
+                    queryDesignerAxis = QueryDesignerAxis.getInstance(table.id);
+                    switch (customClass) { 
+                        case "MDSCHEMA_HIERARCHIES": 
+                        case "MDSCHEMA_LEVELS": 
+                        case "MDSCHEMA_MEMBERS":
+                        case "MDSCHEMA_MEASURES":
+                            if (queryDesignerAxis.canDropItem(target, customClass, metadata)) {
+                                queryDesignerAxis.itemDropped(target, customClass, metadata);
+                            }
+                            break;
+                        default: 
                     }
                 }
+            }
+            if (queryDesigner) {
+                queryDesigner.hideProxies();
             }
             dragProxy.className = "";
             dragProxy.innerHTML = "";
