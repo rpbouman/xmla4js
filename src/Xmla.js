@@ -27,9 +27,16 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/    
+*/
 var Xmla;
-(function (){
+(function () {
+/**
+*   Xmla implements a XML for Analysis (XML/A) client in javascript.
+*   Using this utility you can communicate with XML/A enabled OLAP servers 
+*   to obtain metadata and to issue MDX queries.
+*   @module xmla
+*   @title Xmla utility
+*/
 
 var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSOAPenvelope = _soap + "envelope/",
@@ -49,43 +56,6 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsDataset = _xmlnsXmla + ":mddataset",
     _useAX = window.ActiveXObject ? true : false
 ;    
-
-function _xml2obj(xml) {
-    //        1     2    3                 4   5       6                   7 89       10   11  1213   141516       1718                 19  2021     22      2324 
-    var re = /(\s+)|(<!--([^-]|-[^-])*-->)|(<\?(\w+)\s+([^\?]|\?[^>])+\?>)|(<((\w+):)?(\w+)(\s+((\w+)=(("([^"]*)")|('([^'])*'))))*\s*>)|(<\/((\w+):)?(\w+)>)|(>([^<]*)<)/g,
-        items
-    ;
-    while (items = re.exec(xml)) {
-        if (items[1]) {
-        }
-        else
-        if (items[2]) {
-        }
-        else
-        if (items[4]) {
-        }
-        else 
-        if (items[7]) {
-        }
-        else 
-        if (items[17]) {
-        }
-        else 
-        if (items[19]) {
-        }
-        else 
-        if (items[23]) {
-        }
-    }
-};
-
-/**
-*   Xmla implements a XML for Analysis (XML/A) client in javascript.
-*   Using this utility you can communicate with XML/A enabled OLAP servers 
-*   to obtain metadata and to issue MDX queries.
-*   @module xmla
-*   @title Xmla utility
-*/
 
 /****************************************************************************/
 /****************************************************************************/
@@ -124,12 +94,13 @@ function _ajax(options){
                 break;
             }
         };
+    if (XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    }
+    else 
     if (_useAX) {
         xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
     } 
-    else {
-        xhr = new XMLHttpRequest();
-    }
     if (options.username && options.password) {
         xhr.open(
             "POST", options.url, options.async, 
