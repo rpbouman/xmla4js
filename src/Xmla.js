@@ -122,23 +122,32 @@ function _ajax(options){
         handler.call(xhr);
     }        
     return xhr;
-}
+};
 
 function _isUnd(arg){
     return typeof(arg)==="undefined";
-}
+};
 function _isArr(arg){
     return arg && arg.constructor === Array;
-}
+};
 function _isNum(arg){
     return typeof(arg)==="number";
-}
+};
+function _isFun(arg){
+    return typeof(arg)==="function";
+};
+function _isStr(arg) {
+    return typeof(arg)==="string";
+};
+function _isObj(arg) {
+    return arg && typeof(arg)==="object";
+};
 function _xmlEncode(value){
-    if (typeof(value) === "string") {
+    if (_isStr(value)) {
         value = value.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
     return value;
-}
+};
 
 var docEl = document.documentElement;
 
@@ -205,13 +214,11 @@ function _getElementText(el){
         func = function(el) {
             var text = [], childNode,
                 childNodes = el.childNodes, i,
-                numChildNodes = childNodes.length
+                n = childNodes.length
             ;
-            for (i=0; i<numChildNodes; i += 1){
+            for (i = 0; i < n; i++){
                 childNode = childNodes.item(i);                                                        
-                if (childNode.data!==null) {
-                    text.push(childNode.data);
-                }                                                      
+                if (childNode.data !== null) text.push(childNode.data);
             }
             return text.length ? text.join("") : null;
         }
@@ -221,18 +228,17 @@ function _getElementText(el){
 };
                                                                 
 function _getXmlaSoapList(container, listType, items, indent){
-    if (!indent){
-        indent = "";
-    }
-    var numItems, i, entry, property, item, msg = "\n" + indent + "<" + container + ">";
+    if (!indent) indent = "";
+    var n, i, entry, property, item, msg = "\n" + indent + "<" + container + ">";
     if (items) {
         msg += "\n" + indent + " <" + listType + ">";
         for (property in items){
             if (items.hasOwnProperty(property)) {
                 item = items[property];
                 msg += "\n" + indent + "  <" + property + ">";
-                if (typeof(item)==="array"){
-                    for (entry, i=0, numItems = item.length; i<numItems; i += 1){
+                if (_isArr(item)){
+                    n = item.length;
+                    for (i = 0; i < n; i++){
                         entry = item[i];
                         msg += "<Value>" + _xmlEncode(entry) + "</Value>";
                     }
@@ -246,13 +252,11 @@ function _getXmlaSoapList(container, listType, items, indent){
     }
     msg += "\n" + indent + "</" + container + ">";
     return msg;
-}
+};
 
 var _xmlRequestType = "RequestType";
 
-function _getXmlaSoapMessage(
-    options
-){
+function _getXmlaSoapMessage(options){
     var method = options.method,
         msg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
         "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope" + 
@@ -298,13 +302,14 @@ function _getXmlaSoapMessage(
         "\n</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
     ;
     return msg;
-}
+};
 
 function _applyProps(object, properties, overwrite){
     if (properties && (!object)) {
         object = {};
     }
-    for (var property in properties){
+    var property;
+    for (property in properties){
         if (properties.hasOwnProperty(property)){
             if (overwrite || _isUnd(object[property])) {
                 object[property] = properties[property];
@@ -312,7 +317,7 @@ function _applyProps(object, properties, overwrite){
         }
     }
     return object;
-}
+};
 
 /**
 *   <p>
@@ -352,9 +357,7 @@ Xmla = function(options){
         true
     );
     var listeners = this.options.listeners;
-    if (listeners) {
-        this.addListener(listeners);
-    }
+    if (listeners) this.addListener(listeners);
     return this;
 };
 
@@ -729,7 +732,7 @@ Xmla.MDSCHEMA_PROPERTIES =     _xmlaMDSCHEMA + "PROPERTIES";
 *   @type string
 *   @default <code>MDSCHEMA_SETS</code>
 */
-Xmla.MDSCHEMA_SETS =           _xmlaMDSCHEMA + "SETS";
+Xmla.MDSCHEMA_SETS = _xmlaMDSCHEMA + "SETS";
 /**
 *   Indicates the <code>request</code> event. 
 *   This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
@@ -1285,12 +1288,46 @@ Xmla.prototype = {
     },
 /**
 *   This method can be used to register one or more listeners. On such listener can listen for one or more events.
-*   For a single listener, the <code>listener</code> argument should have the following structure: <pre>{
-*       events: [...event names...],
-*       handler: function(eventName, eventData, xmla) {...code to run upon notification...},
+*   <p>For a single listener, you can pass a <code>listener</code> object literal with the following structure:</p><pre>{
+*       events: ...event name or array of event names...,
+*       handler: ...function or array of functions...,
 *       scope: object
 *   }</pre>
-*   To register multiple listeners, pass an array of such listener objects.
+*   <p>
+*       You can use <code>event</code> as an alias for <code>events</code>.
+*       Likewise, you can use <code>handlers</code> as an alias for <code>handler</code>.
+*   </p>
+*   <p>
+*       Alternatively, you can pass the element as separate arguments instead of as an object literal:
+*       <code>addListener(name, func, scope)</code> 
+*       where name is a valid event name, func is the function that is to be called when the event occurs. 
+*       The last argument is optional and can be used to specify the scope that will be used as context for executing the function. 
+*   </p>
+*   <p>
+*       To register multiple listeners, pass an array of listener objects: 
+*       <code>addListener([listener1, ..., listenerN])</code>
+*   </p>
+*   <p>
+*       Alternatively, pass multiple listener objects as separate arguments:
+*       <code>addListener(listener1, ..., listenerN)</code>
+*   </p> 
+*   <p>
+*       Or, pass a single object literal with event names as keys and listener objects or functions as values:
+*       <pre>addListener({
+*           discover: function() {
+*               ...handle discover event...
+*           },
+*           error: {
+*               handler: function() {
+*                  ...handle error event...
+*               },
+*               scope: obj
+*           },
+*           scope: defaultscope
+*       })</pre>
+*       In this case, you can use scope as a key to specify the default scope for the handler functions.
+*   </p> 
+*   <p>Below is a more detailed description of the listener object and its components:</p>
 *   <dl>
 *       <dt><code>events</code></dt>
 *       <dd><code>string</code>|<code>string[]</code> REQUIRED. 
@@ -1302,10 +1339,15 @@ Xmla.prototype = {
 *       To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>, 
 *       or otherwise the <code>string</code> value <code>"all"</code>.
 *       </dd>
-*       <dt><code>boolean handler(eventName, eventData, xmla)</code></dt>
-*       <dd><code>function</code> REQUIRED. This function will be called and notified whenever one of the specified events occurs.
+*       <dt><code>event</code></dt>
+*       <dd><code>string</code>|<code>string[]</code> Alias for <code>events</code></dd>
+*       <dt><code>handler</code></dt>
+*       <dd><code>function</code>|<code>function[]</code> REQUIRED. 
+*       This function will be called and notified whenever one of the specified events occurs.
+*       The function has the following signature: <code>boolean handler(string eventName, object eventData, Xmla xmla)</code> 
+*       You can also pass in an array of functions if you want multiple functions to be called when the event occurs.
 *       The function is called in scope of the <code>scope</code> property of the listener object. 
-*       If no <code>scope</code> is specified, a global function (having brower built-in <code>window</code> scope) is assumed.
+*       If no <code>scope</code> is specified, a global function is assumed.
 *       The <code>handler</code> function has the following arguments:
 *           <dl>
 *               <dt><code>eventName</code></dt>
@@ -1328,6 +1370,8 @@ Xmla.prototype = {
 *       <code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code>, and
 *       <code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>. 
 *       </dd>
+*       <dt><code>handlers</code></dt>
+*       <dd><code>function</code>|<code>function[]</code> Alias for <code>handler</code></dd>
 *       <dt><code>scope</code></dt>
 *       <dd><code>Object</code> OPTIONAL When specified, this object is used as the <code>this</code> object when calling the handler.
 *           When not specified, the global <code>window</code> is used.
@@ -1336,62 +1380,102 @@ Xmla.prototype = {
 *   @method addListener
 *   @param {Object|Array} listener An object that defines the events and the notification function to be called, or an array of such objects.
 */    
-    addListener: function(listener){
-        if (_isArr(listener)) {
-            for (var i=0, l=listener.length; i<l; i += 1){
-                this.addListener(listener[i]);
-            }
-            return;
-        }
-        var events = listener.events;
-        if (!events){
-            Xmla.Exception._newError(
-                "NO_EVENTS_SPECIFIED",
-                "Xmla.addListener",
-                listener
-            )._throw();
-        }
-        if (typeof(events)==="string"){
-            if (events==="all"){
-                events = Xmla.EVENT_ALL;
-            } else {
-                events = events.split(",");
-            }
-        }
-        if (!(_isArr(events))){
-            Xmla.Exception._newError(
-                "WRONG_EVENTS_FORMAT",
-                "Xmla.addListener",
-                listener
-            )._throw();
-        }
-        var numEvents = events.length;
-        var eventName, myListeners;
-        for (var i=0; i<numEvents; i += 1){
-            eventName = events[i].replace(/\s+/g,"");
-            myListeners = this.listeners[eventName];
-            if (!myListeners) {
+    addListener: function(){
+        var n = arguments.length;
+        switch(n) {
+            case 0:
                 Xmla.Exception._newError(
-                    "UNKNOWN_EVENT",
+                    "NO_EVENTS_SPECIFIED",
                     "Xmla.addListener",
                     listener
                 )._throw();
-            }
-            if (typeof(listener.handler)=="function"){
-                if (!listener.scope) {
-                    listener.scope = window;
+            case 1:
+                var arg = arguments[0];
+                if (_isObj(arg)) {
+                    var events, handlers;
+                    if (_isArr(arg)) this._addListeners(arg)
+                    else 
+                    if (events = arg.events || arg.event) {
+                        if (_isStr(events)) events = (events==="all") ? Xmla.EVENT_ALL : events.split(",");
+                        if (!(_isArr(events))){
+                            Xmla.Exception._newError(
+                                "WRONG_EVENTS_FORMAT",
+                                "Xmla.addListener",
+                                listener
+                            )._throw();
+                        }
+                        var i, n = events.length;
+                        for (i = 0; i < n; i++) this._addListener(events[i], arg);
+                    }
+                    else {
+                        var scope = arg.scope, handler;
+                        if (_isUnd(scope)) {
+                            scope = null;
+                        }
+                        else {
+                            delete arg.scope;
+                        }
+                        for (events in arg) {
+                            handler = arg[events];
+                            if (_isUnd(handler.scope)) {
+                                handler.scope = scope;
+                            }
+                            this._addListener(events, handler);
+                        }
+                    }
                 }
-                myListeners.push(listener);
-            }
-            else {
-                Xmla.Exception._newError(
-                    "INVALID_EVENT_HANDLER",
-                    "Xmla.addListener",
-                    listener
-                )._throw();
-            }
+                else
+                    Xmla.Exception._newError(
+                        "WRONG_EVENTS_FORMAT",
+                        "Xmla.addListener",
+                        listener
+                    )._throw();
+                break;
+            case 2:
+            case 3:
+                var event = arguments[0], handler = arguments[1], scope = arguments[2];
+                if (_isStr(event) && (_isFun(handler)||(_isObj(handler)))) this._addListener(event, handler, scope);
+                else {
+                    var arr = [event, handler];
+                    if (scope) arr.push(scope);
+                    this.addListener(arr);
+                }
+                break;
+            default:
+                this._addListeners(arguments);
         }
-    },    
+    },
+    _addListeners: function(listeners) {
+        var i, n = listeners.length;
+        for (i = 0; i < n; i++) this.addListener(listeners[i]);
+    },
+    _addListener: function(name, handler, scope) {
+        var myListeners = this.listeners[name];
+        if (!myListeners)
+            Xmla.Exception._newError(
+                "UNKNOWN_EVENT",
+                "Xmla.addListener",
+                listener
+            )._throw();
+        if (!scope) scope = null;
+        switch (typeof(handler)) {
+            case "function":
+                myListeners.concat({handler: handler, scope: scope}); 
+                break;
+            case "object":
+                var handlers = handler.handler || handler.handlers;
+                if (_isFun(handlers.handler)) {
+                    if (!handlers.scope) handlers.scope = scope;
+                    myListeners.concat(handler);
+                }
+                else 
+                if (_isArr(handlers)) {
+                    var i, n = handlers.length;
+                    for (i = 0; i < n; i++) this._addListener(name, handlers[i]);
+                }
+                break;
+        }
+    },
     _fireEvent: function(eventName, eventData, cancelable){
         var listeners = this.listeners[eventName];
         if (!listeners) {
@@ -1401,11 +1485,10 @@ Xmla.prototype = {
                 eventName
             )._throw();
         }
-        var numListeners = listeners.length;
-        var outcome = true;
-        if (numListeners) {
-            var listener, listenerResult;
-            for (var i=0; i<numListeners; i += 1){
+        var n = listeners.length, outcome = true;
+        if (n) {
+            var listener, listenerResult, i;
+            for (i = 0; i < n; i++){
                 listener = listeners[i];
                 listenerResult = listener.handler.call(
                     listener.scope,
@@ -1419,14 +1502,8 @@ Xmla.prototype = {
                 }
             }
         }
-        else 
-        if (eventName===Xmla.EVENT_ERROR && 
-            typeof(eventData.error)!=="function" &&
-            typeof(eventData.callback)!=="function"
-        ) { //if there is neither a listener nor an error nor a general callback 
-            //we explicitly throw the exception.
-            eventData.exception._throw();
-        }
+        else //if there is neither a listener nor an error nor a general callback  we explicitly throw the exception.
+        if (eventName === Xmla.EVENT_ERROR && !_isFun(eventData.error) && !_isFun(eventData.callback)) eventData.exception._throw(); 
         return outcome;
     },
 /**
@@ -4211,14 +4288,14 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 
 function _getComplexType(node, name){
     var types = _getElementsByTagNameNS(
-        node, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"
-    ),  numTypes = types.length, type, i
+            node, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"
+        ),  
+        numTypes = types.length, 
+        type, i
     ;
-    for (i=0; i<numTypes; i += 1){
+    for (i=0; i<numTypes; i ++){
         type = types.item(i);
-        if (type.getAttribute("name")===name){
-            return type;
-        }
+        if (type.getAttribute("name")===name) return type;
     }
     return null;
 }
@@ -4652,10 +4729,10 @@ _restrictionsConverter.jsType = "object";
 
 function _arrayConverter(nodes, valueConverter){
     var arr = [],
-        numNodes = nodes.length,
-        node
+        n = nodes.length,
+        i, node
     ;
-    for (var i=0; i<numNodes; i += 1){
+    for (i = 0; i < n; i++){
         node = nodes.item(i);
         arr.push(valueConverter(_getElementText(node)));
     }
@@ -4744,7 +4821,7 @@ Xmla.Rowset.prototype = {
                 seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
                 fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter, getter, 
                 addFieldGetters = this._xmla.options.addFieldGetters, i, val;
-            for (i=0; i<numChildren; i += 1){
+            for (i = 0; i < numChildren; i++){
                 seqChild = seqChildren.item(i);
                 if (seqChild.nodeType !== 1) {  //element node
                     continue;
@@ -4763,33 +4840,22 @@ Xmla.Rowset.prototype = {
                         );
                     }                    
                 }
-                if (!type && this._type==Xmla.DISCOVER_SCHEMA_ROWSETS && fieldName==="Restrictions") {
-                    type = "Restrictions";
-                }
+                if (!type && 
+                    this._type==Xmla.DISCOVER_SCHEMA_ROWSETS && 
+                    fieldName==="Restrictions"
+                ) type = "Restrictions";
                 minOccurs = seqChild.getAttribute("minOccurs");
-                if (minOccurs){
-                    minOccurs=parseInt(minOccurs,10);
-                } 
-                else {
-                    minOccurs = 1;
-                }
+                if (minOccurs) minOccurs = parseInt(minOccurs, 10);
+                else minOccurs = 1;
                 maxOccurs = seqChild.getAttribute("maxOccurs");
-                if (maxOccurs){
-                    if (maxOccurs==="unbounded") {
-                        maxOccurs = Infinity;
-                    }
-                    else {
-                        minOccurs=parseInt(maxOccurs,10);
-                    }
+                if (maxOccurs) {
+                    if (maxOccurs === "unbounded") maxOccurs = Infinity;
+                    else minOccurs=parseInt(maxOccurs,10);
                 } 
-                else {
-                    maxOccurs = 1;
-                }
+                else maxOccurs = 1;
                 valueConverter = _getValueConverter(type);
                 getter = this._createFieldGetter(fieldName, valueConverter, minOccurs, maxOccurs);
-                if (addFieldGetters){
-                    this[_getterNameForColumnName(fieldName)] = getter;
-                }
+                if (addFieldGetters) this[_getterNameForColumnName(fieldName)] = getter;
                 this.fields[fieldLabel] = {
                     name: fieldName,
                     label: fieldLabel,
@@ -4799,7 +4865,7 @@ Xmla.Rowset.prototype = {
                     minOccurs: minOccurs,
                     maxOccurs: maxOccurs,
                     getter: getter
-                };            
+                };
                 this.fieldOrder.push(fieldLabel);
             }        
         }
@@ -4815,14 +4881,13 @@ Xmla.Rowset.prototype = {
         var me = this;
         var getter;
         if (maxOccurs===1) {
-            if(minOccurs===1) {
+            if(minOccurs===1) 
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                     return valueConverter(_getElementText(els.item(0)));
                 };
-            }
             else 
-            if(minOccurs===0) {
+            if (minOccurs === 0)
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                     if (els.length) {
@@ -4832,17 +4897,15 @@ Xmla.Rowset.prototype = {
                         return null;
                     }
                 };
-            }
         }
         else 
-        if(minOccurs===1) {
+        if(minOccurs === 1) 
             getter = function(){
                 var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                 return _arrayConverter(els, valueConverter);
             };
-        }
         else 
-        if(minOccurs===0) {
+        if (minOccurs === 0)
             getter = function(){
                 var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                 if (els.length) {
@@ -4852,7 +4915,6 @@ Xmla.Rowset.prototype = {
                     return null;
                 }
             };
-        }
         return getter;
     },
 /**
@@ -4872,16 +4934,14 @@ Xmla.Rowset.prototype = {
 *   <code><a href="#method_fieldDef">fieldDef()</a></code> method.
 *
 *   @method getFields
-*   @return <code>fieldDef[]</code> An (ordered) array of field definition objects. 
+*   @return {fieldDef[]} An (ordered) array of field definition objects. 
 */    
     getFields: function(){
         var f = [], 
-            fieldCount = this._fieldCount,
+            i, n = this._fieldCount,
             fieldOrder = this.fieldOrder
         ;
-        for (var i=0; i<fieldCount; i += 1){
-            f[i] = this.fieldDef(fieldOrder[i]);
-        }
+        for (i = 0; i < n; i++) f[i] = this.fieldDef(fieldOrder[i]);
         return f;
     },
 /**
@@ -4889,13 +4949,11 @@ Xmla.Rowset.prototype = {
 *   The position of the names in the array corresponds to the column order of the rowset.
 *
 *   @method getFieldNames
-*   @return <code>string[]</code> An (ordered) array of field names. 
+*   @return {string[]} An (ordered) array of field names. 
 */    
     getFieldNames: function(){
-        var fieldNames = [];
-        for (var i=0, count = this._fieldCount; i<count; i += 1){
-            fieldNames[i] = this.fieldOrder[i];
-        }
+        var fieldNames = [], i, n = this._fieldCount;
+        for (i = 0; i < n; i++) fieldNames[i] = this.fieldOrder[i];
         return fieldNames;
     },
 /**
@@ -4924,7 +4982,7 @@ Xmla.Rowset.prototype = {
 *   @method nextRow
 */    
     nextRow: function(){
-        this.rowIndex += 1
+        this.rowIndex++;
         this._row = this._rows.item(this.rowIndex);
         return this.rowIndex;
     },
@@ -4937,30 +4995,34 @@ Xmla.Rowset.prototype = {
         return this.nextRow();
     },
 /**
-*   Walks through all rows, and calls the callback for each row
+*   <p>Walks through all rows, and calls the callback function for each row.</p>
+* 
+*   <p>The callback function gets passed an object that represents the row. 
+*   The keys of the row object are the column names, and the values are the respective column values.</p>
+*   <p>The scope for calling the callback can be passed  as the second argument to this method.
+*   If the scope is not defined (or if it is <code>null</code>), the Rowset's <code>this</code> pointer is used instead.</p>
+*   <p>You can pass additional data to the callback by passing in a third argument. This is then passed as is as second argument to the callback.</p>
+*   
+*   <p>The <code>eachRow</code> method will iterate untill the callback returns <code>false</code>, or until all rows have been traversed.
+*   If the callback returns <code>false</code>, iteration is aborted and <code>eachRow</code> as a whole returns <code>false</code> too.
+*   If iteration is not aborted, then eachRow returns <code>true</code>.</p>
 *
 *   @method eachRow
-*   @param {function} callback Function to be called for each row.
+*   @param {function} callback Function to be called for each row. 
 *   @param {Object} scope Optional. Scope in which the callback is called. Defaults to this, that is, the Rowset.
-*   @param {Object} args Optional. Object that is passed to the callback. 
+*   @param {Object} args Optional. Object that is passed as extra argument to the callback. 
 *   @return {bool} true if all rows were itereated. If the callback returns false, iteration stops and false is returned.
 */    
     eachRow: function(rowCallback, scope, args){
-        if (_isUnd(scope)){
-            scope = this;
-        }
+        if (_isUnd(scope)) scope = this;
         var mArgs = [null];
         if (!_isUnd(args)) {
-            if (!_isArr(args)) {
-                args = [args];
-            }
+            if (!_isArr(args)) args = [args];
             mArgs = mArgs.concat(args);
         }
         while (this.hasMoreRows()){
             mArgs[0] = this.readAsObject();
-            if (rowCallback.apply(scope, mArgs)===false) {
-                return false;
-            }
+            if (rowCallback.apply(scope, mArgs)===false) return false;
             this.nextRow();
         }
         return true;
@@ -5013,13 +5075,12 @@ Xmla.Rowset.prototype = {
 */    
     fieldDef: function(name){
         var field = this.fields[name];
-        if (!field){
+        if (!field)
             Xmla.Exception._newError(
                 "INVALID_FIELD",
                 "Xmla.Rowset.fieldDef",
                 name
             )._throw();
-        }
         return field;
     },
 /**
@@ -5041,13 +5102,12 @@ Xmla.Rowset.prototype = {
 */    
     fieldName: function(index){
         var fieldName = this.fieldOrder[index];
-        if (!fieldName){
+        if (!fieldName)
             Xmla.Exception._newError(
                 "INVALID_FIELD",
                 "Xmla.Rowset.fieldDef",
                 index
             )._throw();
-        }
         return fieldName;
     },
 /**
@@ -5057,9 +5117,7 @@ Xmla.Rowset.prototype = {
 *   @return {array|boolean|float|int|string} From the current row, the value of the field that matches the argument.
 */    
     fieldVal: function(name){
-        if (_isNum(name)){
-            name = this.fieldName(name);
-        }
+        if (_isNum(name)) name = this.fieldName(name);
         return this.fieldDef(name).getter.call(this);
     },
 /**
@@ -5094,9 +5152,7 @@ Xmla.Rowset.prototype = {
 */    
     readAsArray: function(array){
         var fields = this.fields, fieldName, fieldDef;
-        if (!array){
-            array = [];
-        }
+        if (!array) array = [];
         for (fieldName in fields){
             if (fields.hasOwnProperty(fieldName)){
                 fieldDef = fields[fieldName];
@@ -5123,9 +5179,8 @@ while (rowArray = rowset.fetchAsArray()){
         if (this.hasMoreRows()) {
             array = this.readAsArray(array);
             this.nextRow();
-        } else {
-            array = false;
-        }
+        } 
+        else array = false;
         return array;
     },
 /**
@@ -5142,10 +5197,8 @@ while (rowArray = rowset.fetchAsArray()){
 */    
     readAsObject: function(object){
         var fields = this.fields, fieldName, fieldDef;
-        if (!object){
-            object = {};
-        }
-        for (fieldName in fields){
+        if (!object) object = {};
+        for (fieldName in fields) {
             if (fields.hasOwnProperty(fieldName)) {
                 fieldDef = fields[fieldName];
                 object[fieldName] = fieldDef.getter.call(this);
@@ -5171,9 +5224,8 @@ while (rowObject = rowset.fetchAsObject()){
         if (this.hasMoreRows()){
             object = this.readAsObject(object);
             this.nextRow();
-        } else {
-            object = false;
-        }
+        } 
+        else object = false;
         return object;
     },
 /**
@@ -5192,9 +5244,8 @@ while (rowObject = rowset.fetchAsObject()){
         if (this.hasMoreRows()){
             object = func.call(this, args);
             this.nextRow();
-        } else {
-            object = false;
-        }
+        } 
+        else object = false;
         return object;
     },
 /**
@@ -5202,16 +5253,12 @@ while (rowObject = rowset.fetchAsObject()){
 *   See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.
 *   @method fetchAllAsArray 
 *   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created
-*   @return array[]
+*   @return {array}
 */    
     fetchAllAsArray: function(rows){
         var row;
-        if (!rows){
-            rows = [];
-        }
-        while((row = this.fetchAsArray())){
-            rows.push(row);
-        }
+        if (!rows) rows = [];
+        while((row = this.fetchAsArray())) rows.push(row);
         return rows;
     },
 /**
@@ -5219,16 +5266,12 @@ while (rowObject = rowset.fetchAsObject()){
 *   See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.
 *   @method fetchAllAsObject 
 *   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created
-*   @return array[]
+*   @return {array}
 */    
     fetchAllAsObject: function(rows){
         var row;
-        if (!rows){
-            rows = [];
-        }
-        while((row = this.fetchAsObject())){
-            rows.push(row);
-        }
+        if (!rows) rows = [];
+        while((row = this.fetchAsObject())) rows.push(row);
         return rows;
     },
 /**
@@ -5238,19 +5281,15 @@ while (rowObject = rowset.fetchAsObject()){
 *   @param rows {array[]} OPTIONAL. An array to append the rows to. If not specified, a new array is created
 *   @param func {function} a callback function to extract the fields.
 *   @param args {object} an object to pass data to the callback. 
-*   @return array[]
+*   @return {array}
 */    
     fetchAllCustom: function(rows, func, args){
         var row;
-        if (!rows){
-            rows = [];
-        }
-        while((row = this.fetchCustom(func, args))){
-            rows.push(row);
-        }
+        if (!rows) rows = [];
+        while((row = this.fetchCustom(func, args))) rows.push(row);
         return rows;
     },
-/*
+/**
 *   Fetch all row as an object, store it in nested objects according to values in the column identified by the key argument.
 *   This method should typically not be called directly, rather it is a helper method for <code><a href="#method_mapAllAsObject">mapAllAsObject()</a></code>.
 *
@@ -5262,29 +5301,20 @@ while (rowObject = rowset.fetchAsObject()){
 */    
     mapAsObject: function(map, key, row){
         var k, v, p, i, len = key.length, last = len - 1, m = map;
-        for (i=0; i < len; i += 1){
+        for (i = 0; i < len; i++){
             k = key[i]; //get the keypart
             v = row[k]; //get the value for the key part
             p = m[v];   //get the property from the map for this keypart.
             if (p) {   
                 if (i === last) {   //last, we need to store the row now.
-                    if (p instanceof Array) {   //already entries here, append
-                        p.push(row);
-                    }
-                    else {          //single row store here. since we need multiple rows, add an array
-                        m[v] = [p, row];
-                    }
+                    if (isArr(p)) p.push(row); //already entries here, append
+                    else m[v] = [p, row]; //single row store here. since we need multiple rows, add an array
                 }
-                else {
-                    m = p;
-                }
+                else m = p;
             }
-            else                //property didnt exist for this key yet.         
-            if (i === last) {   //last keypart: store the row here
-                m[v] = row;
-            } else {            //more keyparts to go: add a new map for this keypart
-                m = m[v] = {};
-            }
+            else                        //property didnt exist for this key yet.         
+            if (i === last) m[v] = row; //last keypart: store the row here
+            else m = m[v] = {};         //more keyparts to go: add a new map for this keypart
         }
     },
 /**
@@ -5295,16 +5325,10 @@ while (rowObject = rowset.fetchAsObject()){
 *   @return {object}
 */    
     mapAllAsObject: function(key, map){
-        if(!map){
-            map = {};
-        }
-        if (!key) {
-            key = this.getKey();
-        }
+        if (!map) map = {};
+        if (!key) key = this.getKey();
         var row;
-        while (row = this.fetchAsObject()){
-            this.mapAsObject(map, key, row);
-        }
+        while (row = this.fetchAsObject()) this.mapAsObject(map, key, row);
         return map;
     },
 
@@ -5312,27 +5336,99 @@ while (rowObject = rowset.fetchAsObject()){
 *   Find a key for the resultset type.
 */    
     getKey: function(){
-        var key;
-        if (this._type){
-            key = Xmla.Rowset.KEYS[this._type];
-        }
-        else {
-            key = this.getFieldNames();
-        }
-        return key;
+        return (this._type) ? Xmla.Rowset.KEYS[this._type] : this.getFieldNames();
     }
 };
 
+/**
+*   <p>
+*   This class implements an XML/A multidimensional Dataset object.
+*   </p>
+*   <p>
+*   You do not need to instantiate objects of this class yourself. 
+*   Rather, the <code><a href="Xmla.html#class_Xmla">Xmla</a></code> class will instantiate this class 
+*   to convey the result of the <code>executeMultiDimensional</code> method
+*   (see <code><a href="Xmla.html#method_executeMultiDimensional">executeMultiDimensional()</a></code>), 
+*   and possibly the <code>execute</code> method.
+*   (Note that the <code><a name="Xmla.html#method_execute">execute()</code> instantiates either the  
+*   <code><a href="Xmla.html#class_Xmla.Rowset">Xmla.Rowset</a></code> or the <code><a href="Xmla.html#class_Xmla.Rowset">Xmla.Dataset</a></code> class 
+*   depending on the value of the <code>Format</code> property in the options passed to the <code><a href="Xmla.html#method_execute">execute()</a></code> method.)
+*   </p>
+*   <p>
+*   An instance of the <code>Xmla.Dataset</code> class may be returned immediately as return value from these methods when doing a synchronous request. 
+*   In addition, the <code>Xmla.Dataset</code> object is available in the eventdata passed to any registered listeners
+*   (see <code><a href="Xmla.html#method_addListener">addListener()</a></code>).
+*   </p>
+*   
+*   @class Xmla.Dataset
+*   @constructor
+*   @param {DOMDocument} doc The responseXML result returned by server in response to a <code>Execute</code> request. 
+*/
 Xmla.Dataset = function(doc){
     this._initDataset(doc);
     return this;
 }
 
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the first axis (the column axis).
+*   Alternatively you can simply call <code><a href="#method_getColumnAxis">getColumnAxis()</a></code>
+*   @property AXIS_COLUMNS
+*   @static
+*   @final
+*   @type int
+*   @default <code>0</code>
+*/
 Xmla.Dataset.AXIS_COLUMNS = 0;
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the second axis (the row axis).
+*   Alternatively you can simply call <code><a href="#method_getRowAxis">getRowAxis()</a></code>
+*   @property AXIS_ROWS
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
 Xmla.Dataset.AXIS_ROWS = 1;
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the third axis (the page axis).
+*   Alternatively you can simply call <code><a href="#method_getPageAxis">getPageAxis()</a></code>
+*   @property AXIS_PAGES
+*   @static
+*   @final
+*   @type int
+*   @default <code>2</code>
+*/
 Xmla.Dataset.AXIS_PAGES = 2;
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the fourth axis (the section axis).
+*   Alternatively you can simply call <code><a href="#method_getSectionAxis">getSectionAxis()</a></code>
+*   @property AXIS_SECTIONS
+*   @static
+*   @final
+*   @type int
+*   @default <code>3</code>
+*/
 Xmla.Dataset.AXIS_SECTIONS = 3;
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the fifth axis (the chapters axis).
+*   Alternatively you can simply call <code><a href="#method_getChapterAxis">getChapterAxis()</a></code>
+*   @property AXIS_CHAPTERS
+*   @static
+*   @final
+*   @type int
+*   @default <code>4</code>
+*/
 Xmla.Dataset.AXIS_CHAPTERS = 4;
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the slicer axis 
+*   (the axis that appears in the <code>WHERE</code> clause of an MDX-<code>SELECT</code> statement).
+*   Alternatively you can simply call <code><a href="#method_getSlicerAxis">getSlicerAxis()</a></code>
+*   @property AXIS_SLICER
+*   @static
+*   @final
+*   @type string
+*   @default <code>SlicerAxis</code>
+*/
 Xmla.Dataset.AXIS_SLICER = "SlicerAxis";
 
 Xmla.Dataset.prototype = {
@@ -5358,9 +5454,7 @@ Xmla.Dataset.prototype = {
         for (a = 0, i = this._numAxes-1; i >= 0; i--, a++) {
             func += "\nif (typeof(a = arguments[" + a + "])!==\"number\") new Xmla.Exception._newError(\"ERROR_ILLEGAL_ARGUMENT\", \"cellOrdinalForTupleIndexes\", this)._throw();";
             mul = 1;
-            for (j = i-1; j >= 0; j--) {
-                mul *= this._axesOrder[j].tupleCount();
-            }
+            for (j = i-1; j >= 0; j--) mul *= this._axesOrder[j].tupleCount();
             func += "\nordinal += a ";
             if (i) func += "* " + mul + ";";
         }
@@ -5369,16 +5463,13 @@ Xmla.Dataset.prototype = {
     },
     _initRoot: function(doc){
         var root = _getElementsByTagNameNS(doc, _xmlnsDataset, "", "root");
-        if (root.length){
-            this._root = root.item(0);
-        }
-        else {
+        if (root.length) this._root = root.item(0);
+        else
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
                 "Xmla.Dataset._initData",
                 doc
             )._throw();        
-        }
     },
     _initAxes: function(){
         var i, axis, axisNode, axisName, axisNodes, numAxisNodes, tmpAxes = {};
@@ -5389,7 +5480,7 @@ Xmla.Dataset.prototype = {
         //collect the axisInfo nodes
         axisNodes = _getElementsByTagNameNS(this._root, _xmlnsDataset, "", "AxisInfo");
         numAxisNodes = axisNodes.length;
-        for (i=0; i<numAxisNodes; i++){
+        for (i = 0; i < numAxisNodes; i++) {
             axisNode = axisNodes.item(i);
             axisName = axisNode.getAttribute("name");
             tmpAxes[axisName] = axisNode;            
@@ -5397,13 +5488,11 @@ Xmla.Dataset.prototype = {
         //collect the axis nodes
         axisNodes = _getElementsByTagNameNS(this._root, _xmlnsDataset, "", "Axis");
         numAxisNodes = axisNodes.length;
-        for (i=0; i<numAxisNodes; i++){
+        for (i = 0; i < numAxisNodes; i++){
             axisNode = axisNodes.item(i);
             axisName = axisNode.getAttribute("name");
             axis = new Xmla.Dataset.Axis(tmpAxes[axisName], axisNode, axisName, i);
-            if (axisName==Xmla.Dataset.AXIS_SLICER) {
-                this._slicer = axis;
-            }
+            if (axisName === Xmla.Dataset.AXIS_SLICER) this._slicer = axis;
             else {
                 this._axes[axisName] = axis;
                 this._axesOrder.push(axis);
@@ -5414,86 +5503,182 @@ Xmla.Dataset.prototype = {
     _initCells: function(){
         this._cellset = new Xmla.Dataset.Cellset(this);
     },
+/**
+*   Get the number of proper axes in this Dataset. This is the number of axes that appears in the <code>SELECT</code> list, and excludes the slicer axis.
+*   @method axisCount 
+*   @return {int}
+*/    
     axisCount: function(){
         return this._numAxes;
     },
     _getAxis: function(nameOrIndex) {
         var name, axis;
-        if (_isNum(nameOrIndex)){
-            axis = this._axesOrder[nameOrIndex];
-        }
-        else 
-        if (typeof(nameOrIndex)==="string"){
-            if (name===Xmla.Dataset.AXIS_SLICER) {
-                axis = this._slicer;
-            }
-            else {        
-                axis = this._axes[name];
-            }
+        switch (typeof(nameOrIndex)) {
+            case "number":
+                axis = this._axesOrder[nameOrIndex];
+                break;
+            case "string":
+                axis = (name === Xmla.Dataset.AXIS_SLICER) ? this._slicer : this._axes[name];
+                break;
         }
         return axis;
     },
+/**
+*   Get the axis specified by the argument index or name. 
+*   If the axis does not exist, an <code>INVALID_AXIS</code> exception is thrown. 
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasAxis">hasAxis()</a></code> method to determine if the axis exists. 
+*   Alternatively, you can call <code><a href="#method_axisCount">axisCount()</a></code>, and use an integer argument between zero (inclusive) and axis count (exclusive).
+*   @method getAxis 
+*   @param nameOrIndex {string | int} For int arguments, a value of 0 up to the number of axes. You can also use one of the <code>AXIS_xxx</code> constants. For string arguments, this method will match the name of the axis as it is returned in the XML/A response. These names are of the form <code>AxisN</code> where N is an ordinal that identifies the axis.
+*   @return {Xmla.Dataset.Axis} The <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object that corresponds to the argument. 
+*/    
     getAxis: function(nameOrIndex){
+        if (nameOrIndex === Xmla.Dataset.AXIS_SLICER) return this._slicer; 
         var axis = this._getAxis(nameOrIndex);
-        if (!axis){
+        if (!axis)
             Xmla.Exception._newError(
                 "INVALID_AXIS",
                 "Xmla.Dataset.getAxis",
                 name || nameOrIndex
             )._throw();            
-        }
         return axis;
     },
+/**
+*   Determine if the axis specified by the argument exists. 
+*   @method hasAxis 
+*   @param nameOrIndex {string | int} For int arguments, a value of 0 up to the number of axes. You can also use one of the <code>AXIS_xxx</code> constants. For string arguments, this method will match the name of the axis as it is returned in the XML/A response. These names are of the form <code>AxisN</code> where N is an ordinal that identifies the axis.
+*   @return {boolean} <code>true</code> if the specified axis exists, <code>false</code> if it doesn't exist. 
+*/    
     hasAxis: function(nameOrIndex) {
         var axis = this._getAxis(nameOrIndex);
         return !_isUnd(axis);
     },
+/**
+*   Get the Column axis. This is the first axis, and has ordinal 0. If the column axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown. 
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasColumnAxis">hasColumnAxis()</a></code> method to determine if the axis exists. 
+*   @method getColumnAxis 
+*   @return {Xmla.Dataset.Axis} The column <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object. 
+*/    
     getColumnAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_COLUMNS);
     },
+/**
+*   Determine if the column axis exists. 
+*   @method hasColumnAxis 
+*   @return {boolean} <code>true</code> if the column axis exists, <code>false</code> if it doesn't exist. 
+*/    
     hasColumnAxis: function(){
         return this.hasAxis(Xmla.Dataset.AXIS_COLUMNS);
     },
+/**
+*   Get the Row axis. This is the second axis, and has ordinal 1. If the row axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown. 
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasRowAxis">hasRowAxis()</a></code> method to determine if the axis exists. 
+*   @method getRowAxis 
+*   @return {Xmla.Dataset.Axis} The row <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object. 
+*/    
     getRowAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_ROWS);
     },
+/**
+*   Determine if the row axis exists. 
+*   @method hasRowAxis 
+*   @return {boolean} <code>true</code> if the row axis exists, <code>false</code> if it doesn't exist. 
+*/    
     hasRowAxis: function(){
         return this.hasAxis(Xmla.Dataset.AXIS_ROWS);
     },
+/**
+*   Get the Page axis. This is the third axis, and has ordinal 2. If the page axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown. 
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasPageAxis">hasPageAxis()</a></code> method to determine if the axis exists. 
+*   @method getPageAxis 
+*   @return {Xmla.Dataset.Axis} The page <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object. 
+*/    
     getPageAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_PAGES);
     },
+/**
+*   Determine if the page axis exists. 
+*   @method hasPageAxis 
+*   @return {boolean} <code>true</code> if the page axis exists, <code>false</code> if it doesn't exist. 
+*/    
     hasPageAxis: function(){
         return this.hasAxis(Xmla.Dataset.AXIS_PAGES);
     },
+/**
+*   Get the Section axis. This is the fourth axis, and has ordinal 3. If the section axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown. 
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasPageAxis">hasSectionAxis()</a></code> method to determine if the axis exists. 
+*   @method getSectionAxis 
+*   @return {Xmla.Dataset.Axis} The section <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object. 
+*/    
     getSectionAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_SECTIONS);
     },
+/**
+*   Determine if the section axis exists. 
+*   @method hasSectionAxis 
+*   @return {boolean} <code>true</code> if the section axis exists, <code>false</code> if it doesn't exist. 
+*/    
     hasSectionAxis: function(){
         return this.hasAxis(Xmla.Dataset.AXIS_SECTIONS);
     },
+/**
+*   Get the Chapter axis. This is the fifth axis, and has ordinal 4. If the chapter axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown. 
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasChapterAxis">hasChapterAxis()</a></code> method to determine if the axis exists. 
+*   @method getChapterAxis 
+*   @return {Xmla.Dataset.Axis} The chapter <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object. 
+*/    
     getChapterAxis: function(){
         return this.getAxis(Xmla.Dataset.AXIS_CHAPTERS);
     },
+/**
+*   Determine if the chapter axis exists. 
+*   @method hasChapterAxis 
+*   @return {boolean} <code>true</code> if the chapter axis exists, <code>false</code> if it doesn't exist. 
+*/    
     hasChapterAxis: function(){
         return this.hasAxis(Xmla.Dataset.AXIS_CHAPTERS);
     },
+/**
+*   Get the Slicer axis. This is the axis that appears in the <code>WHERE</code> clause of the MDX statement. 
+*   @method getSlicerAxis 
+*   @return {Xmla.Dataset.Axis} The slicer <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object. 
+*/    
     getSlicerAxis: function(){
         return this._slicer;
     },
+/**
+*   Get the Cellset object. 
+*   @method getCellset 
+*   @return {Xmla.Dataset.Cellset} The <code><a href="Xmla.Dataset.Cellset.html#class_Cellset">Xmla.Dataset.Cellset</a></code> object. 
+*/    
     getCellset: function(){
         return this._cellset;
     },
+/**
+*   <p>Calculate the cellset ordinal for the argument tuple indexes.</p>
+*   <p>This method accepts a variable number of tuple indexes. One integer argument must be passed for each proper axis (excluding the slicer axis).
+*   Each integer arguments represent the index of a tuple on the respective axis.</p>
+*   <p>The arguments must be specified by descending axis order. So if the data set has two axes (a row and a column axis), 
+*   this method expects the tuple index of a tuple on the row axis first, and after that, the tuple index on the column axis.</p>
+*   <p>The method returns an integer that represents the ordinal of the cell identified by the tuples specified by the tuple index arguments.
+*   One could use this ordinal as argument to the <code><a href="Xmla.Dataset.Cellset.html#method_getByOrdinal">getByOrdinal()</a></code> method of this Dataset's <code><a href="Xmla.Dataset.Cellset.html#class_Cellset">Cellset</a></code>.</p>
+*   <p>Instead of calling this method and passing the result into the Cellsets <code><a href="Xmla.Dataset.Cellset.html#method_getByOrdinal">getByOrdinal()</a></code> method, 
+*   you can call the <code><a href="Xmla.Dataset.Cellset.html#method_getByTupleIndexes">getByTupleIndexes()</a></code> method  of this Dataset's <code><a href="Xmla.Dataset.Cellset.html#class_Cellset">Cellset</a></code>.</p>  
+*   @method cellOrdinalForTupleIndexes
+*   @param {int} A variable number of integer tuple indexes. Tuple indexes should be passed in descending order of axes. 
+*   @return {int} The ordinal number that identifies the cell from this Dataset's <code><a href="Xmla.Dataset.Cellset.html#class_Cellset">Xmla.Dataset.Cellset</a></code> that belongs to the tuples identified by the arguments.  
+*/    
     cellOrdinalForTupleIndexes: function() {
         throw "Not implemented"
     },
+/**
+*   Cleanup this Dataset object. 
+*   @method close 
+*/    
     close: function(){
-        if (this._slicer){
-            this._slicer.close();
-        }
-        for (var i=0; i<this._namAxes; i++){
-            this.getAxis(i).close();
-        }
+        if (this._slicer) this._slicer.close();
+        var i, n = this._numAxes;
+        for (i = 0; i < n; i++) this.getAxis(i).close();
         this._cellset.close();
         this._root = null;
         this._axes = null;
@@ -5503,6 +5688,18 @@ Xmla.Dataset.prototype = {
     }
 };
 
+/**
+*   <p>
+*   This class implements an Axis object.
+*   </p>
+*   <p>
+*   You do not need to instantiate objects of this class yourself. 
+*   Rather, the <code><a href="Xmla.Dataset.html#class_Xmla.Dataset">Xmla.Dataset</a></code> class creates instances of this class to represent the axes of an MDX query.
+*   (see <code><a href="Xmla.Dataset.html#method_getAxis">getAxis()</a></code>.)
+*   
+*   @class Xmla.Dataset.Axis
+*   @constructor
+*/
 Xmla.Dataset.Axis = function(_axisInfoNode, _axisNode, name, id){
     this._initAxis(_axisInfoNode, _axisNode);
     this.name = name;
@@ -5541,7 +5738,7 @@ Xmla.Dataset.Axis.prototype = {
         this._hierarchyOrder = [];
         this._hierarchyIndexes = {};
         this.numHierarchies = numHierarchies;
-        for (i=0; i<numHierarchies; i++){
+        for (i = 0; i < numHierarchies; i++){
             hierarchyInfoNode = hierarchyInfoNodes.item(i);
             hierarchyName = hierarchyInfoNode.getAttribute("name");
             this._hierarchyOrder[i] = hierarchyName;
@@ -5557,7 +5754,7 @@ Xmla.Dataset.Axis.prototype = {
                 "*"
             );
             numPropertyNodes = propertyNodes.length;
-            for (j=0; j<numPropertyNodes; j++){
+            for (j = 0; j < numPropertyNodes; j++) {
                 propertyNode = propertyNodes.item(j);
                 properties[propertyNode.tagName] = null;
             }
@@ -5580,17 +5777,50 @@ Xmla.Dataset.Axis.prototype = {
             _xmlnsDataset, "", "Member"
         );
     },
+/**
+*   Resets this axis object. 
+*   This resets internal counters for iterating through the hierarchies and tuples of this Axis object. 
+*   When using hierarchy and tuple iterators to traverse the entire axis, you typically won't need to call this method yourself.
+*   @method reset 
+*/    
     reset: function(){
         this._hierarchyIndex = 0;
         this._tupleIndex = 0;
         this._members = this._getMembers();
     },
+/**
+*   Checks if there are more hierarchies to iterate through. 
+*   You can use this method along with the <code><a href="#method_nextHierarchy">nextHierarchy()</a></code> method to drive a loop 
+*   to iterate through the hierarchies contained in this axis object.
+*   @method hasMoreHierarchies
+*   @return {boolean} Returns <code>true</code> if there are more hierarchies to vist, <code>false</code> if all hierarchies are traversed. 
+*/
     hasMoreHierarchies: function(){
         return this.numHierarchies > this._hierarchyIndex;
     },
+/**
+*   Moves the internal hierarchy pointer forward. 
+*   You can use this method along with the <code><a href="#method_hasMoreHierarchies">hasMoreHierarchies()</a></code> method to drive a loop 
+*   to iterate through the hierarchies contained in this axis object.
+*   @method nextHierarchy
+*   @return {int} Returns the index of current hierarchy. 
+*/
     nextHierarchy: function(){
-        return this._hierarchyIndex += 1;
+        return this._hierarchyIndex++;
     },
+/**
+*   <p>Calls a callback function for each hierarchy in this Axis object.</p> 
+*   <p>The callback function is passed an object that represents the hierarchy. This object has the following structure:</p><ul>
+*     <li><code>index</code> <code>int</code> The ordinal identifying this hierarchy</li>
+*     <li><code>name</code> <code>string</code> The name of this hierarchy</li>
+*   </ul>
+*   <p>The callback may return <code>false</code> to abort iteration. If the callback does not return <code>false</code>, iteration will resume until all hierarchies are traversed.</p>
+*   @param {function} callback. A function that will be called for each hierarchy. The hierarchy is passed as an object as the first argument to the callback. 
+*   @param {object} scope. The object that will be used as scope when executing the callback function. If this is undefined or <code>null</code>, the Axis' <code>this</code> pointer will be used. 
+*   @param {object} args. Additional data to be passed to the callback function.. 
+*   @method eachHierarchy
+*   @return {boolean} Returns <code>true</code> if all hierarchies were visited and the callback did not return <code>false</code>. Returns <code>false</code> if the callback returned <code>false</code> and further iteration was aborted. 
+*/
     eachHierarchy: function(callback, scope, args){
         var mArgs = [null];
         if (!scope) scope = this;
@@ -5600,38 +5830,68 @@ Xmla.Dataset.Axis.prototype = {
         }
         while (this.hasMoreHierarchies()){
             mArgs[0] = this._hierarchyDefs[this._hierarchyOrder[this._hierarchyIndex]];
-            if (callback.apply(scope, mArgs)===false) {
-                return false;
-            }
+            if (callback.apply(scope, mArgs)===false) return false;
             this.nextHierarchy();
         }
         this._hierarchyIndex = 0;
         return true;
     },
+/**
+*   Checks if there are more tuples to iterate through. 
+*   You can use this method along with the <code><a href="#method_nextTuple">nextTuple()</a></code> method to drive a loop 
+*   to iterate through the tuples contained in this axis object.
+*   @method hasMoreTuples
+*   @return {boolean} Returns <code>true</code> if there are more tuples to vist, <code>false</code> if all tuples are traversed. 
+*/
     hasMoreTuples: function(){
         return this.numTuples > this._tupleIndex;
     },
+/**
+*   Moves the internal tuple pointer forward. 
+*   You can use this method along with the <code><a href="#method_nextTuple">nextTuple()</a></code> method to drive a loop 
+*   to iterate through the tuples contained in this axis object.
+*   @method nextTuple
+*   @return {int} Returns the index of current tuple. 
+*/
     nextTuple: function(){
-        this._tupleIndex += 1
+        this._tupleIndex++;
         this._members = this._getMembers();
         return this._tupleIndex;
     },
+/**
+*   Gets the number of tuples in this axis object.
+*   @method tupleCount
+*   @return {int} Returns the number of tuples in this Axis object. 
+*/
     tupleCount: function(){
         return this.numTuples;
     },
+/**
+*   Returns the current value of the tuple pointer.
+*   @method tupleIndex
+*   @return {int} Returns the current value of the tuple pointer. 
+*/
     tupleIndex: function() {
         return this._tupleIndex;
     },
+/**
+*   Get the current tuple as an object. The tuple object has the following structure: <ul>
+*       <li><code>index</code> <code>int</code>: the ordinal of this tuple</li>
+*       <li><code>index</code> <code>int</code>: the ordinal of this tuple</li>
+*   </ul>
+*   @method getTuple
+*   @return {object} An object representing the current tuple.. 
+*/
     getTuple: function() {
         var i, n = this.numHierarchies,
-            hierarchies = {}, members = [], tuple = {
-            index: this._tupleIndex, 
-            hierarchies: hierarchies, 
-            members: members
-        };
-        for (i=0; i < n; i++){
-            members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
-        }
+            hierarchies = {}, members = [], 
+            tuple = {
+                index: this._tupleIndex, 
+                hierarchies: hierarchies, 
+                members: members
+            }
+        ;
+        for (i=0; i < n; i++) members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
         return tuple;
     },
     eachTuple: function(callback, scope, args){
@@ -5643,9 +5903,7 @@ Xmla.Dataset.Axis.prototype = {
         }
         while (this.hasMoreTuples()){
             mArgs[0] = this.getTuple();
-            if (callback.apply(scope, mArgs)===false) {
-                return false;
-            }
+            if (callback.apply(scope, mArgs)===false) return false;
             this.nextTuple();
         }
         this._tupleIndex = 0;
@@ -5656,78 +5914,62 @@ Xmla.Dataset.Axis.prototype = {
         return this._hierarchyDefs;
     },
     getHierarchyNames: function(){
-        var hierarchyNames = [];
-        for (var i=0, count = this.numHierarchies; i<count; i += 1){
-            hierarchyNames[i] = this._hierarchyOrder[i];
-        }
+        var hierarchyNames = [], i, n = this.numHierarchies;
+        for (i = 0; i < n; i++) hierarchyNames[i] = this._hierarchyOrder[i];
         return hierarchyNames;
     },
     hierarchyCount: function(){
         return this.numHierarchies;
     },
     hierarchyIndex: function(hierarchyName){
-        if (_isUnd(hierarchyName)) {
-            return this._hierarchyIndex;
-        }
+        if (_isUnd(hierarchyName)) return this._hierarchyIndex;
         var index = this._hierarchyIndexes[hierarchyName];
-        if (_isUnd(index)) {
+        if (_isUnd(index)) 
             Xmla.Exception._newError(
                 "INVALID_HIERARCHY",
                 "Xmla.Dataset.Axis.hierarchyDef",
                 hierarchyName
             )._throw();
-        }
         return index;
     },
     hierarchyName: function(index){
-        if (_isUnd(index)) {
-            index = this._hierarchyIndex;
-        }
-        if (index !== parseInt(index, 10)
-        ||  index >= this.numHierarchies
-        ) {
+        if (_isUnd(index)) index = this._hierarchyIndex;
+        if (index !== parseInt(index, 10) ||
+            index >= this.numHierarchies
+        )
             Xmla.Exception._newError(
                 "INVALID_HIERARCHY",
                 "Xmla.Dataset.Axis.hierarchyDef",
                 index
             )._throw();
-        }
         return this._hierarchyOrder[index];
     },
     hierarchy: function(hierarchyIndexOrName){
-        if (_isUnd(hierarchyIndexOrName)) {
-            index = this._hierarchyIndex;
-        }
+        if (_isUnd(hierarchyIndexOrName)) index = this._hierarchyIndex;
         var index, hierarchyName, hierarchy;
         if (_isNum(hierarchyIndexOrName)) {
             if (hierarchyIndexOrName !== parseInt(hierarchyIndexOrName, 10)
             ||  hierarchyIndexOrName >= this.numHierarchies
-            ) {
+            )
                 Xmla.Exception._newError(
                     "INVALID_HIERARCHY",
                     "Xmla.Dataset.Axis.hierarchyDef",
                     hierarchyIndexOrName
                 )._throw();
-            }
             hierarchyName = this.hierarchyName(hierarchyIndexOrName);
         }
-        else {
-            hierarchyName = hierarchyIndexOrName;
-        }
+        else hierarchyName = hierarchyIndexOrName;
         hierarchy = this._hierarchyDefs[hierarchyName];
-        if (_isUnd(hierarchy)) {
+        if (_isUnd(hierarchy))
             Xmla.Exception._newError(
                 "INVALID_HIERARCHY",
                 "Xmla.Dataset.Axis.hierarchyDef",
                 hierarchyName
             )._throw();
-        }
         return hierarchy;
     },
     member: function(hierarchyIndexOrName){
-        if (_isUnd(hierarchyIndexOrName)) {
-            index = this._hierarchyIndex;
-        }
+        if (_isUnd(hierarchyIndexOrName)) index = this._hierarchyIndex;
         var index, hierarchyName, hierarchy;
         switch(typeof(hierarchyIndexOrName)){
             case "string":
@@ -5735,15 +5977,14 @@ Xmla.Dataset.Axis.prototype = {
                 hierarchyName = hierarchyIndexOrName;
                 break;
             case "number":
-                if (hierarchyIndexOrName !== parseInt(hierarchyIndexOrName, 10)
-                ||  hierarchyIndexOrName >= this.numHierarchies
-                ) {
+                if (hierarchyIndexOrName !== parseInt(hierarchyIndexOrName, 10) ||
+                    hierarchyIndexOrName >= this.numHierarchies
+                )
                     Xmla.Exception._newError(
                         "INVALID_HIERARCHY",
                         "Xmla.Dataset.Axis.hierarchyDef",
                         name
                     )._throw();
-                }
                 index = hierarchyIndexOrName;
                 break;
         }        
@@ -5780,59 +6021,43 @@ Xmla.Dataset.Axis.prototype = {
         return member;
     },
     readAsArray: function(array){
-        if(!array){
-            array = [];
-        }
-        for (var i=0; i<this.numHierarchies; i++){
-            array[i] = this._member(i);
-        }
+        if (!array) array = [];
+        var i, n = this.numHierarchies;
+        for (i = 0; i < n; i++) array[i] = this._member(i);
         return array;
     },
     readAsObject: function(object){
-        if (!object){
-            object = {};
-        }
-        for (var i=0; i<this.numHierarchies; i++){
-            object[this._hierarchyOrder[i]] = this._member(i);
-        }
+        if (!object) object = {};
+        var i, n = this.numHierarchies;
+        for (i = 0; i < n; i++) object[this._hierarchyOrder[i]] = this._member(i);
         return object;
     },
     fetchAsArray: function(array){
         if (this.hasMoreTuples()) {
             array = this.readAsArray(array);
             this.nextTuple();
-        } else {
-            array = false;
-        }
+        } 
+        else array = false;
         return array;
     },
     fetchAsObject: function(object){
         if (this.hasMoreTuples(object)){
             object = this.readAsObject();
             this.nextTuple();
-        } else {
-            object = false;
-        }
+        } 
+        else object = false;
         return object;
     },
     fetchAllAsArray: function(rows){
         var row;
-        if (!rows){
-            rows = [];
-        }
-        while((row = this.fetchAsArray())){
-            rows.push(row);
-        }
+        if (!rows) rows = [];
+        while((row = this.fetchAsArray())) rows.push(row);
         return rows;
     },
     fetchAllAsObject: function(rows){
         var row;
-        if (!rows){
-            rows = [];
-        }
-        while((row = this.fetchAsObject())){
-            rows.push(row);
-        }
+        if (!rows) rows = [];
+        while((row = this.fetchAsObject())) rows.push(row);
         return rows;
     }
 }
@@ -5858,13 +6083,12 @@ Xmla.Dataset.Cellset.prototype = {
             propertyNodes, propertyNode, propertyNodeTagName, numPropertyNodes, i, j
         ;
         cellSchema = _getComplexType(root, "CellData");
-        if (!cellSchema){
+        if (!cellSchema)
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
                 "Xmla.Rowset",
                 root
             )._throw();
-        }        
         cellSchemaElements = _getElementsByTagNameNS(
             cellSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "element"
         );
@@ -5872,13 +6096,13 @@ Xmla.Dataset.Cellset.prototype = {
         cellInfoNodes = _getElementsByTagNameNS(
             root, _xmlnsDataset, "", "CellInfo"
         ); 
-        if (!cellInfoNodes || cellInfoNodes.length==0){
+        if (!cellInfoNodes || cellInfoNodes.length===0) 
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
                 "Xmla.Rowset",
                 root
             )._throw();
-        }
+            
         cellInfoNode = cellInfoNodes.item(0);
         propertyNodes = _getElementsByTagNameNS(
             cellInfoNode, _xmlnsDataset, "", "*"
@@ -5886,15 +6110,13 @@ Xmla.Dataset.Cellset.prototype = {
         this._cellProperties = {};
         //examine cell property info so we can parse them
         numPropertyNodes = propertyNodes.length;
-        for(i=0; i<numPropertyNodes; i+=1){
+        for(i = 0; i < numPropertyNodes; i++) {
             propertyNode = propertyNodes.item(i);
             propertyNodeTagName = propertyNode.tagName;
             //find the xsd:element node that describes this property
-            for (var j=0; j<numCellSchemaElements; j++){
+            for (j = 0; j < numCellSchemaElements; j++) {
                 cellSchemaElement = cellSchemaElements.item(j);
-                if (cellSchemaElement.getAttribute("name")!==propertyNodeTagName){
-                    continue;
-                }
+                if (cellSchemaElement.getAttribute("name") !== propertyNodeTagName) continue;
                 type = cellSchemaElement.getAttribute("type");
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
                 this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
@@ -5908,9 +6130,7 @@ Xmla.Dataset.Cellset.prototype = {
         this.reset();
     },
     _getCellNode: function(index){
-        if (!_isUnd(index)) {
-            this._idx = index;
-        }
+        if (!_isUnd(index)) this._idx = index;
         this._cellNode = this._cellNodes.item(this._idx);
         this._cellOrd = this._getCellOrdinal(this._cellNode);
     },
@@ -5981,22 +6201,16 @@ Xmla.Dataset.Cellset.prototype = {
         return rows;
     },
     eachRow: function(rowCallback, scope, args){
-        if (_isUnd(scope)){
-            scope = this;
-        }
+        if (_isUnd(scope)) scope = this;
         var mArgs = [null];
         if (!_isUnd(args)) {
-            if (!_isArr(args)) {
-                args = [args];
-            }
+            if (!_isArr(args)) args = [args];
             mArgs = mArgs.concat(args);
         }
         var row, rows=[];
         while((row = this.fetchAsArrayOfValues()) && (this.hasMoreCells())){
             mArgs[0] = row;
-            if (rowCallback.apply(scope, mArgs)===false) {
-                return false;
-            }
+            if (rowCallback.apply(scope, mArgs)===false) return false;
         }        
         return true;
     },   
@@ -6007,15 +6221,9 @@ Xmla.Dataset.Cellset.prototype = {
             ).item(0);
             if (!cellProp) continue;
             cellProperty = this._cellProperties[p];
-            if (cellProperty){
-                object[p] = cellProperty(_getElementText(cellProp));
-            }
-            else if (p==="Value"){
-                object[p] = _getElementValue(cellProp);
-            }
-            else {
-                object[p] = _getElementText(cellProp);
-            }
+            if (cellProperty) object[p] = cellProperty(_getElementText(cellProp));
+            else if (p === "Value") object[p] = _getElementValue(cellProp);
+            else object[p] = _getElementText(cellProp);
         }
         object.ordinal = this._getCellOrdinal(node);
         return object;
@@ -6028,17 +6236,13 @@ Xmla.Dataset.Cellset.prototype = {
         var mArgs = [null];
         if (!scope) scope = this;
         if (args) {
-            if (!_isArr(args)) {
-                args = [args];
-            }
+            if (!_isArr(args)) args = [args];
             mArgs = mArgs.concat(args);
         }
         while (this.hasMoreCells()){
             this.nextCell();
             mArgs[0] = this.readCell();
-            if (callback.apply(scope, mArgs)===false) {
-                return false;
-            }
+            if (callback.apply(scope, mArgs)===false) return false;
         }
         this._idx = 0;
         return true;
@@ -6053,16 +6257,10 @@ Xmla.Dataset.Cellset.prototype = {
         while(true) {
             node = this._cellNodes.item(idx);
             ord = this._getCellOrdinal(node);
-            if (ord === ordinal) {
-                return this.getByIndex(idx, object);
-            }
+            if (ord === ordinal) return this.getByIndex(idx, object);
             else
-            if (ord > ordinal) {
-                idx--;
-            }
-            else {
-                return null;
-            }
+            if (ord > ordinal) idx--;
+            else return null;
         }
     },
     cellOrdinalForTupleIndexes: function() {
