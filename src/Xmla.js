@@ -5810,7 +5810,7 @@ Xmla.Dataset.Axis.prototype = {
     },
 /**
 *   <p>Calls a callback function for each hierarchy in this Axis object.</p> 
-*   <p>The callback function is passed an object that represents the hierarchy. This object has the following structure:</p><ul>
+*   <p>The callback function is passed an object that represents the current hierarchy. This object has the following structure:</p><ul>
 *     <li><code>index</code> <code>int</code> The ordinal identifying this hierarchy</li>
 *     <li><code>name</code> <code>string</code> The name of this hierarchy</li>
 *   </ul>
@@ -5876,8 +5876,9 @@ Xmla.Dataset.Axis.prototype = {
     },
 /**
 *   Get the current tuple as an object. The tuple object has the following structure: <ul>
-*       <li><code>index</code> <code>int</code>: the ordinal of this tuple</li>
-*       <li><code>index</code> <code>int</code>: the ordinal of this tuple</li>
+*       <li><code>index</code> <code>int</code>: the ordinal of this tuple within its axis</li>
+*       <li><code>hierarchies</code> <code>object</code>: A map of members using hierarchy names as keys, and member objects as values</li>
+*       <li><code>members</code> <code>array</code>: An array of members in order of hierarchy order.</li>
 *   </ul>
 *   @method getTuple
 *   @return {object} An object representing the current tuple.. 
@@ -5894,6 +5895,16 @@ Xmla.Dataset.Axis.prototype = {
         for (i=0; i < n; i++) members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
         return tuple;
     },
+/**
+*   <p>Calls a callback function for each tuple in this Axis object.</p> 
+*   <p>The callback function is passed an object that represents the current tuple. (see <code><a href="#method_getTuple">getTuple()</a></code> for a description of the tuple format.)</p>
+*   <p>The callback may return <code>false</code> to abort iteration. If the callback does not return <code>false</code>, iteration will resume until all tuples are traversed.</p>
+*   @param {function} callback. A function that will be called for each tuple. The tuple is passed as an object as the first argument to the callback. 
+*   @param {object} scope. The object that will be used as scope when executing the callback function. If this is undefined or <code>null</code>, the Axis' <code>this</code> pointer will be used. 
+*   @param {object} args. Additional data to be passed as the second argument to the callback function.
+*   @method eachTuple
+*   @return {boolean} Returns <code>true</code> if all tuples were visited and the callback did not return <code>false</code>. Returns <code>false</code> if the callback returned <code>false</code> and further iteration was aborted. 
+*/
     eachTuple: function(callback, scope, args){
         var mArgs = [null];
         if (!scope) scope = this;
@@ -5903,24 +5914,45 @@ Xmla.Dataset.Axis.prototype = {
         }
         while (this.hasMoreTuples()){
             mArgs[0] = this.getTuple();
-            if (callback.apply(scope, mArgs)===false) return false;
+            if (callback.apply(scope, mArgs) === false) return false;
             this.nextTuple();
         }
         this._tupleIndex = 0;
         this._members = this._getMembers();
         return true;
     },
+/**
+ *  Returns the hierarchies of this Axis object.
+*   @method getHierarchies
+*   @return {array} An array of hierarchies contained in this Axis.
+ **/
     getHierarchies: function(){
         return this._hierarchyDefs;
     },
+/**
+ *  Returns the names of the hierarchies of this Axis object.
+*   @method getHierarchyNames
+*   @return {array} An array of names of the hierarchies contained in this Axis.
+ **/
     getHierarchyNames: function(){
         var hierarchyNames = [], i, n = this.numHierarchies;
         for (i = 0; i < n; i++) hierarchyNames[i] = this._hierarchyOrder[i];
         return hierarchyNames;
     },
+/**
+*   Gets the number of hierarchies in this axis object.
+*   @method hierarchyCount
+*   @return {int} Returns the number of hierarchies in this Axis object. 
+*/
     hierarchyCount: function(){
         return this.numHierarchies;
     },
+/**
+*   Gets the index of the hierarchy identified by the specified name, or the index of the current hierarchy (in case the name argument is omitted).
+*   @method hierarchyIndex
+*   @param hierarchyName {string} The name of the hierarchy for which the index is to be retrieved. When omitted, the index of the current hierarchy is returned. 
+*   @return {int} The index of the hierarchy specified by the name passed as argument, or the index of the current hierarchy if the name argument is omitted. 
+*/
     hierarchyIndex: function(hierarchyName){
         if (_isUnd(hierarchyName)) return this._hierarchyIndex;
         var index = this._hierarchyIndexes[hierarchyName];
@@ -5932,6 +5964,12 @@ Xmla.Dataset.Axis.prototype = {
             )._throw();
         return index;
     },
+/**
+*   Gets the name of the hierarchy identified by the specified index, or the name of the current hierarchy (in case the index argument is omitted).
+*   @method hierarchyName
+*   @param hierarchyIndex {int} The ordinal of the hierarchy for which the name is to be retrieved. When omitted, the name of the current hierarchy is returned. 
+*   @return {string} The name of the hierarchy specified by the argument index, or the name of the current hierarchy if the index argument is omitted. 
+*/
     hierarchyName: function(index){
         if (_isUnd(index)) index = this._hierarchyIndex;
         if (index !== parseInt(index, 10) ||
@@ -5944,6 +5982,12 @@ Xmla.Dataset.Axis.prototype = {
             )._throw();
         return this._hierarchyOrder[index];
     },
+/**
+*   Gets the hierarchy identified by the specified index or hierarchyName, or the current hierarchy (in case the argument is omitted).
+*   @method hierarchy
+*   @param hierarchyIndexOrName {int|string} The ordinal or name of the hierarchy that is to be retrieved. When omitted, the the current hierarchy is returned. 
+*   @return {string} The hierarchy specified by the argument index or name, or the current hierarchy if the argument is omitted. 
+*/
     hierarchy: function(hierarchyIndexOrName){
         if (_isUnd(hierarchyIndexOrName)) index = this._hierarchyIndex;
         var index, hierarchyName, hierarchy;
@@ -5968,6 +6012,26 @@ Xmla.Dataset.Axis.prototype = {
             )._throw();
         return hierarchy;
     },
+/**
+*   Gets the member for the specified hierarchy from the current tuple. The member has the following structure: <ul>
+*     <li><code>index</code> - <code>int</code></li>
+*     <li><code>hierarchy</code> - <code>string</code>. Name of the hiearchy to which this member belongs.</li>
+*     <li><code>UName</code> - <code>string</code>. Unique name of this member.</li>
+*     <li><code>Caption</code> - <code>string</code>. Human friendly name for this member.</li>
+*     <li><code>LName</code> - <code>string</code>. Name of the level to which this member belongs.</li>
+*     <li><code>LNum</code> - <code>int</code>. Number of the level to which this member belongs. Typically, the top-level is level 0, its children are level 1 and so on.</li>
+*     <li><code>DisplayInfo</code> - <code>int</code>.</li>
+*   </ul>
+*   <p>
+*   The <code>index</code> and <code>hierarchy</code> properties are non standard and always added by Xmla4js.
+*   The properties <code>UName</code>, <code>Caption</code>, <code>LName</code> and <code>LNum</code> are defined by the XML/A standard, and should always be present.
+*   The property <code>DisplayInfo</code> is non-standard, but often available.
+*   Other properties may be present depending on the specific XML/A provider. 
+*   </p> 
+*   @method member
+*   @param hierarchyIndexOrName {int|string} The ordinal or name of the hierarchy from which the member is to be retrieved. When omitted, the the current hierarchy is returned. 
+*   @return {object} The member of the current tuple that belongs to the specified hierarchy, If the argument is omitted the member that belongs current hierarchy is retrieved from the current tuple. 
+*/
     member: function(hierarchyIndexOrName){
         if (_isUnd(hierarchyIndexOrName)) index = this._hierarchyIndex;
         var index, hierarchyName, hierarchy;
@@ -6020,18 +6084,40 @@ Xmla.Dataset.Axis.prototype = {
         }
         return member;
     },
+/**
+*   Gets the current tuple as an array of members.
+*   For a description of the structure of the member elements, see <code><a href="#method_member">member()</a></code>.
+*   @method readAsArray
+*   @param array {array} An existing array to store the members in. If omitted, a new array is returned. 
+*   @return {array} An array of members that represents the current tuple.
+*/
     readAsArray: function(array){
         if (!array) array = [];
         var i, n = this.numHierarchies;
         for (i = 0; i < n; i++) array[i] = this._member(i);
         return array;
     },
+/**
+*   Gets the current tuple as an object. 
+*   The object's keys are the hierarchy names, and the members of the current tuple are used as values for the keys.
+*   For a description of the structure of the member elements, see <code><a href="#method_member">member()</a></code>.
+*   @method readAsObject
+*   @param object {object} An existing object to store the tuple data in. If omitted, a new object is returned. 
+*   @return {object} An object that represents the current tuple.
+*/
     readAsObject: function(object){
         if (!object) object = {};
         var i, n = this.numHierarchies;
         for (i = 0; i < n; i++) object[this._hierarchyOrder[i]] = this._member(i);
         return object;
     },
+/**
+*   Gets the current tuple as an array of members and advances the internal tuple pointer.
+*   For a description of the structure of the member elements, see <code><a href="#method_member">member()</a></code>.
+*   @method fetchAsArray
+*   @param array {array} An existing array to store the members in. If omitted, a new array is returned. 
+*   @return {array|false} An array of members that represents the current tuple, or <code>false</code> if there are no more tuples.
+*/
     fetchAsArray: function(array){
         if (this.hasMoreTuples()) {
             array = this.readAsArray(array);
@@ -6040,6 +6126,14 @@ Xmla.Dataset.Axis.prototype = {
         else array = false;
         return array;
     },
+/**
+*   Gets the current tuple as an object and advances the current tuple pointer. 
+*   The object's keys are the hierarchy names, and the members of the current tuple are used as values for the keys. 
+*   For a description of the structure of the member elements, see <code><a href="#method_member">member()</a></code>.
+*   @method fetchAsObject
+*   @param object {object} An existing object to store the tuple data in. If omitted, a new object is returned. 
+*   @return {object} An object that represents the current tuple.
+*/
     fetchAsObject: function(object){
         if (this.hasMoreTuples(object)){
             object = this.readAsObject();
@@ -6048,12 +6142,29 @@ Xmla.Dataset.Axis.prototype = {
         else object = false;
         return object;
     },
+/**
+*   Fetches all tuples and returns them as an array of arrays. 
+*   Each element of the returned array is an array of member objects.
+*   For a description of the structure of the member elements, see <code><a href="#method_member">member()</a></code>.
+*   @method fetchAllAsArray
+*   @param rows {array} An existing array to store the tuples in. If omitted, a new array is returned. 
+*   @return {array[array[]]} An array of arrays representing all tuples that belong to this axis.
+**/
     fetchAllAsArray: function(rows){
         var row;
         if (!rows) rows = [];
         while((row = this.fetchAsArray())) rows.push(row);
         return rows;
     },
+/**
+*   Fetches all tuples and returns them as an array of objects. 
+*   Each element of the returned array is a tuple object.
+*   The object's keys are the hierarchy names, and the members of the current tuple are used as values for the keys. 
+*   For a description of the structure of the member elements, see <code><a href="#method_member">member()</a></code>.
+*   @method fetchAllAsObject
+*   @param rows {array} An existing array to store the tuples in. If omitted, a new array is returned. 
+*   @return {array[object]} An array of arrays representing all tuples that belong to this axis.
+**/
     fetchAllAsObject: function(rows){
         var row;
         if (!rows) rows = [];
@@ -6062,6 +6173,18 @@ Xmla.Dataset.Axis.prototype = {
     }
 }
 
+/**
+*   <p>
+*   This class implements a Cellset object.
+*   </p>
+*   <p>
+*   You do not need to instantiate objects of this class yourself. 
+*   Rather, the <code><a href="Xmla.Dataset.html#class_Xmla.Dataset">Xmla.Dataset</a></code> class creates instances of this class to represent the cells (the value of the measures) of an MDX query.
+*   (see <code><a href="Xmla.Dataset.html#method_getCellset">getCellset()</a></code>.)
+*   
+*   @class Xmla.Dataset.Cellset
+*   @constructor
+*/
 Xmla.Dataset.Cellset = function(dataset){
     this._dataset = dataset;
     this._initCellset();
@@ -6137,16 +6260,41 @@ Xmla.Dataset.Cellset.prototype = {
     _getCellOrdinal: function(node){
         return parseInt(node.getAttribute("CellOrdinal"), 10);
     },
+/**
+*   Returns the number of cells contained in this cellset. 
+*   This is the number of cells that is actually present in the cellset - not the number of logical cells.
+*   The nuber of logical cells can be be calculated by multiplying the tuple counts of all axes of the data set.
+*   The XML/A provider will typically not return empty cells, hence, the cellCount may be less than the logical cell count. 
+*   @method cellCount
+*   @return {int} The number of cells in this cellset.
+*/
     cellCount: function() {
         return this._cellNodes.length;
     },
+/**
+*   Resets the internal cell pointer to the argument, or to 0 if the argument is omitted.
+*   Normally, you shouldn't have to call this method yourself.
+*   @method reset
+*   @param idx {int}
+*/ 
     reset: function(idx){
         this._idx = idx ? idx : 0;
         this._getCellNode();
     },
+/**
+*   Check if there are cells to iterate through.
+*   @method hasMoreCells
+*   @return {boolean} <code>true</code> if there are more cells to iterate, <code>false</code> if there are no more cells to iterate.
+*/ 
     hasMoreCells: function(){
         return this._idx < this._cellCount;
     },
+/**
+*   Advance to the next (physical) cell. 
+*   Note that this method may appear to be skipping cells. This happens when the XML/A provider omits empty cells in the response.
+*   @method nextCell
+*   @return {int} returns the ordinal of the next cell, or -1 if there was no next cell. 
+*/ 
     nextCell: function(){     
         this._idx += 1;
         if (this.hasMoreCells()) {
@@ -6158,12 +6306,46 @@ Xmla.Dataset.Cellset.prototype = {
             return -1;
         }
     },
+/**
+*   Returns the internal cell pointer. This is the fysical cell pointer. 
+*   To get the logical cell pointer, see <code><a href="#method_cellOrdinal">cellOrdinal()</a></code>
+*   @method curr
+*   @return {int} returns the internal cell pointer. 
+*/ 
     curr: function(){
         return this._idx;
     },
+/**
+*   Check if the cell has the specified property. 
+*   XML/A defines these standard properties:<ul>
+*     <li><code>Value</code></li>
+*     <li><code>FmtValue</code></li>
+*     <li><code>ForeColor</code></li>
+*     <li><code>BackColor</code></li>
+*   </ul>
+*   Whether all these properties are returned depends on the XML/A provider and on the query.
+*   The XML/A provider may return specific additional properties.
+*   @method hasCellProperty
+*   @param propertyName {string} The name of the property to check for.
+*   @return {boolean} returns <code>true</code> if the current cell has the specified property, <code>false</code> if it doesn't. 
+*/ 
     hasCellProperty: function(propertyName) {
         return !_isUnd(this._cellProperties[propertyName]);
     },
+/**
+*   Return the value of the current property of the current cell. 
+*   XML/A defines these standard properties:<ul>
+*     <li><code>Value</code></li>
+*     <li><code>FmtValue</code></li>
+*     <li><code>ForeColor</code></li>
+*     <li><code>BackColor</code></li>
+*   </ul>
+*   Whether all these properties are returned depends on the XML/A provider and on the query.
+*   The XML/A provider may return specific additional properties.
+*   @method cellProperty
+*   @param propertyName {string} The name of the property to retrieve.
+*   @return {mixed} returns the value of the specified property of the current cell. 
+*/ 
     cellProperty: function(propertyName){
         var text, type, valueEl = _getElementsByTagNameNS(
             this._cellNode, _xmlnsDataset, "", propertyName
@@ -6181,6 +6363,12 @@ Xmla.Dataset.Cellset.prototype = {
         }
         return valueConverter(text);
     },
+/**
+*   Returns the cell ordinal. This is the logical cell pointer. 
+*   To get the physical cell pointer, see <code><a href="#method_curr">curr()</a></code>
+*   @method cellOrdinal
+*   @return {int} returns the logical cell pointer. 
+*/ 
     cellOrdinal: function() {
         return this._cellOrd;
     },
@@ -6228,10 +6416,22 @@ Xmla.Dataset.Cellset.prototype = {
         object.ordinal = this._getCellOrdinal(node);
         return object;
     },
+/**
+*   @method readCell
+*   @param {object} object An existing object to use for the current cell. If omitted, a new object will be created.
+*   @return {object} An object that represents the current cell.
+*/     
     readCell: function(object) {
         if (!object) object = {};
         return this._readCell(this._cellNode, object);
     },
+/**
+*   @method eachCell
+*   @param {function} callback 
+*   @param {object} scope 
+*   @param {object} args 
+*   @return {boolean} 
+*/     
     eachCell: function(callback, scope, args) {
         var mArgs = [null];
         if (!scope) scope = this;
@@ -6247,10 +6447,22 @@ Xmla.Dataset.Cellset.prototype = {
         this._idx = 0;
         return true;
     },
+/**
+*   @method getByIndex
+*   @param {int} index 
+*   @param {object} object 
+*   @return {object} 
+*/     
     getByIndex: function(index, object) {
         this._getCellNode(index);
         return this.readCell(object);
     },
+/**
+*   @method getByOrdinal
+*   @param {int} ordinal 
+*   @param {object} object 
+*   @return {object} 
+*/     
     getByOrdinal: function(ordinal, object) {
         var node, ord, idx, lastIndex = this.cellCount() - 1;
         idx = ordinal > lastIndex ? lastIndex : ordinal;
@@ -6263,12 +6475,25 @@ Xmla.Dataset.Cellset.prototype = {
             else return null;
         }
     },
+/**
+*   @method cellOrdinalForTupleIndexes
+*   @param {int...} ordinal 
+*   @return {int} 
+*/     
     cellOrdinalForTupleIndexes: function() {
         throw "Not implemented";
     },
+/**
+*   @method getByTupleIndexes
+*   @param {int...} ordinal 
+*   @return {object} 
+*/     
     getByTupleIndexes: function() {
         return this.getByOrdinal(this.cellOrdinalForTupleIndexes.apply(this, arguments));
     },
+/**
+*   @method close
+*/     
     close: function(){
         this._dataset = null;
         this._cellNodes = null;
