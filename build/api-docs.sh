@@ -1,6 +1,6 @@
 #!/bin/sh
 # The location of your yuidoc install
-yuidoc_home=~/yuidoc
+yuidoc_home=/home/rbouman/yuidoc
 
 # The location of the files to parse.  Parses subdirectories, but will fail if
 # there are duplicate file names in these directories.  You can specify multiple
@@ -17,7 +17,7 @@ generator_out="../doc/api"
 
 # The location of the template files.  Any subdirectories here will be copied
 # verbatim to the destination directory.
-template="yuidoc-template"
+template="./yuidoc-template"
 
 # The version of your project to display within the documentation.
 version=r120
