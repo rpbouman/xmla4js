@@ -28,14 +28,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var Xmla;
 (function () {
-/**
-*   Xmla implements a XML for Analysis (XML/A) client in javascript.
-*   Using this utility you can communicate with XML/A enabled OLAP servers 
-*   to obtain metadata and to issue MDX queries.
-*   @module xmla
-*   @title Xmla utility
+/** 
+*  This is xmla4js - a stand-alone, cross-browser javascript library for working with "XML for Analysis".
+*  XML for Analysis (XML/A) is a vendor-neutral industry-standard protocol for OLAP services over HTTP.
+*  xmla4js enables web-browser-based analytical business intelligence applications.
+*  @module xmla
+*  @title Xmla
 */
 
 var _soap = "http://schemas.xmlsoap.org/soap/",
@@ -56,10 +55,6 @@ var _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsDataset = _xmlnsXmla + ":mddataset",
     _useAX = window.ActiveXObject ? true : false
 ;    
-
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
 
 function _ajax(options){
 /*
@@ -329,8 +324,8 @@ function _applyProps(object, properties, overwrite){
 *   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>). 
 *   </p>
 *   @class Xmla
-*   @param options Object standard options
 *   @constructor
+*   @param options Object standard options
 */
 Xmla = function(options){
 
@@ -6417,6 +6412,7 @@ Xmla.Dataset.Cellset.prototype = {
         return object;
     },
 /**
+ *  Reads the current cell into the specified object.
 *   @method readCell
 *   @param {object} object An existing object to use for the current cell. If omitted, a new object will be created.
 *   @return {object} An object that represents the current cell.
@@ -6426,6 +6422,7 @@ Xmla.Dataset.Cellset.prototype = {
         return this._readCell(this._cellNode, object);
     },
 /**
+ *  Iterate through each cell.
 *   @method eachCell
 *   @param {function} callback 
 *   @param {object} scope 
@@ -6448,6 +6445,7 @@ Xmla.Dataset.Cellset.prototype = {
         return true;
     },
 /**
+ *  Get a cell by its physical index.
 *   @method getByIndex
 *   @param {int} index 
 *   @param {object} object 
@@ -6458,6 +6456,7 @@ Xmla.Dataset.Cellset.prototype = {
         return this.readCell(object);
     },
 /**
+ *  Get a cell by its logical index.
 *   @method getByOrdinal
 *   @param {int} ordinal 
 *   @param {object} object 
@@ -6476,6 +6475,7 @@ Xmla.Dataset.Cellset.prototype = {
         }
     },
 /**
+ *  Calculate the ordinal based on the specified tuple indexes. 
 *   @method cellOrdinalForTupleIndexes
 *   @param {int...} ordinal 
 *   @return {int} 
@@ -6484,6 +6484,7 @@ Xmla.Dataset.Cellset.prototype = {
         throw "Not implemented";
     },
 /**
+ *  Get the cell corresponding to the specified tuple indexes. 
 *   @method getByTupleIndexes
 *   @param {int...} ordinal 
 *   @return {object} 
@@ -6492,6 +6493,7 @@ Xmla.Dataset.Cellset.prototype = {
         return this.getByOrdinal(this.cellOrdinalForTupleIndexes.apply(this, arguments));
     },
 /**
+ *  Close this cellset.
 *   @method close
 */     
     close: function(){
@@ -6840,9 +6842,12 @@ Xmla.Exception.prototype = {
 /**
 *   A reference to the built-in <code>arguments</code> array of the function that is throwing the exception
 *   This can be used to get a "stack trace" 
+*   @property args
+*   @type {array}
 */    
     args: null,
 /**
+ *  Returns a string representing this exception 
 *   @method toString
 *   @return a string representing this exception
 */    
@@ -6850,6 +6855,7 @@ Xmla.Exception.prototype = {
         return this.type + " " + this.code + ": " + this.message;
     },
 /**
+ *  Get a stack trace.
 *   @method getStackTrace
 *   @return an array of objects describing the function on the stack
 */    
