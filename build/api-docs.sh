@@ -8,7 +8,7 @@ yuidoc_home=/home/rbouman/yuidoc
 #     parser_in="%HOME/www/yui/src %HOME/www/event/src"
 parser_in="../src"
 
-# The location to output the parser data.  This output is a file containing a 
+# The location to output the parser data.  This output is a file containing a
 # json string, and copies of the parsed files.
 parser_out="~/tmp/xmla4js_apidoc"
 
@@ -20,7 +20,7 @@ generator_out="../doc/api"
 template="./yuidoc-template"
 
 # The version of your project to display within the documentation.
-version=r120
+version=r130
 
 # The version of YUI the project is using.  This effects the output for
 # YUI configuration attributes.  This should start with '2' or '3'.

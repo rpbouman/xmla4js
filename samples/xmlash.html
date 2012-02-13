@@ -10,12 +10,12 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -33,7 +33,7 @@
             }
             table {
                 margin: 1em;
-            }            
+            }
             table, thead td, thead th {
                 border-style: dashed;
             }
@@ -52,33 +52,33 @@
             overflow: hidden;
         "
     >
-        <div id="editor" 
+        <div id="editor"
             style="
                 width:100%;
                 height:100%;
                 overflow: scroll;
                 padding-bottom:.5em;
             "
-        ></div>        
+        ></div>
         <script type="text/javascript" src="wsh.js"></script>
         <script type="text/javascript" src="../src/Xmla.js"></script>
         <script type="text/javascript">
         (function(){
-                        
+
             var prompt = "xmla> ", buffer = [], xmla = new Xmla();
-            
+
             function addLineToBuffer(){
                 var line = ed.getLine();
                 var text = ed.getLineText(line);
                 buffer.push(text);
             }
-            
+
             function clear() {
                 buffer = [];
                 ed.config.prompt = prompt;
                 ed.createLine(ed.config.prompt);
             }
-            
+
             //ESC handler: clear the buffer
             wsh.WebShell.defaultNonCharKeyHandlers["27"] = function(event){
                 ed.createLine("buffer cleared.");
@@ -89,7 +89,7 @@
                 ed.createLine("Error " + error.code + ": " + error.message);
                 clear();
             }
-            
+
             function renderRowset(rowset, fieldNames) {
                 var line = ed.createLine(), result,
                     thead = "", cols = "", tbody = "",
@@ -125,9 +125,9 @@
                 }
                 line.innerHTML = result;
             }
-            
+
             function renderDataset(dataset) {
-                
+
                 var axisCount = dataset.axisCount(),
                     cellset = dataset.getCellset()
                 ;
@@ -140,10 +140,10 @@
                     }
                     return mName;
                 }
-                
+
                 function renderAxisHorizontally(axis) {
                     var thead = "",
-                        tupleCount = axis.tupleCount(), 
+                        tupleCount = axis.tupleCount(),
                         lastTuple = tupleCount-1,
                         hierarchyCount = axis.hierarchyCount(),
                         name, oldName, member, span, td
@@ -174,7 +174,7 @@
                     thead += "</thead>";
                     return thead;
                 }
-                
+
                 function renderCells(offset, count){
                     var td = "";
                     for (var i = 0; i < count; i++) {
@@ -189,16 +189,16 @@
                     }
                     return td;
                 }
-                
+
                 function renderAxis(dataset, axisId) {
                     var axis = dataset.getAxis(axisId),
-                        line, tupleCount = axis.tupleCount(), 
+                        line, tupleCount = axis.tupleCount(),
                         lastTuple = tupleCount-1;
                     ;
                     switch (axisId) {
                         case 0:
                             var thead, tbody;
-                            
+
                             thead = renderAxisHorizontally(axis);
                             tbody = "<tbody>" +
                                         "<tr>" + renderCells(tupleCount, 0) + "</tr>" +
@@ -215,7 +215,7 @@
                             axis.eachTuple(function(tuple){
                                 var line = ed.createLine(),
                                     members = tuple.members,
-                                    member, 
+                                    member,
                                     i, n = members.length,
                                     thead = "", tbody = "", caption = "Axis: " + axisId;
                                 line.className = "";
@@ -232,7 +232,7 @@
                             });
                     }
                 }
-                
+
                 if (axisCount) {
                     renderAxis(dataset, axisCount - 1);
                 }
@@ -255,7 +255,7 @@
                     }
                     return mName;
                 }
-                
+
                 function renderTuple(tuple) {
                     ed.createLine();
                     ed.createLine(getTupleName(tuple));
@@ -304,9 +304,9 @@
                     line.className = "";
                     line.innerHTML = "<table>" + thead + tbody + "</table>";
                 }
-                
+
                 function renderAxis(axisId) {
-                    var axis 
+                    var axis
                     if (axisId !==-1) axis = dataset.getAxis(axisId);
                     switch (axisId) {
                         case -1:
@@ -314,14 +314,14 @@
                             ed.createLine(cellset.cellValue());
                             ed.createLine();
                             break;
-                        case 0:                            
+                        case 0:
                             var line = ed.createLine();
                             line.className = "";
-                            line.innerHTML = "<table>" + 
+                            line.innerHTML = "<table>" +
                                                 renderHeader(axis, false) +
                                                  "<tr>" +
                                                     renderCells(axis) +
-                                                 "</tr>" + 
+                                                 "</tr>" +
                                             "</table>"
                             ;
                             break;
@@ -335,10 +335,10 @@
                             });
                     }
                 }
-                
+
                 renderAxis(axisCount - 1);
             }
-            
+
             var commands = {
                 connect: {
                     handler: function(command) {
@@ -384,7 +384,7 @@
                         }
                         ed.createLine();
                     },
-                    help: "Displays the available commands." 
+                    help: "Displays the available commands."
                 },
                 select: {
                     handler: function(command) {
@@ -401,7 +401,7 @@
                             },
                             error: function(xmla, options) {
                                 displayError(options.exception);
-                            }                            
+                            }
                         });
                     },
                     help: "Execute the mdx SELECT command against the current connection."
@@ -409,7 +409,7 @@
                 set: {
                     handler: function(command){
                         var settings = trim(command.substr("set".length)),
-                            setting, i, n, indexOfEquals, name, value, 
+                            setting, i, n, indexOfEquals, name, value,
                             names, j, m, options, obj
                         ;
                         settings = settings.split(",");
@@ -448,47 +448,37 @@
                     handler: function(command){
                         var command = trim(command.substr("show".length)),
                             lowerCaseCommand = command.toLowerCase(),
-                            keyword
+                            keyword,requestType,
+                            requestTypes = {
+                                "catalogs": Xmla.DBSCHEMA_CATALOGS,
+                                "cubes": Xmla.MDSCHEMA_CUBES,
+                                "dimensions": Xmla.MDSCHEMA_DIMENSIONS,
+                                "measures": Xmla.MDSCHEMA_MEASURES,
+                                "hierarchies": Xmla.MDSCHEMA_HIERARCHIES,
+                                "levels": Xmla.MDSCHEMA_LEVELS,
+                                "members": Xmla.MDSCHEMA_MEMBERS
+                            }
                         ;
+
                         if (!lowerCaseCommand.indexOf(keyword = "options")) {
                             var line = ed.createLine();
                             line.className = "";
                             line.innerHTML = "<pre>" + JSON.stringify(xmla.options, null, 2) + "</pre>";
                             return;
                         }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "catalogs")) {
-                            command = trim(command.substr(keyword.length));
-                        }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "cubes")) {
-                            command = trim(command.substr(keyword.length));
-                        }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "dimensions")) {
-                            command = trim(command.substr(keyword.length));
-                        }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "measures")) {
-                            command = trim(command.substr(keyword.length));
-                        }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "hierarchies")) {
-                            command = trim(command.substr(keyword.length));
-                        }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "levels")) {
-                            command = trim(command.substr(keyword.length));
-                        }
-                        else 
-                        if (!lowerCaseCommand.indexOf(keyword = "members")) {
-                            command = trim(command.substr(keyword.length));
-                        }
                         else {
+                            keyword = /[^\w]*(\w+)[^\w]*/.exec(lowerCaseCommand);
+                            if (keyword) {
+                                keyword = keyword[1];
+                                requestType = requestTypes[keyword];
+                            }
+                        }
+                        if (!requestType) {
                             displayError({
                                 code: 0,
                                 message: "Invalid show command."
                             });
+                            return;
                         }
                         xmla.discover({
                             requestType: ({
@@ -508,13 +498,16 @@
                             },
                         })
                     },
-                    help: "Show metadata."
+                    arguments: {
+                        keyword: "A keyword indicating the kind of metadata to show"
+                    },
+                    help: "Show metadata. Valid keywords are: options|catalogs|cubes|dimensions|measures|hierarchies|levels|members"
                 }
             };
             //F10 handler: execute lines in the buffer
             wsh.WebShell.defaultNonCharKeyHandlers["121"] = function(event){
                 addLineToBuffer();
-                var commandText = buffer.join("\n"), 
+                var commandText = buffer.join("\n"),
                     cleanCommand = trim(commandText).toLowerCase(),
                     command,
                     result
@@ -534,10 +527,10 @@
                 displayError({
                     code: 0,
                     message: "Unknown command. " +
-                            "Type \"help\" and F10 to get a list of available commands."  
+                            "Type \"help\" and F10 to get a list of available commands."
                 })
             };
-            
+
             function trim(str) {
                 return str.replace(/^\s+/, "").replace(/\s+$/, "");
             }
@@ -560,7 +553,7 @@
 
             ed.addListener("enterline", function(event, ed, text){
                 addLineToBuffer();
-                ed.config.prompt = "   -> ";                
+                ed.config.prompt = "   -> ";
             });
 
             ed.render();

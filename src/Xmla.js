@@ -28,14 +28,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-(function(root) {
 /**
+*
 *  This is xmla4js - a stand-alone, cross-browser javascript library for working with "XML for Analysis".
 *  XML for Analysis (XML/A) is a vendor-neutral industry-standard protocol for OLAP services over HTTP.
 *  xmla4js enables web-browser-based analytical business intelligence applications.
 *  @module xmla
 *  @title Xmla
 */
+(function(root) {
 var Xmla,
     _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSOAPenvelope = _soap + "envelope/",
@@ -315,15 +316,16 @@ function _applyProps(object, properties, overwrite){
 };
 
 if (_isUnd(root)) root = window;
+
 /**
-*   <p>
+*
 *   The Xmla class provides a javascript API to communicate XML for Analysis (XML/A) over HTTP.
 *   XML/A is an industry standard protocol that allows webclients to work with OLAP servers.
 *   To fully understand the scope and purpose of this utility, it is highly recommended
 *   to read <a href="http://xmla.org/xmla1.1.doc">the XML/A specification</a>
 *   (MS Word format. For other formats,
 *   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>).
-*   </p>
+*
 *   @class Xmla
 *   @constructor
 *   @param options Object standard options
