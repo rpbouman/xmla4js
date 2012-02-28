@@ -1452,18 +1452,18 @@ Xmla.prototype = {
         if (!scope) scope = null;
         switch (typeof(handler)) {
             case "function":
-                myListeners.concat({handler: handler, scope: scope});
+                myListeners.push({handler: handler, scope: scope});
                 break;
             case "object":
                 var handlers = handler.handler || handler.handlers;
-                if (_isFun(handlers.handler)) {
-                    if (!handlers.scope) handlers.scope = scope;
-                    myListeners.concat(handler);
+                if (handler.scope) scope = handler.scope;
+                if (_isFun(handlers)) {
+                    myListeners.push({handler: handlers, scope: scope});
                 }
                 else
                 if (_isArr(handlers)) {
                     var i, n = handlers.length;
-                    for (i = 0; i < n; i++) this._addListener(name, handlers[i]);
+                    for (i = 0; i < n; i++) this._addListener(name, handlers[i], scope);
                 }
                 break;
         }
