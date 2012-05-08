@@ -75,8 +75,7 @@ function _ajax(options){
                         options.complete(xhr);
                     }
                     else {
-                        options.error(
-                            Xmla.Exception._newError(
+                        var err = Xmla.Exception._newError(
                                 "HTTP_ERROR",
                                 "_ajax",
                                 {
@@ -85,7 +84,10 @@ function _ajax(options){
                                     statusText: this.statusText
                                 }
                             )
-                        );
+                        //console.log(err);
+                        //When I have an error in HTTP, this allows better debugging
+                        //So made an extra call instead of _newError inside func call
+                        options.error(err);
                     }
                 break;
             }
@@ -5663,6 +5665,59 @@ Xmla.Dataset.prototype = {
     cellOrdinalForTupleIndexes: function() {
         throw "Not implemented"
     },
+/**
+ * Gets all of the XML data into one JS objects
+ */
+    fetchA  sObject: function() {
+        console.log('func Call: ' + arguments.callee.name);
+        var xmla_axes = [], axes=[], xmla_filter, filterAxis={}, xmla_cells=[], cells=[],xmla_axis, axis;
+
+        //loop through all non slicer axes
+        for (var i=0, j=this.axisCount()-1;j>=i;j--){
+                xmla_axis = this.getAxis(j);
+                axis = {};
+                if (xmla_axis instanceof Xmla.Dataset.Axis) {
+                        console.log(xmla_axis.name)
+                        axis.positions = [];
+                        xmla_axis.eachTuple(function(tuple){
+                            axis.positions.push(tuple);
+                         });
+                        axis.hierarchies = [];
+                        xmla_axis.eachHierarchy(function(hier){
+                            axis.hierarchies.push(hier);
+                         });
+                        
+                } else {
+                    console.error('not Xmla.Dataset.Axis')
+                    console.log(xmla_axis)
+                }
+                axes.push(axis)
+        }
+
+        //get Slicer information
+        xmla_filter = this.getSlicerAxis();
+        filterAxis.positions = [];
+        xmla_filter.eachTuple(function(tuple){
+            filterAxis.positions.push(tuple);
+         });
+        filterAxis.hierarchies = [];
+        xmla_filter.eachHierarchy(function(hier){
+            filterAxis.hierarchies.push(hier);
+         });
+        
+        //get Cellset data
+        xmla_cells = this.getCellset();
+        console.log(xmla_cells.cellCount())
+        for (i=0,j=xmla_cells.cellCount();i<j;i++){
+            var cell = xmla_cells.readCell();
+            cells.push(cell);
+            xmla_cells.nextCell();			    
+        }
+        
+        obj = {axes:axes, filterAxis:filterAxis, cells:cells};
+        xmla_cells.close();
+        return obj;
+    },    
 /**
 *   Cleanup this Dataset object.
 *   @method close
