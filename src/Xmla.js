@@ -149,29 +149,45 @@ function _xmlEncode(value){
 
 var docEl = document.documentElement;
 
-var _getElementsByTagNameNS = docEl.getElementsByTagNameNS ? function(node, ns, prefix, tagName){
-                                                                 return node.getElementsByTagNameNS(ns, tagName);
-                                                             }
-                                                           : function(node, ns, prefix, tagName){
-                                                                 if (prefix){
-                                                                     return node.getElementsByTagName(prefix + ":" + tagName);
-                                                                 }
-                                                                 else {
-                                                                     return node.getElementsByTagName(tagName);
-                                                                 }
-                                                             };
+var ___getElemsByTagNameNS = function(node, ns, prefix, tagName){
+    var ret;
+    try{
+        ret = node.getElementsByTagNameNS(ns, tagName);
+    } catch(err){
+        //If there is a getElementsByTagNameNS method re-throw
+        if (node.getElementsByTagNameNS) throw err;
+        //Switch implementation
+        _getElementsByTagNameNS = ___getElemsByTagName;
+        ret = ___getElemsByTagName(node, ns, prefix, tagName);
+    }
+    return ret;
+};
 
-var _getAttributeNS = docEl.getAttributeNS ? function(element, ns, prefix, attributeName){
-                                                 return element.getAttributeNS(ns, attributeName);
-                                             }
-                                           : function(element, ns, prefix, attributeName){
-                                                 if (prefix) {
-                                                     return element.getAttribute(prefix + ":" + attributeName);
-                                                 }
-                                                 else {
-                                                     return element.getAttribute(attributeName);
-                                                 }
-                                             };
+var ___getElemsByTagName = function(node, ns, prefix, tagName){
+    return prefix ? node.getElementsByTagName(prefix + ":" + tagName) : node.getElementsByTagName(tagName);
+};
+
+var _getElementsByTagNameNS = docEl.getElementsByTagNameNS ? ___getElemsByTagNameNS : ___getElemsByTagName;
+
+var ___getAttrNS = function(element, ns, prefix, attributeName){
+    var ret;
+    try{
+        ret = element.getAttributeNS(ns, attributeName);
+    } catch(err){
+        //If there is a getAttributeNS method re-throw
+        if (element.getAttributeNS) throw err;
+        //Switch implementation
+        getAttributeNS = ___getAttr;
+        ret = ___getAttr(element, ns, prefix, attributeName);
+    }
+    return ret;
+};
+
+var ___getAttr = function(element, ns, prefix, attributeName){
+    return prefix ? element.getAttribute(prefix + ":" + attributeName) : element.getAttribute(attributeName);
+};
+
+var _getAttributeNS = docEl.getAttributeNS ? ___getAttrNS : ___getAttr;
 function _getElementText(el){
     //on first call, we examine the properies of the argument element
     //to try and find a native (and presumably optimized) method to grab
