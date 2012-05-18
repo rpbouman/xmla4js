@@ -5668,7 +5668,7 @@ Xmla.Dataset.prototype = {
 /**
  * Gets all of the XML data into one JS objects
  */
-    fetchA  sObject: function() {
+    fetchAsObject: function() {
         console.log('func Call: ' + arguments.callee.name);
         var xmla_axes = [], axes=[], xmla_filter, filterAxis={}, xmla_cells=[], cells=[],xmla_axis, axis;
 
@@ -5686,7 +5686,7 @@ Xmla.Dataset.prototype = {
                         xmla_axis.eachHierarchy(function(hier){
                             axis.hierarchies.push(hier);
                          });
-                        
+
                 } else {
                     console.error('not Xmla.Dataset.Axis')
                     console.log(xmla_axis)
@@ -5704,20 +5704,20 @@ Xmla.Dataset.prototype = {
         xmla_filter.eachHierarchy(function(hier){
             filterAxis.hierarchies.push(hier);
          });
-        
+
         //get Cellset data
         xmla_cells = this.getCellset();
         console.log(xmla_cells.cellCount())
         for (i=0,j=xmla_cells.cellCount();i<j;i++){
             var cell = xmla_cells.readCell();
             cells.push(cell);
-            xmla_cells.nextCell();			    
+            xmla_cells.nextCell();
         }
-        
+
         obj = {axes:axes, filterAxis:filterAxis, cells:cells};
         xmla_cells.close();
         return obj;
-    },    
+    },
 /**
 *   Cleanup this Dataset object.
 *   @method close
