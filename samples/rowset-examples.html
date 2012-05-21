@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2011 Roland Bouman 
+    Copyright 2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     twitter: @rolandbouman
-    
+
     rowset-examples.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,7 +28,7 @@
             #url {
                 width: 100%;
             }
-            
+
             .error {
                 border-style:outset;
                 border-width: 2px;
@@ -37,7 +37,7 @@
                 background-color: red;
                 color: white;
             }
-            
+
             table {
                 border-color: ThreeDFace;
                 border-style: outset;
@@ -65,10 +65,10 @@
         <h1>Sample: Iterating Rowsets</h1>
         <p>
             The <code>Rowset</code> represents a tabular (relational) dataset.
-            XML/A providers return metadata in the form of <code>Rowsets</code> (see the <code>Xmla.discover()</code> method. 
-            There is also an option (see the <code>Xmla.executeTabular()</code> method) 
-            to return the result of MDX queries as a <code>Rowset</code>. 
-            (Although this is supported by most XML/A providers (including Mondrian), 
+            XML/A providers return metadata in the form of <code>Rowsets</code> (see the <code>Xmla.discover()</code> method.
+            There is also an option (see the <code>Xmla.executeTabular()</code> method)
+            to return the result of MDX queries as a <code>Rowset</code>.
+            (Although this is supported by most XML/A providers (including Mondrian),
             Palo does not seem to support this option)
         </p>
         <p>
@@ -76,19 +76,19 @@
         </p>
         <div>
             URL:
-            <input type="text" id="url" name="url" 
+            <input type="text" id="url" name="url"
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
-            <button id="discover">Discover...</button>            
+            <button id="discover">Discover...</button>
             <div id="select_datasources_group" style="display: none">
                 <label>DataSource:</label>
-                <select id="select_datasources" name="select_datasources"></select>            
+                <select id="select_datasources" name="select_datasources"></select>
             </div>
             <div id="iterationMethod_group" style="display:none">
                 <label>Iteration Method:</label>
                 <select id="iterationMethod" name="iterationMethod" style="font-family: monospace">
                     <option value="">Choose a method...</option>
-                </select>            
+                </select>
             </div>
         </div>
 
@@ -99,16 +99,19 @@
 
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
-                        
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript">
             var xmla = new Xmla();
             var datasourceCache;
-                                
+
             function clearError(){
                 var section_error = document.getElementById("section_error");
                 section_error.innerHTML = "";
             }
-            
+
             function showException(exception){
                 var section_error = document.getElementById("section_error");
                 if (exception instanceof Xmla.Exception){
@@ -119,7 +122,7 @@
                     "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "</a>"
                     ;
                 }
-                else {                   
+                else {
                     section_error.innerHTML = exception;
                 }
             }
@@ -130,13 +133,13 @@
                 clearError();
                 var select_datasources_group = document.getElementById("select_datasources_group");
                 select_datasources_group.style.display = "none";
-                try {                
+                try {
                     datasourceCache = [];
                     select_datasources.innerHTML = "";
                     var rowset = xmla.discoverDataSources({
                         url: document.getElementById("url").value
                     });
-                    
+
                     option = document.createElement("option");
                     option.value = "";
                     option.text = "Select a datasource";
@@ -151,7 +154,7 @@
                         option.text = datasource.DataSourceName;
                         option.label = datasource.DataSourceName;
                         select_datasources.appendChild(option);
-                    } 
+                    }
 
                     if(datasourceCache.length) {
                         select_datasources_group.style.display = "";
@@ -162,7 +165,7 @@
                     showException(exception);
                 }
             }
-            
+
             var rowset = null;
             function datasourceSelected(){
                 var iterationMethod_group = document.getElementById("iterationMethod_group"),
@@ -186,7 +189,7 @@
                             option.value = id;
                             option.text = id;
                             option.label = id;
-                            iterationMethod.appendChild(option);                            
+                            iterationMethod.appendChild(option);
                         }
                     }
                 }
@@ -218,7 +221,7 @@
                 }
                 document.getElementById("source").innerHTML = text;
             }
-            
+
             document.getElementById("discover").onclick = populateDatasources;
             document.getElementById("select_datasources").onchange = datasourceSelected;
             document.getElementById("iterationMethod").onchange = iterationMethodSelected;
@@ -226,12 +229,12 @@
 
         <script type="text/javascript">
             function getRowset(){
-                var rowset = xmla.discoverMDDimensions();                                
+                var rowset = xmla.discoverMDDimensions();
             }
         </script>
-        
+
         <script type="text/javascript" id="fieldValByName">
-            function fieldValByName(rowset) {            
+            function fieldValByName(rowset) {
                 var catalogName, schemaName, cubeName, dimensionUniqueName, levelName;
 
                 //reset to ensure we can iterate through the set again.
@@ -247,9 +250,9 @@
                 }
             }
         </script>
-        
+
         <script type="text/javascript" id="fieldValByIndex">
-            function fieldValByIndex(rowset) {            
+            function fieldValByIndex(rowset) {
                 var catalogName, schemaName, cubeName, dimensionUniqueName, levelName;
                 //reset so we can iterate through the set again.
                 rowset.reset();
@@ -264,9 +267,9 @@
                 }
             }
         </script>
-        
+
         <script type="text/javascript" id="getXXX">
-            function getXXX(rowset) {            
+            function getXXX(rowset) {
                 var catalogName, schemaName, cubeName, dimensionUniqueName, levelName;
                 //reset so we can iterate through the set again.
                 rowset.reset();
@@ -281,9 +284,9 @@
                 }
             }
         </script>
-        
+
         <script type="text/javascript" id="fetchAsArray">
-            function fetchAsArray(rowset) {            
+            function fetchAsArray(rowset) {
                 var array;
                 //reset so we can iterate through the set again.
                 rowset.reset();
@@ -294,7 +297,7 @@
                 return array;
             }
         </script>
-        
+
         <script type="text/javascript" id="fetchAsObject">
             function fetchAsObject(rowset) {
                 var object;
@@ -307,7 +310,7 @@
                 return object;
             }
         </script>
-        
+
         <script type="text/javascript" id="eachRow">
             function eachRow(rowset) {
                 var object;
@@ -322,7 +325,7 @@
         </script>
 
         <script type="text/javascript" id="fetchAllAsArray">
-            function fetchAllAsArray(rowset) {            
+            function fetchAllAsArray(rowset) {
                 var array;
                 //reset so we can iterate through the set again.
                 rowset.reset();
@@ -331,7 +334,7 @@
                 return array;
             }
         </script>
-        
+
         <script type="text/javascript" id="fetchAllAsObject">
             function fetchAllAsObject(rowset) {
                 var array;
@@ -342,9 +345,9 @@
                 return array;
             }
         </script>
-        
+
         <script type="text/javascript" id="mapAllAsObject">
-            function mapAllAsObject(rowset) {            
+            function mapAllAsObject(rowset) {
                 var object;
                 //reset so we can iterate through the set again.
                 rowset.reset();

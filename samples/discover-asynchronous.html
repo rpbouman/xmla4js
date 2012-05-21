@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     Twitter: @rolandbouman
-    
+
     execute-asynchronous.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <title>xmla4js: discover asynchronous</title>
@@ -26,12 +26,12 @@
         <style type="text/css">
             .node {
             }
-            
+
             span.toggle {
                 font-family: monospace;
                 font-size: 12pt;
             }
-            
+
             div.nodebody {
                 padding-left: 1em;
             }
@@ -40,30 +40,30 @@
                 margin: 3px 0px 3px 0px;
             }
 
-            div.node > div.nodehead > span.toggle:before { 
+            div.node > div.nodehead > span.toggle:before {
                 background-repeat: no-repeat;
                 background-position: 13px -3px;
                 font-family: monospace;
                 font-size: 12pt;
             }
-            
+
             div.leaf > div.nodehead > span.toggle:before {
                 content: "\00A0\00A0\00A0\00A0";
-            } 
+            }
             div.collapsed > div.nodehead > span.toggle:before {
                 content: "+\00A0\00A0\00A0";
-            } 
+            }
             div.expanded > div.nodehead > span.toggle:before {
                 content: "-\00A0\00A0\00A0";
-            } 
-                        
+            }
+
             div.collapsed > div.nodebody {
                 display: none;
-            } 
+            }
             div.expanded > div.nodebody {
                 display: block;
-            } 
-            
+            }
+
             div.DBSCHEMA_CATALOGS > div.nodehead > span.toggle:before {
                 background-image: url('schema24.gif');
             }
@@ -75,7 +75,7 @@
             div.MDSCHEMA_DIMENSIONS > div.nodehead > span.toggle:before {
                 background-image: url('dimension24.gif');
             }
-            
+
             div.MDSCHEMA_MEASURES > div.nodehead > span.toggle:before {
                 background-image: url('measure24.gif');
             }
@@ -83,10 +83,10 @@
             div.MDSCHEMA_HIERARCHIES > div.nodehead > span.toggle:before {
                 background-image: url('hierarchy24.gif');
             }
-            
+
             div.MDSCHEMA_LEVELS > div.nodehead > span.toggle:before {
                 background-image: url('level24.gif');
-            }            
+            }
         </style>
     </head>
     <body>
@@ -102,15 +102,19 @@
         <h1>Sample: Discover asynchronous</h1>
         <div>
             URL:
-            <input size="100" type="text" id="url" name="url" 
+            <input size="100" type="text" id="url" name="url"
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
             <button id="discover">Discover...</button>
             <div>Tree:</div>
             <div id="node0"></div>
         </div>
-        
+
         <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript">
             (function() {
                 (TreeNode = function(conf){
@@ -216,7 +220,7 @@
                     url: document.getElementById("url").value,
                     success: function(xmla, request, response){
                         response.eachRow(function(row){
-                            var url = row["URL"], 
+                            var url = row["URL"],
                                 dataSourceInfo = row["DataSourceInfo"]
                             ;
                             getTree().appendChild(new TreeNode({
@@ -237,7 +241,7 @@
                                                     className: request.requestType,
                                                     loadChildren: function(){
                                                         node = this;
-                //Cubes                                 
+                //Cubes
                                                         xmla.discoverMDCubes({
                                                             url: request.url,
                                                             properties: {
@@ -249,7 +253,7 @@
                                                                 response.eachRow(function(row) {
                                                                     var cubeName = row["CUBE_NAME"];
                                                                     new TreeNode({
-                                                                        parentNode: node, 
+                                                                        parentNode: node,
                                                                         title: cubeName,
                                                                         className: request.requestType,
                                                                         loadChildren: function(){
@@ -259,7 +263,7 @@
                                                                                 url: request.url,
                                                                                 properties: request.properties,
                                                                                 restrictions: {
-                                                                                    CATALOG_NAME: request.restrictions.CATALOG_NAME, 
+                                                                                    CATALOG_NAME: request.restrictions.CATALOG_NAME,
                                                                                     CUBE_NAME: cubeName
                                                                                 },
                                                                                 success: function(xmla, request, response){
@@ -278,13 +282,13 @@
                                                                                                     url: request.url,
                                                                                                     properties: request.properties,
                                                                                                     restrictions: {
-                                                                                                        CATALOG_NAME: request.restrictions.CATALOG_NAME, 
+                                                                                                        CATALOG_NAME: request.restrictions.CATALOG_NAME,
                                                                                                         CUBE_NAME: request.restrictions.CUBE_NAME
                                                                                                     },
                                                                                                     success: function(xmla, request, response){
                                                                                                         response.eachRow(function(row) {
                                                                                                             new TreeNode({
-                                                                                                                parentNode: node, 
+                                                                                                                parentNode: node,
                                                                                                                 title: row["MEASURE_NAME"],
                                                                                                                 state: TreeNode.STATE_LEAF
                                                                                                             });
@@ -302,7 +306,7 @@
                                                                                                     url: request.url,
                                                                                                     properties: request.properties,
                                                                                                     restrictions: {
-                                                                                                        CATALOG_NAME: request.restrictions.CATALOG_NAME, 
+                                                                                                        CATALOG_NAME: request.restrictions.CATALOG_NAME,
                                                                                                         CUBE_NAME: request.restrictions.CUBE_NAME,
                                                                                                         DIMENSION_UNIQUE_NAME: dimensionUniqueName
                                                                                                     },
@@ -312,7 +316,7 @@
                                                                                                                 hierarchyUniqueName = row["HIERARCHY_UNIQUE_NAME"]
                                                                                                             ;
                                                                                                             new TreeNode({
-                                                                                                                parentNode: node, 
+                                                                                                                parentNode: node,
                                                                                                                 title: hierarchyName,
                                                                                                                 className: request.requestType,
                                                                                                                 loadChildren: function(){
@@ -322,7 +326,7 @@
                                                                                                                         url: request.url,
                                                                                                                         properties: request.properties,
                                                                                                                         restrictions: {
-                                                                                                                            CATALOG_NAME: request.restrictions.CATALOG_NAME, 
+                                                                                                                            CATALOG_NAME: request.restrictions.CATALOG_NAME,
                                                                                                                             CUBE_NAME: request.restrictions.CUBE_NAME,
                                                                                                                             DIMENSION_UNIQUE_NAME: request.restrictions.DIMENSION_UNIQUE_NAME,
                                                                                                                             HIERARCHY_UNIQUE_NAME: hierarchyUniqueName
@@ -333,7 +337,7 @@
                                                                                                                                     levelUniqueName = row["LEVEL_UNIQUE_NAME"]
                                                                                                                                 ;
                                                                                                                                 new TreeNode({
-                                                                                                                                    parentNode: node, 
+                                                                                                                                    parentNode: node,
                                                                                                                                     title: levelName,
                                                                                                                                     className: request.requestType,
                                                                                                                                     loadChildren: function(){
@@ -343,7 +347,7 @@
                                                                                                                                             url: request.url,
                                                                                                                                             properties: request.properties,
                                                                                                                                             restrictions: {
-                                                                                                                                                CATALOG_NAME: request.restrictions.CATALOG_NAME, 
+                                                                                                                                                CATALOG_NAME: request.restrictions.CATALOG_NAME,
                                                                                                                                                 CUBE_NAME: request.restrictions.CUBE_NAME,
                                                                                                                                                 DIMENSION_UNIQUE_NAME: request.restrictions.DIMENSION_UNIQUE_NAME,
                                                                                                                                                 HIERARCHY_UNIQUE_NAME: hierarchyUniqueName,
@@ -352,7 +356,7 @@
                                                                                                                                             success: function(xmla, request, response){
                                                                                                                                                 response.eachRow(function(row) {
                                                                                                                                                     new TreeNode({
-                                                                                                                                                        parentNode: node, 
+                                                                                                                                                        parentNode: node,
                                                                                                                                                         title: row["MEMBER_NAME"],
                                                                                                                                                         state: TreeNode.STATE_LEAF
                                                                                                                                                     });
@@ -370,9 +374,9 @@
                                                                                                     }
                                                                                                 });
                                                                                             }
-                                                                                        }                                                                                        
+                                                                                        }
                                                                                         new TreeNode({
-                                                                                            parentNode: node, 
+                                                                                            parentNode: node,
                                                                                             title: dimensionName,
                                                                                             className: className,
                                                                                             loadChildren: loadChildren
@@ -397,14 +401,14 @@
                 });
             };
 
-/*            
+/*
             var tree = getTree();
             if (tree.addEventListener) {
                 tree.addEventListener("click", function(e){
                     TreeNode.clickHandler(e);
                 }, true);
             }
-            else 
+            else
             if (tree.attachEvent){
                 tree.attachEvent("onclick", function(){
                     TreeNode.clickHandler(window.event);

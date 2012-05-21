@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
-    
+
     discover-schema-rowsets.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -27,7 +27,7 @@
             #url {
                 width: 100%;
             }
-            
+
             .error {
                 border-style:outset;
                 border-width: 2px;
@@ -36,7 +36,7 @@
                 background-color: red;
                 color: white;
             }
-            
+
             table {
                 border-color: ThreeDFace;
                 border-style: outset;
@@ -64,10 +64,10 @@
         <h1>Sample: Schema Rowsets</h1>
         <div>
             URL:
-            <input type="text" id="url" name="url" 
+            <input type="text" id="url" name="url"
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
-            <button id="discover">Discover...</button>            
+            <button id="discover">Discover...</button>
         </div>
 
         <div id="schemaRowsets">
@@ -77,7 +77,10 @@
 
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
-                
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript">
             //using this to check standards compliance.
             var schemaRowsetMeta = {
@@ -426,7 +429,7 @@
                         },
                         HIERARCHY_CAPTION: {
                             type: ""
-                        },                        
+                        },
                         DIMENSION_TYPE: {
                             type: 0
                         },
@@ -634,7 +637,7 @@
                         },
                         CUBE_NAME: {
                             type: ""
-                        },                    
+                        },
                         DIMENSION_UNIQUE_NAME: {
                             type: ""
                         },
@@ -710,7 +713,7 @@
                         },
                         CUBE_NAME: {
                             type: ""
-                        },                    
+                        },
                         DIMENSION_UNIQUE_NAME: {
                             type: ""
                         },
@@ -786,13 +789,13 @@
                         },
                         CUBE_NAME: {
                             type: ""
-                        },                    
+                        },
                         SET_NAME: {
                             type: ""
-                        },                    
+                        },
                         SCOPE: {
                             type: 0
-                        },                    
+                        },
                         DESCRIPTION: {
                             type: ""
                         },
@@ -816,16 +819,16 @@
             };
             var discover = document.getElementById("discover");
             var xmla = new Xmla({});
-			var datasourceIndependentRowsets = {};
-			datasourceIndependentRowsets[Xmla.DISCOVER_DATASOURCES] = Xmla.DISCOVER_DATASOURCES;
-			datasourceIndependentRowsets[Xmla.DISCOVER_ENUMERATORS] = Xmla.DISCOVER_ENUMERATORS;
-			datasourceIndependentRowsets[Xmla.DISCOVER_KEYWORDS] = Xmla.DISCOVER_KEYWORDS;
-			datasourceIndependentRowsets[Xmla.DISCOVER_LITERALS] = Xmla.DISCOVER_LITERALS;
-			datasourceIndependentRowsets[Xmla.DISCOVER_PROPERTIES] = Xmla.DISCOVER_PROPERTIES;
-			datasourceIndependentRowsets[Xmla.DISCOVER_SCHEMA_ROWSETS] = Xmla.DISCOVER_SCHEMA_ROWSETS;
+            var datasourceIndependentRowsets = {};
+            datasourceIndependentRowsets[Xmla.DISCOVER_DATASOURCES] = Xmla.DISCOVER_DATASOURCES;
+            datasourceIndependentRowsets[Xmla.DISCOVER_ENUMERATORS] = Xmla.DISCOVER_ENUMERATORS;
+            datasourceIndependentRowsets[Xmla.DISCOVER_KEYWORDS] = Xmla.DISCOVER_KEYWORDS;
+            datasourceIndependentRowsets[Xmla.DISCOVER_LITERALS] = Xmla.DISCOVER_LITERALS;
+            datasourceIndependentRowsets[Xmla.DISCOVER_PROPERTIES] = Xmla.DISCOVER_PROPERTIES;
+            datasourceIndependentRowsets[Xmla.DISCOVER_SCHEMA_ROWSETS] = Xmla.DISCOVER_SCHEMA_ROWSETS;
 
             function showException(exception, element){
-			    var msg;
+                var msg;
                 if (exception instanceof Xmla.Exception){
                     msg = "" +
                     "<div>code: " + exception.code + "<\/div>" +
@@ -834,69 +837,68 @@
                     "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "<\/a>"
                     ;
                 }
-                else 
+                else
                 if (exception.message) {
                     msg = exception.message;
                 }
-                else {                   
+                else {
                     msg = exception;
                 }
-				element.innerHTML += msg;
+                element.innerHTML += msg;
             }
 
-			function getUrl(){
-				return document.getElementById("url").value;
-			}
-			
-			function fillDataSourceIndependentTables(){
-				var schemaRowsetsEl = document.getElementById("schemaRowsets");
+            function getUrl(){
+              return document.getElementById("url").value;
+            }
+
+            function fillDataSourceIndependentTables(){
+                var schemaRowsetsEl = document.getElementById("schemaRowsets");
                 var url = getUrl();
                 xmla.setOptions({async: false, url: url});
-				for (var p in datasourceIndependentRowsets){
-					xmla.setOptions({requestType: p});
-					fillTable(p, xmla, xmla.discover);
-				}
-			}
-			
-			function fillPerDataSourceTables(){
-				try {
-					var fallbackUrl = getUrl();
-					var schemaRowsetsEl = document.getElementById("schemaRowsets");
-					var datasource, datasources = xmla.discoverDataSources();
-					while (datasource = datasources.fetchAsObject()) {
-						var url = datasource.URL;
-						if (!url){
-							url = fallbackUrl;
-						}
-						schemaRowsetsEl.innerHTML += "<h2>Rowsets for " + url + "</h2>";
+                for (var p in datasourceIndependentRowsets){
+                  xmla.setOptions({requestType: p});
+                  fillTable(p, xmla, xmla.discover);
+                }
+            }
+
+            function fillPerDataSourceTables(){
+                try {
+                    var fallbackUrl = getUrl();
+                    var schemaRowsetsEl = document.getElementById("schemaRowsets");
+                    var datasource, datasources = xmla.discoverDataSources();
+                    while (datasource = datasources.fetchAsObject()) {
+                        var url = datasource.URL;
+                        if (!url){
+                            url = fallbackUrl;
+                        }
+                        schemaRowsetsEl.innerHTML += "<h2>Rowsets for " + url + "</h2>";
                         var div = document.createElement("div");
                         schemaRowsetsEl.appendChild(div);
 
-						xmla.setOptions({
-							async: false,
-							url: url,
-							properties: {
-								DataSourceInfo: datasource.DataSourceInfo
-							}
-						});
-                        
-                        
-						var schemaRowset, schemaRowsets = xmla.discoverSchemaRowsets();
-						while (schemaRowset = schemaRowsets.fetchAsObject()){
-							if (!datasourceIndependentRowsets[schemaRowset.SchemaName]){
-								xmla.setOptions({requestType: schemaRowset.SchemaName});
-								fillTable(schemaRowset.SchemaName, xmla, xmla.discover);
-							}
-						}
-						schemaRowsets.close();                        
-					}
-					datasources.close();
-				} catch (exception){
-					showException(exception, document.getElementById("section_error"));
-				}
-			}
-			
-            function fillTable(name, obj, func){ 
+                        xmla.setOptions({
+                            async: false,
+                            url: url,
+                            properties: {
+                                DataSourceInfo: datasource.DataSourceInfo
+                            }
+                        });
+
+                        var schemaRowset, schemaRowsets = xmla.discoverSchemaRowsets();
+                        while (schemaRowset = schemaRowsets.fetchAsObject()){
+                            if (!datasourceIndependentRowsets[schemaRowset.SchemaName]){
+                                xmla.setOptions({requestType: schemaRowset.SchemaName});
+                                fillTable(schemaRowset.SchemaName, xmla, xmla.discover);
+                            }
+                        }
+                        schemaRowsets.close();
+                    }
+                    datasources.close();
+                } catch (exception){
+                    showException(exception, document.getElementById("section_error"));
+                }
+            }
+
+            function fillTable(name, obj, func){
                 var schemaRowsetsEl = document.getElementById("schemaRowsets");
 
                 var h3 = document.createElement("h3");
@@ -905,12 +907,12 @@
 
                 var div = document.createElement("div");
                 schemaRowsetsEl.appendChild(div);
-                
+
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
                 schemaRowsetsEl.appendChild(tab);
-				
-				try {
+
+                try {
                     var found = {}, extensions = {};
                     var referenceMeta = schemaRowsetMeta[name];
                     if (referenceMeta) {
@@ -921,10 +923,10 @@
                         //this must be an extension
                         //todo: highlight it.
                     }
-					var rowset = func.apply(xmla), fieldName;
-					var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
-					for (i=0; i<fieldCount; i++){
-						c = r.insertCell(i);
+                    var rowset = func.apply(xmla), fieldName;
+                    var c, i, r = tab.insertRow(0), fieldCount = rowset.fieldCount();
+                    for (i=0; i<fieldCount; i++){
+                        c = r.insertCell(i);
                         fieldName = rowset.fieldName(i);
                         if (referenceMeta && referenceMeta[fieldName]){
                             found[fieldName] = true;
@@ -932,10 +934,10 @@
                         else {
                             extensions[fieldName] = true;
                         }
-						c.innerHTML = fieldName;
-						c.setAttribute("class", "th");
-					}
-                    
+                        c.innerHTML = fieldName;
+                        c.setAttribute("class", "th");
+                    }
+
                     var omitted = "", extra = "";
                     if (referenceMeta) {
                         for (fieldName in referenceMeta){
@@ -948,9 +950,9 @@
                                         "<ul>" + omitted + "</ul>";
                         }
                         for (fieldName in extensions){
-                            extra += "<li>" + fieldName + "</li>";                            
+                            extra += "<li>" + fieldName + "</li>";
                         }
-                        if (extra !== ""){ 
+                        if (extra !== ""){
                             extra = "This rowset has these non-standard fields: " +
                                         "<ul>" + extra + "</ul>";
                         }
@@ -963,26 +965,37 @@
                         report = "This rowset is a non-standard extension.";
                     }
                     div.innerHTML = report;
-                        
-					var rows = rowset.fetchAllAsArray();                
-					for (var rowCount = rows.length, j=0; j<rowCount; j++){
-						r = tab.insertRow(j+1);
-						for (i=0; i<fieldCount; i++){
-							c = r.insertCell(i);
-							c.innerHTML = rows[j][i];
-						}
-					}
-					rowset.close();
-				} catch (exception){
-					showException(exception, name);
-				}
+
+                    var j = 0, rowCount = rowset.rowCount(), maxRows = 100;
+                    if (rowCount > maxRows) {
+                        rowCount = maxRows;
+                    }
+                    while (rowset.hasMoreRows()) {
+                        r = tab.insertRow(++j);
+                        for (i = 0; i < fieldCount; i++){
+                            c = r.insertCell(i);
+                            c.innerHTML = rowset.fieldVal(i);
+                        }
+                        if (j > rowCount) {
+                            r = tab.insertRow(++j);
+                            c = r.insertCell(0);
+                            c.setAttribute("colspan", fieldCount);
+                            c.innerHTML = "Maximum number of " + maxRows + " rows reached. Omitting rest of the rowset.";
+                            break;
+                        }
+                        rowset.next();
+                    }
+                    rowset.close();
+                } catch (exception){
+                    showException(exception, name);
+                }
             }
-            
+
             discover.onclick = function(){
                 var schemaRowsetsEl = document.getElementById("schemaRowsets");
                 schemaRowsetsEl.innerHTML = "";
-				fillDataSourceIndependentTables();				
-				fillPerDataSourceTables();
+                fillDataSourceIndependentTables();
+                fillPerDataSourceTables();
             }
         </script>
     </body>

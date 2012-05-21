@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     Twitter: @rolandbouman
-    
+
     execute-synchronous.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,7 +28,7 @@
             #input_url {
                 width: 100%;
             }
-            
+
             #section_error {
                 border-style:outset;
                 border-width: 2px;
@@ -37,12 +37,12 @@
                 background-color: red;
                 color: white;
             }
-            
+
             #textarea_statement {
                 width:100%;
                 height:10em;
             }
-                        
+
             table {
                 border-color: ThreeDFace;
                 border-style: outset;
@@ -70,17 +70,17 @@
         <h1>Sample: Execute</h1>
         <fieldset>
             <legend>XML/A Connection</legend>
-            <input type="text" id="input_url" name="input_url" 
+            <input type="text" id="input_url" name="input_url"
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
-            <button id="button_discover" name="button_discover">Discover Datasources...</button>            
+            <button id="button_discover" name="button_discover">Discover Datasources...</button>
             <div>
                 <label>DataSource:</label>
-                <select id="select_datasources" name="select_datasources"></select>            
+                <select id="select_datasources" name="select_datasources"></select>
             <div>
             <div>
                 <label>Catalog:</label>
-                <select id="select_catalogs" name="select_catalgogs"></select>            
+                <select id="select_catalogs" name="select_catalgogs"></select>
             <div>
         </fieldset>
         <fieldset>
@@ -93,7 +93,7 @@ from [Quadrant Analysis]
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>
             <select id="select_axisformat" name="select_axisfomat"></select>
-            <button id="button_execute" name="button_execute">Execute Statement...</button>            
+            <button id="button_execute" name="button_execute">Execute Statement...</button>
         </fieldset>
 
         <fieldset>
@@ -114,7 +114,10 @@ from [Quadrant Analysis]
         </fieldset>
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
-                
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript">
             var xmla = new Xmla({
                 async: false
@@ -131,7 +134,7 @@ from [Quadrant Analysis]
             var section_request = document.getElementById("section_request");
             var section_response = document.getElementById("section_response");
             var section_result = document.getElementById("section_result");
-            
+
             function addOption(select, value){
                 var option = document.createElement("option");
                 option.text = value;
@@ -139,7 +142,7 @@ from [Quadrant Analysis]
                 option.value = value;
                 select.appendChild(option);
             }
-            
+
             var select_format = document.getElementById("select_format");
             addOption(select_format, Xmla.PROP_FORMAT_MULTIDIMENSIONAL);
             addOption(select_format, Xmla.PROP_FORMAT_TABULAR);
@@ -154,16 +157,16 @@ from [Quadrant Analysis]
                 select_datasources.disabled = disabled;
                 select_catalogs.disabled = disabled;
                 button_discover.disabled = disabled;
-                if (!disabled && select_catalogs.selectedIndex) {                
+                if (!disabled && select_catalogs.selectedIndex) {
                     textarea_statement.disabled = disabled;
                     button_execute.disabled = disabled;
                 }
             }
-            
+
             function getDatasource(){
                 return datasourceCache[select_datasources.selectedIndex];
             }
-                
+
             function clearError(){
                 section_error.innerHTML = "";
             }
@@ -176,10 +179,10 @@ from [Quadrant Analysis]
                     />/g,"&gt;"
                 );
             }
-            function setResponse(txt){                
+            function setResponse(txt){
                 section_response.innerHTML = escapeXML(txt);
             }
-            function setRequest(txt){                
+            function setRequest(txt){
                 section_request.innerHTML = escapeXML(txt);
             }
 
@@ -192,11 +195,11 @@ from [Quadrant Analysis]
                     "<div>helpfile: <a href=\"" + exception.helpfile + "\">" + exception.helpfile + "</a>"
                     ;
                 }
-                else {                   
+                else {
                     section_error.innerHTML = exception;
                 }
             }
-            
+
             function populateDatasources(){
                 section_result.innerHTML = "";
                 clearError();
@@ -211,7 +214,7 @@ from [Quadrant Analysis]
                             addOption(select_datasources, datasourceCache[i].DataSourceName);
                         }
                         populateCatalogs()
-                    } 
+                    }
                     else {
                         section_error.innerHTML = "No datasources found";
                     }
@@ -239,8 +242,8 @@ from [Quadrant Analysis]
                         while (rowset.hasMoreRows()){
                             addOption(select_catalogs, rowset.getCatalogName());
                             rowset.next();
-                        }                        
-                    } 
+                        }
+                    }
                     else {
                         section_error.innerHTML = "No catalogs found";
                     }
@@ -249,8 +252,8 @@ from [Quadrant Analysis]
                 }
                 setGuiDisabled(false);
             }
-            
-            function fillTableFromRowset(rowset){ 
+
+            function fillTableFromRowset(rowset){
                 var tab = document.createElement("table");
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
@@ -268,15 +271,15 @@ from [Quadrant Analysis]
                     }
                 }
             }
-            
+
             function fillTableFromDataset(dataset){
                 var tab = document.createElement("table");
                 var rows = tab.rows;
                 tab.setAttribute("border", "1");
                 section_result.appendChild(tab);
-                
+
                 function getTupleName(tuple) {
-                    var name = "", members = tuple.members, 
+                    var name = "", members = tuple.members,
                         i, n = members.length
                     ;
                     for (i=0; i < n; i++) {
@@ -323,7 +326,7 @@ from [Quadrant Analysis]
                         cellset.nextCell();
                         c.innerHTML = cellset.cellValue();
                     }
-                }                
+                }
             }
 
             function executeQuery(){
@@ -350,20 +353,20 @@ from [Quadrant Analysis]
                     if (result instanceof Xmla.Rowset){
                         fillTableFromRowset(result);
                     }
-                    else 
+                    else
                     if (result instanceof Xmla.Dataset) {
                         fillTableFromDataset(result);
                     }
-                } catch (exception) { 
+                } catch (exception) {
                     showException(exception);
                 }
                 setGuiDisabled(false);
             }
-            
-            select_datasources.onchange = populateCatalogs;        
+
+            select_datasources.onchange = populateCatalogs;
             button_discover.onclick = populateDatasources;
             button_execute.onclick = executeQuery;
-            
+
         </script>
     </body>
 </html>

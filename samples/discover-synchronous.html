@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
-    
+
     discover-synchronous.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -30,7 +30,7 @@
             #tree {
                 border-style:outset;
                 border-width: 2px;
-            }            
+            }
             .node {
                 font-family: sans;
                 font-size: 12pt;
@@ -57,19 +57,19 @@
         </div>
         <h1>Sample: Synchronous Discovery</h1>
         <p>
-            This file illustrates how to make synchronous calls to the 
-            <a href="http://msdn.microsoft.com/en-us/library/ms186653(SQL.105).aspx" target="_ms">XML/A Discover method</a> 
+            This file illustrates how to make synchronous calls to the
+            <a href="http://msdn.microsoft.com/en-us/library/ms186653(SQL.105).aspx" target="_ms">XML/A Discover method</a>
             using the xmla4js library.
-            In the XML/A protocol, the discover method allows clients to retrieve metadata from the XML/A server. 
+            In the XML/A protocol, the discover method allows clients to retrieve metadata from the XML/A server.
         </p>
         <p>
-            The metadata describes the available data sources, catalogs, cubes and their structure through a collection of relational (tabular) datasets called 
+            The metadata describes the available data sources, catalogs, cubes and their structure through a collection of relational (tabular) datasets called
             <a href="http://msdn.microsoft.com/en-us/library/ms126233.aspx" target="_ms">schema rowsets</a>.
-            For 
+            For
         </p>
         <div>
             URL:
-            <input type="text" id="url" name="url" 
+            <input type="text" id="url" name="url"
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
             <button id="discover">Discover...</button>
@@ -77,18 +77,21 @@
             <div id="tree"></div>
         </div>
         <script type="text/javascript" src="../src/Xmla.js"></script>
-        
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript">
             function getTree(){
                 var tree = document.getElementById("tree");
                 return tree;
             }
-            
+
             function getNodeBody(node){
                 var body = node.getElementsByTagName("DIV").item(1);
                 return body;
             }
-        
+
             function toggleNode(toggle){
                 var display;
                 var node = toggle.parentNode.parentNode;
@@ -114,27 +117,27 @@
                 body.style.display = display;
                 toggle.innerHTML = state;
             }
-        
+
             function createTreeNode(config){
                 var parent = document.getElementById(config.parent);
                 if (config.parent!="tree"){
                     parent = getNodeBody(parent);
                 }
-                
+
                 var node = document.createElement("DIV");
                 node.setAttribute("id", config.id);
                 node.setAttribute("class", "node");
                 var toggle;
                 if (config.loader) {
-                    node.setAttribute("loader", config.loader);                
+                    node.setAttribute("loader", config.loader);
                     toggle = "+";
                 }
                 else {
-                    toggle = "&#160;"; 
+                    toggle = "&#160;";
                 }
                 parent.appendChild(node);
 
-                node.innerHTML = 
+                node.innerHTML =
                     "<div class=\"head\" title=\"" + config.title + "\">"
                 +     "<span class=\"switch\" onclick=\"toggleNode(this)\">" + toggle + "<\/span>"
                 +     "&#160;"
@@ -143,9 +146,9 @@
                 +   "<div class=\"body\"><\/div>"
                 ;
             }
-            
+
         </script>
-        
+
         <script type="text/javascript">
             var xmla = new Xmla({
                 async: false,
@@ -163,18 +166,18 @@
                     }
                 ]
             });
-            
+
             function getUrl(){
                 return document.getElementById("url").value;
             }
             var discover = document.getElementById("discover");
             discover.onclick = function(){
                 var tree = getTree();
-                tree.innerHTML = ""; 
+                tree.innerHTML = "";
                 var url = getUrl();
                 discoverDataSources(url);
             }
-            
+
             function discoverDataSources(
                 url
             ){
@@ -207,9 +210,9 @@
                     ,   loader: loader
                     });
                     rowset.nextRow();
-                }                
+                }
             }
-            
+
             function discoverCatalogs(
                 url
             ,   dataSourceInfo
@@ -224,9 +227,9 @@
                 var rowset = xmla.discoverDBCatalogs({
                     url: url
                 ,   properties: properties
-                });                
+                });
                 var loader, id, catalogName;
-                while (rowset.hasMoreRows()){                     
+                while (rowset.hasMoreRows()){
                     catalogName = rowset.fieldVal("CATALOG_NAME");
                     id = parent
                     + "#" + catalogName
@@ -247,12 +250,12 @@
                     rowset.nextRow();
                 }
             }
-            
+
             function discoverCubes(
                 url
             ,   dataSourceInfo
             ,   catalogName
-            ){  
+            ){
                 var parent = dataSourceInfo
                 + "#" + catalogName
                 ;
@@ -271,7 +274,7 @@
                 ,   properties: properties
                 ,   restrictions: restrictions
                 });
-       
+
                 var loader, id, cubeName;
                 while (rowset.hasMoreRows()){
                     cubeName = rowset.fieldVal("CUBE_NAME");
@@ -295,7 +298,7 @@
                     rowset.nextRow();
                 }
             }
-            
+
             function discoverDimensions(
                 url
             ,   dataSourceInfo
@@ -322,7 +325,7 @@
                 ,   properties: properties
                 ,   restrictions: restrictions
                 });
-       
+
                 var loader, id, dimensionName, dimensionUniqueName;
                 while (rowset.hasMoreRows()){
                     dimensionName = rowset.fieldVal("DIMENSION_NAME");
@@ -348,7 +351,7 @@
                     rowset.nextRow();
                 }
             }
-            
+
             function discoverHierarchies(
                 url
             ,   dataSourceInfo
@@ -378,7 +381,7 @@
                 ,   properties: properties
                 ,   restrictions: restrictions
                 });
-       
+
                 var loader, id, hierarchyName, hierarchyUniqueName;
                 while (rowset.hasMoreRows()){
                     hierarchyName = rowset.fieldVal("HIERARCHY_NAME");
@@ -438,7 +441,7 @@
                 ,   properties: properties
                 ,   restrictions: restrictions
                 });
-       
+
                 var loader, id, levelName, levelNumber;
                 while (rowset.hasMoreRows()){
                     levelName = rowset.fieldVal("LEVEL_NAME");
@@ -466,7 +469,7 @@
                     rowset.nextRow();
                 }
             }
-            
+
             function discoverMembers(
                 url
             ,   dataSourceInfo
@@ -502,7 +505,7 @@
                 ,   properties: properties
                 ,   restrictions: restrictions
                 });
-       
+
                 var loader, id, memberName, memberUniqueName;
                 while (rowset.hasMoreRows()){
                     memberName = rowset.fieldVal("MEMBER_NAME");
@@ -531,7 +534,7 @@
                     rowset.nextRow();
                 }
             }
-            
+
             function discoverProperties(
                 url
             ,   dataSourceInfo
@@ -585,7 +588,7 @@
                     rowset.nextRow();
                 }
             }
-            
+
         </script>
     </body>
 </html>

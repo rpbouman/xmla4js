@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
-    
+
     yui-chart-wizard.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,15 +18,15 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>xmla4js: YUI Chart Wizard</title>
-        <!-- 
+        <!--
             YUI config: http://developer.yahoo.com/yui/articles/hosting/?charts&datasource&datatable&dragdrop&element&json&reset-fonts-grids&swf&yahoo&yahoo-dom-event&MIN
         -->
-        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css"/> 
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css"/>
         <link rel="stylesheet" type="text/css" href="../css/default.css"/>
         <style type="text/css">
             #header {
@@ -54,7 +54,7 @@
             .footer {
                 clear: both;
             }
-            #input_url {
+            #url {
                 position:relative;
                 left: 3em;
                 width:40em;
@@ -65,10 +65,10 @@
             #button_render_chart {
                 float: right;
             }
-            
-            #input_url,
-            #select_datasource, 
-            #select_catalog, 
+
+            #url,
+            #select_datasource,
+            #select_catalog,
             #select_cube,
             #select_chart_type {
                 position:relative;
@@ -79,7 +79,7 @@
                 height: 350px;
                 margin-bottom: 10px;
             }
-            
+
             label {
                 position:absolute;
             }
@@ -100,7 +100,7 @@
             <fieldset>
                 <legend>XML/A Service</legend>
                 <label>URL:</label>
-                <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/>
+                <input id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/>
                 <button id="button_discover_datasources">Discover Datasources...</button>
             </fieldset>
         </div>
@@ -141,7 +141,7 @@
                     position: relative;
                 "
             >
-                <legend>Chart</legend>                
+                <legend>Chart</legend>
                 <div>
                     <label>Type:</label>
                     <select id="select_chart_type">
@@ -161,17 +161,21 @@
         <div class="mid-right-col">
             <div id="section_chart"></div>
         </div>
-        
+
         <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js&2.8.0r4/build/dragdrop/dragdrop-min.js&2.8.0r4/build/datatable/datatable-min.js"></script>
         <script type="text/javascript" src="../src/Xmla.js"></script>
-        
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
+
         <script type="text/javascript">
             /*
             *   references to the DOM
             */
             var button_discover_datasources = document.getElementById("button_discover_datasources"),
                 button_render_chart         = document.getElementById("button_render_chart"),
-                input_url                   = document.getElementById("input_url"),
+                url                   = document.getElementById("url"),
                 select_datasource           = document.getElementById("select_datasource"),
                 select_catalog              = document.getElementById("select_catalog"),
                 select_cube                 = document.getElementById("select_cube"),
@@ -192,14 +196,14 @@
             */
                 xmla                        = new Xmla({async: true}),
                 dataSource;
-                
+
                 YAHOO.widget.Chart.SWFURL   =  "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf";
-            
+
             /*
             *   Functions to populate objects with data from xmla
             */
             function getSelectValue(select){    //in normal browsers, we can do select.value. Why IE8 wants us to write a funcion like this?
-                var value;  
+                var value;
                 if (select.options.length) {
                     value = select.options[select.selectedIndex].value;
                 }
@@ -208,7 +212,7 @@
                 }
                 return value;
             }
-    
+
             function populateSelect(config){
                 while (config.select.options.length){
                     config.select.removeChild(config.select.firstChild);
@@ -224,7 +228,7 @@
                     config.select.selectedIndex = 0;
                 }
             }
-            
+
             function populateDatasources(rowset){
                 datasources = rowset.fetchAllAsObject();
                 populateSelect({
@@ -235,7 +239,7 @@
                 rowset.close();
                 select_datasource.onchange();
             }
-            
+
             function populateCatalogs(rowset){
                 var catalogs = rowset.fetchAllAsObject();
                 populateSelect({
@@ -266,7 +270,7 @@
                     text: "MEASURE_NAME"
                 });
                 rowset.close();
-                
+
                 var datasource = datasources[select_datasource.selectedIndex];
 
                 var properties = {};
@@ -279,9 +283,9 @@
                     url: datasource.URL,
                     properties: properties,
                     restrictions: restrictions
-                });                
+                });
             }
-            
+
             function populateHierarchies(rowset){
                 var hierarchy;
                 hierarchies = [];
@@ -298,18 +302,18 @@
                 });
                 rowset.close();
             }
-                       
+
             function getYUIDataSource(xmlaRowset){
                 var fieldNames = xmlaRowset.getFieldNames()
                 var data = xmlaRowset.fetchAllAsObject();
-                var yuiDataSource = new YAHOO.util.DataSource(data); 
-                yuiDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY; 
-                yuiDataSource.responseSchema = { 
+                var yuiDataSource = new YAHOO.util.DataSource(data);
+                yuiDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+                yuiDataSource.responseSchema = {
                     fields: fieldNames
                 }
                 return yuiDataSource;
             }
-            
+
             function renderYUIDataTable(xmlaRowset, yuiDataSource){
                 var columnDefs = [];
                 var fieldNames = xmlaRowset.getFieldNames();
@@ -332,7 +336,7 @@
                 var chartType = getSelectValue(select_chart_type);
                 var fieldNames = xmlaRowset.getFieldNames();
                 var _constructor = YAHOO.widget[chartType];
-                
+
                 var config = {
                     series: [],
                     style: {
@@ -370,13 +374,13 @@
                     config
                 );
             }
-                        
+
             function render_graph(xmlaRowset){
                 var yuiDataSource = getYUIDataSource(xmlaRowset);
                 renderYUIDataTable(xmlaRowset, yuiDataSource);
                 renderYUIChart(xmlaRowset, yuiDataSource);
             }
-            
+
             /*
             *   Xmla event Handlers
             */
@@ -403,7 +407,7 @@
                     events: Xmla.EVENT_DISCOVER_SUCCESS,
                     handler: function(eventName, eventData){
                         var requestType = eventData.requestType;
-                        switch (requestType) { 
+                        switch (requestType) {
                             case Xmla.DISCOVER_DATASOURCES:
                                 populateDatasources(eventData.rowset);
                                 break;
@@ -429,7 +433,7 @@
                     handler: function(eventName, eventData){
                         var properties = eventData.properties;
                         switch (properties[Xmla.PROP_FORMAT]){
-                            case Xmla.PROP_FORMAT_TABULAR:                                
+                            case Xmla.PROP_FORMAT_TABULAR:
                                 render_graph(eventData.resultset);
                                 break;
                             case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
@@ -442,16 +446,16 @@
             /*
             *   DOM event Handlers
             */
-            function button_discover_datasources_onclick(){            
+            function button_discover_datasources_onclick(){
                 select_datasource.innerHTML = "";
                 select_catalog.innerHTML = "";
                 select_cube.innerHTML = "";
                 select_measures.innerHTML = "";
                 xmla.discoverDataSources({
-                    url: input_url.value
+                    url: url.value
                 });
             }
-            
+
             function select_datasource_onchange(){
                 if (!select_datasource.options.length || !datasources.length){
                     return;
@@ -466,7 +470,7 @@
                     properties: properties
                 });
             }
-            
+
             function select_catalog_onchange(){
                 if (!select_catalog.options.length){
                     return;
@@ -482,7 +486,7 @@
                     properties: properties
                 });
             }
-            
+
             function select_cube_onchange(){
                 if (!select_cube.options.length){
                     return;
@@ -502,10 +506,10 @@
                     restrictions: restrictions
                 });
             }
-            
+
             function button_render_chart_onclick(){
                 var mdx = "SELECT\n";
-                var cols = "", rows = "";                
+                var cols = "", rows = "";
                 for (var measure, i=0, num = select_measures.length; i<num; i++){
                     measure = select_measures[i];
                     if (measure.selected){
@@ -517,7 +521,7 @@
                 }
                 mdx += "\n{" + cols + "} ON COLUMNS,\n";
                 for (var hiearchy, i=0, num = select_hierarchies.length; i<num; i++){
-                    hierarchy = select_hierarchies[i];                    
+                    hierarchy = select_hierarchies[i];
                     if (hierarchy.selected){
                         if (rows!=""){
                             rows += "*";
@@ -528,7 +532,7 @@
                 }
                 mdx += "\n{" + rows + "} ON ROWS\n";
                 mdx += "FROM [" + getSelectValue(select_cube) + "]";
-                section_query.innerHTML = mdx;   
+                section_query.innerHTML = mdx;
                 var datasource = datasources[select_datasource.selectedIndex];
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
@@ -540,13 +544,13 @@
                     statement: mdx
                 });
             }
-            
+
             function select_chart_type_onchange(){
                 switch (getSelectValue(select_chart_type)) {
                     case "BarChart":
                         break;
                     case "PieChart":
-                        
+
                         break;
                     case "Scatterplot":
                         break;
@@ -556,22 +560,22 @@
             *   Initialization
             */
             function init(){
-                
+
                 initAjaxLoader();
                 initDiscoverEvents();
                 initExecuteEvents();
-                
+
                 button_discover_datasources.onclick = button_discover_datasources_onclick;
                 button_render_chart.onclick         = button_render_chart_onclick;
-                
+
                 select_datasource.onchange          = select_datasource_onchange;
                 select_catalog.onchange             = select_catalog_onchange;
                 select_cube.onchange                = select_cube_onchange;
                 select_chart_type.onchange               = select_chart_type_onchange;
-                
+
             }
 
-            YAHOO.util.Event.addListener(window, "load", function() { 
+            YAHOO.util.Event.addListener(window, "load", function() {
                 init();
             });
         </script>

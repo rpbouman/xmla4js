@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd">
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
-    
+
     pivot-table.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -53,8 +53,8 @@
             #button_render_table {
                 float: right;
             }
-            
-             #input_url
+
+             #url
             ,#select_datasource
             ,#select_catalog
             ,#select_cube
@@ -63,7 +63,7 @@
                 left: 7em;
             }
 
-            #input_url {
+            #url {
                 position:relative;
                 left: 0em;
                 width:100%;
@@ -72,21 +72,21 @@
             td.select {
                 vertical-align: top;
             }
-            
+
              #select_hierarchies_slicer
             ,#select_hierarchies_rows
-            ,#select_hierarchies_columns 
+            ,#select_hierarchies_columns
             {
             }
-            
+
             label {
-                
+
             }
-            
+
             label.abs {
                 position:absolute;
             }
-            
+
             select {
                 min-width: 0.5em;
             }
@@ -105,7 +105,7 @@
             </div>
             <h1>Sample: Pivot Table<img style="display:none" id="image_ajax_loader" src="../css/ajax-loader.gif"/></h1>
             <p>
-                Enter the URL to your XML/A service in the textbox. 
+                Enter the URL to your XML/A service in the textbox.
                 Then, press the "Discover Datasources..." button to find datasources, catalogs and cubes.
                 Use the combo and listboxes below to select the cube, measures and hierarchies for your pivot table.
                 When done, press the "Render Table..." button to render the pivot table matching your selections.
@@ -115,7 +115,7 @@
             <fieldset>
                 <legend>XML/A Service</legend>
                 <label class="abs">URL:</label><br/>
-                <input id="input_url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/><br/>
+                <input id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"/><br/>
                 <button id="button_discover_datasources">Discover Datasources...</button>
             </fieldset>
         </div>
@@ -140,7 +140,7 @@
         <div class="left-col">
             <fieldset>
                 <legend>Measures:</legend>
-                <p>                    
+                <p>
                     Click the measures in the unused list and they will be added to the used list.
                     Click the measures in the used list to remove them to the unused list.
                 </p>
@@ -169,7 +169,7 @@
             <fieldset>
                 <legend>Hierarchies:</legend>
                 <p>
-                    Use the radiobuttons to select an axis. 
+                    Use the radiobuttons to select an axis.
                     To add hierarchies to the selected axis, click the entries on any of the two other axes.
                 </p>
                 <table>
@@ -219,17 +219,21 @@
                 <pre id="section_query"></pre>
             </fieldset>
         </div>
-        
+
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
-        
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
+
         <script type="text/javascript">
             /*
             *   references to the DOM
             */
             var button_discover_datasources = document.getElementById("button_discover_datasources"),
                 button_render_table         = document.getElementById("button_render_table"),
-                input_url                   = document.getElementById("input_url"),
+                url                   = document.getElementById("url"),
                 select_datasource           = document.getElementById("select_datasource"),
                 select_catalog              = document.getElementById("select_catalog"),
                 select_cube                 = document.getElementById("select_cube"),
@@ -255,13 +259,13 @@
                 dataSource,
                 xslt
                 ;
-                
+
             /*
             *   Functions to populate objects with data from xmla
             */
-            
+
             function getSelectValue(select){    //in normal browsers, we can do select.value. Why IE8 wants us to write a funcion like this?
-                var value;  
+                var value;
                 if (select.options.length) {
                     value = select.options[select.selectedIndex].value;
                 }
@@ -270,7 +274,7 @@
                 }
                 return value;
             }
-            
+
             function populateSelect(config){
                 while (config.select.options.length){
                     config.select.removeChild(config.select.firstChild);
@@ -281,28 +285,28 @@
                         option = document.createElement("OPTION");
                         text = options[i][config.text];
                         option.innerHTML = text;
-                        option.value = text;                    
+                        option.value = text;
                         config.select.appendChild(option);
                     }
                     size = options.length;
                 }
-                else 
+                else
                 if (options instanceof Object){
                     size = 0
                     for (var p in options) {
                         if (options.hasOwnProperty(p)){
                             option = document.createElement("OPTION");
                             option.innerHTML = p;
-                            option.value = p;                    
+                            option.value = p;
                             config.select.appendChild(option);
                         }
                         size++
-                    }                    
+                    }
                 }
-                //setting the size is the only way I could get IE8 to behave. 
+                //setting the size is the only way I could get IE8 to behave.
                 //of course, that is not enough becayse that would just be way too easy.
                 //no, we have to check ourself too if it was a multi select list.
-                //MS, can't you just give up on this browser thing? 
+                //MS, can't you just give up on this browser thing?
                 config.select.size = config.select.multiple? size : 1;
             }
 
@@ -311,12 +315,12 @@
                 if (config.choices) {
                     var choice;
                     choices = "<select name=\"${name}\"" +
-                                " onchange=\"dimension_selected(this)\"" +                                
+                                " onchange=\"dimension_selected(this)\"" +
                                 ">"
                     for (var i=0; i<config.choices.length; i++){
                         choice = config.choices[i];
                         choices += "<option" +
-                                (config.checked? " selected=\"" + config.checked + "\"": "") +                         
+                                (config.checked? " selected=\"" + config.checked + "\"": "") +
                                 " value=\"" + choice + "\">" +
                                 choice +
                                 "<\/option>";
@@ -325,7 +329,7 @@
                 }
                 else {
                     choices = "<input name=\"${name}\"" +
-                            " onclick=\"measure_clicked(this)\"" + 
+                            " onclick=\"measure_clicked(this)\"" +
                             " type=\"checkbox\"/>"
                 }
                 for (var text, str = "", i=0; i<config.options.length; i++){
@@ -334,7 +338,7 @@
                 }
                 config.select.innerHTML = str;
             }
-            
+
             function populateDatasources(rowset){
                 datasources = rowset.fetchAllAsObject();
                 populateSelect({
@@ -345,7 +349,7 @@
                 rowset.close();
                 select_datasource.onchange();
             }
-            
+
             function populateCatalogs(rowset){
                 var catalogs = rowset.fetchAllAsObject();
                 populateSelect({
@@ -376,7 +380,7 @@
                     text: "MEASURE_NAME"
                 });
                 rowset.close();
-                
+
                 var datasource = datasources[select_datasource.selectedIndex];
 
                 var properties = {};
@@ -387,12 +391,12 @@
                 restrictions["CATALOG_NAME"] = getSelectValue(select_catalog);
                 restrictions["CUBE_NAME"] = getSelectValue(select_cube);
                 xmla.discoverMDHierarchies({
-                    url: datasource.URL? datasource.URL : input_url.value,
+                    url: datasource.URL? datasource.URL : url.value,
                     properties: properties,
                     restrictions: restrictions
-                });                
+                });
             }
-            
+
             function populateHierarchies(rowset){
                 hierarchies = rowset.mapAllAsObject(["HIERARCHY_NAME"]);
                 populateSelect({
@@ -403,47 +407,47 @@
                     checked: "rows"
                 });
                 rowset.close();
-            }                        
-            
+            }
+
             function getMDXSet(select_hierarchies) {
                 var hierarchy, tail = "", mdx = "";
-                
+
                 for (var i=0; i<select_hierarchies.length; i++){
                     hierarchy = hierarchies[select_hierarchies.options[i].value];
-					if (i) {
-						mdx += ", ";
-					}
+          if (i) {
+            mdx += ", ";
+          }
                     if (select_hierarchies.length - i > 1){
                         mdx += "CrossJoin(";
-						tail += ")";
+            tail += ")";
                     }
                     if (hierarchy["DIMENSION_TYPE"]==Xmla.Rowset.MD_DIMTYPE_MEASURE) {
-						if (select_measures_used.options.length > 1) { 
-							mdx += "union(";
-							for (var j=0; j<select_measures_used.length; j++){
-								if (j >0){
-									mdx += ",";
-								}
-								mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
-									".[" + select_measures_used.options[j].value +"])}";
-							}
-							mdx += ")";
-						}
-						else {
-							mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
-							      ".[" + select_measures_used.options[0].value +"])}";
-						}						
+            if (select_measures_used.options.length > 1) {
+              mdx += "union(";
+              for (var j=0; j<select_measures_used.length; j++){
+                if (j >0){
+                  mdx += ",";
+                }
+                mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+                  ".[" + select_measures_used.options[j].value +"])}";
+              }
+              mdx += ")";
+            }
+            else {
+              mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+                    ".[" + select_measures_used.options[0].value +"])}";
+            }
                     }
                     else {
                         mdx += "{(" + hierarchy["DEFAULT_MEMBER"] + ")}";
                     }
                 }
-				if (i>1) {
-					mdx += tail;
-				} 
+        if (i>1) {
+          mdx += tail;
+        }
                 return mdx;
             }
-            
+
             function generateMDX(){
                 var mdx = "SELECT ";
                 mdx += getMDXSet(select_hierarchies_columns) + " ON COLUMNS";
@@ -452,12 +456,12 @@
                 }
                 mdx += "\nFROM [" + getSelectValue(select_cube) + "]";
                 return mdx;
-            }            
+            }
 
             function render_table(xmla) {
                 //xslt init code (once)
                 if (!xslt){
-                    var xsltParamName = "param-render", 
+                    var xsltParamName = "param-render",
                         xsltParamValue = "",
                         xsltURL = "../xslt/xmla-mdresult.xslt"
                         ;
@@ -469,10 +473,10 @@
                         xsltDoc = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.6.0');
                         xsltDoc.async = false;
                         xsltDoc.load(xsltURL);
-                        
-                        xsltTemplate = new ActiveXObject("Msxml2.XSLTemplate.6.0"); 
+
+                        xsltTemplate = new ActiveXObject("Msxml2.XSLTemplate.6.0");
                         xsltTemplate.stylesheet = xsltDoc;
-                        
+
                         xslt = xsltTemplate.createProcessor();
                         xslt.addParameter(xsltParamName, xsltParamValue, "");
                     }
@@ -484,13 +488,13 @@
                         xhr = new XMLHttpRequest();
                         xhr.open("GET", xsltURL, false);
                         xhr.send("");
-                        
-                        xslt = new XSLTProcessor();                        
+
+                        xslt = new XSLTProcessor();
                         xslt.importStylesheet(xhr.responseXML);
                         xslt.setParameter(null, xsltParamName, xsltParamValue);
                     }
                 }
-                //xslt appy code 
+                //xslt appy code
                 section_table.innerHTML = "";
                 var result;
                 if (window.ActiveXObject) {
@@ -499,12 +503,12 @@
                     section_table.innerHTML = xslt.output;
                 }
                 else
-                if (document.implementation && 
+                if (document.implementation &&
                     document.implementation.createDocument) {
                     result = xslt.transformToFragment(xmla.responseXML, document);
                     section_table.appendChild(result);
                 }
-            }            
+            }
 
             /*
             *   Xmla event Handlers
@@ -532,7 +536,7 @@
                     events: Xmla.EVENT_DISCOVER_SUCCESS,
                     handler: function(eventName, eventData){
                         var requestType = eventData.requestType;
-                        switch (requestType) { 
+                        switch (requestType) {
                             case Xmla.DISCOVER_DATASOURCES:
                                 populateDatasources(eventData.rowset);
                                 break;
@@ -552,14 +556,14 @@
                     }
                 });
             }
-            
+
             function initExecuteEvents(){
                 xmla.addListener({
                     events: Xmla.EVENT_EXECUTE_SUCCESS,
                     handler: function(eventName, eventData, xmla){
                         var properties = eventData.properties;
                         switch (properties[Xmla.PROP_FORMAT]){
-                            case Xmla.PROP_FORMAT_TABULAR:                                
+                            case Xmla.PROP_FORMAT_TABULAR:
                                 break;
                             case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
                                 render_table(xmla);
@@ -579,17 +583,17 @@
                 select_hierarchies_rows.innerHTML = "";
                 select_hierarchies_columns.innerHTML = "";
             }
-            
-            function button_discover_datasources_onclick(){            
+
+            function button_discover_datasources_onclick(){
                 select_datasource.innerHTML = "";
                 select_catalog.innerHTML = "";
                 select_cube.innerHTML = "";
                 clear_hierarchies_and_measures();
                 xmla.discoverDataSources({
-                    url: input_url.value
+                    url: url.value
                 });
             }
-            
+
             function select_datasource_onchange(){
                 if (!select_datasource.options.length || !datasources.length){
                     return;
@@ -600,11 +604,11 @@
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
 
                 xmla.discoverDBCatalogs({
-                    url: datasource.URL? datasource.URL : input_url.value,
+                    url: datasource.URL? datasource.URL : url.value,
                     properties: properties
                 });
             }
-            
+
             function select_catalog_onchange(){
                 if (!select_catalog.options.length){
                     return;
@@ -618,12 +622,12 @@
                 restrictions["CATALOG_NAME"] = getSelectValue(select_catalog);
 
                 xmla.discoverMDCubes({
-                    url: datasource.URL? datasource.URL : input_url.value,
+                    url: datasource.URL? datasource.URL : url.value,
                     properties: properties,
                     restrictions: restrictions
                 });
             }
-            
+
             function select_cube_onchange(){
                 if (!select_cube.options.length){
                     return;
@@ -640,12 +644,12 @@
                 restrictions["CATALOG_NAME"] = getSelectValue(select_catalog);
 
                 xmla.discoverMDMeasures({
-                    url: datasource.URL? datasource.URL : input_url.value,
+                    url: datasource.URL? datasource.URL : url.value,
                     properties: properties,
                     restrictions: restrictions
                 });
             }
-            
+
             function select_hierarchies_onchange(){
                 var prefix = "select_hierarchies_";
                 var option = this.options[this.selectedIndex];
@@ -666,7 +670,7 @@
                 var hierarchy = option.value;
                 var select_hierarchy = prefix + axis;
                 if (select_hierarchy == this.id) {
-                    alert("You cannot move the [" + 
+                    alert("You cannot move the [" +
                     hierarchy + "] hierarchy to the [" +
                     axis + "] axis, " +
                     "because it's there already.\n" +
@@ -681,11 +685,11 @@
                     target.size = target.options.length;
                 }
             }
-                        
+
             function select_measures_onchange(){
                 var prefix = "select_measures_";
                 var option = this.options[this.selectedIndex];
-                option.selected = false;                
+                option.selected = false;
                 var select;
                 switch (this) {
                     case select_measures_unused:
@@ -694,20 +698,20 @@
                     case select_measures_used:
                         select = select_measures_unused;
                         break;
-                }                
+                }
                 this.removeChild(option);
                 this.size = this.options.length;
                 select.appendChild(option);
                 select.size = select.options.length;
             }
-            
+
             function select_empty_cells_onchange(){
                 var model = loadModel(xmla.responseXML);
                 var mdx = getMDX(model);
                 executeMDX(mdx);
             }
 
-                        
+
             function button_render_table_onclick(){
                 if (!select_measures_used.options.length){
                     alert("Please add one or more measures to the used list.");
@@ -720,16 +724,16 @@
                 var mdx = generateMDX();
                 executeMDX(mdx);
             }
-            
+
             function executeMDX(mdx) {
                 section_query.innerHTML = mdx;
                 var datasource = datasources[select_datasource.selectedIndex];
                 var catalog = getSelectValue(select_catalog);
                 xmla.executeMultiDimensional({
-                    url: datasource.URL? datasource.URL : input_url.value,
+                    url: datasource.URL? datasource.URL : url.value,
                     statement: mdx,
                     properties: {
-                        DataSourceInfo: datasource["DataSourceInfo"],   
+                        DataSourceInfo: datasource["DataSourceInfo"],
                         Catalog: catalog
                     }
                 });
@@ -739,8 +743,8 @@
                 if (typeof(node.getElementsByTagNameNS)=="function"){
                     return node.getElementsByTagNameNS(ns, tagName);
                 }
-                else    
-                if (prefix){        
+                else
+                if (prefix){
                     return node.getElementsByTagName(prefix + ":" + tagName);
                 }
                 else {
@@ -751,27 +755,27 @@
             function loadModel(node){
                 var _xmlnsResultset = "urn:schemas-microsoft-com:xml-analysis:mddataset";
                 var model = {
-                    type: "mdx", 
+                    type: "mdx",
                     axes: {},
                     cube: _getElementsByTagNameNS(node, _xmlnsResultset, null, "CubeName").item(0).firstChild.data
                 };
-                for (var axes = _getElementsByTagNameNS(node, _xmlnsResultset, null, "Axis"), 
-                        axisNode, 
-                        axis, 
-                        i=0, 
+                for (var axes = _getElementsByTagNameNS(node, _xmlnsResultset, null, "Axis"),
+                        axisNode,
+                        axis,
+                        i=0,
                         numAxes = axes.length; i<numAxes; i++
                 ){
                     axisNode = axes.item(i);
                     axis = {
-                        type: "set", 
+                        type: "set",
                         tuples: [],
                         name: axisNode.getAttribute("name")
                     };
                     model.axes[axis.name] = axis;
                     for (var tuples = _getElementsByTagNameNS(axisNode, _xmlnsResultset, null, "Tuple"),
-                        tupleNode, 
-                        tuple, 
-                        j=0, 
+                        tupleNode,
+                        tuple,
+                        j=0,
                         numTuples = tuples.length; j<numTuples; j++
                     ) {
                         tupleNode = tuples.item(j);
@@ -784,7 +788,7 @@
                         ){
                             memberNode = members.item(k);
                             member = {
-                                type: "member", 
+                                type: "member",
                                 hierarchy: memberNode.getAttribute("Hierarchy")
                             };
                             for (var childNodes = _getElementsByTagNameNS(memberNode, _xmlnsResultset, null, "*"),
@@ -801,7 +805,7 @@
                 }
                 return model;
             }
-            
+
             function transformModel(model, drillTuple, memberIndex, expanded){
                 var memberFound, drillMember = drillTuple[memberIndex];
                 var axes = model.axes;
@@ -809,13 +813,13 @@
                     if (axes.hasOwnProperty(p)){
                         var axis = axes[p];
                         for (var tuples = axis.tuples, numTuples = tuples.length, i=0; i<numTuples; i++){
-                            memberFound = true;                            
+                            memberFound = true;
                             var tuple = tuples[i];
                             for (var members = tuple.members, numMembers = members.length, j=0; j<numMembers; j++){
                                 var member = members[j];
                                 if (memberFound && (member.UName != drillTuple[j])){
                                     memberFound = false;
-                                }                                
+                                }
                             }
                             if (memberFound){
                                 if (expanded){  //rollup
@@ -837,11 +841,11 @@
                                 else {          //drilldown
                                     var expr = {
                                         type: "expression",
-                                        text: drillMember + ".Children" 
+                                        text: drillMember + ".Children"
                                     };
                                     if (members.length > memberIndex+1) {
                                         expr = {
-                                            type: "function", 
+                                            type: "function",
                                             name: "crossjoin",
                                             args: [
                                                 expr,
@@ -898,7 +902,7 @@
                 }
                 return model;
             }
-            
+
             function getMDX(node){
                 var type = node.type;
                 var mdx = "";
@@ -928,7 +932,7 @@
                             mdx += "\nWHERE " + getMDX(axis);
                         }
                         break;
-                    case "set":                        
+                    case "set":
                         var tuple;
                         var tuples = node.tuples, numTuples = tuples.length, i;
                         for (i=0; i<numTuples; i++){
@@ -974,43 +978,43 @@
                 }
                 return mdx;
             }
-            
+
             function drill(tuple, memberIndex, expanded){
                 var model = loadModel(xmla.responseXML);
                 model = transformModel(model, tuple, memberIndex, expanded);
                 var mdx = getMDX(model);
                 executeMDX(mdx);
             }
-            
+
             /*
             *   Initialization
             */
             function init(){
-                
+
                 initAjaxLoader();
                 initDiscoverEvents();
                 initExecuteEvents();
-                
+
                 button_discover_datasources.onclick = button_discover_datasources_onclick;
                 button_render_table.onclick         = button_render_table_onclick;
-                
+
                 select_datasource.onchange          = select_datasource_onchange;
                 select_catalog.onchange             = select_catalog_onchange;
                 select_cube.onchange                = select_cube_onchange;
-                
+
                 select_measures_unused.onchange     = select_measures_onchange;
                 select_measures_used.onchange       = select_measures_onchange;
 
                 select_hierarchies_slicer.onchange  = select_hierarchies_onchange;
                 select_hierarchies_rows.onchange    = select_hierarchies_onchange;
                 select_hierarchies_columns.onchange = select_hierarchies_onchange;
-                
+
                 select_empty_cells.onchange         = select_empty_cells_onchange;
-                
+
             }
 
             init();
-            
+
         </script>
     </body>
 </html>

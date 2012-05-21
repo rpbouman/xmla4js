@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009,2010,2011 Roland Bouman 
+    Copyright 2009,2010,2011 Roland Bouman
     (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
     Twitter: @rolandbouman
-    
+
     execute-asynchronous.html - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,7 +28,7 @@
             #input_url {
                 width: 100%;
             }
-            
+
             #section_error {
                 border-style:outset;
                 border-width: 2px;
@@ -37,13 +37,13 @@
                 background-color: red;
                 color: white;
             }
-            
+
             #textarea_statement {
                 width:100%;
                 height:10em;
                 font-family:monospace;
             }
-                        
+
             table {
                 border-color: ThreeDFace;
                 border-style: outset;
@@ -56,7 +56,7 @@
             }
             td {
             }
-            
+
             .node-body {
                 padding-left: 1em;
             }
@@ -75,17 +75,17 @@
         <h1>Sample: Execute</h1>
         <fieldset>
             <legend>XML/A Connection</legend>
-            <input type="text" id="input_url" name="input_url" 
+            <input type="text" id="input_url" name="input_url"
                 value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
             />
-            <button id="button_discover" name="button_discover">Discover Datasources...</button>            
+            <button id="button_discover" name="button_discover">Discover Datasources...</button>
             <div>
                 <label>DataSource:</label>
-                <select id="select_datasources" name="select_datasources"></select>            
+                <select id="select_datasources" name="select_datasources"></select>
             <div>
             <div>
                 <label>Catalog:</label>
-                <select id="select_catalogs" name="select_catalgogs"></select>            
+                <select id="select_catalogs" name="select_catalgogs"></select>
             <div>
         </fieldset>
         <fieldset>
@@ -97,7 +97,7 @@ FROM [Quadrant Analysis]</textarea>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>
             <select id="select_axisformat" name="select_axisfomat"></select>
-            <button id="button_execute" name="button_execute">Execute Statement...</button>            
+            <button id="button_execute" name="button_execute">Execute Statement...</button>
         </fieldset>
 
         <fieldset>
@@ -118,7 +118,10 @@ FROM [Quadrant Analysis]</textarea>
         </fieldset>
 
         <script type="text/javascript" src="../src/Xmla.js"></script>
-                
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript">
             var button_discover = document.getElementById("button_discover"),
                 input_url = document.getElementById("input_url"),
@@ -127,7 +130,7 @@ FROM [Quadrant Analysis]</textarea>
                 button_execute = document.getElementById("button_execute"),
                 textarea_statement = document.getElementById("textarea_statement")
             ;
-            
+
             /*
                 Utilities
             */
@@ -139,7 +142,7 @@ FROM [Quadrant Analysis]</textarea>
                 option.title = o.title || option.label;
                 select.appendChild(option);
             }
-            
+
             function addOptions(select, rowset, mapping){
                 rowset.eachRow(function(row){
                     addOption(select, {
@@ -149,13 +152,13 @@ FROM [Quadrant Analysis]</textarea>
                     });
                 })
             }
-            
+
             function removeOptions(select){
                 while (select.options.length) {
                     select.remove(0);
                 }
-            }                        
-                
+            }
+
             /*
                 Bind UI
             */
@@ -164,15 +167,15 @@ FROM [Quadrant Analysis]</textarea>
                 button.value = "Discovering...";
                 discoverDataSources();
             };
-            
+
             select_datasources.onchange = function(){
                 discoverCatalogs();
             };
-            
-            button_execute.onclick = function(){                
+
+            button_execute.onclick = function(){
                 executeMDX();
             };
-            
+
             /*
                 Xmla
             */
@@ -219,7 +222,7 @@ FROM [Quadrant Analysis]</textarea>
                     }
                 });
             }
-            
+
             function discoverCatalogs() {
                 xmla.discoverDBCatalogs({
                     url: input_url.value,
@@ -235,7 +238,7 @@ FROM [Quadrant Analysis]</textarea>
                     },
                 });
             }
-            
+
             function executeMDX(){
                 xmla.execute({
                     url: input_url.value,
@@ -249,8 +252,8 @@ FROM [Quadrant Analysis]</textarea>
                     },
                 });
             }
-            
-            function renderDatasetAsTree(dataset){                
+
+            function renderDatasetAsTree(dataset){
                 var section_result = document.getElementById("section_result");
                 var cellset = dataset.getCellset();
 
@@ -269,7 +272,7 @@ FROM [Quadrant Analysis]</textarea>
                         node.className = "node";
                         node.appendChild(nodeHead = document.createElement("DIV"));
                         nodeHead.className = "node-head";
-                        
+
                         this.eachHierarchy(function(hierarchy){
                             member = this.member();
                             if (tupleHTML!=="") {
@@ -287,12 +290,12 @@ FROM [Quadrant Analysis]</textarea>
                         }
                         else {
                             nodeBody.innerHTML = cellset.cellValue();
-                            cellset.nextCell();                            
+                            cellset.nextCell();
                         }
                     });
                     axis.reset();
                 }
-                
+
                 section_result.innerHTML = "";
                 renderAxes();
             }

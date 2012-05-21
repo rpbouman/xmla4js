@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <!--
-    Copyright 2009, 2010, 2011 Roland Bouman 
+    Copyright 2009, 2010, 2011 Roland Bouman
     Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
     Twitter: @rolandbouman
-    
+
     index.html - this documentation is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->    
+-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -37,7 +37,7 @@
                 float: left;
                 width: 19%;
             }
-            
+
             .component {
                 border-style: solid;
                 border-radius: 10px;
@@ -46,12 +46,12 @@
                 background-color: white;
                 padding: 2px;
             }
-            
+
             .main-component {
                 height: 95%;
                 position: absolute;
             }
-            
+
             #discover {
                 float:left;
             }
@@ -76,7 +76,7 @@
             #url:active {
                 border-style: none;
             }
-            
+
             #toolbar {
                 height:26px;
                 margin-bottom:8px;
@@ -86,7 +86,7 @@
                 border-color: grey;
                 background-color: white;
             }
-            
+
         </style>
         <style type="text/css" id="tree-section">
             .section-header {
@@ -99,24 +99,24 @@
                 border-style: outset;
                 text-indent: 2em;
             }
-            
+
             #datasources-head:hover {
                 color: blue;
                 text-decoration: underline;
                 cursor: pointer;
             }
-            
+
             #cube-head {
                 background-image: url('cube24.png');
                 background-position: 0px -1px;
-            } 
+            }
         </style>
         <style type="text/css" id="tree">
             div.node > div.head > span.toggle {
                 font-family: monospace;
                 height: 26px!important;
             }
-            
+
             div.node > div.body {
                 margin-left: 1em;
             }
@@ -125,32 +125,32 @@
                 cursor: default;
             }
 
-            div.node > div.head > span.toggle:before { 
+            div.node > div.head > span.toggle:before {
                 background-repeat: no-repeat;
                 background-position: 13px -1px;
                 font-family: monospace;
                 font-size: 13pt;
             }
-            
+
             div.leaf > div.head > span.toggle:before {
                 content: "\00A0\00A0\00A0\00A0";
-            } 
+            }
 
             div.collapsed > div.head > span.toggle:before {
                 content: "+\00A0\00A0\00A0";
-            } 
+            }
 
             div.expanded > div.head > span.toggle:before {
                 content: "-\00A0\00A0\00A0";
-            } 
-                        
+            }
+
             div.collapsed > div.body {
                 display: none;
-            } 
+            }
 
             div.expanded > div.body {
                 display: block;
-            } 
+            }
         </style>
         <style type="text/css" id="olap">
             div.DBSCHEMA_CATALOGS > div.head > span.toggle:before {
@@ -166,7 +166,7 @@
                 text-decoration: underline;
                 cursor: pointer;
             }
-        
+
             div.MDSCHEMA_MEASURES > div.head > span.toggle:before {
                 background-image: url('measure24.gif');
             }
@@ -178,7 +178,7 @@
             div.MDSCHEMA_LEVELS > div.head > span.toggle:before {
                 background-image: url('level24.gif');
             }
-            
+
             div.MDSCHEMA_MEMBERS > div.head > span.toggle:before {
                 background-image: url('property24.gif');
             }
@@ -186,28 +186,28 @@
             #ddDragProxy.MDSCHEMA_MEASURES {
                 background-image: url('measure24.gif');
                 background-color: white;
-                border-style: solid; 
+                border-style: solid;
                 border-width: 1px;
             }
 
             #ddDragProxy.MDSCHEMA_HIERARCHIES {
                 background-image: url('hierarchy24.gif');
                 background-color: white;
-                border-style: solid; 
+                border-style: solid;
                 border-width: 1px;
             }
 
             #ddDragProxy.MDSCHEMA_LEVELS {
                 background-image: url('level24.gif');
                 background-color: white;
-                border-style: solid; 
+                border-style: solid;
                 border-width: 1px;
             }
 
             #ddDragProxy.MDSCHEMA_MEMBERS {
                 background-image: url('property24.gif');
                 background-color: white;
-                border-style: solid; 
+                border-style: solid;
                 border-width: 1px;
             }
         </style>
@@ -240,7 +240,7 @@
                 border-style: solid;
                 border-width: 1px;
             }
-            
+
             .query-designer-axis td {
                 border-style: solid;
                 border-width: 1px;
@@ -253,11 +253,11 @@
                 vertical-align: top;
                 align: left;
             }
-                        
+
             td.query-designer-axis-header:after {
                 content: ": ";
             }
-            
+
             td.MDSCHEMA_HIERARCHIES {
                 border-style: solid;
                 border-width: 1px;
@@ -266,7 +266,7 @@
                 background-image: url('hierarchy24.gif');
                 background-color: lightgrey;
             }
-            
+
             td.MDSCHEMA_LEVELS {
                 border-style: solid;
                 border-width: 1px;
@@ -290,13 +290,13 @@
                 text-indent: 2em;
                 background-image: url('measure24.gif');
             }
-            
+
             div.query-designer-horizontal-drag-proxy {
                 position: absolute;
                 height: 1px;
                 background-color:black;
             }
-             
+
             div.query-designer-vertical-drag-proxy {
                 position: absolute;
                 width: 1px;
@@ -308,7 +308,7 @@
                 border-collapse: collapse;
                 margin: 1em;
             }
-            
+
             table.pivot-table td {
                 border-width: 1px;
                 border-style: solid;
@@ -345,6 +345,10 @@
             <div id="ddDragProxy"></div>
         </div>
         <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
         <script type="text/javascript" src="treeview-pivottable-combination.js"></script>
     </body>
 </html>
