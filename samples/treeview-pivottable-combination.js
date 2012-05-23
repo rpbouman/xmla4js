@@ -11,7 +11,7 @@ function clearBrowserSelection() {
     else
     if (doc.selection) {
         doc.selection.clear();
-    }    
+    }
 }
 
 function merge(dst, src, mode){
@@ -26,7 +26,7 @@ function merge(dst, src, mode){
         if (((o===null) && (mode & merge.DELETE_IF_NULL)) || (mode & merge.DELETE)) {
             delete dst[p];
         }
-        else 
+        else
         if (iUnd(dst[p]) || (mode & merge.OVERWRITE)) {
             dst[p] = o;
         }
@@ -55,7 +55,7 @@ function gEls(node, tag, idx){
     var node = node.getElementsByTagName(tag);
     if (node && iInt(idx)) {
         node = node.item(idx);
-    } 
+    }
     return node;
 }
 function sAtts(e, atts){
@@ -136,20 +136,20 @@ function pos(e1, e2){
         left += e1.offsetLeft;
         top += e1.offsetTop;
     } while (e1 = e1.offsetParent);
-    
+
     if (e2) {
         var p = pos(e2);
         left -= p.left;
         top -= p.top;
     }
-    
+
     return {
         left: left,
         top: top
     };
 }
 /***************************************************************
-*   
+*
 *   TreeNode
 *
 ***************************************************************/
@@ -196,14 +196,14 @@ var TreeNode;
     },
     getDomBody: function() {
         return gEls(this.getDom(), "DIV", 1);
-    }, 
+    },
     toggle: function() {
         var state = this.getState();
         switch (state) {
-            case TreeNode.states.collapsed: 
+            case TreeNode.states.collapsed:
                 state = TreeNode.states.expanded;
                 break;
-            case TreeNode.states.expanded: 
+            case TreeNode.states.expanded:
                 state = TreeNode.states.collapsed;
                 break;
         }
@@ -224,14 +224,14 @@ var TreeNode;
             f = function(){
                 loader.call(me, function(){
                     dEl(ajaxLoader);
-                });            
+                });
             }
             setTimeout(f, 1);
         }
     },
     initClass: function(dom) {
-        dom.className = TreeNode.prefix + 
-                    " " + this.getState() + 
+        dom.className = TreeNode.prefix +
+                    " " + this.getState() +
                     " " + this.getCustomClass()
         ;
     },
@@ -253,7 +253,7 @@ var TreeNode;
             cEl("DIV", {
                 "class": "body"
             })
-        ]); 
+        ]);
         ;
         this.initClass(dom);
         return dom;
@@ -281,7 +281,7 @@ TreeNode.lookupTreeNode = function(el){
 };
 
 /***************************************************************
-*   
+*
 *   Event
 *
 ***************************************************************/
@@ -292,13 +292,13 @@ var Event;
     }
     this.browserEvent = e;
     return this;
-}).prototype = {    
-    getTarget: function(){ 
+}).prototype = {
+    getTarget: function(){
         var browserEvent = this.browserEvent;
         if (browserEvent.target) {
             target = browserEvent.target;
         }
-        else 
+        else
         if (browserEvent.srcElement) {
             target = browserEvent.srcElement
         }
@@ -314,7 +314,7 @@ var Event;
         else
         if (doc.attachEvent) {
             switch (this.browserEvent.button) {
-                case 1: 
+                case 1:
                     return 0;
                 case 2:
                     return 2;
@@ -342,7 +342,7 @@ var Event;
     preventDefault: function() {
         this.browserEvent.preventDefault();
     },
-    save: function(){ 
+    save: function(){
         var proto = Event.prototype, savedEvent = new Event.Saved(), property;
         for (property in proto) {
             if (property.indexOf("get")===0 && iFun(proto[property])) {
@@ -394,7 +394,7 @@ function listen(node, type, listener, scope) {
             listener.call(scope, Event.get(e));
         }, true);
     }
-    else 
+    else
     if (node.attachEvent){
         node.attachEvent("on" + type, function(){
             listener.call(scope, Event.get(win.event));
@@ -402,7 +402,7 @@ function listen(node, type, listener, scope) {
     }
 }
 /***************************************************************
-*   
+*
 *   DDHandler
 *
 ***************************************************************/
@@ -444,7 +444,7 @@ var DDHandler;
     listen(this.node, "mousemove", function(e){
         me.event = e;
         me.handleMouseMove(e);
-    }, this);    
+    }, this);
 }).prototype = {
     listen: function(listener){
         if (!listener.scope) {
@@ -483,8 +483,8 @@ var DDHandler;
         }
     },
     startDrag: function(e) {
-        var me = this, i, 
-            listeners = me.listeners, 
+        var me = this, i,
+            listeners = me.listeners,
             n = listeners.length,
             listener
         ;
@@ -498,7 +498,7 @@ var DDHandler;
             if (iFun(listener.whileDrag)) me.whileDragListeners.push(listener);
         }
     },
-    endDrag: function(e) {    
+    endDrag: function(e) {
         var me = this, i, listeners, listener, n;
         if (me.startDragEvent) {
             listeners = me.listeners;
@@ -528,11 +528,11 @@ var DDHandler;
 };
 
 /***************************************************************
-*   
+*
 *   QueryDesigner
 *
 ***************************************************************/
-var QueryDesigner; 
+var QueryDesigner;
 
 (QueryDesigner = function(conf) {
     this.id = QueryDesigner.id++;
@@ -588,7 +588,7 @@ var QueryDesigner;
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
-        
+
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
         c = r.insertCell(1);
@@ -631,7 +631,7 @@ var QueryDesigner;
             }
         }
         if (mdx.length) {
-            mdx = "SELECT" + mdx + 
+            mdx = "SELECT" + mdx +
                 "\nFROM   [" + this.cube.cube.CUBE_NAME + "]"
             ;
         }
@@ -663,7 +663,7 @@ var QueryDesignerAxis;
         this.setDefs = [];
     },
     getLayout: function() {
-        return (this.conf.id === Xmla.Dataset.AXIS_ROWS ? "vertical" : "horizontal"); 
+        return (this.conf.id === Xmla.Dataset.AXIS_ROWS ? "vertical" : "horizontal");
     },
     getId: function(){
         return this.conf.queryDesigner.getId() + "-axis" + this.conf.id;
@@ -840,8 +840,8 @@ var QueryDesignerAxis;
         }
         c.innerHTML = this.getHierarchyCaption(hierarchy);
         c.className = "MDSCHEMA_HIERARCHIES";
-                
-        var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef, 
+
+        var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef,
             defaultMember = hierarchy.DEFAULT_MEMBER
         ;
         if (numSetDefs) {
@@ -878,7 +878,7 @@ var QueryDesignerAxis;
                 case "vertical":
                     r = dom.insertRow(dom.rows.length);
                     c = r.insertCell(0);
-                    
+
                     break;
             }
             c.innerHTML = memberCaption;
@@ -891,7 +891,7 @@ var QueryDesignerAxis;
             oldHierarchyName = this.getHierarchyName(oldHierarchy),
             hierarchyName = this.getHierarchyName(metadata),
             defaultMember = metadata.DEFAULT_MEMBER,
-            layout = this.getLayout(), 
+            layout = this.getLayout(),
             dom = this.getDom(),
             r, c
         ;
@@ -935,11 +935,11 @@ var QueryDesignerAxis;
     addMember: function(member, hierarchyIndex, tupleIndex) {
     },
     getMdx: function() {
-        var hierarchies = this.hierarchies, 
-            numHierarchies = hierarchies.length, 
+        var hierarchies = this.hierarchies,
+            numHierarchies = hierarchies.length,
             hierarchy, i,
             setDefs = this.setDefs, member,
-            numSetDefs = setDefs.length, 
+            numSetDefs = setDefs.length,
             setDef, i,
             mdx = "", tuple = "", set = "";
         ;
@@ -977,7 +977,7 @@ var QueryDesignerAxis;
             if (set.length && tuple.length) {
                 set = "CrossJoin(" + set + ", " + tuple + ")";
             }
-            else 
+            else
             if (tuple.length) {
                 set = tuple;
             }
@@ -1000,7 +1000,7 @@ QueryDesignerAxis.getInstance = function(id){
 };
 
 /***************************************************************
-*   
+*
 *   Application
 *
 ***************************************************************/
@@ -1040,7 +1040,7 @@ function clearWorkarea() {
 function clearUI() {
     gEl("datasources-body").innerHTML = "";
     clearCubeTree();
-    
+
 }
 function metadataClicked(e) {
     if (!e) e = win.event;
@@ -1081,11 +1081,11 @@ function discoverClicked(){
                     metadata: row
                 })).getId();
                 xmla.discoverDBCatalogs({
-                    url: row.URL,
+                    url: row.URL ? row.URL : req.url,
                     properties: {DataSourceInfo: row.DataSourceInfo},
                     nodeId: nodeId,
                     success: function(xmla, req, resp) {
-                        resp.eachRow(function(row){ 
+                        resp.eachRow(function(row){
                             var properties = {
                                 DataSourceInfo: req.properties.DataSourceInfo,
                                 Catalog: row.CATALOG_NAME
@@ -1115,7 +1115,7 @@ function discoverClicked(){
                                             title: row.CUBE_CAPTION,
                                             tooltip: row.DESCRIPTION,
                                             state: TreeNode.states.leaf,
-                                            metadata: row, 
+                                            metadata: row,
                                             xmla: {
                                                 url: req.url,
                                                 properties: properties,
@@ -1167,7 +1167,7 @@ function selectCube(cubeTreeNode) {
                 });
             });
             xmla.discoverMDHierarchies({
-                url: req.url,                
+                url: req.url,
                 properties: req.properties,
                 restrictions: req.restrictions,
                 success: function(xmla, req, resp) {
@@ -1226,7 +1226,7 @@ function selectCube(cubeTreeNode) {
                                                                     Format: "Multidimensional",
                                                                     AxisFormat: "TupleFormat"
                                                                 },  mdx =   "WITH MEMBER [Measures].numChildren " +
-                                                                            "AS " + metadata.HIERARCHY_UNIQUE_NAME  + ".CurrentMember.Children.Count " + 
+                                                                            "AS " + metadata.HIERARCHY_UNIQUE_NAME  + ".CurrentMember.Children.Count " +
                                                                             "SELECT CrossJoin(" + metadata.MEMBER_UNIQUE_NAME + ".Children," +
                                                                                     "[Measures].numChildren) ON COLUMNS " +
                                                                             "FROM [" + metadata.CUBE_NAME + "]"
@@ -1370,7 +1370,7 @@ function renderTable(columnAxis, rowAxis){
                     }
                 }
             });
-        });        
+        });
     }
     else {
         r = t.insertRow(numColumnHierarchies);
@@ -1384,7 +1384,7 @@ function renderTable(columnAxis, rowAxis){
     return t;
 }
 
-function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){ 
+function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){
     var rows = table.rows, i, j, r, c, cell,
         rowOffset = columnAxis ? columnAxis.hierarchyCount() : 0,
         columnCount = columnAxis ? columnAxis.tupleCount() : 1,
@@ -1395,7 +1395,7 @@ function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){
     if (pageTuple!==-1) {
         getCell = function() {return cellset.getByTupleIndexes(pageTuple, i, j);}
     }
-    else 
+    else
     if (rowAxis) {
         getCell = function() {return cellset.getByTupleIndexes(i, j);}
     }
@@ -1422,7 +1422,7 @@ function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){
 
 function renderDataset(dataset) {
     var start = new Date(), end,
-        container = gEl("query-results"), 
+        container = gEl("query-results"),
         table, cellset = dataset.getCellset(),
         columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
         rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
@@ -1455,21 +1455,21 @@ function init() {
                 treeNode, customClass, dragProxy, xy
             ;
             gEl("workspace").className = "no-user-select";
-            if (tagName !== "SPAN" || className !== "label") return; 
+            if (tagName !== "SPAN" || className !== "label") return;
             treeNode = TreeNode.lookupTreeNode(target);
             if (!treeNode) return;
             customClass = treeNode.getCustomClass();
             switch (customClass) {
                 case "MDSCHEMA_MEASURES":
-                case "MDSCHEMA_HIERARCHIES": 
+                case "MDSCHEMA_HIERARCHIES":
                 case "MDSCHEMA_LEVELS":
                 case "MDSCHEMA_MEMBERS":
                     break;
-                default: 
+                default:
                     return;
             }
             startDragEvent = ddHandler.startDragEvent;
-            startDragEvent.treeNode = treeNode;  
+            startDragEvent.treeNode = treeNode;
             xy = event.getXY();
             dragProxy = ddHandler.dragProxy;
             dragProxy.style.position = "absolute";
@@ -1486,7 +1486,7 @@ function init() {
                 treeNode = startDragEvent.treeNode,
                 customClass,
                 dropTarget = event.getTarget(),
-                tagName = dropTarget.tagName, 
+                tagName = dropTarget.tagName,
                 className = target.className,
                 axisTable
             ;
@@ -1517,7 +1517,7 @@ function init() {
                         left: (p1.left - p2.left) + "px",
                         top: (xy.y - p2.top + 2) + "px"
                     }
-                });               
+                });
                 sAtts(queryDesigner.verticalDragProxy, {
                     style: {
                         display: "block",
@@ -1538,7 +1538,7 @@ function init() {
                 treeNode = startDragEvent.treeNode,
                 requestType, metadata, customClass,
                 dropTarget = event.getTarget(),
-                tagName = dropTarget.tagName, 
+                tagName = dropTarget.tagName,
                 className = target.className,
                 queryDesignerAxis, table
             ;
@@ -1562,16 +1562,16 @@ function init() {
                 }
                 if (!table.className.indexOf("query-designer-axis")){
                     queryDesignerAxis = QueryDesignerAxis.getInstance(table.id);
-                    switch (customClass) { 
-                        case "MDSCHEMA_HIERARCHIES": 
-                        case "MDSCHEMA_LEVELS": 
+                    switch (customClass) {
+                        case "MDSCHEMA_HIERARCHIES":
+                        case "MDSCHEMA_LEVELS":
                         case "MDSCHEMA_MEMBERS":
                         case "MDSCHEMA_MEASURES":
                             if (queryDesignerAxis.canDropItem(target, customClass, metadata)) {
                                 queryDesignerAxis.itemDropped(target, customClass, metadata);
                             }
                             break;
-                        default: 
+                        default:
                     }
                 }
             }
@@ -1596,7 +1596,7 @@ function init() {
             }
         });
     }
-    
+
     //init the ui
     showCube(false);
     var search = window.location.search;
@@ -1609,8 +1609,8 @@ function init() {
                     gEl("url").value = decodeURIComponent(item[1]);
                     gEl("discover").click();
                     break;
-                default: 
-                    
+                default:
+
             }
         }
     }
