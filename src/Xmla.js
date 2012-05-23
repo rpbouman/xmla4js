@@ -36,7 +36,7 @@
 *  @module xmla
 *  @title Xmla
 */
-(function(root) {
+(function(window) {
 var Xmla,
     _soap = "http://schemas.xmlsoap.org/soap/",
     _xmlnsSOAPenvelope = _soap + "envelope/",
@@ -53,15 +53,30 @@ var Xmla,
     _xmlnsSchemaInstance = "http://www.w3.org/2001/XMLSchema-instance",
     _xmlnsSchemaInstancePrefix = "xsi",
     _xmlnsRowset = _xmlnsXmla + ":rowset",
-    _xmlnsDataset = _xmlnsXmla + ":mddataset",
-    _useAX = window.ActiveXObject ? true : false
+    _xmlnsDataset = _xmlnsXmla + ":mddataset"
 ;
 
+var _createXhr;
+if (window.XMLHttpRequest) _createXhr = function(){
+    return new window.XMLHttpRequest();
+}
+else
+if (window.ActiveXObject) _createXhr = function(){
+    return new window.ActiveXObject("MSXML2.XMLHTTP.3.0");
+}
+else
+if (typeof(require)==="function") _createXhr = function(){
+    var xhr = require("xmlhttprequest").XMLHttpRequest;
+    return new xhr();
+}
+else Xmla.Exception._newError(
+    "ERROR_INSTANTIATING_XMLHTTPREQUEST",
+    "_ajax",
+    null
+)._throw();
+
+
 function _ajax(options){
-/*
-    This is not a general ajax function,
-    just something that is good enough for Xmla.
-*/
     var xhr,
         handlerCalled = false,
         handler = function(){
@@ -71,9 +86,7 @@ function _ajax(options){
                     options.aborted(xhr);
                     break;
                 case 4:
-                    if (xhr.status===200){
-                        options.complete(xhr);
-                    }
+                    if (xhr.status === 200) options.complete(xhr)
                     else {
                         var err = Xmla.Exception._newError(
                                 "HTTP_ERROR",
@@ -92,13 +105,9 @@ function _ajax(options){
                 break;
             }
         };
-    if (XMLHttpRequest) {
-        xhr = new XMLHttpRequest();
-    }
-    else
-    if (_useAX) {
-        xhr = new ActiveXObject("MSXML2.XMLHTTP.3.0");
-    }
+
+    xhr = _createXhr();
+
     if (options.username && options.password) {
         xhr.open(
             "POST", options.url, options.async,
@@ -147,47 +156,121 @@ function _xmlEncode(value){
     return value;
 };
 
-var docEl = document.documentElement;
-
-var ___getElemsByTagNameNS = function(node, ns, prefix, tagName){
-    var ret;
-    try{
-        ret = node.getElementsByTagNameNS(ns, tagName);
-    } catch(err){
-        //If there is a getElementsByTagNameNS method re-throw
-        if (node.getElementsByTagNameNS) throw err;
-        //Switch implementation
-        _getElementsByTagNameNS = ___getElemsByTagName;
-        ret = ___getElemsByTagName(node, ns, prefix, tagName);
+//this is here to support (partial) dom interface on top of our own document implementation
+//we don't need this in the browser, it's here when running in environments without a native xhr
+//where the xhr object does not offer a DOM responseXML object.
+function _getElements(parent, list, criteria){
+    var childNodes = parent.childNodes;
+    if (!childNodes) return list;
+    for (var node, i = 0, n = childNodes.length; i < n; i++){
+        node = childNodes[i];
+        if (criteria && criteria(node) === true) list.push(node);
+        _getElements(node, list, criteria);
     }
-    return ret;
 };
 
-var ___getElemsByTagName = function(node, ns, prefix, tagName){
-    return prefix ? node.getElementsByTagName(prefix + ":" + tagName) : node.getElementsByTagName(tagName);
-};
-
-var _getElementsByTagNameNS = docEl.getElementsByTagNameNS ? ___getElemsByTagNameNS : ___getElemsByTagName;
-
-var ___getAttrNS = function(element, ns, prefix, attributeName){
-    var ret;
-    try{
-        ret = element.getAttributeNS(ns, attributeName);
-    } catch(err){
-        //If there is a getAttributeNS method re-throw
-        if (element.getAttributeNS) throw err;
-        //Switch implementation
-        getAttributeNS = ___getAttr;
-        ret = ___getAttr(element, ns, prefix, attributeName);
+var _getElementsByTagName = function(node, tagName){
+    var func;
+    if (node.getElementsByTagName) {
+        func = function(node, tagName) {
+            return node.getElementsByTagName(tagName);
+        };
     }
-    return ret;
+    else {
+        func = function(node, tagName){
+            var list = [],
+                criteria = tagName === "*" ? null : function(node){
+                    return (node.nodeType === 1 && ((node.namespaceURI === "" ? "" : node.prefix + ":") + node.nodeName) === tagName);
+                }
+            ;
+            _getElements(node, list, criteria);
+            return list;
+        };
+    }
+    return (_getElementsByTagName = func)(node, tagName);
 };
 
-var ___getAttr = function(element, ns, prefix, attributeName){
-    return prefix ? element.getAttribute(prefix + ":" + attributeName) : element.getAttribute(attributeName);
+var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
+    var func;
+    if (node.getElementsByTagNameNS) {
+        func = function(node, ns, prefix, tagName) {
+            return node.getElementsByTagNameNS(ns, tagName);
+        };
+    }
+    else
+    if (node.getElementsByTagName) {
+        func = function(node, ns, prefix, tagName){
+            return node.getElementsByTagName((prefix ? prefix + ":" : "") + tagName);
+        };
+    }
+    else {
+        func = function(node, ns, prefix, tagName){
+            var list = [], criteria;
+            if (tagName === "*") {
+                criteria = function(node){
+                    return (node.nodeType === 1 && node.namespaceURI === ns);
+                };
+            }
+            else {
+                criteria = function(node){
+                    return (node.nodeType === 1 && node.namespaceURI === ns && node.nodeName === tagName);
+                };
+            }
+            _getElements(node, list, criteria);
+            return list;
+        };
+    }
+    return (_getElementsByTagNameNS = func)(node, ns, prefix, tagName);
 };
 
-var _getAttributeNS = docEl.getAttributeNS ? ___getAttrNS : ___getAttr;
+var _getAttributeNS = function(element, ns, prefix, attributeName) {
+    var func;
+    if (element.getAttributeNS) {
+        func = function(element, ns, prefix, attributeName){
+            return element.getAttributeNS(ns, attributeName);
+        };
+    }
+    else
+    if (element.getAttribute) {
+        func = function(element, ns, prefix, attributeName){
+            return element.getAttribute((prefix ? prefix + ":" : "") + attributeName);
+        };
+    }
+    else {
+        func = function(element, namespaceURI, prefix, attributeName){
+            var attributes = element.attributes;
+            if (!attributes) return null;
+            for (var attr, i = 0, n = attributes.length; i < n; i++) {
+                attr = attributes[i];
+                if (attr.namespaceURI === namespaceURI && attr.nodeName === attributeName) return attr.value;
+            }
+            return null;
+        };
+    }
+    return (_getAttributeNS = func)(element, ns, prefix, attributeName);
+};
+
+var _getAttribute = function(node, name){
+    var func;
+    if (node.getAttribute) {
+        func = function(node, name){
+            return node.getAttribute(name);
+        };
+    }
+    else {
+        func = function(node, name) {
+            var attributes = node.attributes;
+            if (!attributes) return null;
+            for (var attr, i = 0, n = attributes.length; i < n; i++) {
+                attr = attributes[i];
+                if (attr.nodeName === name) return attr.value;
+            }
+            return null;
+        };
+    }
+    return (_getAttribute = func)(node, name);
+};
+
 function _getElementText(el){
     //on first call, we examine the properies of the argument element
     //to try and find a native (and presumably optimized) method to grab
@@ -228,10 +311,10 @@ function _getElementText(el){
         func = function(el) {
             var text = [], childNode,
                 childNodes = el.childNodes, i,
-                n = childNodes.length
+                n = childNodes ? childNodes.length : 0
             ;
             for (i = 0; i < n; i++){
-                childNode = childNodes.item(i);
+                childNode = childNodes[i];
                 if (childNode.data !== null) text.push(childNode.data);
             }
             return text.length ? text.join("") : null;
@@ -333,7 +416,128 @@ function _applyProps(object, properties, overwrite){
     return object;
 };
 
-if (_isUnd(root)) root = window;
+function _xjs(xml) {
+  //         1234          5        6          789          10          11   12          13  14                 15
+  var re = /<(((([\w\-\.]+):)?([\w\-\.]+))([^>]+)?|\/((([\w\-\.]+):)?([\w\-\.]+))|\?(\w+)([^\?]+)?\?|(!--([^\-]|-[^\-])*--))>|([^<>]+)/ig,
+      match, name, prefix, atts, ePrefix, eName, piTarget, text,
+      ns = {"": ""}, newNs, nsUri, doc, parentNode, namespaces = [], nextParent, node = null
+  ;
+  doc = parentNode = {
+    nodeType: 9,
+    childNodes: []
+  };
+
+  function Ns(){
+      namespaces.push(ns);
+      var _ns = new (function(){});
+      _ns.constructor.prototype = ns;
+      ns = new _ns.constructor();
+      node.namespaces = ns;
+      newNs = true;
+  }
+  function popNs() {
+      ns = namespaces.pop();
+  }
+
+  while (match = re.exec(xml)) {
+      node = null;
+      if (name = match[5]) {
+          newNs = false;
+          node = {
+              offset: match.index,
+              parentNode: parentNode,
+              nodeType: 1,
+              nodeName: name
+          };
+          nextParent = node;
+          if (atts = match[6]) {
+              if (atts.length && atts.substr(atts.length - 1, 1) === "\/") {
+                  nextParent = node.parentNode;
+                  if (ns === node.namespaces) popNs();
+                  atts = atts.substr(0, atts.length - 1);
+              }
+              var attMatch, att;
+              //           123          4               5 6         7
+              var attRe = /((([\w\-]+):)?([\w\-]+))\s*=\s*('([^']*)'|"([^"]*)")/g;
+              while(attMatch = attRe.exec(atts)) {
+                  var pfx = attMatch[3] || "",
+                      value = attMatch[attMatch[6] ? 6 : 7]
+                  ;
+                  if (attMatch[1].indexOf("xmlns")) {
+                      if (!node.attributes) node.attributes = [];
+                      att = {
+                          nodeType: 2,
+                          prefix: pfx,
+                          nodeName: attMatch[4],
+                          value: value
+                      };
+                      nsUri = (pfx === "") ? "" : ns[pfx];
+                      if (typeof(nsUri) === "undefined") {
+                          throw "Unrecognized namespace with prefix \"" + prefix + "\"";
+                      }
+                      att.namespaceURI = nsUri;
+                      node.attributes.push(att);
+                  }
+                  else {
+                      if (!newNs) Ns();
+                      ns[attMatch[3] ? attMatch[4] : ""] = value;
+                  }
+              }
+              attRe.lastIndex = 0;
+          }
+          prefix = match[4] || "";
+          node.prefix = prefix;
+          nsUri = ns[prefix];
+          if (typeof(nsUri) === "undefined") {
+              throw "Unrecognized namespace with prefix \"" + prefix + "\"";
+          }
+          node.namespaceURI = nsUri;
+      }
+      else
+      if (eName = match[10]) {
+          ePrefix = match[9] || "";
+          if (parentNode.nodeName === eName && parentNode.prefix === ePrefix) {
+              nextParent = parentNode.parentNode;
+              if (ns === parentNode.namespaces) popNs();
+          }
+          else throw "Unclosed tag " + ePrefix + ":" + eName;
+      }
+      else
+      if (piTarget = match[11]) {
+          node = {
+              offset: match.index,
+              parentNode: parentNode,
+              target: piTarget,
+              data: match[12],
+              nodeType: 7
+          };
+      }
+      else
+      if (match[13]) {
+          node = {
+              offset: match.index,
+              parentNode: parentNode,
+              nodeType: 8,
+              data: match[14]
+          };
+      }
+      else
+      if ((text = match[15]) && (!/^\s+$/.test(text))) {
+          node = {
+              offset: match.index,
+              parentNode: parentNode,
+              nodeType: 3,
+              data: text
+          };
+      }
+      if (node) {
+          if (!parentNode.childNodes) parentNode.childNodes = [];
+          parentNode.childNodes.push(node);
+      }
+      if (nextParent) parentNode = nextParent;
+  }
+  return doc;
+};
 
 /**
 *
@@ -348,7 +552,7 @@ if (_isUnd(root)) root = window;
 *   @constructor
 *   @param options Object standard options
 */
-Xmla = root.Xmla = function(options){
+Xmla = function(options){
 
     this.listeners = {};
     this.listeners[Xmla.EVENT_REQUEST] = [];
@@ -364,13 +568,8 @@ Xmla = root.Xmla = function(options){
     this.listeners[Xmla.EVENT_EXECUTE_ERROR] = [];
 
     this.options = _applyProps(
-        _applyProps(
-            {},
-            Xmla.defaultOptions,
-            true
-        ),
-        options,
-        true
+        _applyProps({}, Xmla.defaultOptions, true),
+        options, true
     );
     var listeners = this.options.listeners;
     if (listeners) this.addListener(listeners);
@@ -378,9 +577,11 @@ Xmla = root.Xmla = function(options){
 };
 
 Xmla.defaultOptions = {
-    requestTimeout: 30000,      //by default, we bail out after 30 seconds
-    async: false,               //by default, we do a synchronous request
-    addFieldGetters: true       //true to augment rowsets with a method to fetch a specific field.
+    requestTimeout: 30000,            //by default, we bail out after 30 seconds
+    async: false,                     //by default, we do a synchronous request
+    addFieldGetters: true,            //true to augment rowsets with a method to fetch a specific field.
+    forceResponseXMLEmulation: true   //true to use our own XML parser instead of XHR's native responseXML. Useful for testing.
+    //forceResponseXMLEmulation: false   //true to use our own XML parser instead of XHR's native responseXML. Useful for testing.
 };
 
 /**
@@ -1234,7 +1435,7 @@ Xmla.prototype = {
 *   For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).
 *
 *   @property response
-*   @type Xmla.Rowset|Xmla.Resultset
+*   @type Xmla.Rowset|Xmla.Dataset
 *   @default <code>null</code>
 */
     response: null,
@@ -1269,11 +1470,21 @@ Xmla.prototype = {
 *   Note that it is not safe to read this property immediately after doing an asynchronous request.
 *   For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).
 *
+*   @deprecated
 *   @property responseXML
 *   @type {DOMDocument}
 *   @default <code>null</code>
+*   @see getRep
 */
     responseXML: null,
+/**
+*   @method getResponseXML
+*   @return {DOMDocument}
+*/
+    getResponseXML: function(){
+        if (_isObj(this.responseXML)) return this.responseXML;
+        return (this.responseXML = _xjs(this.responseText));
+    },
 /**
 *    This method can be used to set a number of default options for the Xmla instance.
 *    This is especially useful if you don't want to pass each and every option to each method call all the time.
@@ -1543,7 +1754,7 @@ Xmla.prototype = {
 *                   <p>
 *                   This method is used to send an MDX quey to the XML/A provider.
 *                   Query results are returned in a multidimentsional format which is represented by an instance of the
-*                   <code><a href="Xmla.Resultset.html#class_Xmla.Resultset">Xmla.Resultset</a></code> class.
+*                   <code><a href="Xmla.Dataset.html#class_Xmla.Dataset">Xmla.Dataset</a></code> class.
 *                   For these types of requests, you must pass the <code>statement</code> option to specify the MDX query.
 *                   </p>
 *                   <p>
@@ -1633,7 +1844,7 @@ Xmla.prototype = {
 *   or one of the specialized <code>discoverXXX()</code> methods (to obtain a particular schema rowset).
 *   @method request
 *   @param {Object} options An object whose properties convey the options for the request.
-*   @return {Xmla.Rowset|Xmla.Resultset} The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Resultset</code>.
+*   @return {Xmla.Rowset|Xmla.Dataset} The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Dataset</code>.
 */
     request: function(options){
         var ex, xmla = this;
@@ -1642,37 +1853,17 @@ Xmla.prototype = {
         this.responseText = null;
         this.responseXML = null;
 
+        options = _applyProps(options, this.options, false);
         if (!options.url){
-            if (this.options.url){
-                options.url = this.options.url;
-            }
-            else {
-                ex = Xmla.Exception._newError(
-                    "MISSING_URL",
-                    "Xmla.request",
-                    options
-                );
-                ex._throw();
-            }
+            ex = Xmla.Exception._newError(
+                "MISSING_URL",
+                "Xmla.request",
+                options
+            );
+            ex._throw();
         }
-
         options.properties = _applyProps(options.properties, this.options.properties, false);
         options.restrictions = _applyProps(options.restrictions, this.options.restrictions, false);
-        if (_isUnd(options.async) && !_isUnd(this.options.async)){
-            options.async = this.options.async;
-        }
-        if (_isUnd(options.requestTimeout) && !_isUnd(this.options.requestTimeout)) {
-            options.requestTimeout = this.options.requestTimeout;
-        }
-        if (!options.username && this.options.username){
-            options.username = this.options.username;
-        }
-        if (!options.password && this.options.password){
-            options.password = this.options.password;
-        }
-        if (!options.headers && this.options.headers){
-            options.headers = this.options.headers;
-        }
 
         var soapMessage = _getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
@@ -1683,7 +1874,7 @@ Xmla.prototype = {
             data: soapMessage,
             error:      function(exception){
                             options.exception = exception;
-                            xmla._requestError(options);
+                            xmla._requestError(options, exception);
                         },
             complete:   function(xhr){
                             options.xhr = xhr;
@@ -1691,65 +1882,70 @@ Xmla.prototype = {
                         },
             url: options.url
         };
-        if (options.username){
-            ajaxOptions.username = options.username;
-        }
-        if (options.password){
-            ajaxOptions.password = options.password;
-        }
-        if (options.headers) {
-            ajaxOptions.headers = options.headers;
-        }
+        if (options.username) ajaxOptions.username = options.username;
+        if (options.password) ajaxOptions.password = options.password;
+        if (options.headers) ajaxOptions.headers = options.headers;
 
-        if  (this._fireEvent(Xmla.EVENT_REQUEST, options, true) &&
-                (
-                    (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
-                    (options.method == Xmla.METHOD_EXECUTE  && this._fireEvent(Xmla.EVENT_EXECUTE, options))
-                )
-        ) {
-            myXhr = _ajax(ajaxOptions);
-        }
+        if (this._fireEvent(Xmla.EVENT_REQUEST, options, true) && (
+            (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
+            (options.method == Xmla.METHOD_EXECUTE  && this._fireEvent(Xmla.EVENT_EXECUTE, options)))
+        ) myXhr = _ajax(ajaxOptions);
         return this.response;
     },
-    _requestError: function(options) {
-        if (options.error) {
-            options.error.call(
-                options.scope ? options.scope : null,
-                this,
-                options,
-                null
-            );
-        }
-        if (options.callback) {
-            options.callback.call(
-                options.scope ? options.scope : null,
-                Xmla.EVENT_ERROR,
-                this,
-                options,
-                null
-            );
-        }
+    _requestError: function(options, exception) {
+        if (options.error) options.error.call(options.scope ? options.scope : null, this, options, exception);
+        if (options.callback) options.callback.call(options.scope ? options.scope : null, Xmla.EVENT_ERROR, this, options, exception);
         this._fireEvent(Xmla.EVENT_ERROR, options);
     },
     _requestSuccess: function(request) {
         var xhr = request.xhr, response;
-        this.responseXML = xhr.responseXML;
+        if (request.forceResponseXMLEmulation !== true) this.responseXML = xhr.responseXML;
         this.responseText = xhr.responseText;
 
         var method = request.method;
 
-        var soapFault = _getElementsByTagNameNS(this.responseXML, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, "Fault");
-        if (soapFault.length) {
-            //TODO: extract error info
-            soapFault = soapFault.item(0);
-            request.exception = new Xmla.Exception(
-                Xmla.Exception.TYPE_ERROR,
-                soapFault.getElementsByTagName("faultcode").item(0).childNodes.item(0).data,
-                soapFault.getElementsByTagName("faultstring").item(0).childNodes.item(0).data,
-                null,
-                "_requestSuccess",
-                request
-            );
+        try {
+            var responseXml = this.getResponseXML();
+            var soapFault = _getElementsByTagNameNS(responseXml, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, "Fault");
+            if (soapFault.length) {
+                //TODO: extract error info
+                soapFault = soapFault[0];
+                request.exception = new Xmla.Exception(
+                    Xmla.Exception.TYPE_ERROR,
+                    _getElementsByTagName(soapFault, "faultcode")[0].childNodes[0].data,
+                    _getElementsByTagName(soapFault, "faultstring")[0].childNodes[0].data,
+                    null,
+                    "_requestSuccess",
+                    request
+                );
+            }
+            else {
+                switch(method){
+                    case Xmla.METHOD_DISCOVER:
+                        request.rowset = response = new Xmla.Rowset(responseXml, request.requestType, this);
+                        break;
+                    case Xmla.METHOD_EXECUTE:
+                        var resultset = null, dataset = null;
+                        var format = request.properties[Xmla.PROP_FORMAT];
+                        switch(format){
+                            case Xmla.PROP_FORMAT_TABULAR:
+                                response = resultset = new Xmla.Rowset(responseXml, null, this);
+                                break;
+                            case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
+                                response = dataset = new Xmla.Dataset(responseXml);
+                                break;
+                        }
+                        request.resultset = resultset;
+                        request.dataset = dataset;
+                        break;
+                }
+                this.response = response;
+            }
+        }
+        catch (exception) {
+            request.exception = exception;
+        }
+        if (request.exception) {
             switch(method){
                 case Xmla.METHOD_DISCOVER:
                     this._fireEvent(Xmla.EVENT_DISCOVER_ERROR, request);
@@ -1758,65 +1954,21 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_EXECUTE_ERROR, request);
                     break;
             }
-            if (request.error) {
-                request.error.call(
-                    request.scope ? request.scope : null,
-                    this,
-                    request,
-                    request.exception
-                );
-            }
-            if (request.callback) {
-                request.callback.call(
-                    request.scope ? request.scope : null,
-                    Xmla.EVENT_ERROR,
-                    this,
-                    request,
-                    request.exception
-                );
-            }
+            if (request.error) request.error.call(request.scope ? request.scope : null, this, request, request.exception);
+            if (request.callback) request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_ERROR, this, request, request.exception);
             this._fireEvent(Xmla.EVENT_ERROR, request);
         }
         else {
             switch(method){
                 case Xmla.METHOD_DISCOVER:
-                    request.rowset = this.response = response = new Xmla.Rowset(this.responseXML, request.requestType, this);
                     this._fireEvent(Xmla.EVENT_DISCOVER_SUCCESS, request);
                     break;
                 case Xmla.METHOD_EXECUTE:
-                    var resultset = null, dataset = null;
-                    var format = request.properties[Xmla.PROP_FORMAT];
-                    switch(format){
-                        case Xmla.PROP_FORMAT_TABULAR:
-                            response = resultset = new Xmla.Rowset(this.responseXML, null, this);
-                            break;
-                        case Xmla.PROP_FORMAT_MULTIDIMENSIONAL:
-                            response = dataset = new Xmla.Dataset(this.responseXML);
-                            break;
-                    }
-                    request.resultset = resultset;
-                    request.dataset = dataset;
-                    this.response = response;
                     this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, request);
                     break;
             }
-            if (request.success) {
-                request.success.call(
-                    request.scope ? request.scope : null,
-                    this,
-                    request,
-                    response
-                );
-            }
-            if (request.callback) {
-                request.callback.call(
-                    request.scope ? request.scope : null,
-                    Xmla.EVENT_SUCCESS,
-                    this,
-                    request,
-                    response
-                );
-            }
+            if (request.success) request.success.call(request.scope ? request.scope : null, this, request, response);
+            if (request.callback) request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_SUCCESS, this, request, response);
             this._fireEvent(Xmla.EVENT_SUCCESS, request);
         }
     },
@@ -1872,7 +2024,7 @@ Xmla.prototype = {
 *   </ul>
 *   @method execute
 *   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request.
-*   @return {Xmla.Resultset|Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Resultset</code> that represents the multi-dimensional result set of the MDX query. If the <code>Format</code> property in the request was set to <code>Tabular</code>, then an instance of the
+*   @return {Xmla.Dataset|Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Dataset</code> that represents the multi-dimensional result set of the MDX query. If the <code>Format</code> property in the request was set to <code>Tabular</code>, then an instance of the
 <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code> class is returned to represent the <code>Resultset</code>.
 */
     execute: function(options) {
@@ -1882,19 +2034,11 @@ Xmla.prototype = {
             options.properties = properties;
         }
         _applyProps(properties, this.options.properties, false)
-        if (!properties[Xmla.PROP_CONTENT]){
-            properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
-        }
-        if (!properties[Xmla.PROP_FORMAT]){
-            options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
-        }
-        var request = _applyProps(
-            options,
-            {
-                method: Xmla.METHOD_EXECUTE
-            },
-            true
-        );
+        if (!properties[Xmla.PROP_CONTENT]) properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
+        if (!properties[Xmla.PROP_FORMAT]) options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        var request = _applyProps(options, {
+            method: Xmla.METHOD_EXECUTE
+        }, true);
         return this.request(request);
     },
 /**
@@ -1904,9 +2048,7 @@ Xmla.prototype = {
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Rowset</code> that represents the multi-dimensional result set of the MDX query.
 */
     executeTabular: function(options){
-        if (!options.properties){
-            options.properties = {};
-        }
+        if (!options.properties) options.properties = {};
         options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
         return this.execute(options);
     },
@@ -1917,9 +2059,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request.
 */
     executeMultiDimensional: function(options){
-        if (!options.properties){
-            options.properties = {};
-        }
+        if (!options.properties) options.properties = {};
         options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
         return this.execute(options);
     },
@@ -2008,16 +2148,10 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discover: function(options) {
-        var request = _applyProps(
-            options,
-            {
-                method: Xmla.METHOD_DISCOVER
-            },
-            true
-        );
-        if (!request.requestType){
-            request.requestType = this.options.requestType;
-        }
+        var request = _applyProps(options, {
+            method: Xmla.METHOD_DISCOVER
+        }, true);
+        if (!request.requestType) request.requestType = this.options.requestType;
         return this.request(request);
     },
 /**
@@ -2171,13 +2305,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverDataSources: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DISCOVER_DATASOURCES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DISCOVER_DATASOURCES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2307,13 +2437,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverProperties: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DISCOVER_PROPERTIES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DISCOVER_PROPERTIES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2357,13 +2483,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverSchemaRowsets: function(options){
-        var request = _applyProps(
-           options,
-            {
-                requestType: Xmla.DISCOVER_SCHEMA_ROWSETS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DISCOVER_SCHEMA_ROWSETS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2428,13 +2550,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverEnumerators: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DISCOVER_ENUMERATORS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DISCOVER_ENUMERATORS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2464,13 +2582,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverKeywords: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DISCOVER_KEYWORDS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DISCOVER_KEYWORDS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2528,13 +2642,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverLiterals: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DISCOVER_LITERALS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DISCOVER_LITERALS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2584,13 +2694,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverDBCatalogs: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DBSCHEMA_CATALOGS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DBSCHEMA_CATALOGS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2817,13 +2923,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverDBColumns: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DBSCHEMA_COLUMNS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DBSCHEMA_COLUMNS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -2993,13 +3095,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverDBProviderTypes: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DBSCHEMA_PROVIDER_TYPES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DBSCHEMA_PROVIDER_TYPES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3022,13 +3120,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverDBSchemata: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DBSCHEMA_SCHEMATA
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DBSCHEMA_SCHEMATA
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3051,13 +3145,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverDBTables: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.DBSCHEMA_TABLES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.DBSCHEMA_TABLES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3109,13 +3199,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDActions: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_ACTIONS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_ACTIONS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3264,13 +3350,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDCubes: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_CUBES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_CUBES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3432,13 +3514,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDDimensions: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_DIMENSIONS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_DIMENSIONS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3461,13 +3539,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDFunctions: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_FUNCTIONS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_FUNCTIONS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3665,13 +3739,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDHierarchies: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_HIERARCHIES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_HIERARCHIES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -3895,13 +3965,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDLevels: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_LEVELS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_LEVELS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -4064,13 +4130,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDMeasures: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_MEASURES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_MEASURES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -4227,13 +4289,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDMembers: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_MEMBERS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_MEMBERS
+        }, true);
         return this.discover(request);
     },
 /**
@@ -4256,13 +4314,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDProperties: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_PROPERTIES
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_PROPERTIES
+        }, true);
         return this.discover(request);
     },
 /**
@@ -4285,27 +4339,21 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.
 */
     discoverMDSets: function(options){
-        var request = _applyProps(
-            options,
-            {
-                requestType: Xmla.MDSCHEMA_SETS
-            },
-            true
-        );
+        var request = _applyProps(options, {
+            requestType: Xmla.MDSCHEMA_SETS
+        }, true);
         return this.discover(request);
     }
 };
 
 function _getComplexType(node, name){
-    var types = _getElementsByTagNameNS(
-            node, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"
-        ),
+    var types = _getElementsByTagNameNS(node, _xmlnsSchema, _xmlnsSchemaPrefix, "complexType"),
         numTypes = types.length,
         type, i
     ;
-    for (i=0; i<numTypes; i ++){
-        type = types.item(i);
-        if (type.getAttribute("name")===name) return type;
+    for (i = 0; i < numTypes; i++){
+        type = types[i];
+        if (_getAttribute(type, "name")===name) return type;
     }
     return null;
 }
@@ -4743,7 +4791,7 @@ function _arrayConverter(nodes, valueConverter){
         i, node
     ;
     for (i = 0; i < n; i++){
-        node = nodes.item(i);
+        node = nodes[i];
         arr.push(valueConverter(_getElementText(node)));
     }
     return arr;
@@ -4827,23 +4875,21 @@ Xmla.Rowset.prototype = {
         this._fieldCount = 0;
         var rowSchema = _getComplexType(this._node, "row");
         if (rowSchema){
-            var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence").item(0),
-                seqChildren = seq.childNodes, numChildren = seqChildren.length, seqChild,
+            var seq = _getElementsByTagNameNS(rowSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence")[0],
+                seqChildren = seq.childNodes, numChildren = seqChildren ? seqChildren.length : 0, seqChild,
                 fieldLabel, fieldName, minOccurs, maxOccurs, type, valueConverter, getter,
                 addFieldGetters = this._xmla.options.addFieldGetters, i, val;
             for (i = 0; i < numChildren; i++){
-                seqChild = seqChildren.item(i);
-                if (seqChild.nodeType !== 1) {  //element node
-                    continue;
-                }
+                seqChild = seqChildren[i];
+                if (seqChild.nodeType !== 1) continue;
                 fieldLabel = _getAttributeNS(seqChild, _xmlnsSQL, _xmlnsSQLPrefix, "field");
-                fieldName = seqChild.getAttribute("name");
-                type = seqChild.getAttribute("type");   //get the type from the xsd
+                fieldName = _getAttribute(seqChild, "name");
+                type = _getAttribute(seqChild, "type");   //get the type from the xsd
                 if (type===null && this._row) {           //bummer, not defined there try to get it from xsi:type in the row
-                    val = this._row.getElementsByTagName(fieldName);
+                    val = _getElementsByTagName(this._row, fieldName);
                     if (val.length){
                         type = _getAttributeNS(
-                            val.item(0),
+                            val[0],
                             _xmlnsSchemaInstance,
                             _xmlnsSchemaInstancePrefix,
                             "type"
@@ -4854,10 +4900,10 @@ Xmla.Rowset.prototype = {
                     this._type==Xmla.DISCOVER_SCHEMA_ROWSETS &&
                     fieldName==="Restrictions"
                 ) type = "Restrictions";
-                minOccurs = seqChild.getAttribute("minOccurs");
+                minOccurs = _getAttribute(seqChild, "minOccurs");
                 if (minOccurs) minOccurs = parseInt(minOccurs, 10);
                 else minOccurs = 1;
-                maxOccurs = seqChild.getAttribute("maxOccurs");
+                maxOccurs = _getAttribute(seqChild, "maxOccurs");
                 if (maxOccurs) {
                     if (maxOccurs === "unbounded") maxOccurs = Infinity;
                     else minOccurs=parseInt(maxOccurs,10);
@@ -4894,14 +4940,14 @@ Xmla.Rowset.prototype = {
             if(minOccurs===1)
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
-                    return valueConverter(_getElementText(els.item(0)));
+                    return valueConverter(_getElementText(els[0]));
                 };
             else
             if (minOccurs === 0)
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
                     if (els.length) {
-                        return valueConverter(_getElementText(els.item(0)));
+                        return valueConverter(_getElementText(els[0]));
                     }
                     else {
                         return null;
@@ -4993,7 +5039,7 @@ Xmla.Rowset.prototype = {
 */
     nextRow: function(){
         this.rowIndex++;
-        this._row = this._rows.item(this.rowIndex);
+        this._row = this._rows[this.rowIndex];
         return this.rowIndex;
     },
 /**
@@ -5065,7 +5111,7 @@ Xmla.Rowset.prototype = {
 */
     reset: function(){
         this.rowIndex = 0;
-        this._row = (this.hasMoreRows()) ? this._rows.item(this.rowIndex) : null;
+        this._row = (this.hasMoreRows()) ? this._rows[this.rowIndex] : null;
     },
 /**
 *   Retrieves a <code>fieldDef</code> object by name.
@@ -5123,7 +5169,7 @@ Xmla.Rowset.prototype = {
 /**
 *   Retrieves a value from the current row for the field having the name specified by the argument.
 *   @method fieldVal
-*   @param {string} name The name of the field for which you want to retrieve the value.
+*   @param {string | int} name The name or the index of the field for which you want to retrieve the value.
 *   @return {array|boolean|float|int|string} From the current row, the value of the field that matches the argument.
 */
     fieldVal: function(name){
@@ -5453,7 +5499,7 @@ Xmla.Dataset.prototype = {
         this.cubeName = _getElementText(
             _getElementsByTagNameNS(
                 this._root, _xmlnsDataset, "", "CubeName"
-            ).item(0)
+            )[0]
         );
         this._initAxes();
         this._initCells();
@@ -5473,7 +5519,7 @@ Xmla.Dataset.prototype = {
     },
     _initRoot: function(doc){
         var root = _getElementsByTagNameNS(doc, _xmlnsDataset, "", "root");
-        if (root.length) this._root = root.item(0);
+        if (root.length) this._root = root[0];
         else
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
@@ -5491,16 +5537,16 @@ Xmla.Dataset.prototype = {
         axisNodes = _getElementsByTagNameNS(this._root, _xmlnsDataset, "", "AxisInfo");
         numAxisNodes = axisNodes.length;
         for (i = 0; i < numAxisNodes; i++) {
-            axisNode = axisNodes.item(i);
-            axisName = axisNode.getAttribute("name");
+            axisNode = axisNodes[i];
+            axisName = _getAttribute(axisNode, "name");
             tmpAxes[axisName] = axisNode;
         }
         //collect the axis nodes
         axisNodes = _getElementsByTagNameNS(this._root, _xmlnsDataset, "", "Axis");
         numAxisNodes = axisNodes.length;
         for (i = 0; i < numAxisNodes; i++){
-            axisNode = axisNodes.item(i);
-            axisName = axisNode.getAttribute("name");
+            axisNode = axisNodes[i];
+            axisName = _getAttribute(axisNode, "name");
             axis = new Xmla.Dataset.Axis(tmpAxes[axisName], axisNode, axisName, i);
             if (axisName === Xmla.Dataset.AXIS_SLICER) this._slicer = axis;
             else {
@@ -5657,6 +5703,14 @@ Xmla.Dataset.prototype = {
         return this._slicer;
     },
 /**
+*   Determine if the slicer axis exists.
+*   @method hasSlicerAxis
+*   @return {boolean} <code>true</code> if the slicer axis exists, <code>false</code> if it doesn't exist.
+*/
+    hasSlicerAxis: function(){
+        return this._slicer !== null;
+    },
+/**
 *   Get the Cellset object.
 *   @method getCellset
 *   @return {Xmla.Dataset.Cellset} The <code><a href="Xmla.Dataset.Cellset.html#class_Cellset">Xmla.Dataset.Cellset</a></code> object.
@@ -5685,54 +5739,40 @@ Xmla.Dataset.prototype = {
  * Gets all of the XML data into one JS objects
  */
     fetchAsObject: function() {
-        console.log('func Call: ' + arguments.callee.name);
-        var xmla_axes = [], axes=[], xmla_filter, filterAxis={}, xmla_cells=[], cells=[],xmla_axis, axis;
+        var axes = [], axis, slicerAxis,
+            cellset = [], cells = [],
+            i, n;
 
         //loop through all non slicer axes
-        for (var i=0, j=this.axisCount()-1;j>=i;j--){
-                xmla_axis = this.getAxis(j);
-                axis = {};
-                if (xmla_axis instanceof Xmla.Dataset.Axis) {
-                        console.log(xmla_axis.name)
-                        axis.positions = [];
-                        xmla_axis.eachTuple(function(tuple){
-                            axis.positions.push(tuple);
-                         });
-                        axis.hierarchies = [];
-                        xmla_axis.eachHierarchy(function(hier){
-                            axis.hierarchies.push(hier);
-                         });
-
-                } else {
-                    console.error('not Xmla.Dataset.Axis')
-                    console.log(xmla_axis)
-                }
-                axes.push(axis)
+        for (i = 0, n = this.axisCount(); i < n; i++){
+            axis = this.getAxis(i);
+            axes.push({
+                positions: axis.fetchAllAsObject(),
+                hierarchies: axis.getHierarchies()
+            });
         }
 
         //get Slicer information
-        xmla_filter = this.getSlicerAxis();
-        filterAxis.positions = [];
-        xmla_filter.eachTuple(function(tuple){
-            filterAxis.positions.push(tuple);
-         });
-        filterAxis.hierarchies = [];
-        xmla_filter.eachHierarchy(function(hier){
-            filterAxis.hierarchies.push(hier);
-         });
+        slicerAxis = (axis = this.getSlicerAxis()) ? {
+            positions: axis.fetchAllAsObject(),
+            hierarchies: axis.getHierarchies()
+        } : null;
 
         //get Cellset data
-        xmla_cells = this.getCellset();
-        console.log(xmla_cells.cellCount())
-        for (i=0,j=xmla_cells.cellCount();i<j;i++){
-            var cell = xmla_cells.readCell();
+        cellset = this.getCellset();
+        //console.log(xmla_cells.cellCount())
+        for (i = 0, n = cellset.cellCount(); i < n; i++){
+            cell = cellset.readCell();
             cells.push(cell);
-            xmla_cells.nextCell();
+            cellset.nextCell();
         }
+        cellset.close();
 
-        obj = {axes:axes, filterAxis:filterAxis, cells:cells};
-        xmla_cells.close();
-        return obj;
+        return {
+            axes: axes,
+            slicerAxis: slicerAxis,
+            cells: cells
+        };
     },
 /**
 *   Cleanup this Dataset object.
@@ -5802,31 +5842,26 @@ Xmla.Dataset.Axis.prototype = {
         this._hierarchyIndexes = {};
         this.numHierarchies = numHierarchies;
         for (i = 0; i < numHierarchies; i++){
-            hierarchyInfoNode = hierarchyInfoNodes.item(i);
-            hierarchyName = hierarchyInfoNode.getAttribute("name");
+            hierarchyInfoNode = hierarchyInfoNodes[i];
+            hierarchyName = _getAttribute(hierarchyInfoNode, "name");
             this._hierarchyOrder[i] = hierarchyName;
             this._hierarchyIndexes[hierarchyName] = i;
             properties = {
                 index: i,
                 name: hierarchyName
             };
-            propertyNodes = _getElementsByTagNameNS(
-                _axisInfoNode,
-                _xmlnsDataset,
-                "",
-                "*"
-            );
+            propertyNodes = _getElementsByTagNameNS(_axisInfoNode, _xmlnsDataset, "", "*");
             numPropertyNodes = propertyNodes.length;
             for (j = 0; j < numPropertyNodes; j++) {
-                propertyNode = propertyNodes.item(j);
-                properties[propertyNode.tagName] = null;
+                propertyNode = propertyNodes[j];
+                properties[propertyNode.nodeName] = null;
             }
             this._hierarchyDefs[hierarchyName] = properties;
         }
 
     },
     _initAxis: function(_axisInfoNode, _axisNode){
-        this.name = _axisNode.getAttribute("name");
+        this.name = _getAttribute(_axisNode, "name");
 
         this._initHierarchies(_axisInfoNode);
         this._tuples = _getElementsByTagNameNS(_axisNode, _xmlnsDataset, "", "Tuple");
@@ -5836,7 +5871,7 @@ Xmla.Dataset.Axis.prototype = {
     _getMembers: function(){
         if (!this.hasMoreTuples()) return null;
         return _getElementsByTagNameNS(
-            this._tuples.item(this._tupleIndex),
+            this._tuples[this._tupleIndex],
             _xmlnsDataset, "", "Member"
         );
     },
@@ -6118,7 +6153,7 @@ Xmla.Dataset.Axis.prototype = {
         return this._member(index);
     },
     _member: function(index){
-        var memberNode = this._members.item(index),
+        var memberNode = this._members[index],
             hierarchyName = this.hierarchyName(index),
             hierarchy = this.hierarchy(hierarchyName),
             property,
@@ -6136,7 +6171,7 @@ Xmla.Dataset.Axis.prototype = {
                     member[property] = hierarchy[property]
                     break;
                 case 1: //this is expected, single element for property, get value
-                    member[property] = _getElementText(el.item(0));
+                    member[property] = _getElementText(el[0]);
                     break;
                 default:
                     Xmla.Exception._newError(
@@ -6290,7 +6325,7 @@ Xmla.Dataset.Cellset.prototype = {
                 root
             )._throw();
 
-        cellInfoNode = cellInfoNodes.item(0);
+        cellInfoNode = cellInfoNodes[0];
         propertyNodes = _getElementsByTagNameNS(
             cellInfoNode, _xmlnsDataset, "", "*"
         );
@@ -6298,13 +6333,13 @@ Xmla.Dataset.Cellset.prototype = {
         //examine cell property info so we can parse them
         numPropertyNodes = propertyNodes.length;
         for(i = 0; i < numPropertyNodes; i++) {
-            propertyNode = propertyNodes.item(i);
-            propertyNodeTagName = propertyNode.tagName;
+            propertyNode = propertyNodes[i];
+            propertyNodeTagName = propertyNode.nodeName;
             //find the xsd:element node that describes this property
-            for (j = 0; j < numCellSchemaElements; j++) {
-                cellSchemaElement = cellSchemaElements.item(j);
-                if (cellSchemaElement.getAttribute("name") !== propertyNodeTagName) continue;
-                type = cellSchemaElement.getAttribute("type");
+              for (j = 0; j < numCellSchemaElements; j++) {
+                cellSchemaElement = cellSchemaElements[j];
+                if (_getAttribute(cellSchemaElement, "name") !== propertyNodeTagName) continue;
+                type = _getAttribute(cellSchemaElement, "type");
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
                 this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
                 break;
@@ -6318,11 +6353,11 @@ Xmla.Dataset.Cellset.prototype = {
     },
     _getCellNode: function(index){
         if (!_isUnd(index)) this._idx = index;
-        this._cellNode = this._cellNodes.item(this._idx);
+        this._cellNode = this._cellNodes[this._idx];
         this._cellOrd = this._getCellOrdinal(this._cellNode);
     },
     _getCellOrdinal: function(node){
-        return parseInt(node.getAttribute("CellOrdinal"), 10);
+        return parseInt(_getAttribute(node, "CellOrdinal"), 10);
     },
 /**
 *   Returns the number of cells contained in this cellset.
@@ -6414,7 +6449,7 @@ Xmla.Dataset.Cellset.prototype = {
         var text, type, valueConverter,
             valueEl = _getElementsByTagNameNS(
               this._cellNode, _xmlnsDataset, "", propertyName
-            ).item(0);
+            )[0];
         text = _getElementValue(valueEl);
         valueConverter = this._cellProperties[propertyName];
         if (!valueConverter) {
@@ -6472,7 +6507,7 @@ Xmla.Dataset.Cellset.prototype = {
         for (p in this._cellProperties){
             cellProp = _getElementsByTagNameNS(
                 node, _xmlnsDataset, "", p
-            ).item(0);
+            )[0];
             if (!cellProp) continue;
             cellProperty = this._cellProperties[p];
             if (cellProperty) object[p] = cellProperty(_getElementText(cellProp));
@@ -6537,7 +6572,7 @@ Xmla.Dataset.Cellset.prototype = {
         var node, ord, idx, lastIndex = this.cellCount() - 1;
         idx = ordinal > lastIndex ? lastIndex : ordinal;
         while(true) {
-            node = this._cellNodes.item(idx);
+            node = this._cellNodes[idx];
             ord = this._getCellOrdinal(node);
             if (ord === ordinal) return this.getByIndex(idx, object);
             else
@@ -6849,6 +6884,21 @@ Xmla.Exception.ILLEGAL_ARGUMENT_HLP = _exceptionHlp +
                                     "#" + Xmla.Exception.ILLEGAL_ARGUMENT_CDE  +
                                     "_" + Xmla.Exception.ILLEGAL_ARGUMENT_MSG;
 
+/**
+*   Exception code indicating that we couldn't instantiate a xml http request object
+*
+*   @property ERROR_INSTANTIATING_XMLHTTPREQUEST
+*   @static
+*   @final
+*   @type {int}
+*   @default <code>-15</code>
+*/
+Xmla.Exception.ERROR_INSTANTIATING_XMLHTTPREQUEST_CDE = -15;
+Xmla.Exception.ERROR_INSTANTIATING_XMLHTTPREQUEST_MSG = "Error creating XML Http Request";
+Xmla.Exception.ERROR_INSTANTIATING_XMLHTTPREQUEST_HLP = _exceptionHlp +
+                                    "#" + Xmla.Exception.ERROR_INSTANTIATING_XMLHTTPREQUEST_CDE  +
+                                    "_" + Xmla.Exception.ERROR_INSTANTIATING_XMLHTTPREQUEST_MSG;
+
 Xmla.Exception._newError = function(codeName, source, data){
     return new Xmla.Exception(
         Xmla.Exception.TYPE_ERROR,
@@ -6943,4 +6993,19 @@ Xmla.Exception.prototype = {
     }
 };
 
-}());
+/**
+*   Register Xmla.
+*   In an amd (https://github.com/amdjs/amdjs-api/wiki/AMD) environment, use the define function
+*   Otherwise, add it to the global window variable.
+*   For server side environemnts that do not have a proper window object,
+*   simply create a global variable called window and assign an object to it that you want to function as the Xmla container.
+*/
+if (typeof(define)==="function" && define.amd) {
+  define(function (){
+      return Xmla;
+  });
+}
+else window.Xmla = Xmla;
+
+return Xmla;
+})(typeof exports === "undefined" ? window : exports);
