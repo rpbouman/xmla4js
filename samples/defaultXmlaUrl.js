@@ -1,1 +1,1 @@
-var defaultXmlaUrl = "http://localhost:8080/mondrian/xmla";
+var defaultXmlaUrl = "http://localhost:8008/mondrian/xmla";
