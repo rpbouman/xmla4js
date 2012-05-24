@@ -66,7 +66,80 @@ if (window.ActiveXObject) _createXhr = function(){
 }
 else
 if (typeof(require)==="function") _createXhr = function(){
-    var xhr = require("xmlhttprequest").XMLHttpRequest;
+    var xhr;
+    (xhr = function() {
+        this.readyState = 0;
+        this.status = -1;
+        this.statusText = "Not sent";
+        this.responseText = null;
+    }).prototype = {
+        changeStatus: function(statusCode, readyState){
+            this.status = statusCode;
+            this.statusText = statusCode;
+            this.readyState = readyState;
+            if (_isFun(this.onreadystatechange)) {
+                this.onreadystatechange.call(this, this);
+            }
+        },
+        open: function(method, url, async, username, password){
+            if (async !== true) {
+                throw "Synchronous mode not supported in this environment."
+            }
+            var options = require("url").parse(url);
+            if (options.host.length > options.hostname.length) {
+                //for some reason, host includes the port, this confuses http.request
+                //so, overwrite host with hostname (which does not include the port)
+                //and kill hostname so that we end up with only host.
+                options.host = options.hostname;
+                delete options.hostname;
+            }
+            if (!options.path && options.pathname) {
+                options.path = options.pathname;
+            }
+            if (username && password) options.auth = username + ":" + password;
+            options.method = method;
+            options.headers = {};
+            this.options = options;
+            this.changeStatus(-1, 1);
+        },
+        send: function(data){
+            var me = this,
+                options = me.options,
+                client
+            ;
+            options.headers["Content-Length"] = data.length;
+            switch (options.protocol) {
+                case "http:":
+                    client = require("http");
+                    if (!options.port) options.port = "80";
+                    break;
+                case "https:":
+                    client = require("https");
+                    if (!options.port) options.port = "443";
+                    break;
+                default:
+                    throw "Unsupported protocol " + options.protocol;
+            }
+            var request = client.request(options, function(response){
+                response.setEncoding("utf8");
+                response.on("data", function(chunk){
+                    me.changeStatus(-1, 3)
+                });
+            });
+            request.on("response", function(response){
+                me.status = response.statusCode;
+                me.statusText = response.statusCode;
+                response.on("data", function(chunk){
+                    me.responseText = chunk;
+                    me.changeStatus(response.statusCode, 4);
+                });
+            });
+            request.end(data);
+        },
+        setRequestHeader: function(name, value){
+            this.options.headers[name] = value;
+        }
+    };
     return new xhr();
 }
 else Xmla.Exception._newError(
@@ -77,7 +150,7 @@ else Xmla.Exception._newError(
 
 
 function _ajax(options){
-    var xhr,
+    var xhr, args, headers, header,
         handlerCalled = false,
         handler = function(){
             handlerCalled = true;
@@ -107,27 +180,15 @@ function _ajax(options){
         };
 
     xhr = _createXhr();
-
-    if (options.username && options.password) {
-        xhr.open(
-            "POST", options.url, options.async,
-            options.username, options.password
-        );
-    }
-    else {
-        xhr.open("POST", options.url, options.async);
-    }
+    args = ["POST", options.url, options.async];
+    if (options.username && options.password) args = args.concat([options.username, options.password]);
+    xhr.open.apply(xhr, args);
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
-    if (options.headers) {
-        var headers = options.headers, header;
-        for (header in headers) xhr.setRequestHeader(header, headers[header]);
-    }
+    if (headers = options.headers) for (header in headers) xhr.setRequestHeader(header, headers[header]);
     xhr.send(options.data);
-    if (!options.async && !handlerCalled){
-        handler.call(xhr);
-    }
+    if (!options.async && !handlerCalled) handler.call(xhr);
     return xhr;
 };
 

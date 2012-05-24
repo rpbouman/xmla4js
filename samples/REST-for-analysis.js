@@ -21,37 +21,37 @@
 */
 var http = require("http"),
     url = require("url"),
-    xhr = require("xmlhttprequest").XMLHttpRequest,
-    xmla = require('./Xmla.js'),
+    xmla = require('../src/Xmla.js'),
     X = xmla.Xmla
 ;
 var window = {};
-
-function parseUrl(request){
-    var requestUrl = url.parse(request.url),
-        path = requestUrl.pathname,
-        query = requestUrl.query,
-        param
-        params = {}
-    ;
-    path = path.split("/");
-    if (typeof(query) !== "undefined") {
-        query = query.split("&");
-        for (var i = 0, n = query.length; i < n; i++) {
-            param = query[i].split("=");
-            params[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
-        }
-    }
-    return {
-        path: path,
-        query: params
-    };
-}
 
 function toCsv(xmla, xmlaRequest, xmlaResponse, url){
 }
 
 function toHtml(xmla, xmlaRequest, xmlaResponse, url){
+    var thead = "", tbody = "", i, n, row;
+    switch (xmlaRequest.method) {
+        case X.METHOD_EXECUTE:
+            break;
+        case X.METHOD_DISCOVER:
+            n = xmlaResponse.fieldCount();
+            for (i = 0; i < n; i++) {
+                thead += "<th>" + xmlaResponse.fieldDef(xmlaResponse.fieldName(i)).label + "</th>";
+            }
+            while (row = xmlaResponse.fetchAsArray()) {
+                tbody += "<tr><td>" + row.join("</td><td>") + "</td></tr>";
+                xmlaResponse.next();
+            }
+            break;
+        default:
+            throw "Invalid method " + xmlaRequest.method;
+    }
+
+    function generateBreadCrumbs() {
+        var prefix = url.protocol + url.auth + url.host;
+    }
+
     var html = [
         "<!DOCTYPE html>",
         "<html>",
@@ -59,13 +59,19 @@ function toHtml(xmla, xmlaRequest, xmlaResponse, url){
             "<title></title>",
           "</head>",
           "<body>",
-            "<h1></h1>",
-            "<table>",
+            "<h1>",
+            "<a href=\"\">" +  +  "</a>",
+            "</h1>",
+            "<table border=\"1\">",
               "<caption>",
               "</caption>",
               "<thead>",
+                "<tr>",
+                thead,
+                "</tr>",
               "</thead>",
               "<tbody>",
+              tbody,
               "</tbody>",
             "</table>",
           "</body>",
@@ -82,7 +88,6 @@ function toJson(xmla, xmlaRequest, xmlaResponse, url){
     var obj;
     switch (xmlaRequest.method) {
         case X.METHOD_EXECUTE:
-            console.log(typeof(xmlaResponse));
             obj = xmlaResponse.fetchAsObject();
             break;
         case X.METHOD_DISCOVER:
@@ -137,11 +142,12 @@ http.createServer(function (request, response) {
       return;
   }
 
-  var requestUrl = parseUrl(request);
+  var requestUrl = url.parse(request.url, true);
 
   var query = requestUrl.query,
       xmlaUrl = query.url,
-      path = requestUrl.path
+      fragments = requestUrl.pathname.split("/"),
+      numFragments = fragments.length
   ;
   if (typeof(xmlaUrl) === "undefined") {
       httpError(response, 400, "Missing parameter \"url\"");
@@ -155,6 +161,7 @@ http.createServer(function (request, response) {
           async: true,
           url: xmlaUrl,
           success: function(xmla, xmlaRequest, xmlaResponse) {
+              console.log("\nResponse:");
               console.log(xmla.responseText);
               var output = outputHandler.call(null, xmla, xmlaRequest, xmlaResponse, requestUrl);
               response.write(output);
@@ -182,38 +189,40 @@ http.createServer(function (request, response) {
           X.MDSCHEMA_MEMBERS
       ]
   ;
-  var parts;
-  switch (path.length) {
+  switch (numFragments) {
       case 7:
-          restrictions["LEVEL_NUMBER"] = path[6];
+          restrictions["LEVEL_NUMBER"] = fragments[6];
       case 6:
-          restrictions["HIERARCHY_UNIQUE_NAME"] = path[5];
+          restrictions["HIERARCHY_UNIQUE_NAME"] = fragments[5];
       case 5:
-          restrictions["DIMENSION_UNIQUE_NAME"] = path[4];
+          restrictions["DIMENSION_UNIQUE_NAME"] = fragments[4];
       case 4:
-          if (path.length === 4) {
+          if (numFragments === 4) {
               if (typeof(query.mdx) !== "undefined") {
                   xmlaRequest.method = X.METHOD_EXECUTE;
                   xmlaRequest.statement = query.mdx;
                   properties[X.PROP_FORMAT] = query.format || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
               }
           }
-          properties[X.PROP_CUBE] = restrictions["CUBE_NAME"] = path[3];
+          properties[X.PROP_CUBE] = restrictions["CUBE_NAME"] = fragments[3];
       case 3:
-          restrictions["CATALOG_NAME"] = properties[X.PROP_CATALOG] = path[2];
+          restrictions["CATALOG_NAME"] = properties[X.PROP_CATALOG] = fragments[2];
           xmlaRequest.restrictions = restrictions;
       case 2:
-          if (path[1] !== "") properties[X.PROP_DATASOURCEINFO] = path[1];
+          if (fragments[1] !== "") properties[X.PROP_DATASOURCEINFO] = fragments[1];
           xmlaRequest.properties = properties;
           if (!xmlaRequest.method) {
               xmlaRequest.restrictions = restrictions;
               xmlaRequest.method = X.METHOD_DISCOVER;
-              xmlaRequest.requestType = (path[1] === "") ? X.DISCOVER_DATASOURCES : requestTypes[path.length];
+              xmlaRequest.requestType = (fragments[1] === "") ? X.DISCOVER_DATASOURCES : requestTypes[numFragments];
           }
   }
 
   x = new xmla.Xmla();
+  console.log("\nRequest:");
+  console.log(xmlaRequest);
   x.request(xmlaRequest);
+  console.log("\nSOAP message:");
   console.log(x.soapMessage);
 }).listen(8124);
 
