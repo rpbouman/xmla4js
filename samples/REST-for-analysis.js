@@ -30,51 +30,84 @@ var http = require("http"),
         {name: X.MDSCHEMA_CUBES, key: "CUBE_NAME", property: X.PROP_CUBE},
         {name: X.MDSCHEMA_DIMENSIONS, key: "DIMENSION_UNIQUE_NAME"},
         {name: X.MDSCHEMA_HIERARCHIES, key: "HIERARCHY_UNIQUE_NAME"},
-        {name: X.MDSCHEMA_LEVELS, key: "LEVEL_NUMBER"},
-        {name: X.MDSCHEMA_MEMBERS}
+        {name: X.MDSCHEMA_LEVELS, key: "LEVEL_UNIQUE_NAME"},
+        {name: X.MDSCHEMA_MEMBERS, key: "MEMBER_UNIQUE_NAME"},
+        {name: X.MDSCHEMA_PROPERTIES}
     ]
 ;
 
 function toCsv(xmla, xmlaRequest, xmlaResponse, requestUrl){
 }
 
-function toHtml(xmla, xmlaRequest, xmlaResponse, requestUrl){
-    var title = "", heading = "", thead = "", tbody = "", i, n, row, href, links = "",
-        fieldName, keyIndex, keyValue,
+function rowsetToHtml(xmla, xmlaRequest, xmlaRowset, requestUrl) {
+    var thead = "", tbody = "", i, n, row, href, links = "",
+        fieldName, keyIndex = -1, keyValue,
         search = requestUrl.search,
         fragments = requestUrl.fragments,
+        decodedFragments = requestUrl.decodedFragments,
         numFragments = fragments.length,
-        requestType
+        requestTypeIndex, requestType
     ;
-    console.log(requestUrl);
-    href = requestUrl.pathname + (requestUrl.search || "");
+    requestTypeIndex = (numFragments === 2) && (fragments[1] === "") ? 1 : numFragments;
+    requestType = discoverRequestTypes[requestTypeIndex];
+    n = xmlaRowset.fieldCount();
+    for (i = 0; i < n; i++) {
+        fieldName = xmlaRowset.fieldName(i);
+        if (fieldName === requestType.key) keyIndex = i;
+        thead += "<th>" + xmlaRowset.fieldDef(fieldName).label + "</th>";
+    }
+    links = (numFragments === 2) && (fragments[1] === "") ? "" : fragments.join("/");
+    while (row = xmlaRowset.fetchAsArray()) {
+        if (keyIndex!==-1) {
+            keyValue = row[keyIndex];
+            row[keyIndex] = "<a rel=\"next\"" +
+                              " title=\"" + discoverRequestTypes[numFragments + 1].name + "\"" +
+                              " href=\"" + links + "/" + encodeURIComponent(keyValue) + search + "\">" +
+                              keyValue +
+                              "</a>"
+            ;
+        }
+        tbody += "<tr><td>" + row.join("</td><td>") + "</td></tr>";
+    }
+    links = "";
+    for (i = 2; i <= numFragments; i++) {
+        if (links.length) links += "&#160;&gt;&#160;";
+        links += "<a title=\"" + discoverRequestTypes[i].name + "\"" +
+                   " href=\"" + fragments.slice(0, i).join("/") + search + "\">" +
+                 decodedFragments[i-1] +
+                 "</a>"
+        ;
+    }
+    links = "<a title=\"" + discoverRequestTypes[1].name + "\" rel=\"prev\" href=\"/" + search + "\">/</a>" + links;
+    return {
+        title: requestType.name,
+        heading: requestType.name,
+        links: links,
+        data: [
+          "<table border=\"1\">",
+            "<caption>",
+            "</caption>",
+            "<thead>",
+              "<tr>",
+                thead,
+              "</tr>",
+            "</thead>",
+            "<tbody>",
+              tbody,
+            "</tbody>",
+          "</table>"
+        ].join("\n")
+    };
+}
+
+function toHtml(xmla, xmlaRequest, xmlaResponse, requestUrl){
+    var rendition;
     switch (xmlaRequest.method) {
         case X.METHOD_EXECUTE:
             heading = xmlaRequest.method;
             break;
         case X.METHOD_DISCOVER:
-            requestType = discoverRequestTypes[(numFragments === 2) && (fragments[1] === "") ? 1 : numFragments];
-            heading = requestType.name;
-            n = xmlaResponse.fieldCount();
-            for (i = 0; i < n; i++) {
-                fieldName = xmlaResponse.fieldName(i);
-                if (fieldName === requestType.key) keyIndex = i;
-                thead += "<th>" + xmlaResponse.fieldDef(fieldName).label + "</th>";
-            }
-            links = (numFragments === 2) && (fragments[1] === "") ? "" : fragments.join("/");
-            while (row = xmlaResponse.fetchAsArray()) {
-                keyValue = row[keyIndex];
-                console.log(keyValue);
-                row[keyIndex] = "<a rel=\"next\" href=\"" + links + "/" + keyValue + search + "\">" + keyValue + "</a>";
-                tbody += "<tr><td>" + row.join("</td><td>") + "</td></tr>";
-                xmlaResponse.next();
-            }
-            links = "";
-            for (i = 2; i <= numFragments; i++) {
-                if (links.length) links += "/";
-                links += "<a href=\"" + fragments.slice(0, i).join("/") + search + "\">" + fragments[i-1] + "</a>";
-            }
-            links = "<a rel=\"prev\" href=\"/" + search + "\">/</a>" + links;
+            rendition = rowsetToHtml(xmla, xmlaRequest, xmlaResponse, requestUrl);
             break;
         default:
             throw "Invalid method " + xmlaRequest.method;
@@ -84,29 +117,18 @@ function toHtml(xmla, xmlaRequest, xmlaResponse, requestUrl){
         "<html>",
           "<head>",
             "<title>",
-              title,
+              rendition.title,
             "</title>",
             "<style type=\"text/css\">",
             "td {white-space:nowrap;}",
             "</style>",
           "</head>",
           "<body>",
-            links,
+            rendition.links,
             "<h1>",
-              heading,
+              rendition.heading,
             "</h1>",
-            "<table border=\"1\">",
-              "<caption>",
-              "</caption>",
-              "<thead>",
-                "<tr>",
-                thead,
-                "</tr>",
-              "</thead>",
-              "<tbody>",
-              tbody,
-              "</tbody>",
-            "</table>",
+            rendition.data,
           "</body>",
         "</html>"
     ];
@@ -143,6 +165,14 @@ function httpError(response, errorCode, message){
     response.writeHead(errorCode, {"Content-Type": "text/plain"});
     if (message) response.write(message);
     response.end();
+}
+
+function decodeFragments(fragments) {
+    var decodedFragments = [], i, n = fragments.length;
+    for (i = 0; i < n; i++) {
+        decodedFragments.push(decodeURIComponent(fragments[i]));
+    }
+    return decodedFragments;
 }
 
 http.createServer(function (request, response) {
@@ -185,9 +215,12 @@ http.createServer(function (request, response) {
     var query = requestUrl.query,
         xmlaUrl = query.url,
         fragments = requestUrl.pathname.split("/"),
+        decodedFragments = decodeFragments(fragments),
         numFragments = fragments.length
     ;
     requestUrl.fragments = fragments;
+    requestUrl.decodedFragments = decodedFragments;
+
     if (typeof(xmlaUrl) === "undefined") {
         httpError(response, 400, "Missing parameter \"url\"");
         return;
@@ -227,12 +260,14 @@ http.createServer(function (request, response) {
 
     //Map the path of the original request url to a xmla request
     switch (numFragments) {
+        case 8:
+            restrictions[discoverRequestTypes[7].key] = decodedFragments[7];
         case 7:
-            restrictions[discoverRequestTypes[6].key] = fragments[6];
+            restrictions[discoverRequestTypes[6].key] = decodedFragments[6];
         case 6:
-            restrictions[discoverRequestTypes[5].key] = fragments[5];
+            restrictions[discoverRequestTypes[5].key] = decodedFragments[5];
         case 5:
-            restrictions[discoverRequestTypes[4].key] = fragments[4];
+            restrictions[discoverRequestTypes[4].key] = decodedFragments[4];
         case 4:
             if (numFragments === 4) {
                 //check if we need to output cube metadata or a mdx query result
@@ -242,14 +277,14 @@ http.createServer(function (request, response) {
                     properties[X.PROP_FORMAT] = query.format || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
                 }
             }
-            restrictions[discoverRequestTypes[3].key] = properties[discoverRequestTypes[3].property] = fragments[3];
+            restrictions[discoverRequestTypes[3].key] = properties[discoverRequestTypes[3].property] = decodedFragments[3];
         case 3:
-            restrictions[discoverRequestTypes[2].key] = properties[discoverRequestTypes[2].property] = fragments[2];
+            restrictions[discoverRequestTypes[2].key] = properties[discoverRequestTypes[2].property] = decodedFragments[2];
             xmlaRequest.restrictions = restrictions;
         case 2:
             //check if we need to output datasoures or catalog metadata for a particular datasource
             if (fragments[1] !== "") {
-                properties[discoverRequestTypes[1].property] = fragments[1];
+                properties[discoverRequestTypes[1].property] = decodedFragments[1];
                 xmlaRequest.properties = properties;
             }
             if (!xmlaRequest.method) {
