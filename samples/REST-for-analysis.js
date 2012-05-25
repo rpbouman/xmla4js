@@ -19,7 +19,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var http = require("http"),
+var port = 8124,
+    http = require("http"),
     url = require("url"),
     xmla = require('../src/Xmla.js'),
     X = xmla.Xmla
@@ -39,10 +40,10 @@ var http = require("http"),
 function toCsv(xmla, xmlaRequest, xmlaResponse, requestUrl){
 }
 
-function rowsetToHtml(xmla, xmlaRequest, xmlaRowset, requestUrl) {
+function discoverRowsetToHtml(xmla, xmlaRequest, xmlaRowset, requestUrl) {
     var thead = "", tbody = "", i, n, row, href, links = "",
         fieldName, keyIndex = -1, keyValue,
-        search = requestUrl.search,
+        search = requestUrl.search.replace(/&/g, "&amp;"),
         fragments = requestUrl.fragments,
         decodedFragments = requestUrl.decodedFragments,
         numFragments = fragments.length,
@@ -67,18 +68,17 @@ function rowsetToHtml(xmla, xmlaRequest, xmlaRowset, requestUrl) {
                               "</a>"
             ;
         }
-        tbody += "<tr><td>" + row.join("</td><td>") + "</td></tr>";
+        tbody += "<tr>\n<td>" + row.join("</td>\n<td>") + "</td>\n</tr>";
     }
     links = "";
     for (i = 2; i <= numFragments; i++) {
-        if (links.length) links += "&#160;&gt;&#160;";
-        links += "<a title=\"" + discoverRequestTypes[i].name + "\"" +
+        links += "\n<li><a title=\"" + discoverRequestTypes[i].name + "\"" +
                    " href=\"" + fragments.slice(0, i).join("/") + search + "\">" +
                  decodedFragments[i-1] +
-                 "</a>"
+                 "</a></li>"
         ;
     }
-    links = "<a title=\"" + discoverRequestTypes[1].name + "\" rel=\"prev\" href=\"/" + search + "\">/</a>" + links;
+    links = "<ul><li><a title=\"" + discoverRequestTypes[1].name + "\" rel=\"prev\" href=\"/" + search + "\">/</a></li>" + links + "</ul>";
     return {
         title: requestType.name,
         heading: requestType.name,
@@ -107,20 +107,24 @@ function toHtml(xmla, xmlaRequest, xmlaResponse, requestUrl){
             heading = xmlaRequest.method;
             break;
         case X.METHOD_DISCOVER:
-            rendition = rowsetToHtml(xmla, xmlaRequest, xmlaResponse, requestUrl);
+            rendition = discoverRowsetToHtml(xmla, xmlaRequest, xmlaResponse, requestUrl);
             break;
         default:
             throw "Invalid method " + xmlaRequest.method;
     }
     var html = [
-        "<!DOCTYPE html>",
-        "<html>",
+        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">",
+        "<html xmlns=\"http://www.w3.org/1999/xhtml\">",
           "<head>",
+            "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml;charset=UTF-8\" />",
             "<title>",
               rendition.title,
             "</title>",
             "<style type=\"text/css\">",
             "td {white-space:nowrap;}",
+            "ul {margin: 0; padding: 0;}",
+            "ul li {display: inline;}",
+            "ul li:before {content: \"\\0020 \\00BB \\0020\";}",
             "</style>",
           "</head>",
           "<body>",
@@ -162,7 +166,7 @@ function toJavaScript(xmla, xmlaRequest, xmlaResponse, requestUrl){
 }
 
 function httpError(response, errorCode, message){
-    response.writeHead(errorCode, {"Content-Type": "text/plain"});
+    response.writeHead(errorCode, message, {"Content-Type": "text/plain"});
     if (message) response.write(message);
     response.end();
 }
@@ -173,6 +177,44 @@ function decodeFragments(fragments) {
         decodedFragments.push(decodeURIComponent(fragments[i]));
     }
     return decodedFragments;
+}
+
+function getOutputHandler(request, requestUrl, response){
+    var accept = request.headers["accept"],
+        i, n, outputHandler,
+        contentType,
+        outputHandlers = ({
+            "text/csv": toCsv,
+            "text/plain": toCsv,
+            "text/html": toHtml,
+            "application/xhtml+xml": toHtml,
+            "text/xml": toXml,
+            "application/xml": toXml,
+            "text/json": toJson,
+            "application/json": toJson,
+            "text/javascript": toJavaScript,
+            "application/javascript": toJavaScript
+        })
+    ;
+    if (requestUrl.query.format && outputHandlers[requestUrl.query.format]) {
+        contentType = requestUrl.query.format;
+    }
+    else
+    if (accept) {
+        accept = accept.split(";")[0].split(",");
+        n = accept.length;
+        for (i = 0; i < n; i++){
+            contentType = accept[i];
+            if (outputHandlers[contentType]) {
+                response.setHeader("Vary", "Accept");
+                break;
+            }
+        }
+    }
+    if (outputHandler = outputHandlers[contentType]) {
+        response.setHeader("Content-Type", contentType);
+    }
+    return outputHandler;
 }
 
 http.createServer(function (request, response) {
@@ -186,51 +228,38 @@ http.createServer(function (request, response) {
         return;
     }
 
-    //Check content type and find an appropriate handler
-    var headers = request.headers,
-        contentType = request.headers["Content-Type"] || "text/html",
-        outputHandler = ({
-            "text/csv": toCsv,
-            "text/plain": toCsv,
-            "text/html": toHtml,
-            "text/xml": toXml,
-            "application/xml": toXml,
-            "text/json": toJson,
-            "application/json": toJson,
-            "text/javascript": toJavaScript,
-            "application/javascript": toJavaScript
-        })[contentType]
+    //Analyze request
+    var requestUrl = url.parse(request.url, true),
+        query = requestUrl.query,
+        xmlaUrl = query.url,
+        outputHandler
     ;
+    if (typeof(xmlaUrl) === "undefined") {
+        httpError(response, 400, "Missing parameter \"url\"");
+        return;
+    }
+
+    outputHandler = getOutputHandler(request, requestUrl, response);
 
     if (typeof(outputHandler)!=="function") {
         httpError(response, 406);
         return;
     }
 
-    //Analyze request
-    var requestUrl = url.parse(request.url, true);
     console.log("\nnode Request url:");
     console.log(requestUrl);
 
-    var query = requestUrl.query,
-        xmlaUrl = query.url,
-        fragments = requestUrl.pathname.split("/"),
+    //Everything looking good so far
+    response.writeHead(200);
+
+    //Map the path of the original request url to a xmla request
+    var fragments = requestUrl.pathname.split("/"),
         decodedFragments = decodeFragments(fragments),
         numFragments = fragments.length
-    ;
-    requestUrl.fragments = fragments;
-    requestUrl.decodedFragments = decodedFragments;
-
-    if (typeof(xmlaUrl) === "undefined") {
-        httpError(response, 400, "Missing parameter \"url\"");
-        return;
-    }
-
-    //Everything looking good so far, commit to requested content type
-    response.writeHead(200, {"Content-Type": contentType});
-
-    //Set up a xmla4js request.
-    var xmlaRequest = {
+        properties = {},
+        restrictions = {},
+        discoverRequestType = discoverRequestTypes[numFragments],
+        xmlaRequest = {
             async: true,
             url: xmlaUrl,
             success: function(xmla, xmlaRequest, xmlaResponse) {
@@ -252,13 +281,10 @@ http.createServer(function (request, response) {
                 //use it to conclude the response.
                 response.end();
             }
-        },
-        properties = {},
-        restrictions = {},
-        discoverRequestType = discoverRequestTypes[numFragments]
+        }
     ;
-
-    //Map the path of the original request url to a xmla request
+    requestUrl.fragments = fragments;
+    requestUrl.decodedFragments = decodedFragments;
     switch (numFragments) {
         case 8:
             restrictions[discoverRequestTypes[7].key] = decodedFragments[7];
@@ -274,7 +300,7 @@ http.createServer(function (request, response) {
                 if (typeof(query.mdx) !== "undefined") {
                     xmlaRequest.method = X.METHOD_EXECUTE;
                     xmlaRequest.statement = query.mdx;
-                    properties[X.PROP_FORMAT] = query.format || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
+                    properties[X.PROP_FORMAT] = query.resultformat || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
                 }
             }
             restrictions[discoverRequestTypes[3].key] = properties[discoverRequestTypes[3].property] = decodedFragments[3];
@@ -306,6 +332,6 @@ http.createServer(function (request, response) {
     x.request(xmlaRequest);
     console.log("\nSOAP message:");
     console.log(x.soapMessage);
-}).listen(8124);
+}).listen(port);
 
 console.log('Server running at http://127.0.0.1:8124/');
