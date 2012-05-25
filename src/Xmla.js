@@ -94,11 +94,12 @@ if (typeof(require)==="function") _createXhr = function(){
                 delete options.hostname;
             }
             if (!options.path && options.pathname) {
-                options.path = options.pathname;
+                //old versions of node may not give the path, so we need to create it ourselves.
+                options.path = options.pathname + (options.search || "");
             }
-            if (username && password) options.auth = username + ":" + password;
-            options.method = method;
+            options.method = "POST";//method;
             options.headers = {};
+            if (username) options.headers.Authorization = "Basic " + (new Buffer(user + ":" + (password || ""))).toString("base64");
             this.options = options;
             this.changeStatus(-1, 1);
         },
@@ -107,7 +108,7 @@ if (typeof(require)==="function") _createXhr = function(){
                 options = me.options,
                 client
             ;
-            options.headers["Content-Length"] = data.length;
+            options.headers["Content-Length"] = Buffer.byteLength(data);
             switch (options.protocol) {
                 case "http:":
                     client = require("http");
@@ -120,21 +121,33 @@ if (typeof(require)==="function") _createXhr = function(){
                 default:
                     throw "Unsupported protocol " + options.protocol;
             }
+            me.responseText = "";
             var request = client.request(options, function(response){
                 response.setEncoding("utf8");
+                me.changeStatus(-1, 2);
                 response.on("data", function(chunk){
-                    me.changeStatus(-1, 3)
+                    me.responseText += chunk;
+                    me.changeStatus(response.statusCode, 3);
                 });
-            });
-            request.on("response", function(response){
-                me.status = response.statusCode;
-                me.statusText = response.statusCode;
-                response.on("data", function(chunk){
-                    me.responseText = chunk;
+                response.on("error", function(error){
+                    me.changeStatus(response.statusCode, 4);
+                });
+                response.on("end", function(){
                     me.changeStatus(response.statusCode, 4);
                 });
             });
-            request.end(data);
+            request.on("error", function(e){
+                me.responseText = e;
+                me.changeStatus(500, 4);
+            });
+            /* does not work, maybe only not in old node versions.
+            request.setTimeout(this.timeout, function(){
+                request.abort();
+                me.changeStatus(500, 0);
+            });
+            */
+            if (data) request.write(data);
+            request.end();
         },
         setRequestHeader: function(name, value){
             this.options.headers[name] = value;
@@ -156,7 +169,7 @@ function _ajax(options){
             handlerCalled = true;
             switch (xhr.readyState){
                 case 0:
-                    options.aborted(xhr);
+                    if (_isFun(options.aborted)) options.aborted(xhr);
                     break;
                 case 4:
                     if (xhr.status === 200) options.complete(xhr)
@@ -182,6 +195,7 @@ function _ajax(options){
     xhr = _createXhr();
     args = ["POST", options.url, options.async];
     if (options.username && options.password) args = args.concat([options.username, options.password]);
+    xhr.timeout = options.timeout;
     xhr.open.apply(xhr, args);
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");

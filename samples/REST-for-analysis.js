@@ -23,14 +23,24 @@ var http = require("http"),
     url = require("url"),
     xmla = require('../src/Xmla.js'),
     X = xmla.Xmla
+    discoverRequestTypes = [
+        null,
+        {name: X.DISCOVER_DATASOURCES, key: "DataSourceName", property: X.PROP_DATASOURCEINFO},
+        {name: X.DBSCHEMA_CATALOGS, key: "CATALOG_NAME", property: X.PROP_CATALOG},
+        {name: X.MDSCHEMA_CUBES, key: "CUBE_NAME", property: X.PROP_CUBE},
+        {name: X.MDSCHEMA_DIMENSIONS, key: "DIMENSION_UNIQUE_NAME"},
+        {name: X.MDSCHEMA_HIERARCHIES, key: "HIERARCHY_UNIQUE_NAME"},
+        {name: X.MDSCHEMA_LEVELS, key: "LEVEL_NUMBER"},
+        {name: X.MDSCHEMA_MEMBERS}
+    ]
 ;
-var window = {};
 
-function toCsv(xmla, xmlaRequest, xmlaResponse, url){
+function toCsv(xmla, xmlaRequest, xmlaResponse, requestUrl){
 }
 
-function toHtml(xmla, xmlaRequest, xmlaResponse, url){
-    var thead = "", tbody = "", i, n, row;
+function toHtml(xmla, xmlaRequest, xmlaResponse, requestUrl){
+    var thead = "", tbody = "", i, n, row, href;
+    href = url.protocol + "//" + url.hostname;
     switch (xmlaRequest.method) {
         case X.METHOD_EXECUTE:
             break;
@@ -48,10 +58,6 @@ function toHtml(xmla, xmlaRequest, xmlaResponse, url){
             throw "Invalid method " + xmlaRequest.method;
     }
 
-    function generateBreadCrumbs() {
-        var prefix = url.protocol + url.auth + url.host;
-    }
-
     var html = [
         "<!DOCTYPE html>",
         "<html>",
@@ -60,7 +66,7 @@ function toHtml(xmla, xmlaRequest, xmlaResponse, url){
           "</head>",
           "<body>",
             "<h1>",
-            "<a href=\"\">" +  +  "</a>",
+            "<a href=\"" + href + "\">" + href +  "</a>",
             "</h1>",
             "<table border=\"1\">",
               "<caption>",
@@ -80,11 +86,11 @@ function toHtml(xmla, xmlaRequest, xmlaResponse, url){
     return html.join("\r\n");
 }
 
-function toXml(xmla, xmlaRequest, xmlaResponse, url){
+function toXml(xmla, xmlaRequest, xmlaResponse, requestUrl){
     return xmla.responseText;
 }
 
-function toJson(xmla, xmlaRequest, xmlaResponse, url){
+function toJson(xmla, xmlaRequest, xmlaResponse, requestUrl){
     var obj;
     switch (xmlaRequest.method) {
         case X.METHOD_EXECUTE:
@@ -99,9 +105,9 @@ function toJson(xmla, xmlaRequest, xmlaResponse, url){
     return JSON.stringify(obj);
 }
 
-function toJavaScript(xmla, xmlaRequest, xmlaResponse, url){
-    var json = toJson(xmla, xmlaRequest, xmlaResponse, url),
-        callback = url.query["callback"] || "callback"
+function toJavaScript(xmla, xmlaRequest, xmlaResponse, requestUrl){
+    var json = toJson(xmla, xmlaRequest, xmlaResponse, requestUrl),
+        callback = requestUrl.query["callback"] || "callback"
     ;
     return callback + "(" + json + ")";
 }
@@ -113,117 +119,131 @@ function httpError(response, errorCode, message){
 }
 
 http.createServer(function (request, response) {
-  var httpMethod = request.method;
-  if (!({
-      "GET": true,
-      "HEAD": true
-  })[httpMethod]) {
-      httpError(response, 405, "Method must be GET or HEAD");
-      return;
-  }
+    //Check http method
+    var httpMethod = request.method;
+    if (!({
+        "GET": true,
+        "HEAD": true
+    })[httpMethod]) {
+        httpError(response, 405, "Method must be GET or HEAD");
+        return;
+    }
 
-  var headers = request.headers,
-      contentType = request.headers["Content-Type"] || "application/json",
-      outputHandler = ({
-          "text/csv": toCsv,
-          "text/plain": toCsv,
-          "text/html": toHtml,
-          "text/xml": toXml,
-          "application/xml": toXml,
-          "text/json": toJson,
-          "application/json": toJson,
-          "text/javascript": toJavaScript,
-          "application/javascript": toJavaScript
-      })[contentType]
-  ;
+    //Check content type and find an appropriate handler
+    var headers = request.headers,
+        contentType = request.headers["Content-Type"] || "text/html",
+        outputHandler = ({
+            "text/csv": toCsv,
+            "text/plain": toCsv,
+            "text/html": toHtml,
+            "text/xml": toXml,
+            "application/xml": toXml,
+            "text/json": toJson,
+            "application/json": toJson,
+            "text/javascript": toJavaScript,
+            "application/javascript": toJavaScript
+        })[contentType]
+    ;
 
-  if (typeof(outputHandler)!=="function") {
-      httpError(response, 406);
-      return;
-  }
+    if (typeof(outputHandler)!=="function") {
+        httpError(response, 406);
+        return;
+    }
 
-  var requestUrl = url.parse(request.url, true);
+    //Analyze request
+    var requestUrl = url.parse(request.url, true);
+    console.log("\nnode Request url:");
+    console.log(requestUrl);
 
-  var query = requestUrl.query,
-      xmlaUrl = query.url,
-      fragments = requestUrl.pathname.split("/"),
-      numFragments = fragments.length
-  ;
-  if (typeof(xmlaUrl) === "undefined") {
-      httpError(response, 400, "Missing parameter \"url\"");
-      return;
-  }
-  var x;
+    var query = requestUrl.query,
+        xmlaUrl = query.url,
+        fragments = requestUrl.pathname.split("/"),
+        numFragments = fragments.length
+    ;
+    requestUrl.fragments = fragments;
+    if (typeof(xmlaUrl) === "undefined") {
+        httpError(response, 400, "Missing parameter \"url\"");
+        return;
+    }
 
-  response.writeHead(200, {"Content-Type": contentType});
+    //Everything looking good so far, commit to requested content type
+    response.writeHead(200, {"Content-Type": contentType});
 
-  var xmlaRequest = {
-          async: true,
-          url: xmlaUrl,
-          success: function(xmla, xmlaRequest, xmlaResponse) {
-              console.log("\nResponse:");
-              console.log(xmla.responseText);
-              var output = outputHandler.call(null, xmla, xmlaRequest, xmlaResponse, requestUrl);
-              response.write(output);
-          },
-          error: function(xmla, xmlaRequest, exception) {
-              console.log("error");
-              console.log(exception.message);
-              console.log(xmla.responseText);
-              response.write("error!!");
-          },
-          callback: function(){
-              response.end();
-          }
-      },
-      properties = {},
-      restrictions = {},
-      requestTypes = [
-          null,
-          X.DISCOVER_DATASOURCES,
-          X.DBSCHEMA_CATALOGS,
-          X.MDSCHEMA_CUBES,
-          X.MDSCHEMA_DIMENSIONS,
-          X.MDSCHEMA_HIERARCHIES,
-          X.MDSCHEMA_LEVELS,
-          X.MDSCHEMA_MEMBERS
-      ]
-  ;
-  switch (numFragments) {
-      case 7:
-          restrictions["LEVEL_NUMBER"] = fragments[6];
-      case 6:
-          restrictions["HIERARCHY_UNIQUE_NAME"] = fragments[5];
-      case 5:
-          restrictions["DIMENSION_UNIQUE_NAME"] = fragments[4];
-      case 4:
-          if (numFragments === 4) {
-              if (typeof(query.mdx) !== "undefined") {
-                  xmlaRequest.method = X.METHOD_EXECUTE;
-                  xmlaRequest.statement = query.mdx;
-                  properties[X.PROP_FORMAT] = query.format || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
-              }
-          }
-          properties[X.PROP_CUBE] = restrictions["CUBE_NAME"] = fragments[3];
-      case 3:
-          restrictions["CATALOG_NAME"] = properties[X.PROP_CATALOG] = fragments[2];
-          xmlaRequest.restrictions = restrictions;
-      case 2:
-          if (fragments[1] !== "") properties[X.PROP_DATASOURCEINFO] = fragments[1];
-          xmlaRequest.properties = properties;
-          if (!xmlaRequest.method) {
-              xmlaRequest.restrictions = restrictions;
-              xmlaRequest.method = X.METHOD_DISCOVER;
-              xmlaRequest.requestType = (fragments[1] === "") ? X.DISCOVER_DATASOURCES : requestTypes[numFragments];
-          }
-  }
+    //Set up a xmla4js request.
+    var xmlaRequest = {
+            async: true,
+            url: xmlaUrl,
+            success: function(xmla, xmlaRequest, xmlaResponse) {
+                //It worked, call the content handler to write the data to the response
+                console.log("\nResponse:");
+                console.log(xmla.responseText);
+                var output = outputHandler.call(null, xmla, xmlaRequest, xmlaResponse, requestUrl);
+                response.write(output);
+            },
+            error: function(xmla, xmlaRequest, exception) {
+                //It failed, lets write the error to the response.
+                console.log("error");
+                console.log(exception.message);
+                console.log(xmla.responseText);
+                response.write("error!!");
+            },
+            callback: function(){
+                //callback gets always called after either success or error,
+                //use it to conclude the response.
+                response.end();
+            }
+        },
+        properties = {},
+        restrictions = {},
+        discoverRequestType = discoverRequestTypes[numFragments]
+    ;
 
-  x = new xmla.Xmla();
-  console.log("\nRequest:");
-  console.log(xmlaRequest);
-  x.request(xmlaRequest);
-  console.log("\nSOAP message:");
-  console.log(x.soapMessage);
+    //Map the path of the original request url to a xmla request
+    switch (numFragments) {
+        case 7:
+            restrictions[discoverRequestTypes[6].key] = fragments[6];
+        case 6:
+            restrictions[discoverRequestTypes[5].key] = fragments[5];
+        case 5:
+            restrictions[discoverRequestTypes[4].key] = fragments[4];
+        case 4:
+            if (numFragments === 4) {
+                //check if we need to output cube metadata or a mdx query result
+                if (typeof(query.mdx) !== "undefined") {
+                    xmlaRequest.method = X.METHOD_EXECUTE;
+                    xmlaRequest.statement = query.mdx;
+                    properties[X.PROP_FORMAT] = query.format || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
+                }
+            }
+            restrictions[discoverRequestTypes[3].key] = properties[discoverRequestTypes[3].property] = fragments[3];
+        case 3:
+            restrictions[discoverRequestTypes[2].key] = properties[discoverRequestTypes[2].property] = fragments[2];
+            xmlaRequest.restrictions = restrictions;
+        case 2:
+            //check if we need to output datasoures or catalog metadata for a particular datasource
+            if (fragments[1] !== "") {
+                properties[discoverRequestTypes[1].property] = fragments[1];
+                xmlaRequest.properties = properties;
+            }
+            if (!xmlaRequest.method) {
+                xmlaRequest.method = X.METHOD_DISCOVER;
+                if (fragments[1] === "") {
+                    xmlaRequest.requestType = X.DISCOVER_DATASOURCES;
+                }
+                else {
+                    xmlaRequest.requestType = discoverRequestType.name;
+                    xmlaRequest.restrictions = restrictions;
+                }
+            }
+    }
+
+    //do the xmla request, log the messages
+    var x = new xmla.Xmla();
+    console.log("\nxmla4js Request:");
+    console.log(xmlaRequest);
+    x.request(xmlaRequest);
+    console.log("\nSOAP message:");
+    console.log(x.soapMessage);
 }).listen(8124);
 
 console.log('Server running at http://127.0.0.1:8124/');
