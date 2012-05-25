@@ -37,7 +37,43 @@ var port = 8124,
     ]
 ;
 
+function rowsetToCsv(xmlaRowset) {
+    var i, n = xmlaRowset.fieldCount(), text = "",
+        linesep = "\r\n", fieldsep = ",", value, row
+    ;
+    for (i = 0; i < n; i++) {
+        if (i) text += fieldsep;
+        text += xmlaRowset.fieldName(i);
+    }
+    text += linesep;
+    while (row = xmlaRowset.fetchAsArray()){
+        for (i = 0; i < n; i++) {
+            if (i) text += fieldsep;
+            value = row[i];
+            if (value === null) text += "";
+            else
+            if (typeof(value)==="string") text += "\"" +  value.replace(/"/g, "\"\"") +"\""
+            else text += value
+            ;
+        }
+        text += linesep;
+    }
+    return text;
+}
+
+function datasetToCsv(dataset) {
+}
+
 function toCsv(xmla, xmlaRequest, xmlaResponse, requestUrl){
+    var text;
+    if (xmlaResponse instanceof X.Rowset) {
+        text = rowsetToCsv(xmlaResponse);
+    }
+    else
+    if (xmlaResponse instanceof X.Dataset) {
+        text = datasetToCsv(xmlaResponse);
+    }
+    return text;
 }
 
 function discoverRowsetToHtml(xmla, xmlaRequest, xmlaRowset, requestUrl) {
