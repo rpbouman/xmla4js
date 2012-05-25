@@ -39,34 +39,61 @@ function toCsv(xmla, xmlaRequest, xmlaResponse, requestUrl){
 }
 
 function toHtml(xmla, xmlaRequest, xmlaResponse, requestUrl){
-    var thead = "", tbody = "", i, n, row, href;
-    href = url.protocol + "//" + url.hostname;
+    var title = "", heading = "", thead = "", tbody = "", i, n, row, href, links = "",
+        fieldName, keyIndex, keyValue,
+        search = requestUrl.search,
+        fragments = requestUrl.fragments,
+        numFragments = fragments.length,
+        requestType
+    ;
+    console.log(requestUrl);
+    href = requestUrl.pathname + (requestUrl.search || "");
     switch (xmlaRequest.method) {
         case X.METHOD_EXECUTE:
+            heading = xmlaRequest.method;
             break;
         case X.METHOD_DISCOVER:
+            requestType = discoverRequestTypes[(numFragments === 2) && (fragments[1] === "") ? 1 : numFragments];
+            heading = requestType.name;
             n = xmlaResponse.fieldCount();
             for (i = 0; i < n; i++) {
-                thead += "<th>" + xmlaResponse.fieldDef(xmlaResponse.fieldName(i)).label + "</th>";
+                fieldName = xmlaResponse.fieldName(i);
+                if (fieldName === requestType.key) keyIndex = i;
+                thead += "<th>" + xmlaResponse.fieldDef(fieldName).label + "</th>";
             }
+            links = (numFragments === 2) && (fragments[1] === "") ? "" : fragments.join("/");
             while (row = xmlaResponse.fetchAsArray()) {
+                keyValue = row[keyIndex];
+                console.log(keyValue);
+                row[keyIndex] = "<a rel=\"next\" href=\"" + links + "/" + keyValue + search + "\">" + keyValue + "</a>";
                 tbody += "<tr><td>" + row.join("</td><td>") + "</td></tr>";
                 xmlaResponse.next();
             }
+            links = "";
+            for (i = 2; i <= numFragments; i++) {
+                if (links.length) links += "/";
+                links += "<a href=\"" + fragments.slice(0, i).join("/") + search + "\">" + fragments[i-1] + "</a>";
+            }
+            links = "<a rel=\"prev\" href=\"/" + search + "\">/</a>" + links;
             break;
         default:
             throw "Invalid method " + xmlaRequest.method;
     }
-
     var html = [
         "<!DOCTYPE html>",
         "<html>",
           "<head>",
-            "<title></title>",
+            "<title>",
+              title,
+            "</title>",
+            "<style type=\"text/css\">",
+            "td {white-space:nowrap;}",
+            "</style>",
           "</head>",
           "<body>",
+            links,
             "<h1>",
-            "<a href=\"" + href + "\">" + href +  "</a>",
+              heading,
             "</h1>",
             "<table border=\"1\">",
               "<caption>",
