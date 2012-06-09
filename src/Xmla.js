@@ -6539,7 +6539,8 @@ Xmla.Dataset.Cellset.prototype = {
         return valueConverter(text);
     },
 /**
-*   Returns the cell ordinal. This is the logical cell pointer.
+*   Returns the ordinal number of the current cell.
+*   The ordinal is the logical cell pointer, which may be different than the physical cell pointer.
 *   To get the physical cell pointer, see <code><a href="#method_curr">curr()</a></code>
 *   @method cellOrdinal
 *   @return {int} returns the logical cell pointer.
@@ -6547,6 +6548,11 @@ Xmla.Dataset.Cellset.prototype = {
     cellOrdinal: function() {
         return this._cellOrd;
     },
+/*
+ *  TODO: check with andy if we can remove these.
+ *  These methods only work for 2 dimensional sets.
+ *  IMO now that we have methods to compute the ordinal based on tuple indexes, we don't need this anymore.
+ *
     fetchAsArrayOfValues: function(){
         var colArray = [];
 
@@ -6577,6 +6583,7 @@ Xmla.Dataset.Cellset.prototype = {
         }
         return true;
     },
+*/
     _readCell: function(node, object){
         var p, cellProp, cellProperty;
         for (p in this._cellProperties){
@@ -6627,10 +6634,12 @@ Xmla.Dataset.Cellset.prototype = {
     },
 /**
  *  Get a cell by its physical index.
+ *  This method should typically not be called by clients.
+ *  Instead, they should use <code><a href="#method_getByOrdinal">getByOrdinal()</a></code>
 *   @method getByIndex
-*   @param {int} index
-*   @param {object} object
-*   @return {object}
+*   @param {int} index - the physical index of the cell within the cellset.
+*   @param {object} object - optional. An object to copy the properties of the specified cell to. If omitted, a new object will be returned instead.
+*   @return {object} An object that represents the cell.
 */
     getByIndex: function(index, object) {
         this._getCellNode(index);
@@ -6639,9 +6648,9 @@ Xmla.Dataset.Cellset.prototype = {
 /**
  *  Get a cell by its logical index.
 *   @method getByOrdinal
-*   @param {int} ordinal
-*   @param {object} object
-*   @return {object}
+*   @param {int} ordinal - the ordinal number of the cell to retrieve.
+*   @param {object} object - optional. An object to copy the properties of the specified cell to. If omitted, a new object will be returned instead.
+*   @return {object} An object that represents the cell.
 */
     getByOrdinal: function(ordinal, object) {
         var node, ord, idx, lastIndex = this.cellCount() - 1;
@@ -6658,8 +6667,8 @@ Xmla.Dataset.Cellset.prototype = {
 /**
  *  Calculate the ordinal based on the specified tuple indexes.
 *   @method cellOrdinalForTupleIndexes
-*   @param {int...} ordinal
-*   @return {int}
+*   @param {int...} tuple index - a variable list of integer arguments. Arguments represent the index of a tuple on the query axes. Tuple indexes should be specified by descending order of axes. For example, if you have a DataSet with 2 Axes, pass the row tuple index as the first argument, and the column tuple index as the last argument.
+*   @return {int} The ordinal number for this combination of tuple indexes. This return value can be used as argument for <code><a href="#method_getByOrdinal">getByOrdinal()</a></code>
 */
     cellOrdinalForTupleIndexes: function() {
         throw "Not implemented";
