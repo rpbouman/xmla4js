@@ -596,6 +596,9 @@ var QueryDesigner;
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_ROWS).getDom());
+        c = r.insertCell(1);
+        c.id = "query-results";
+        c.innerHTML = "No results to display...";
         return dom;
     },
     getDom: function() {
@@ -660,7 +663,7 @@ var QueryDesignerAxis;
     reset: function() {
         this.hierarchies = [];
         this.dimensions = {};
-        this.setDefs = [];
+        this.setDefs = {};
     },
     getLayout: function() {
         return (this.conf.id === Xmla.Dataset.AXIS_ROWS ? "vertical" : "horizontal");
@@ -699,38 +702,40 @@ var QueryDesignerAxis;
     },
     getHierarchyIndex: function(name) {
         for (var h = this.hierarchies, i = 0, n = h.length; i < n; i++){
-            if (h[i].HIERARCHY_UNIQUE_NAME === name) return i;
+            if (this.getHierarchyName(h[i]) === name) return i;
         }
         return -1;
     },
     getHierarchyByName: function(name) {
         for (var h = this.hierarchies, i = 0, n = h.length; i < n; i++){
-            if (h[i].HIERARCHY_UNIQUE_NAME === name) return h[i];
+            if (this.getHierarchyName(h[i]) === name) return h[i];
         }
         return null;
     },
-    canDropItem: function(target, requestType, metadata) {
-        var dimensionName = metadata.DIMENSION_UNIQUE_NAME,
-            hierarchyName = metadata.HIERARCHY_UNIQUE_NAME,
-            axis
-        ;
-        //if this hierarchy was already used on another axis, then we can't drop this item on this axis.
-        if ((axis = this.conf.queryDesigner.getAxisForHierarchy(hierarchyName)) && axis !== this) return false;
-        switch (requestType) {
-            case "MDSCHEMA_HIERARCHIES":
-                //if this axis already has this hierarchy then we can't drop it again.
-                if (this.hasHierarchy(hierarchyName)) return false;
-                //if this axis already has a hierarchy with this dimension, then we can only replace
-                if (this.dimensions[dimensionName] && target.className.indexOf("MDSCHEMA_HIERARCHIES")) return false;
+    getHierarchyByIndex: function(index) {
+        return this.hierarchies[index];
+    },
+    getHierarchyIndexForTd: function(td) {
+        switch (this.getLayout()) {
+            case "horizontal":
+                return Math.floor(td.parentNode.rowIndex -1);
                 break;
-            case "MDSCHEMA_LEVELS":
-            case "MDSCHEMA_MEMBERS":
-            case "MDSCHEMA_MEASURES":
+            case "vertical":
+                if (td.className === "query-designer-axis-header") return -1;
+                return Math.floor(td.cellIndex);
                 break;
             default:
-                return false;
+                return null;
         }
-        return true;
+    },
+    getMemberIndexForSpan: function(span) {
+        var td = span.parentNode;
+        if (td.tagName !== "TD") return null;
+        var i, spans = gEls(td, "SPAN"), n = spans.length;
+        for (i = 0; i < n; i++) {
+            if (span === spans.item(i)) return i;
+        }
+        return -1;
     },
     getIndexesForTableCell: function(td) {
         var hierarchyIndex, tupleIndex;
@@ -751,17 +756,50 @@ var QueryDesignerAxis;
             tupleIndex: tupleIndex
         };
     },
-    itemDropped: function(target, requestType, metadata) {
-        var hierarchy = metadata.HIERARCHY_UNIQUE_NAME,
-            hierarchyIndex = this.getHierarchyIndex(hierarchy),
-            layout = this.getLayout(),
-            dropIndexes,
-            memberType, memberExpression, memberCaption
+    canDropItem: function(target, requestType, metadata) {
+        //if (target.tagName !== "TD") return;
+        var dimensionName = metadata.DIMENSION_UNIQUE_NAME,
+            hierarchyName = metadata.HIERARCHY_UNIQUE_NAME,
+            axis
         ;
-        if (target.tagName === "TD") {
-            dropIndexes = this.getIndexesForTableCell(target);
+        //if this hierarchy was already used on another axis, then we can't drop this item on this axis.
+        if ((axis = this.conf.queryDesigner.getAxisForHierarchy(hierarchyName)) && axis !== this) return false;
+        switch (requestType) {
+            case "MDSCHEMA_HIERARCHIES":
+                //if this axis already has this hierarchy then we can't drop it again.
+                if (this.hasHierarchy(hierarchyName)) return false;
+                //if this axis already has a hierarchy with this dimension, then we can only replace
+                if (this.dimensions[dimensionName] && target.className.indexOf("MDSCHEMA_HIERARCHIES")) return false;
+                break;
+            case "MDSCHEMA_LEVELS":
+            case "MDSCHEMA_MEMBERS":
+            case "MDSCHEMA_MEASURES":
+
+                break;
+            default:
+                return false;
         }
-        if (hierarchyIndex !== -1) return;
+        return true;
+    },
+    itemDropped: function(target, requestType, metadata) {
+        var hierarchyName = this.getHierarchyName(metadata),
+            hierarchyIndex = this.getHierarchyIndex(hierarchyName),
+            layout = this.getLayout(),
+            dropIndexes, dropHierarchyName,
+            memberType, memberExpression, memberCaption,
+            dropMemberIndex, dropHierarchyIndex
+        ;
+        if (target.tagName === "SPAN") {
+            dropMemberIndex = this.getMemberIndexForSpan(target);
+            target = target.parentNode;
+        }
+        else {
+            dropMemberIndex = -1;
+        }
+        if (target.tagName === "TD") {
+            dropHierarchyIndex = this.getHierarchyIndexForTd(target);
+        }
+
         memberType = requestType;
         switch (requestType) {
             case "MDSCHEMA_HIERARCHIES":
@@ -782,11 +820,13 @@ var QueryDesignerAxis;
                 memberCaption = metadata.MEASURE_CAPTION;
                 break;
         }
-        if (!target.className.indexOf("MDSCHEMA_HIERARCHIES")) {
-            this.replaceHierarchy(metadata, dropIndexes.hierarchyIndex, memberType, memberExpression, memberCaption);
+        if (hierarchyIndex === -1) {
+            //if the hierarchy was not already in this axis, add it.
+            this.addHierarchy(metadata, dropHierarchyIndex+1, memberType, memberExpression, memberCaption);
         }
         else {
-            this.addHierarchy(metadata, dropIndexes.hierarchyIndex, memberType, memberExpression, memberCaption);
+            //if the hierarchy is already present, add the member expression to the member list.
+            this.addMember(metadata, dropMemberIndex, memberType, memberExpression, memberCaption);
         }
     },
     getDefaultMemberCaption: function(hierarchy) {
@@ -814,183 +854,89 @@ var QueryDesignerAxis;
     getHierarchyCount: function(){
         return this.hierarchies.length;
     },
+    addMember: function(member, memberIndex, memberType, memberExpression, memberCaption) {
+        var hierarchyName = this.getHierarchyName(member),
+            hierarchyIndex = this.getHierarchyIndex(hierarchyName),
+            layout = this.getLayout(),
+            dom = this.getDom(),
+            r,c,memberList
+        ;
+        if (hierarchyIndex === -1) throw "Hierarchy not present in this axis";
+        switch(layout) {
+            case "horizontal":
+                r = dom.rows.item(1 + hierarchyIndex);
+                c = r.cells.item(1);
+                break;
+            case "vertical":
+                r = dom.rows.item(2);
+                c = r.cells.item(hierarchyIndex);
+                break;
+        }
+        var el = cEl("SPAN", {
+            "class": memberType,
+            id: memberExpression
+        }, memberCaption);
+        c.insertBefore(el, c.childNodes.item(memberIndex + 1));
+        this.setDefs[hierarchyName].splice(memberIndex + 1, 0, memberExpression);
+        this.getQueryDesigner().axisChanged(this);
+    },
     addHierarchy: function(hierarchy, hierarchyIndex, memberType, memberExpression, memberCaption) {
         var hierarchyName = this.getHierarchyName(hierarchy),
             layout = this.getLayout()
         ;
         if (hierarchyIndex === -1) {
-            hierarchyIndex = this.getHierarchyCount();
-            this.hierarchies[hierarchyIndex] = hierarchy;
+            hierarchyIndex = 0;
         }
-        else {
-            this.hierarchies.splice(hierarchyIndex, 0, hierarchy);
-        }
+        this.hierarchies.splice(hierarchyIndex, 0, hierarchy);
         this.dimensions[this.getDimensionName(hierarchy)] = hierarchyName;
-        var dom = this.getDom(), r, c;
+        this.setDefs[hierarchyName] = [];
+        var dom = this.getDom(), r1, r, c,
+            hierarchyCaption = this.getHierarchyCaption(hierarchy),
+            hierarchyClassName = "MDSCHEMA_HIERARCHIES",
+            memberList = "";
+        ;
 
         switch(layout) {
             case "horizontal":
                 r = dom.insertRow(1 + hierarchyIndex);
                 c = r.insertCell(0);
+                c.innerHTML = hierarchyCaption;
+                c.className = hierarchyClassName;
+                c = r.insertCell(1);
+                c.innerHTML = memberList;
                 break;
             case "vertical":
-                if (!(r = dom.rows.item(1))) r = dom.insertRow(1);
+                if ((r = dom.rows.item(1))) {
+                    r1 = dom.rows.item(2);
+                }
+                else {
+                    r1 = dom.insertRow(1);
+                    r = dom.insertRow(1);
+                }
                 c = r.insertCell(hierarchyIndex);
+                c.innerHTML = hierarchyCaption;
+                c.className = hierarchyClassName;
+                c = r1.insertCell(hierarchyIndex);
+                c.innerHTML = memberList;
                 break;
         }
-        c.innerHTML = this.getHierarchyCaption(hierarchy);
-        c.className = "MDSCHEMA_HIERARCHIES";
-
-        var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef,
-            defaultMember = hierarchy.DEFAULT_MEMBER
-        ;
-        if (numSetDefs) {
-            for (i=0; i < numSetDefs; i++) {
-                setDef = setDefs[i];
-                setDef[hierarchyName] = {
-                    member: memberExpression,
-                    type: memberType
-                }
-                switch(layout) {
-                    case "horizontal":
-                        c = r.insertCell(r.cells.length);
-                        break;
-                    case "vertical":
-                        r = dom.rows.item(2+i);
-                        c = r.insertCell(hierarchyIndex);
-                        break;
-                }
-                c.innerHTML = memberCaption;
-                c.className = memberType;
-            }
-        }
-        else {
-            setDef = {};
-            setDef[hierarchyName] = {
-                member: memberExpression,
-                type: memberType
-            };
-            setDefs.push(setDef);
-            switch(layout) {
-                case "horizontal":
-                    c = r.insertCell(r.cells.length);
-                    break;
-                case "vertical":
-                    r = dom.insertRow(dom.rows.length);
-                    c = r.insertCell(0);
-
-                    break;
-            }
-            c.innerHTML = memberCaption;
-            c.className = memberType;
-        }
-        this.getQueryDesigner().axisChanged(this);
-    },
-    replaceHierarchy: function(metadata, existingHierarchyIndex, memberType, memberExpression, memberCaption) {
-        var oldHierarchy = this.getHierarchyByIndex(existingHierarchyIndex),
-            oldHierarchyName = this.getHierarchyName(oldHierarchy),
-            hierarchyName = this.getHierarchyName(metadata),
-            defaultMember = metadata.DEFAULT_MEMBER,
-            layout = this.getLayout(),
-            dom = this.getDom(),
-            r, c
-        ;
-        this.hierarchies[existingHierarchyIndex] = metadata;
-        this.dimensions[this.getDimensionName(metadata)] = hierarchyName;
-        switch (layout) {
-            case "horizontal":
-                r = dom.rows.item(existingHierarchyIndex+1);
-                c = r.cells(0);
-                break;
-            case "vertical":
-                r = dom.rows.item(1);
-                c = r.cells.item(existingHierarchyIndex);
-                break;
-        }
-        c.innerHTML = this.getHierarchyCaption(metadata);
-        var setDefs = this.setDefs, numSetDefs = setDefs.length, i, setDef;
-        for (i=0; i < numSetDefs; i++) {
-            setDef = setDefs[i];
-            delete setDef[oldHierarchyName];
-            setDef[hierarchyName] = {
-                member: memberExpression,
-                type: memberType
-            }
-            switch(layout) {
-                case "horizontal":
-                    c = r.cells.item(1 + i);
-                    break;
-                case "vertical":
-                    r = dom.rows.item(2 + i);
-                    c = r.cells.item(existingHierarchyIndex);
-                    break;
-            }
-            c.innerHTML = memberCaption;
-            c.className = memberType;
-        }
-        this.getQueryDesigner().axisChanged(this);
-    },
-    addLevel: function(level, hierarchyIndex, tupleIndex) {
-    },
-    addMember: function(member, hierarchyIndex, tupleIndex) {
+        this.addMember(hierarchy, -1, memberType, memberExpression, memberCaption);
+        return;
     },
     getMdx: function() {
-        var hierarchies = this.hierarchies,
-            numHierarchies = hierarchies.length,
-            hierarchy, i,
-            setDefs = this.setDefs, member,
-            numSetDefs = setDefs.length,
-            setDef, i,
-            mdx = "", tuple = "", set = "";
+        var hierarchies = this.hierarchies, i, n = hierarchies.length,
+            hierarchy, hierarchyName,
+            setDefs = this.setDefs, setDef, member,
+            mdx = "";
         ;
-        for (i = 0; i < numSetDefs; i++) {
-            setDef = setDefs[i];
-            for (j = 0; j < numHierarchies; j++) {
-                hierarchy = hierarchies[j];
-                member = setDef[this.getHierarchyName(hierarchy)];
-                switch (member.type) {
-                    case "MDSCHEMA_MEASURES":
-                    case "MDSCHEMA_MEMBERS":
-                        if (tuple.length) tuple += ", ";
-                        tuple += member.member;
-                        break;
-                    case "MDSCHEMA_LEVELS":
-                        if (tuple.length) {
-                            tuple = "CrossJoin({(" + tuple + ")}, " + member.member + ")";
-                        }
-                        else {
-                            tuple = member.member;
-                        }
-                        if (set.length) {
-                            set = "CrossJoin(" + set + ", " + tuple + ")";
-                        }
-                        else {
-                            set = tuple;
-                        }
-                        tuple = "";
-                        break;
-                }
-            }
-            if (tuple.length) {
-                tuple = "{(" + tuple + ")}";
-            }
-            if (set.length && tuple.length) {
-                set = "CrossJoin(" + set + ", " + tuple + ")";
-            }
-            else
-            if (tuple.length) {
-                set = tuple;
-            }
-            if (mdx.length) {
-                mdx = "Union(" + mdx + ", " + set + ")";
-            }
-            else {
-                mdx = set;
-            }
-            set = "";
-            tuple = "";
+        for (i = 0; i < n; i++) {
+            hierarchy = hierarchies[i];
+            hierarchyName = this.getHierarchyName(hierarchy);
+            setDef = setDefs[hierarchyName];
+            if (mdx.length) mdx += " * ";
+            mdx += "Hierarchize({" + setDef.join(", ") + "})";
         }
-        if (numSetDefs) mdx += " ON Axis(" + this.conf.id + ")";
+        if (mdx.length) mdx += " ON Axis(" + this.conf.id + ")";
         return mdx;
     }
 };
@@ -1030,12 +976,12 @@ function clearCubeTree() {
 function initWorkarea() {
     queryDesigner.reset();
     gEl("query-text").innerHTML = "";
-    gEl("query-results").innerHTML = "No results to display.";
+    //gEl("query-results").innerHTML = "No results to display.";
 }
 function clearWorkarea() {
     gEl("query-designer").innerHTML = "";
     gEl("query-text").innerHTML = "";
-    gEl("query-results").innerHTML = "";
+    //gEl("query-results").innerHTML = "";
 }
 function clearUI() {
     gEl("datasources-body").innerHTML = "";
@@ -1069,6 +1015,9 @@ function discoverClicked(){
     showDataSources(true);
     xmla.discoverDataSources({
         url: gEl("url").value,
+        error: function(xmla, request, exception){
+            alert("Snap, an error occurred:" + exception.toString());
+        },
         success: function(xmla, req, resp){
             clearUI();
             resp.eachRow(function(row){
@@ -1172,7 +1121,7 @@ function selectCube(cubeTreeNode) {
                 restrictions: req.restrictions,
                 success: function(xmla, req, resp) {
                     resp.eachRow(function(row){
-                        if (row.DIMENSION_TYPE===2) return;
+                        if (row.DIMENSION_TYPE === Xmla.Rowset.MD_DIMTYPE_MEASURE) return;
                         cubeMetaData.hierarchies[row.HIERARCHY_UNIQUE_NAME] = row;
                         var restrictions = {
                             CATALOG_NAME: req.restrictions.CATALOG_NAME,
@@ -1508,6 +1457,7 @@ function init() {
                     axisTable = dropTarget;
                     break;
             }
+            /*
             if (axisTable && !axisTable.className.indexOf("query-designer-axis ")) {
                 var p1 = pos(axisTable), p2 = pos(queryDesigner.getDom().parentNode);
                 sAtts(queryDesigner.horizontalDragProxy, {
@@ -1531,6 +1481,7 @@ function init() {
             if (queryDesigner) {
                 queryDesigner.hideProxies();
             }
+            */
         },
         endDrag: function(event, ddHandler) {
             var dragProxy = ddHandler.dragProxy,
@@ -1547,20 +1498,18 @@ function init() {
                 metadata = treeNode.getConf().metadata;
                 customClass = treeNode.getCustomClass();
                 switch (tagName) {
+                    case "SPAN":
+                        dropTarget = dropTarget.parentNode;
                     case "TD":
-                        table = dropTarget.parentNode.parentNode.parentNode;
-                        break;
+                        dropTarget = dropTarget.parentNode;
                     case "TR":
-                        table = dropTarget.parentNode.parentNode;
-                        break;
+                        dropTarget = dropTarget.parentNode;
                     case "TBODY":
-                        table = dropTarget.parentNode;
-                        break;
-                    case "TABLE":
-                        table = dropTarget;
-                        break;
+                        dropTarget = dropTarget.parentNode;
+                    default:
                 }
-                if (!table.className.indexOf("query-designer-axis")){
+                if (dropTarget.tagName === "TABLE") table = dropTarget;
+                if (table && !table.className.indexOf("query-designer-axis")){
                     queryDesignerAxis = QueryDesignerAxis.getInstance(table.id);
                     switch (customClass) {
                         case "MDSCHEMA_HIERARCHIES":
@@ -1592,7 +1541,7 @@ function init() {
                 renderDataset(resp);
             },
             error: function(a, b, c) {
-                debugger;
+                alert(c.toString());
             }
         });
     }

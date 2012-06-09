@@ -233,17 +233,20 @@
                 border-style: solid;
                 border-width: 1px;
             }
-            .query-designer {
+            table.query-designer {
             }
-            .query-designer-axis {
+
+            table.query-designer td {
+                vertical-align: top
+            }
+
+            table.query-designer-axis {
                 margin: .5em;
                 border-style: solid;
                 border-width: 1px;
             }
 
             .query-designer-axis td {
-                border-style: solid;
-                border-width: 1px;
                 background-repeat: no-repeat;
                 background-position: 2px -1px;
             }
@@ -267,28 +270,46 @@
                 background-color: lightgrey;
             }
 
-            td.MDSCHEMA_LEVELS {
+            .query-designer-axis td ul {
+                padding-left: 1em;
+                margin: 0px;
+            }
+
+            .query-designer-axis td span {
+                background-repeat: no-repeat;
                 border-style: solid;
                 border-width: 1px;
+                white-space: nowrap;
                 padding: 2px;
+                margin: 2px;
                 text-indent: 2em;
+            }
+
+            .query-designer-axis0 td span, .query-designer-axis1 td span {
+                display: inline;
+                margin-top: 2px; padding: 2px;
+            }
+            .query-designer-axis0 td span:before, .query-designer-axis1 td span:before {
+                content: "\A0 \A0 \A0 \A0 \A0 \A0"
+            }
+
+            .query-designer-axis1 td span {
+                display: block;
+            }
+            .query-designer-axis1 td span:before {
+                content: "\A0"
+            }
+
+            .query-designer-axis td span.MDSCHEMA_LEVELS {
                 background-image: url('level24.gif');
             }
 
-            td.MDSCHEMA_MEMBERS {
-                border-style: solid;
-                border-width: 1px;
-                padding: 2px;
-                text-indent: 2em;
+            .query-designer-axis td span.MDSCHEMA_MEMBERS {
                 background-image: url('property24.gif');
             }
 
-            td.MDSCHEMA_MEASURES {
-                border-style: solid;
-                border-width: 1px;
-                padding: 2px;
-                text-indent: 2em;
-                background-image: url('measure24.gif');
+            .query-designer-axis td span.MDSCHEMA_MEASURES {
+                background-imagee: url('measure24.gif');
             }
 
             div.query-designer-horizontal-drag-proxy {
@@ -306,7 +327,7 @@
         <style type="text/css" id="pivot-table">
             table.pivot-table {
                 border-collapse: collapse;
-                margin: 1em;
+                margin: .5em;
             }
 
             table.pivot-table td {
@@ -340,7 +361,7 @@
             <div id="workarea" class="component main-component">
                 <div id="query-designer"></div>
                 <pre id="query-text"></pre>
-                <div id="query-results"></div>
+                <!--<div id="query-results"></div>-->
             </div>
             <div id="ddDragProxy"></div>
         </div>
