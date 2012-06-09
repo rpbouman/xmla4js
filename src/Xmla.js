@@ -5811,7 +5811,15 @@ Xmla.Dataset.prototype = {
         throw "Not implemented"
     },
 /**
- * Gets all of the XML data into one JS objects
+ * Gets all of the XML data into one JS object. The object consists of the following members:
+ * <ul>
+ *  <li><code>axes</code>: An array of objects that represent the query axes (but not the slicer axis).
+ *  Each axis has a <code>positions</code> member which is an array of tuples, and a <code>hierarchies</code> member, which is an array of hierarchies.</li>
+ *  <li><code>slicerAxis</code>: An object that represents the slicer axis, or null if there is no slicer axis.</li>
+ *  <li><code>cells</code>: An array of cell objects, representing the cellset.</li>
+ * </ul>
+ * @method fetchAsObject
+ * @return {Object}
  */
     fetchAsObject: function() {
         var axes = [], axis, slicerAxis,
