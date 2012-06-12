@@ -3,9 +3,10 @@
     contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
     twitter: @rolandbouman
 
-    This is xmla4js - a stand-alone, cross-browser javascript library for working with "XML for Analysis".
+    This is xmla4js - a stand-alone javascript library for working with "XML for Analysis".
     XML for Analysis (XML/A) is a vendor-neutral industry-standard protocol for OLAP services over HTTP.
-    xmla4js enables web-browser-based analytical business intelligence applications.
+    Xmla4js is cross-browser and node.js compatible and enables web-browser-based analytical business intelligence applications.
+    Xmla4js can be loaded as a common js or amd module.
 
     This file contains human-readable javascript source along with the YUI Doc compatible annotations.
     Note: some portions of the API documentation were adopted from the original XML/A specification.
@@ -30,9 +31,10 @@
 */
 /**
 *
-*  This is xmla4js - a stand-alone, cross-browser javascript library for working with "XML for Analysis".
+*  This is xmla4js - a stand-alone javascript library for working with "XML for Analysis".
 *  XML for Analysis (XML/A) is a vendor-neutral industry-standard protocol for OLAP services over HTTP.
-*  xmla4js enables web-browser-based analytical business intelligence applications.
+*  Xmla4js is cross-browser and node.js compatible and enables web-browser-based analytical business intelligence applications.
+*  Xmla4js can be loaded as a common js or amd module.
 *  @module xmla
 *  @title Xmla
 */
@@ -5622,7 +5624,7 @@ Xmla.Dataset.prototype = {
         for (i = 0; i < numAxisNodes; i++){
             axisNode = axisNodes[i];
             axisName = _getAttribute(axisNode, "name");
-            axis = new Xmla.Dataset.Axis(tmpAxes[axisName], axisNode, axisName, i);
+            axis = new Xmla.Dataset.Axis(this, tmpAxes[axisName], axisNode, axisName, i);
             if (axisName === Xmla.Dataset.AXIS_SLICER) this._slicer = axis;
             else {
                 this._axes[axisName] = axis;
@@ -5886,7 +5888,8 @@ Xmla.Dataset.prototype = {
 *   @class Xmla.Dataset.Axis
 *   @constructor
 */
-Xmla.Dataset.Axis = function(_axisInfoNode, _axisNode, name, id){
+Xmla.Dataset.Axis = function(_dataset, _axisInfoNode, _axisNode, name, id){
+    this._dataset = _dataset;
     this._initAxis(_axisInfoNode, _axisNode);
     this.name = name;
     this.id = id;
@@ -5899,9 +5902,43 @@ Xmla.Dataset.Axis.MEMBER_LEVEL_NAME = "LName";
 Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER = "LNum";
 Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO = "DisplayInfo";
 
+/**
+*   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
+*   Bitwise AND-ing this mask to the member's <code>DisplayInfo</code> property returns an estimate of the number of children of this member.
+*   @property MDDISPINFO_DRILLED_DOWN
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Dataset.Axis.MDDISPINFO_NUM_CHILDREN = 65535;
+/**
+*   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
+*   If this bit is set, it means the member is drilled down.
+*   This is the case whenever at least one child of this member appears on the axis immediately following this member.
+*   @property MDDISPINFO_DRILLED_DOWN
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 1 << 16;
+/**
+*   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
+*   If this bit is set, it means this member has the same parent as the member immediately preceding this member.
+*   @property MDDISPINFO_DRILLED_DOWN
+*   @static
+*   @final
+*   @type int
+*   @default <code>1</code>
+*/
+Xmla.Dataset.Axis.MDDISPINFO_SAME_PARENT_AS_PREV = 1 << 17;
+
 Xmla.Dataset.Axis.prototype = {
+    _dataset: null,
     _tuples: null,
     _members: null,
+    _memberProperties: null,
     numTuples: null,
     numHierarchies: null,
     _tupleIndex: null,
@@ -5941,15 +5978,45 @@ Xmla.Dataset.Axis.prototype = {
             }
             this._hierarchyDefs[hierarchyName] = properties;
         }
-
+    },
+    _initMembers: function(){
+        var root = this._dataset._root,
+            memberSchema, memberSchemaElements, numMemberSchemaElements, memberSchemaElement,
+            type, name, i
+        ;
+        memberSchema = _getComplexType(root, "MemberType");
+        if (!memberSchema)
+            Xmla.Exception._newError(
+                "ERROR_PARSING_RESPONSE",
+                "Xmla.DataSet.Axis",
+                root
+            )._throw();
+        memberSchema = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence")[0],
+        memberSchemaElements = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "element");
+        numMemberSchemaElements = memberSchemaElements.length;
+        this._memberProperties = {};
+        for (i = 0; i < numMemberSchemaElements; i++) {
+            memberSchemaElement = memberSchemaElements[i];
+            type = _getAttribute(memberSchemaElement, "type");
+            name = _getAttribute(memberSchemaElement, "name");
+            this._memberProperties[name] = _typeConverterMap[type];
+        }
     },
     _initAxis: function(_axisInfoNode, _axisNode){
         this.name = _getAttribute(_axisNode, "name");
-
         this._initHierarchies(_axisInfoNode);
+        this._initMembers();
         this._tuples = _getElementsByTagNameNS(_axisNode, _xmlnsDataset, "", "Tuple");
         this.numTuples = this._tuples.length;
         this.reset();
+    },
+    close: function(){
+        this.numTuples = -1;
+        this._tuples = null;
+        this._hierarchyDefs = null;
+        this._hierarchyOrder = null;
+        this._hierarchyIndexes = null;
+        this._members = null;
     },
     _getMembers: function(){
         if (!this.hasMoreTuples()) return null;
@@ -6201,7 +6268,9 @@ Xmla.Dataset.Axis.prototype = {
 *     <li><code>Caption</code> - <code>string</code>. Human friendly name for this member.</li>
 *     <li><code>LName</code> - <code>string</code>. Name of the level to which this member belongs.</li>
 *     <li><code>LNum</code> - <code>int</code>. Number of the level to which this member belongs. Typically, the top-level is level 0, its children are level 1 and so on.</li>
-*     <li><code>DisplayInfo</code> - <code>int</code>.</li>
+*     <li><code>DisplayInfo</code> - <code>int</code>. A 4 byte value. The 2 least significant bytes form a 16 bit integer that conveys the number of children of this member.
+*     The remaining two most significant bytes form a 16 bit bitfield.
+*     </li>
 *   </ul>
 *   <p>
 *   The <code>index</code> and <code>hierarchy</code> properties are non standard and always added by Xmla4js.
@@ -6244,9 +6313,11 @@ Xmla.Dataset.Axis.prototype = {
                 index: index,
                 hierarchy: hierarchyName
             },
-            el
+            el,
+            memberProperties = this._memberProperties,
+            valueConverter
         ;
-        for (property in hierarchy){
+        for (property in memberProperties){
             if (property === "index" || property === "name") continue;
             el = _getElementsByTagNameNS(memberNode, _xmlnsDataset, "", property);
             switch (el.length) {
@@ -6254,7 +6325,8 @@ Xmla.Dataset.Axis.prototype = {
                     member[property] = hierarchy[property]
                     break;
                 case 1: //this is expected, single element for property, get value
-                    member[property] = _getElementText(el[0]);
+                    valueConverter = memberProperties[property];
+                    member[property] = valueConverter(_getElementText(el[0]));
                     break;
                 default:
                     Xmla.Exception._newError(
@@ -6265,6 +6337,23 @@ Xmla.Dataset.Axis.prototype = {
             }
         }
         return member;
+    },
+/**
+*   Check if the member has the specified property.
+*   XML/A defines these standard properties:<ul>
+*     <li><code>UName</code></li>
+*     <li><code>Caption</code></li>
+*     <li><code>LName</code></li>
+*     <li><code>LNum</code></li>
+*     <li><code>DisplayInfo</code></li>
+*   </ul>
+*   The XML/A provider may return specific additional properties.
+*   @method hasMemberProperty
+*   @param propertyName {string} The name of the property to check for.
+*   @return {boolean} returns <code>true</code> if the current member has the specified property, <code>false</code> if it doesn't.
+*/
+    hasMemberProperty: function(propertyName) {
+        return !_isUnd(this._memberProperties[propertyName]);
     },
 /**
 *   Gets the current tuple as an array of members.
@@ -6391,7 +6480,7 @@ Xmla.Dataset.Cellset.prototype = {
         if (!cellSchema)
             Xmla.Exception._newError(
                 "ERROR_PARSING_RESPONSE",
-                "Xmla.Rowset",
+                "Xmla.Dataset.Cellset",
                 root
             )._throw();
         cellSchemaElements = _getElementsByTagNameNS(
@@ -6419,7 +6508,7 @@ Xmla.Dataset.Cellset.prototype = {
             propertyNode = propertyNodes[i];
             propertyNodeTagName = propertyNode.nodeName;
             //find the xsd:element node that describes this property
-              for (j = 0; j < numCellSchemaElements; j++) {
+            for (j = 0; j < numCellSchemaElements; j++) {
                 cellSchemaElement = cellSchemaElements[j];
                 if (_getAttribute(cellSchemaElement, "name") !== propertyNodeTagName) continue;
                 type = _getAttribute(cellSchemaElement, "type");
