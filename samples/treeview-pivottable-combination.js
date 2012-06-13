@@ -275,7 +275,7 @@ TreeNode.getInstance = function(id){
 };
 TreeNode.lookupTreeNode = function(el){
     while (el && el.className.indexOf(TreeNode.prefix)) {
-        if (!(el = el.parentNode)) return null;
+        if ((el = el.parentNode) === doc) return null;
     }
     return TreeNode.getInstance(el.id);
 };
@@ -799,7 +799,7 @@ var QueryDesignerAxis;
         if (target.tagName === "TD") {
             dropHierarchyIndex = this.getHierarchyIndexForTd(target);
         }
-
+        if (typeof(dropHierarchyIndex)==="undefined") return;
         memberType = requestType;
         switch (requestType) {
             case "MDSCHEMA_HIERARCHIES":
@@ -872,8 +872,12 @@ var QueryDesignerAxis;
                 c = r.cells.item(hierarchyIndex);
                 break;
         }
+        if (!c) {
+            debugger; //trace stack, we should never have arrived here!
+        };
         var el = cEl("SPAN", {
             "class": memberType,
+            title: memberExpression,
             id: memberExpression
         }, memberCaption);
         c.insertBefore(el, c.childNodes.item(memberIndex + 1));
@@ -932,11 +936,10 @@ var QueryDesignerAxis;
         for (i = 0; i < n; i++) {
             hierarchy = hierarchies[i];
             hierarchyName = this.getHierarchyName(hierarchy);
-            setDef = setDefs[hierarchyName];
-            if (mdx.length) mdx += " * ";
-            mdx += "Hierarchize({" + setDef.join(", ") + "})";
+            setDef = "{" + setDefs[hierarchyName].join(",") + "}";
+            mdx = mdx ? "CrossJoin(" + mdx + ", " + setDef + ")" : setDef;
         }
-        if (mdx.length) mdx += " ON Axis(" + this.conf.id + ")";
+        if (mdx.length) mdx  = "Hierarchize(" + mdx + ") ON Axis(" + this.conf.id + ")";
         return mdx;
     }
 };
@@ -950,7 +953,9 @@ QueryDesignerAxis.getInstance = function(id){
 *   Application
 *
 ***************************************************************/
-var xmla = new Xmla(),
+var xmla = new Xmla({
+        async: true
+    }),
     ddHandler = new DDHandler({
         node: "workspace",
         dragProxy: "ddDragProxy"
@@ -993,20 +998,13 @@ function metadataClicked(e) {
     var target = e.getTarget(),
         treeNode
     ;
-    if (target.tagName === "DIV" && target.id === "datasources-head") {
-        toggleDataSources();
-    }
-    else
-    if (target.tagName === "SPAN" && target.className === "toggle") {
-        treeNode = TreeNode.lookupTreeNode(target);
-        if (!treeNode) return;
-        treeNode.toggle();
-    }
+    if (target.tagName === "DIV" && target.id === "datasources-head") toggleDataSources();
     else {
         treeNode = TreeNode.lookupTreeNode(target);
-        if (treeNode.getCustomClass() === "MDSCHEMA_CUBES") {
-            selectCube(treeNode);
-        }
+        if (!treeNode) return;
+        if (target.tagName === "SPAN" && target.className === "toggle") treeNode.toggle();
+        else
+        if (treeNode.getCustomClass() === "MDSCHEMA_CUBES") selectCube(treeNode);
     }
 }
 function discoverClicked(){
@@ -1072,12 +1070,15 @@ function discoverClicked(){
                                             }
                                         })).getId();
                                     });
+                                    resp.close();
                                 }
                             });
                         });
+                        resp.close();
                     }
                 });
             });
+            resp.close();
         }
     });
 }
@@ -1115,6 +1116,7 @@ function selectCube(cubeTreeNode) {
                     metadata: row
                 });
             });
+            resp.close();
             xmla.discoverMDHierarchies({
                 url: req.url,
                 properties: req.properties,
@@ -1214,6 +1216,7 @@ function selectCube(cubeTreeNode) {
                                                                                 loadChildren: loadChildren
                                                                             })).getId();
                                                                         });
+                                                                        resp.close();
                                                                         if (iFun(callback)) callback.call(win);
                                                                     }
                                                                 });
@@ -1229,18 +1232,21 @@ function selectCube(cubeTreeNode) {
                                                                     loadChildren: loadChildren
                                                                 }).getId());
                                                             });
+                                                            resp.close();
                                                             if (iFun(callback)) callback.call(win);
                                                         }
                                                     });
                                                 }
                                             })).getId();
                                         });
+                                        resp.close();
                                         if (iFun(callback)) callback.call(win);
                                     }
                                 });
                             }
                         })).getId();
                     });
+                    resp.close();
                 }
             });
         }
@@ -1254,142 +1260,139 @@ function getTupleName(tuple, hierarchy) {
     return mName;
 }
 
-function renderAxisHorizontally(axis, t) {
-    var r, c, rows, cName, oName, span;
-    if (!t) {
-        t = cEl("TABLE", {
-            "class": "pivot-table",
-            cellpadding: 0,
-            cellspacing: 0
-        });
-    }
-    rows = t.rows;
+function computeAxisLevels(axis) {
+    var numLevels = 0;
     axis.eachHierarchy(function(hierarchy){
-        r = t.insertRow(rows.length);
+        var levels = {}, level;
         axis.eachTuple(function(tuple){
-            if ((cName = getTupleName(tuple, hierarchy)) !== oName) {
-                c = r.insertCell(r.cells.length);
-                c.className = "th";
-                c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
-                span = 1;
-                oName = cName;
-            }
-            c.colSpan = span++;
+            var member = tuple.members[hierarchy.index];
+            levels[member.LNum] = true;
         });
+        hierarchy.levels = [];
+        for (level in levels) {
+            hierarchy.levels.push(parseInt(level));
+            numLevels++;
+        }
+        hierarchy.levels = hierarchy.levels.sort();
     });
-    return t;
-}
-
-function renderTable(columnAxis, rowAxis){
-    var t = cEl("TABLE", {
-        "class": "pivot-table",
-        cellpadding: 0,
-        cellspacing: 0
-    }), numRowHierarchies = rowAxis ? rowAxis.hierarchyCount() : 0,
-        numColumnHierarchies = columnAxis ? columnAxis.hierarchyCount() : 0,
-        numColumnTuples = columnAxis ? columnAxis.tupleCount() : 0,
-        rows = t.rows, r, c, cName, oName, span
-    ;
-    if (numColumnHierarchies) {
-        renderAxisHorizontally(columnAxis, t);
-    }
-    if (numRowHierarchies) {
-        r = rows.item(0);
-        c = r.insertCell(0);
-        sAtts(c, {
-            rowspan: numColumnHierarchies,
-            colspan: numRowHierarchies,
-            "class": "th"
-        });
-        rowAxis.eachHierarchy(function(hierarchy){
-            this.eachTuple(function(tuple){
-                r = rows.item(numColumnHierarchies + tuple.index);
-                if (!r) r = t.insertRow(rows.length);
-                if ((cName = getTupleName(tuple, hierarchy)) !== oName) {
-                    c = r.insertCell(r.cells.length);
-                    c.className = "th";
-                    c.innerHTML = tuple.hierarchies[hierarchy.name][Xmla.Dataset.Axis.MEMBER_CAPTION];
-                    span = 1;
-                    oName = cName;
-                }
-                c.rowSpan = span++;
-                if (hierarchy.index === numRowHierarchies - 1) {
-                    for (var i = numRowHierarchies, n = numRowHierarchies + numColumnTuples; i < n; i++) {
-                        r.insertCell(r.cells.length);
-                    }
-                }
-            });
-        });
-    }
-    else {
-        r = t.insertRow(numColumnHierarchies);
-        if (!numColumnTuples) {
-            numColumnTuples = 1;
-        }
-        for (var i = 0; i < numColumnTuples; i++) {
-            r.insertCell(i);
-        }
-    }
-    return t;
-}
-
-function renderCellset(cellset, table, rowAxis, columnAxis, pageTuple){
-    var rows = table.rows, i, j, r, c, cell,
-        rowOffset = columnAxis ? columnAxis.hierarchyCount() : 0,
-        columnCount = columnAxis ? columnAxis.tupleCount() : 1,
-        rowCount = rowAxis ? rowAxis.tupleCount() : 1,
-        cellProperty = cellset.hasCellProperty("FmtValue") ? "FmtValue" : "Value",
-        getCell
-    ;
-    if (pageTuple!==-1) {
-        getCell = function() {return cellset.getByTupleIndexes(pageTuple, i, j);}
-    }
-    else
-    if (rowAxis) {
-        getCell = function() {return cellset.getByTupleIndexes(i, j);}
-    }
-    else
-    if (columnAxis) {
-        getCell = function() {return cellset.getByTupleIndexes(j);}
-    }
-    else {
-        getCell = function() {return cellset.getByTupleIndexes();}
-    }
-    for (i = 0; i < rowCount; i++) {
-        r = rows.item(i + rowOffset);
-        columnOffset = 0;
-        while ((c = r.cells.item(columnOffset)).className === "th") {
-            columnOffset++;
-        };
-        for (j = 0; j < columnCount; j++) {
-            c = r.cells.item(j + columnOffset);
-            cell = getCell();
-            c.innerHTML = cell ? cell[cellProperty] : "";
-        }
-    }
+    return numLevels;
 }
 
 function renderDataset(dataset) {
-    var start = new Date(), end,
-        container = gEl("query-results"),
-        table, cellset = dataset.getCellset(),
+    var container = gEl("query-results"),
+        t = cEl("TABLE", {
+            "class": "pivot-table",
+//            border: 1,
+            cellpadding: 0,
+            cellspacing: 0
+        }),
         columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
         rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
-        pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null
+        tupleName, prevTupleName,
+        r, c, memberCell,
+        member, level
     ;
     container.innerHTML = "";
-    if (pageAxis) {
-        table = renderAxisHorizontally(pageAxis);
-        container.appendChild(table);
+    container.appendChild(t);
+    if (columnAxis) {
+        computeAxisLevels(columnAxis);
+        columnAxis.eachHierarchy(function(hierarchy){
+            prevTupleName = null;
+            span = 0;
+            var i, levels = hierarchy.levels, n = levels.length;
+            for (i = 0; i < levels.length; i++){
+                r = t.insertRow(t.rows.length);
+                c = null;
+                level = -1;
+                columnAxis.eachTuple(function(tuple){
+                    member = tuple.members[hierarchy.index];
+                    if (member.LNum === levels[i]) {
+                        tupleName = getTupleName(tuple, hierarchy);
+                        if (tupleName === prevTupleName) {
+                            memberCell.colSpan++;
+                        }
+                        else {
+                            memberCell = r.insertCell(r.cells.length);
+                            memberCell.className = "th MDSCHEMA_MEMBERS";
+                            memberCell.colSpan = 1;
+                            memberCell.innerHTML = member.Caption;
+                            c = null;
+                        }
+                        prevTupleName = tupleName;
+                    }
+                    else
+                    if (member.LNum > levels[i]) {
+                        memberCell.colSpan++;
+                    }
+                    else
+                    if (member.LNum < levels[i]) {
+                        if (level !== member.LNum || c === null) {
+                            c = r.insertCell(r.cells.length);
+                            c.className = "th";
+                            level = member.LNum;
+                        }
+                        else {
+                            c.colSpan++;
+                        }
+                    }
+                });
+            }
+        });
+        columnAxis.close();
     }
-    table = renderTable(columnAxis, rowAxis);
-    container.appendChild(table);
-    end = new Date();
-    container.appendChild(cEl("div", null, "Time to render headers: " + (end.getTime() - start.getTime()) + "ms"));
-    start = new Date();
-    renderCellset(cellset, table, rowAxis, columnAxis, pageAxis ? 0 : -1);
-    end = new Date();
-    container.appendChild(cEl("div", null, "Time to render cells: " + (end.getTime() - start.getTime()) + "ms"));
+    if (rowAxis) {
+        var rowOffset = t.rows.length;
+        var numLevels = computeAxisLevels(rowAxis);
+        c = t.rows[0].insertCell(0);
+        c.colSpan = numLevels;
+        c.rowSpan = rowOffset;
+        rowAxis.eachHierarchy(function(hierarchy){
+            c = null;
+            prevTupleName = null;
+            span = 0;
+            var i, levels = hierarchy.levels, n = levels.length;
+            for (i = 0; i < levels.length; i++){
+                c = null;
+                memberCell = null;
+                rowAxis.eachTuple(function(tuple){
+                    r = (!hierarchy.index && !i) ? t.insertRow(t.rows.length) : t.rows[rowOffset + tuple.index];
+                    member = tuple.members[hierarchy.index];
+                    if (member.LNum === levels[i]) {
+                        tupleName = getTupleName(tuple, hierarchy);
+                        if (tupleName !== prevTupleName) {
+                            memberCell = r.insertCell(r.cells.length);
+                            memberCell.className = "th MDSCHEMA_MEMBERS";
+                            memberCell.innerHTML = member.Caption;
+                            c = null;
+                        }
+                        else {
+                            memberCell.rowSpan++;
+                        }
+                        prevTupleName = tupleName;
+                    }
+                    else {
+                        if (member.LNum < levels[i]) {
+                            memberCell = r.cells.item(r.cells.length - 1);
+                            if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS") memberCell.colSpan++;
+                        }
+                        else {
+                            if (c === null) {
+                                c = r.insertCell(r.cells.length);
+                                c.className = "th";
+                                c.innerHTML = "&#160;";
+                                memberCell = null;
+                            }
+                            else {
+                                c.rowSpan++;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        rowAxis.close();
+    }
+    dataset.close();
 }
 
 function init() {

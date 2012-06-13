@@ -25,7 +25,7 @@
         <title></title>
         <style type="text/css" id="main">
             body {
-                font: message-box;
+                font-family: Arial;
                 font-size: 10pt;
             }
             #workarea {
@@ -87,6 +87,9 @@
                 background-color: white;
             }
 
+            .toggle {
+                font-family: monospace;
+            }
         </style>
         <style type="text/css" id="tree-section">
             .section-header {
@@ -113,7 +116,6 @@
         </style>
         <style type="text/css" id="tree">
             div.node > div.head > span.toggle {
-                font-family: monospace;
                 height: 26px!important;
             }
 
@@ -261,7 +263,7 @@
                 content: ": ";
             }
 
-            td.MDSCHEMA_HIERARCHIES {
+            .query-designer-axis td.MDSCHEMA_HIERARCHIES {
                 border-style: solid;
                 border-width: 1px;
                 padding: 2px;
@@ -331,15 +333,43 @@
             }
 
             table.pivot-table td {
+                white-space: nowrap;
                 border-width: 1px;
-                border-style: solid;
                 padding: 2px;
-                border-color: lightgrey
             }
+
+            table.pivot-table td.td {
+                border-style: solid;
+                border-color: darkgrey;
+            }
+
             table.pivot-table td.th {
+                white-space: nowrap;
                 background-color: lightgrey;
                 border-color: grey;
+                border-style: none none none solid;
             }
+
+            table.pivot-table td.thh {
+                text-indent: 2em;
+                background-repeat: no-repeat;
+                font-weight: bold;
+            }
+
+            table.pivot-table td.MDSCHEMA_HIERARCHIES {
+                background-image: url('hierarchy24.gif');
+                border-style: solid none solid solid;
+            }
+
+            table.pivot-table td.MDSCHEMA_LEVELS {
+                background-image: url('level24.gif');
+                border-style: solid solid dotted none;
+            }
+
+            table.pivot-table td.MDSCHEMA_MEMBERS {
+                border-style: solid solid none solid;
+            }
+
         </style>
     </head>
     <body>
