@@ -625,6 +625,9 @@ function _xjs(xml) {
 *   (MS Word format. For other formats,
 *   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>).
 *
+*   The optional options parameter sets standard options for this Xmla instnace.
+*   If ommitted, a copy of the <code><a href="#property_defaultOptions">defaultOptions</code></a> will be used.
+*
 *   @class Xmla
 *   @constructor
 *   @param options Object standard options
@@ -653,12 +656,26 @@ Xmla = function(options){
     return this;
 };
 
+/**
+* These are the default options used for new Xmla instances in case no custom properties are set.
+* It sets the following properties:
+* <ul>
+*   <li><code>requestTimeout</code> int: 30000 - number of milliseconds before a request to the XML/A server will timeout </li>
+*   <li><code>async</code> boolean: false - determines whether synchronous or asynchronous communication with the XML/A server will be used.</li>
+*   <li><code>addFieldGetters</code> boolean: true - determines whether Xml.Rowset objects will be created with a getter method for each column.</li>
+*   <li><code>forceResponseXMLEmulation</code> boolean: false - determines whether to parse responseText or to use the native responseXML from the xhr object.</li>
+* </ul>
+*
+*  @property defaultOptions
+*  @static
+*  @type object
+**/
 Xmla.defaultOptions = {
     requestTimeout: 30000,            //by default, we bail out after 30 seconds
     async: false,                     //by default, we do a synchronous request
     addFieldGetters: true,            //true to augment rowsets with a method to fetch a specific field.
-    forceResponseXMLEmulation: true   //true to use our own XML parser instead of XHR's native responseXML. Useful for testing.
-    //forceResponseXMLEmulation: false   //true to use our own XML parser instead of XHR's native responseXML. Useful for testing.
+    //forceResponseXMLEmulation: true   //true to use our own XML parser instead of XHR's native responseXML. Useful for testing.
+    forceResponseXMLEmulation: false   //true to use our own XML parser instead of XHR's native responseXML. Useful for testing.
 };
 
 /**
@@ -670,7 +687,7 @@ Xmla.defaultOptions = {
 *   @static
 *   @final
 *   @type string
-*   @default <code>Discover</code>
+*   @default Discover
 */
 Xmla.METHOD_DISCOVER = "Discover";
 /**
@@ -5430,7 +5447,7 @@ while (rowObject = rowset.fetchAsObject()){
 *   @param map
 *   @param key
 *   @param row
-*   @returns {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.
+*   @return {object} a tree using column values as branch names, and storing a row or an array of rows at the leaves.
 */
     mapAsObject: function(map, key, row){
         var k, v, p, i, len = key.length, last = len - 1, m = map;
@@ -5453,7 +5470,7 @@ while (rowObject = rowset.fetchAsObject()){
 /**
 *   Fetch all rows as an object, store them as proprties in an object (which acts as map).
 *   @method mapAllAsObject
-*   @key {string|array} OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.
+*   @param key {string|array} OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.
 *   @param map {object} OPTIONAL. The object that is used as map. Rows are added as properties to this map. If not specified, a new object is created
 *   @return {object}
 */
@@ -5905,13 +5922,13 @@ Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO = "DisplayInfo";
 /**
 *   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
 *   Bitwise AND-ing this mask to the member's <code>DisplayInfo</code> property returns an estimate of the number of children of this member.
-*   @property MDDISPINFO_DRILLED_DOWN
+*   @property MDDISPINFO_CHILDREN_CARDINALITY
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default 65535
 */
-Xmla.Dataset.Axis.MDDISPINFO_NUM_CHILDREN = 65535;
+Xmla.Dataset.Axis.MDDISPINFO_CHILDREN_CARDINALITY = 65535;
 /**
 *   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
 *   If this bit is set, it means the member is drilled down.
@@ -5922,17 +5939,17 @@ Xmla.Dataset.Axis.MDDISPINFO_NUM_CHILDREN = 65535;
 *   @type int
 *   @default <code>1</code>
 */
-Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 1 << 16;
+Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 65536;
 /**
 *   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
 *   If this bit is set, it means this member has the same parent as the member immediately preceding this member.
-*   @property MDDISPINFO_DRILLED_DOWN
+*   @property MDDISPINFO_SAME_PARENT_AS_PREV
 *   @static
 *   @final
 *   @type int
 *   @default <code>1</code>
 */
-Xmla.Dataset.Axis.MDDISPINFO_SAME_PARENT_AS_PREV = 1 << 17;
+Xmla.Dataset.Axis.MDDISPINFO_SAME_PARENT_AS_PREV = 131072;
 
 Xmla.Dataset.Axis.prototype = {
     _dataset: null,
@@ -6063,9 +6080,9 @@ Xmla.Dataset.Axis.prototype = {
 *     <li><code>name</code> <code>string</code> The name of this hierarchy</li>
 *   </ul>
 *   <p>The callback may return <code>false</code> to abort iteration. If the callback does not return <code>false</code>, iteration will resume until all hierarchies are traversed.</p>
-*   @param {function()} callback. A function that will be called for each hierarchy. The hierarchy is passed as an object as the first argument to the callback.
-*   @param {object} scope. The object that will be used as scope when executing the callback function. If this is undefined or <code>null</code>, the Axis' <code>this</code> pointer will be used.
-*   @param {object} args. Additional data to be passed to the callback function..
+*   @param {function()} callback A function that will be called for each hierarchy. The hierarchy is passed as an object as the first argument to the callback. For the structure of the hierarchy object, see <a href="#method_hierarchy">hierarchy()</a>.
+*   @param {object} scope The object that will be used as scope when executing the callback function. If this is undefined or <code>null</code>, the Axis' <code>this</code> pointer will be used.
+*   @param {object} args Additional data to be passed to the callback function..
 *   @method eachHierarchy
 *   @return {boolean} Returns <code>true</code> if all hierarchies were visited and the callback did not return <code>false</code>. Returns <code>false</code> if the callback returned <code>false</code> and further iteration was aborted.
 */
@@ -6147,9 +6164,9 @@ Xmla.Dataset.Axis.prototype = {
 *   <p>Calls a callback function for each tuple in this Axis object.</p>
 *   <p>The callback function is passed an object that represents the current tuple. (see <code><a href="#method_getTuple">getTuple()</a></code> for a description of the tuple format.)</p>
 *   <p>The callback may return <code>false</code> to abort iteration. If the callback does not return <code>false</code>, iteration will resume until all tuples are traversed.</p>
-*   @param {function()} callback. A function that will be called for each tuple. The tuple is passed as an object as the first argument to the callback.
-*   @param {object} scope. The object that will be used as scope when executing the callback function. If this is undefined or <code>null</code>, the Axis' <code>this</code> pointer will be used.
-*   @param {object} args. Additional data to be passed as the second argument to the callback function.
+*   @param {function()} callback A function that will be called for each tuple. The tuple is passed as an object as the first argument to the callback.
+*   @param {object} scope The object that will be used as scope when executing the callback function. If this is undefined or <code>null</code>, the Axis' <code>this</code> pointer will be used.
+*   @param {object} args Additional data to be passed as the second argument to the callback function.
 *   @method eachTuple
 *   @return {boolean} Returns <code>true</code> if all tuples were visited and the callback did not return <code>false</code>. Returns <code>false</code> if the callback returned <code>false</code> and further iteration was aborted.
 */
@@ -6232,6 +6249,17 @@ Xmla.Dataset.Axis.prototype = {
     },
 /**
 *   Gets the hierarchy identified by the specified index or hierarchyName, or the current hierarchy (in case the argument is omitted).
+*   The hierarchy is returned as an object with the following properties:<ul>
+*     <li>index {int} Integer indicating the ordinal position of this hiearchy within the axis.</li>
+*     <li>name {string} String that holds the name of this hierarchy.</li>
+*   </ul>
+*   In addition, the XML/A specification suggests the following standard properties:<ul>
+*     <li>UName {string} the unique name of this hierarchy</li>
+*     <li>Caption {string} the human friendly name for this hierarchy</li>
+*     <li>LName {string} the level name</li>
+*     <li>LNum {int} the level number</li>
+*     <li>DisplayInfo {int} displayinfo</li>
+*   </ul>
 *   @method hierarchy
 *   @param hierarchyIndexOrName {int|string} The ordinal or name of the hierarchy that is to be retrieved. When omitted, the the current hierarchy is returned.
 *   @return {string} The hierarchy specified by the argument index or name, or the current hierarchy if the argument is omitted.
@@ -7174,7 +7202,7 @@ Xmla.Exception.prototype = {
     }
 };
 
-/**
+/*
 *   Register Xmla.
 *   In an amd (https://github.com/amdjs/amdjs-api/wiki/AMD) environment, use the define function
 *   Otherwise, add it to the global window variable.
