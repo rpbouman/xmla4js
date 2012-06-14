@@ -586,6 +586,7 @@ var QueryDesigner;
             }),
             r, c
         ;
+        /*
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(0);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
@@ -600,6 +601,19 @@ var QueryDesigner;
         c = r.insertCell(1);
         c.id = id + "-query-results";
         c.innerHTML = "No results to display...";
+        */
+
+        r = dom.insertRow(dom.rows.length);
+        c = r.insertCell(r.cells.length);
+        c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
+
+        r = dom.insertRow(dom.rows.length);
+        c = r.insertCell(r.cells.length);
+        c.appendChild(this.getAxis(Xmla.Dataset.AXIS_ROWS).getDom());
+
+        c = r.insertCell(r.cells.length);
+        c.appendChild(this.getAxis(Xmla.Dataset.AXIS_COLUMNS).getDom());
+
         return dom;
     },
     getDom: function() {
@@ -974,20 +988,35 @@ var PivotTable;
         return mName;
     },
     computeAxisLevels: function (axis) {
-        var numLevels = 0;
-        axis.eachHierarchy(function(hierarchy){
-            var levels = {}, level;
-            axis.eachTuple(function(tuple){
-                var member = tuple.members[hierarchy.index];
+        var numLevels = 0,
+            tuples = [],
+            n = tuples.length, i,
+            hierarchies = axis.getHierarchies(),
+            m = axis.hierarchyCount(), j, hierarchy,
+            level, levels, allLevels = {}
+        ;
+        axis.eachTuple(function(tuple){
+            var member, members = tuple.members;
+            tuples.push(tuple);
+            for (j = 0; j < m; j++){
+                member = members[j];
+                if (!(levels = allLevels[member.hierarchy])){
+                    allLevels[member.hierarchy] = levels = {};
+                }
                 levels[member.LNum] = true;
-            });
+            }
+        });
+        axis.tuples = tuples;
+        for (hierarchy in hierarchies){
+            levels = allLevels[hierarchy];
+            hierarchy = hierarchies[hierarchy];
             hierarchy.levels = [];
             for (level in levels) {
                 hierarchy.levels.push(parseInt(level));
                 numLevels++;
             }
             hierarchy.levels = hierarchy.levels.sort();
-        });
+        }
         return numLevels;
     },
     getDom: function() {
@@ -1005,7 +1034,9 @@ var PivotTable;
                     level = -1,
                     prevTupleName = null
                 ;
-                axis.eachTuple(function(tuple){
+                var j, tuples = axis.tuples, m = tuples.length, tuple;
+                for (var j = 0; j < m; j++){
+                    tuple = tuples[j];
                     var member = tuple.members[hierarchy.index];
                     if (member.LNum === levels[i]) {
                         tupleName = me.getTupleName(tuple, hierarchy);
@@ -1037,7 +1068,7 @@ var PivotTable;
                             c.colSpan++;
                         }
                     }
-                });
+                }
             }
         });
     },
@@ -1054,7 +1085,9 @@ var PivotTable;
                     memberCell = null,
                     prevTupleName
                 ;
-                axis.eachTuple(function(tuple){
+                var j, tuples = axis.tuples, m = tuples.length, tuple;
+                for (var j = 0; j < m; j++){
+                    tuple = tuples[j];
                     var r = (!hierarchy.index && !i) ? table.insertRow(rows.length) : rows[rowOffset + tuple.index],
                         cells = r.cells,
                         member = tuple.members[hierarchy.index],
@@ -1090,7 +1123,7 @@ var PivotTable;
                             }
                         }
                     }
-                });
+                }
             }
         });
     },
@@ -1101,24 +1134,25 @@ var PivotTable;
             columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
             table = this.table,
             rows = table.rows,
-            r, c
+            r, c,
+            i, n = columnAxis.tupleCount(), colTuples, colTuple,
+            j, m, rowTuples, rowTuple
         ;
-        if (!rowAxis) {
-            r = table.insertRow(rowOffset);
+        if (rowAxis) {
+            m = rowAxis.tupleCount();
+            for (j = 0; j < m; j++){
+                r = rows[rowOffset + j];
+                for (i = 0; i < n; i++){
+                    r.insertCell(r.cells.length).className = "td";
+                }
+            }
         }
-        columnAxis.eachTuple(function(colTuple){
-            if (rowAxis) {
-                rowAxis.eachTuple(function(rowTuple){
-                    r = rows[rowOffset + rowTuple.index];
-                    c = r.insertCell(r.cells.length);
-                    c.className = "td";
-                })
+        else {
+            r = table.insertRow(rowOffset);
+            for (i = 0; i < n; i++) {
+                r.insertCell(r.cells.length).className = "td";
             }
-            else {
-                c = r.insertCell(r.cells.length);
-                c.className = "td";
-            }
-        });
+        }
     },
     loadCells: function(columnAxis, rowAxis, pageAxis){
         var args = [],
@@ -1127,40 +1161,65 @@ var PivotTable;
             rowOffset = this.getRowOffset(),
             dataset = this.dataset,
             cellset = dataset.getCellset(),
+            cell, cells, from, to,
             func = cellset.getByTupleIndexes,
             columnAxis = dataset.getColumnAxis(),
             axisCount = dataset.axisCount(),
-            cell, td
+            td,
+            i, n = columnAxis.tupleCount(), colTuples, colTuple,
+            j, m, rowTuples, rowTuple,
+            k, l;
         ;
         if (dataset.hasPageAxis()) {
             args.push(dataset.getPageAxis.tupleIndex());
         }
         if (dataset.hasRowAxis()) {
-            dataset.getRowAxis().eachTuple(function(rTuple){
-                var index = rTuple.index;
-                r = rows[rowOffset + index];
+            m = dataset.getRowAxis().tupleCount();
+
+            args[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = 0;
+            args[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = 0;
+            from = cellset.cellOrdinalForTupleIndexes.apply(cellset, args);
+
+            args[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = m - 1;
+            args[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = n - 1;
+            to = cellset.cellOrdinalForTupleIndexes.apply(cellset, args);
+
+            cells = cellset.fetchRangeAsArray(from, to);
+            cell = cells.length ? cells[0] : null;
+            for (l = 0, j = 0, k=0; j < m; j++){
+                r = rows[rowOffset + j];
                 var columnOffset = -1;
                 while (r.cells[++columnOffset].className.indexOf("th") !== -1);
-                args[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = index;
-                columnAxis.eachTuple(function(cTuple) {
-                    var index = cTuple.index;
-                    args[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = index;
-                    cell = func.apply(cellset, args);
-                    td = r.cells[columnOffset + index];
-                    td.innerHTML = typeof(cell["FmtValue"]) === "undefined" ? cell.Value : cell.FmtValue;
-                });
-            })
+                for (i = 0; i < n; i++, k++) {
+                    td = r.cells[columnOffset + i];
+                    if (cell && cell.ordinal === k) {
+                        td.innerHTML = (typeof(cell["FmtValue"]) === "undefined") ? cell.Value : cell.FmtValue;
+                        cell = cells[++l];
+                    }
+                    else {
+                        td.innerHTML = "";
+                    }
+                }
+            }
         }
         else
         if (dataset.hasColumnAxis()) {
             r = rows[rowOffset];
-            columnAxis.eachTuple(function(cTuple){
-                var index = cTuple.index;
-                args[0] = index;
-                cell = func.apply(cellset, args);
-                td = r.cells[index];
-                td.innerHTML = typeof(cell["FmtValue"]) === "undefined" ? cell.Value : cell.FmtValue;
-            });
+            from = cellset.cellOrdinalForTupleIndexes(0);
+            to = cellset.cellOrdinalForTupleIndexes(n - 1);
+            cells = cellset.fetchRangeAsArray(from, to);
+            cell = cells.length ? cells[0] : null;
+            for (i = 0, l = 0; i < n; i++) {
+                args[0] = i;
+                td = r.cells[i];
+                if (cell && cell.ordinal === i) {
+                    td.innerHTML = (typeof(cell["FmtValue"]) === "undefined") ? cell.Value : cell.FmtValue;
+                    cell = cells[++l];
+                }
+                else {
+                    td.innerHTML = "";
+                }
+            }
         }
     },
     getRowOffset: function() {
@@ -1171,6 +1230,7 @@ var PivotTable;
     },
     renderDataset: function (dataset) {
         var me = this,
+            start,
             container = me.getContainer(),
             t = cEl("TABLE", {
                 "class": "pivot-table",
@@ -1186,33 +1246,88 @@ var PivotTable;
         this.dataset = dataset;
         me.table = t;
         container.innerHTML = "";
-        container.appendChild(t);
         if (columnAxis) {
+            log.print("Rendering column axis...");
+            start = (new Date()).getTime();
             me.computeAxisLevels(columnAxis);
             me.renderAxisHorizontally(columnAxis);
+            log.print("Column axis rendered in " + ((new Date()).getTime() - start));
         }
         this.rowOffset = rows.length;
         if (rowAxis) {
+            log.print("Rendering row axis...");
+            start = (new Date()).getTime();
             this.columnOffset = me.computeAxisLevels(rowAxis);
             c = rows[0].insertCell(0);
             c.colSpan = this.columnOffset;
             c.rowSpan = this.rowOffset;
             me.renderAxisVertically(rowAxis);
+            log.print("Row axis rendered in " + ((new Date()).getTime() - start));
         }
         if (pageAxis) {
         }
+        log.print("Rendering cells...");
+        start = (new Date()).getTime();
         me.renderCells();
+        log.print("Cells rendered in " + ((new Date()).getTime() - start));
+
+        log.print("Loading cells...");
+        start = (new Date()).getTime();
         me.loadCells();
+        log.print("Cells loaded in " + ((new Date()).getTime() - start));
+
+        log.print("Adding table to the dom...");
+        start = (new Date()).getTime();
+        container.appendChild(t);
+        log.print("Dom updated in " + ((new Date()).getTime() - start));
     }
 };
-
+/***************************************************************
+*
+*   Log
+*
+***************************************************************/
+var Log;
+(Log = function(conf){
+    this.conf = conf;
+}).prototype = {
+    getDom: function(){
+        return gEl(this.conf.container || "log");
+    },
+    clear: function(){
+        this.getDom().innerHTML = "";
+    },
+    print: function(message, type){
+        cEl(
+            "pre", {
+                "class": type || "info"
+            }, message, this.getDom()
+        );
+    }
+};
 /***************************************************************
 *
 *   Application
 *
 ***************************************************************/
-var xmla = new Xmla({
-        async: true
+var log = new Log({
+        container: "log"
+    }),
+    xmla = new Xmla({
+        async: true,
+        listeners: {
+            request: function(eventName, eventData, xmla){
+                xmla.start = (new Date()).getTime();
+            },
+            success: function(eventName, eventData, xmla){
+                var end = (new Date()).getTime();
+                log.print("Xmla success in " + (end - xmla.start) + "ms");
+            },
+            error: function(eventName, eventData, xmla){
+                var end = (new Date()).getTime();
+                log.print("Xmla error in " + (end - xmla.start) + "ms");
+            }
+        }
     }),
     ddHandler = new DDHandler({
         node: "workspace",
@@ -1222,8 +1337,8 @@ var xmla = new Xmla({
         container: "query-designer"
     }),
     pivotTable = new PivotTable({
-        container: "query-designer1-query-results"
-    }),
+        container: "query-results"
+    });
     cubeMetaData = null;
 ;
 function showCube(show){
@@ -1242,17 +1357,16 @@ function clearCubeTree() {
 function initWorkarea() {
     queryDesigner.reset();
     gEl("query-text").innerHTML = "";
-    //gEl("query-results").innerHTML = "No results to display.";
+    gEl("query-results").innerHTML = "No results to display.";
 }
 function clearWorkarea() {
     gEl("query-designer").innerHTML = "";
     gEl("query-text").innerHTML = "";
-    //gEl("query-results").innerHTML = "";
+    gEl("query-results").innerHTML = "";
 }
 function clearUI() {
     gEl("datasources-body").innerHTML = "";
     clearCubeTree();
-
 }
 function metadataClicked(e) {
     if (!e) e = win.event;
@@ -1633,13 +1747,18 @@ function init() {
         var mdx = queryDesigner.getMdx();
         gEl("query-text").innerHTML = mdx;
         if (!mdx.length) return;
+        log.clear();
+        log.print("About to execute Query...");
+        var start = (new Date()).getTime();
         xmla.execute({
             async: true,
             statement: mdx,
             success: function(xmla, req, resp) {
+                log.print("Succes executing mdx in " + ((new Date()).getTime() - start) + "ms");
                 pivotTable.renderDataset(resp);
             },
             error: function(a, b, c) {
+                log.print("Error executing mdx in " + ((new Date()).getTime() - start) + "ms");
                 alert(c.toString());
             }
         });
