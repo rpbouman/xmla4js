@@ -6790,6 +6790,48 @@ Xmla.Dataset.Cellset.prototype = {
         }
     },
 /**
+ *  Get the physical cell index for the specified ordinal number.
+ *  This method is useful to calculate boundaries to retrieve a range of cells.
+ *  @method indexForOrdinal
+ *  @param {int} ordinal - the ordinal number for which the index shoul dbe returned
+ *  @return {int} The physical index.
+ */
+    indexForOrdinal: function(ordinal){
+        var index = ordinal, cellOrdinal;
+        while(true) {
+            node = this._cellNodes[index];
+            if (!node) node = this._cellNodes[this._cellNodes.length - 1];
+            cellOrdinal = this._getCellOrdinal(node);
+            if (cellOrdinal === ordinal) return index;
+            else
+            if (cellOrdinal > ordinal) index--;
+            else return -1;
+        }
+        return null;
+    },
+/**
+ *  Get a range of cells withing the range that fits the specified ordinals.
+ *  This method is useful to grab a slice of cells for a subset of the axes.
+ *  (You can use <code><a href="#method_cellOrdinalForTupleIndexes">cellOrdinalForTupleIndexes</a></code> to calculate ordinals in terms of tuple indexes.)
+ *  The returned range only contains cells that actually exist so the ordinal of adjacent cells may have gaps,
+ * @method fetchRangeAsArray
+ * @param {int} from - the ordinal number indicating the start of the range
+ * @param {int} to - the ordinal number indicating the end of the range
+ * @return {[object]} - An array of cells that fit the specified range.
+ */
+    fetchRangeAsArray: function(from, to){
+        var range = [], cellNodes = this._cellNodes;
+        from = this.indexForOrdinal(from);
+        if (from === -1) return range;
+        to = this.indexForOrdinal(to);
+        if (to === -1) to = cellNodes.length -1;
+        to = Math.min(to, cellNodes.length - 1);
+        for (i = from; i <= to; i++){
+            range[i] = this._readCell(cellNodes[i], {});
+        }
+        return range;
+    },
+/**
  *  Calculate the ordinal based on the specified tuple indexes.
 *   @method cellOrdinalForTupleIndexes
 *   @param {int...} tuple index - a variable list of integer arguments. Arguments represent the index of a tuple on the query axes. Tuple indexes should be specified by descending order of axes. For example, if you have a DataSet with 2 Axes, pass the row tuple index as the first argument, and the column tuple index as the last argument.
