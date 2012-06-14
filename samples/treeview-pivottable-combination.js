@@ -578,8 +578,9 @@ var QueryDesigner;
         return QueryDesigner.prefix + QueryDesigner.id;
     },
     createDom: function() {
-        var dom = this.dom = cEl("TABLE", {
-                id: this.getId(),
+        var id = this.getId(),
+            dom = this.dom = cEl("TABLE", {
+                id: id,
                 "class": "query-designer",
                 cellspacing: 0
             }),
@@ -597,7 +598,7 @@ var QueryDesigner;
         c = r.insertCell(0);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_ROWS).getDom());
         c = r.insertCell(1);
-        c.id = "query-results";
+        c.id = id + "-query-results";
         c.innerHTML = "No results to display...";
         return dom;
     },
@@ -649,6 +650,11 @@ var QueryDesigner;
 QueryDesigner.id = 0;
 QueryDesigner.prefix = "query-designer";
 
+/***************************************************************
+*
+*   QueryDesignerAxis
+*
+***************************************************************/
 var QueryDesignerAxis;
 (QueryDesignerAxis = function(conf){
     this.conf = conf;
@@ -947,6 +953,258 @@ QueryDesignerAxis.instances = {};
 QueryDesignerAxis.getInstance = function(id){
     return QueryDesignerAxis.instances[id];
 };
+/***************************************************************
+*
+*   PivotTable
+*
+***************************************************************/
+var PivotTable;
+
+(PivotTable = function(conf){
+    this.conf = conf || {};
+    this.table = null;
+}).prototype = {
+    getContainer: function() {
+        return gEl(this.conf.container);
+    },
+    getTupleName: function (tuple, hierarchy) {
+        for (var mName = "", i = 0; i <= hierarchy.index; i++) {
+            mName += tuple.members[i][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
+        }
+        return mName;
+    },
+    computeAxisLevels: function (axis) {
+        var numLevels = 0;
+        axis.eachHierarchy(function(hierarchy){
+            var levels = {}, level;
+            axis.eachTuple(function(tuple){
+                var member = tuple.members[hierarchy.index];
+                levels[member.LNum] = true;
+            });
+            hierarchy.levels = [];
+            for (level in levels) {
+                hierarchy.levels.push(parseInt(level));
+                numLevels++;
+            }
+            hierarchy.levels = hierarchy.levels.sort();
+        });
+        return numLevels;
+    },
+    getDom: function() {
+        return gEl(this.conf.id);
+    },
+    renderAxisHorizontally: function(axis, table){
+        var me = this;
+        if (!table) table = me.table;
+        axis.eachHierarchy(function(hierarchy){
+            var i, levels = hierarchy.levels, n = levels.length;
+            for (i = 0; i < levels.length; i++){
+                var r = table.insertRow(table.rows.length),
+                    cells = r.cells,
+                    c = null,
+                    level = -1,
+                    prevTupleName = null
+                ;
+                axis.eachTuple(function(tuple){
+                    var member = tuple.members[hierarchy.index];
+                    if (member.LNum === levels[i]) {
+                        tupleName = me.getTupleName(tuple, hierarchy);
+                        if (tupleName === prevTupleName) {
+                            memberCell.colSpan++;
+                        }
+                        else {
+                            memberCell = r.insertCell(cells.length);
+                            memberCell.className = "th MDSCHEMA_MEMBERS";
+                            memberCell.colSpan = 1;
+                            memberCell.innerHTML = member.Caption;
+                            c = null;
+                        }
+                        prevTupleName = tupleName;
+                    }
+                    else
+                    if (member.LNum > levels[i]) {
+                        memberCell.colSpan++;
+                    }
+                    else
+                    if (member.LNum < levels[i]) {
+                        if (level !== member.LNum || c === null) {
+                            c = r.insertCell(cells.length);
+                            c.className = "th";
+                            c.innerHTML = "&#160;";
+                            level = member.LNum;
+                        }
+                        else {
+                            c.colSpan++;
+                        }
+                    }
+                });
+            }
+        });
+    },
+    renderAxisVertically: function(axis, table) {
+        var me = this;
+        if (!table) table = me.table;
+        var rows = table.rows,
+            rowOffset = rows.length
+        ;
+        axis.eachHierarchy(function(hierarchy){
+            var i, levels = hierarchy.levels, n = levels.length;
+            for (i = 0; i < levels.length; i++){
+                var c = null,
+                    memberCell = null,
+                    prevTupleName
+                ;
+                axis.eachTuple(function(tuple){
+                    var r = (!hierarchy.index && !i) ? table.insertRow(rows.length) : rows[rowOffset + tuple.index],
+                        cells = r.cells,
+                        member = tuple.members[hierarchy.index],
+                        tupleName
+                    ;
+                    if (member.LNum === levels[i]) {
+                        tupleName = me.getTupleName(tuple, hierarchy);
+                        if (tupleName !== prevTupleName) {
+                            memberCell = r.insertCell(r.cells.length);
+                            memberCell.className = "th MDSCHEMA_MEMBERS";
+                            memberCell.innerHTML = member.Caption;
+                            c = null;
+                        }
+                        else {
+                            memberCell.rowSpan++;
+                        }
+                        prevTupleName = tupleName;
+                    }
+                    else {
+                        if (member.LNum < levels[i]) {
+                            memberCell = cells.item(cells.length - 1);
+                            if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS") memberCell.colSpan++;
+                        }
+                        else {
+                            if (c === null) {
+                                c = r.insertCell(cells.length);
+                                c.className = "th";
+                                c.innerHTML = "&#160;";
+                                memberCell = null;
+                            }
+                            else {
+                                c.rowSpan++;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    },
+    renderCells: function() {
+        var rowOffset = this.getRowOffset(),
+            dataset = this.dataset,
+            rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
+            columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
+            table = this.table,
+            rows = table.rows,
+            r, c
+        ;
+        if (!rowAxis) {
+            r = table.insertRow(rowOffset);
+        }
+        columnAxis.eachTuple(function(colTuple){
+            if (rowAxis) {
+                rowAxis.eachTuple(function(rowTuple){
+                    r = rows[rowOffset + rowTuple.index];
+                    c = r.insertCell(r.cells.length);
+                    c.className = "td";
+                })
+            }
+            else {
+                c = r.insertCell(r.cells.length);
+                c.className = "td";
+            }
+        });
+    },
+    loadCells: function(columnAxis, rowAxis, pageAxis){
+        var args = [],
+            table = this.table,
+            rows = table.rows,
+            rowOffset = this.getRowOffset(),
+            dataset = this.dataset,
+            cellset = dataset.getCellset(),
+            func = cellset.getByTupleIndexes,
+            columnAxis = dataset.getColumnAxis(),
+            axisCount = dataset.axisCount(),
+            cell, td
+        ;
+        if (dataset.hasPageAxis()) {
+            args.push(dataset.getPageAxis.tupleIndex());
+        }
+        if (dataset.hasRowAxis()) {
+            dataset.getRowAxis().eachTuple(function(rTuple){
+                var index = rTuple.index;
+                r = rows[rowOffset + index];
+                var columnOffset = -1;
+                while (r.cells[++columnOffset].className.indexOf("th") !== -1);
+                args[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = index;
+                columnAxis.eachTuple(function(cTuple) {
+                    var index = cTuple.index;
+                    args[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = index;
+                    cell = func.apply(cellset, args);
+                    td = r.cells[columnOffset + index];
+                    td.innerHTML = typeof(cell["FmtValue"]) === "undefined" ? cell.Value : cell.FmtValue;
+                });
+            })
+        }
+        else
+        if (dataset.hasColumnAxis()) {
+            r = rows[rowOffset];
+            columnAxis.eachTuple(function(cTuple){
+                var index = cTuple.index;
+                args[0] = index;
+                cell = func.apply(cellset, args);
+                td = r.cells[index];
+                td.innerHTML = typeof(cell["FmtValue"]) === "undefined" ? cell.Value : cell.FmtValue;
+            });
+        }
+    },
+    getRowOffset: function() {
+        return this.rowOffset;
+    },
+    getColumnOffset: function() {
+        return this.columnOffset;
+    },
+    renderDataset: function (dataset) {
+        var me = this,
+            container = me.getContainer(),
+            t = cEl("TABLE", {
+                "class": "pivot-table",
+                cellpadding: 0,
+                cellspacing: 0
+            }),
+            rows = t.rows, c,
+            columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
+            rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
+            pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null
+        ;
+        if (this.dataset) this.dataset.close();
+        this.dataset = dataset;
+        me.table = t;
+        container.innerHTML = "";
+        container.appendChild(t);
+        if (columnAxis) {
+            me.computeAxisLevels(columnAxis);
+            me.renderAxisHorizontally(columnAxis);
+        }
+        this.rowOffset = rows.length;
+        if (rowAxis) {
+            this.columnOffset = me.computeAxisLevels(rowAxis);
+            c = rows[0].insertCell(0);
+            c.colSpan = this.columnOffset;
+            c.rowSpan = this.rowOffset;
+            me.renderAxisVertically(rowAxis);
+        }
+        if (pageAxis) {
+        }
+        me.renderCells();
+        me.loadCells();
+    }
+};
 
 /***************************************************************
 *
@@ -962,6 +1220,9 @@ var xmla = new Xmla({
     }),
     queryDesigner = new QueryDesigner({
         container: "query-designer"
+    }),
+    pivotTable = new PivotTable({
+        container: "query-designer1-query-results"
     }),
     cubeMetaData = null;
 ;
@@ -1253,148 +1514,6 @@ function selectCube(cubeTreeNode) {
     });
 }
 
-function getTupleName(tuple, hierarchy) {
-    for (var mName = "", i = 0; i <= hierarchy.index; i++) {
-        mName += tuple.members[i][Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME];
-    }
-    return mName;
-}
-
-function computeAxisLevels(axis) {
-    var numLevels = 0;
-    axis.eachHierarchy(function(hierarchy){
-        var levels = {}, level;
-        axis.eachTuple(function(tuple){
-            var member = tuple.members[hierarchy.index];
-            levels[member.LNum] = true;
-        });
-        hierarchy.levels = [];
-        for (level in levels) {
-            hierarchy.levels.push(parseInt(level));
-            numLevels++;
-        }
-        hierarchy.levels = hierarchy.levels.sort();
-    });
-    return numLevels;
-}
-
-function renderDataset(dataset) {
-    var container = gEl("query-results"),
-        t = cEl("TABLE", {
-            "class": "pivot-table",
-//            border: 1,
-            cellpadding: 0,
-            cellspacing: 0
-        }),
-        columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
-        rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
-        tupleName, prevTupleName,
-        r, c, memberCell,
-        member, level
-    ;
-    container.innerHTML = "";
-    container.appendChild(t);
-    if (columnAxis) {
-        computeAxisLevels(columnAxis);
-        columnAxis.eachHierarchy(function(hierarchy){
-            prevTupleName = null;
-            span = 0;
-            var i, levels = hierarchy.levels, n = levels.length;
-            for (i = 0; i < levels.length; i++){
-                r = t.insertRow(t.rows.length);
-                c = null;
-                level = -1;
-                columnAxis.eachTuple(function(tuple){
-                    member = tuple.members[hierarchy.index];
-                    if (member.LNum === levels[i]) {
-                        tupleName = getTupleName(tuple, hierarchy);
-                        if (tupleName === prevTupleName) {
-                            memberCell.colSpan++;
-                        }
-                        else {
-                            memberCell = r.insertCell(r.cells.length);
-                            memberCell.className = "th MDSCHEMA_MEMBERS";
-                            memberCell.colSpan = 1;
-                            memberCell.innerHTML = member.Caption;
-                            c = null;
-                        }
-                        prevTupleName = tupleName;
-                    }
-                    else
-                    if (member.LNum > levels[i]) {
-                        memberCell.colSpan++;
-                    }
-                    else
-                    if (member.LNum < levels[i]) {
-                        if (level !== member.LNum || c === null) {
-                            c = r.insertCell(r.cells.length);
-                            c.className = "th";
-                            level = member.LNum;
-                        }
-                        else {
-                            c.colSpan++;
-                        }
-                    }
-                });
-            }
-        });
-        columnAxis.close();
-    }
-    if (rowAxis) {
-        var rowOffset = t.rows.length;
-        var numLevels = computeAxisLevels(rowAxis);
-        c = t.rows[0].insertCell(0);
-        c.colSpan = numLevels;
-        c.rowSpan = rowOffset;
-        rowAxis.eachHierarchy(function(hierarchy){
-            c = null;
-            prevTupleName = null;
-            span = 0;
-            var i, levels = hierarchy.levels, n = levels.length;
-            for (i = 0; i < levels.length; i++){
-                c = null;
-                memberCell = null;
-                rowAxis.eachTuple(function(tuple){
-                    r = (!hierarchy.index && !i) ? t.insertRow(t.rows.length) : t.rows[rowOffset + tuple.index];
-                    member = tuple.members[hierarchy.index];
-                    if (member.LNum === levels[i]) {
-                        tupleName = getTupleName(tuple, hierarchy);
-                        if (tupleName !== prevTupleName) {
-                            memberCell = r.insertCell(r.cells.length);
-                            memberCell.className = "th MDSCHEMA_MEMBERS";
-                            memberCell.innerHTML = member.Caption;
-                            c = null;
-                        }
-                        else {
-                            memberCell.rowSpan++;
-                        }
-                        prevTupleName = tupleName;
-                    }
-                    else {
-                        if (member.LNum < levels[i]) {
-                            memberCell = r.cells.item(r.cells.length - 1);
-                            if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS") memberCell.colSpan++;
-                        }
-                        else {
-                            if (c === null) {
-                                c = r.insertCell(r.cells.length);
-                                c.className = "th";
-                                c.innerHTML = "&#160;";
-                                memberCell = null;
-                            }
-                            else {
-                                c.rowSpan++;
-                            }
-                        }
-                    }
-                });
-            }
-        });
-        rowAxis.close();
-    }
-    dataset.close();
-}
-
 function init() {
     //set up listeners
     listen("discover", "click", discoverClicked);
@@ -1460,31 +1579,6 @@ function init() {
                     axisTable = dropTarget;
                     break;
             }
-            /*
-            if (axisTable && !axisTable.className.indexOf("query-designer-axis ")) {
-                var p1 = pos(axisTable), p2 = pos(queryDesigner.getDom().parentNode);
-                sAtts(queryDesigner.horizontalDragProxy, {
-                    style: {
-                        display: "block",
-                        width: axisTable.clientWidth + "px",
-                        left: (p1.left - p2.left) + "px",
-                        top: (xy.y - p2.top + 2) + "px"
-                    }
-                });
-                sAtts(queryDesigner.verticalDragProxy, {
-                    style: {
-                        display: "block",
-                        height: axisTable.clientHeight + "px",
-                        top: (p1.top - p2.top) + "px",
-                        left: (xy.x - p2.left + 2) + "px"
-                    }
-                });
-            }
-            else
-            if (queryDesigner) {
-                queryDesigner.hideProxies();
-            }
-            */
         },
         endDrag: function(event, ddHandler) {
             var dragProxy = ddHandler.dragProxy,
@@ -1534,14 +1628,16 @@ function init() {
             dragProxy.innerHTML = "";
         }
     });
+
     queryDesigner.queryChanged = function(queryDesigner) {
         var mdx = queryDesigner.getMdx();
         gEl("query-text").innerHTML = mdx;
         if (!mdx.length) return;
         xmla.execute({
+            async: true,
             statement: mdx,
             success: function(xmla, req, resp) {
-                renderDataset(resp);
+                pivotTable.renderDataset(resp);
             },
             error: function(a, b, c) {
                 alert(c.toString());
