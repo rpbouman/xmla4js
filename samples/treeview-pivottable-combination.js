@@ -334,6 +334,7 @@ var Event;
         return this.browserEvent.ctrlKey;
     },
     getXY: function(){
+        //var p = pos(this.getTarget());
         return {
             x: this.browserEvent.clientX,
             y: this.browserEvent.clientY
@@ -586,23 +587,6 @@ var QueryDesigner;
             }),
             r, c
         ;
-        /*
-        r = dom.insertRow(dom.rows.length);
-        c = r.insertCell(0);
-        c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
-
-        r = dom.insertRow(dom.rows.length);
-        c = r.insertCell(0);
-        c = r.insertCell(1);
-        c.appendChild(this.getAxis(Xmla.Dataset.AXIS_COLUMNS).getDom());
-        r = dom.insertRow(dom.rows.length);
-        c = r.insertCell(0);
-        c.appendChild(this.getAxis(Xmla.Dataset.AXIS_ROWS).getDom());
-        c = r.insertCell(1);
-        c.id = id + "-query-results";
-        c.innerHTML = "No results to display...";
-        */
-
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(r.cells.length);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
@@ -1350,6 +1334,7 @@ function toggleDataSources() {
 }
 function showDataSources(show){
     gEl("datasources-body").style.display = show ? "" : "none";
+    gEl("cube-body").style.top = gEl("datasources").clientHeight + gEl("datasources-head").clientHeight + 5 + "px";
 }
 function clearCubeTree() {
     gEl("cube-body").innerHTML = "";
@@ -1660,8 +1645,8 @@ function init() {
             dragProxy.style.position = "absolute";
             dragProxy.className = customClass;
             dragProxy.innerHTML = treeNode.getTitle();
-            dragProxy.style.left = (xy.x + 2) + "px";
-            dragProxy.style.top = (xy.y + 2) + "px";
+            dragProxy.style.left = (xy.x) + "px";
+            dragProxy.style.top = (xy.y) + "px";
             return true;
         },
         whileDrag: function(event, ddHandler) {
@@ -1744,6 +1729,7 @@ function init() {
     });
 
     queryDesigner.queryChanged = function(queryDesigner) {
+        gEl("query-results").innerHTML = "<img src=\"../css/ajax-loader.gif\"/>";
         var mdx = queryDesigner.getMdx();
         gEl("query-text").innerHTML = mdx;
         if (!mdx.length) return;

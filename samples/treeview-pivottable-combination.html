@@ -36,6 +36,8 @@
             #metadata {
                 float: left;
                 width: 19%;
+                position:fixed;
+                left: 5px;
             }
 
             .component {
@@ -79,12 +81,15 @@
 
             #toolbar {
                 height:26px;
-                margin-bottom:8px;
                 border-style: solid;
                 border-width: 2px;
                 border-radius: 5px;
                 border-color: grey;
                 background-color: white;
+                position:fixed;
+                top: 5px;
+                left: 5px;
+                right: 5px;
             }
 
             .toggle {
@@ -114,6 +119,14 @@
                 background-image: url('cube24.png');
                 background-position: 0px -1px;
                 background-repeat: no-repeat;
+            }
+            #cube-body {
+                position: absolute;
+                top: 50px;
+                bottom: 0px;
+                left: 0px;
+                right: 0px;
+                overflow: scroll;
             }
         </style>
         <style type="text/css" id="tree">
@@ -224,6 +237,11 @@
             }
             #workspace {
                 cursor: default;
+                position:absolute;
+                left: 0px;
+                right: 0px;
+                top: 40px;
+                bottom: 0px;
             }
             #ddDragProxy {
                 position: absolute;
@@ -384,7 +402,7 @@
             }
         </style>
     </head>
-    <body>
+    <body style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;">
         <div id="toolbar">
             <button id="discover">Discover</button>
             <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
@@ -406,13 +424,13 @@
                 <pre id="query-text"></pre>
                 <div id="log"></div>
             </div>
-            <div id="ddDragProxy"></div>
         </div>
         <script type="text/javascript" src="../src/Xmla.js"></script>
         <script type="text/javascript" src="defaultXmlaUrl.js"></script>
         <script type="text/javascript">
             document.getElementById("url").value = defaultXmlaUrl;
         </script>
+        <div id="ddDragProxy"></div>
         <script type="text/javascript" src="treeview-pivottable-combination.js"></script>
     </body>
 </html>
