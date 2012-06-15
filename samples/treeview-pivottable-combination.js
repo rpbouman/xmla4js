@@ -788,9 +788,9 @@ var QueryDesignerAxis;
     getDefaultMemberExpression: function(metadata) {
         if (metadata.MEMBER_UNIQUE_NAME) return metadata.MEMBER_UNIQUE_NAME;
         if (metadata.MEASURE_UNIQUE_NAME) return metadata.MEASURE_UNIQUE_NAME;
+        if (metadata.LEVEL_UNIQUE_NAME) return metadata.LEVEL_UNIQUE_NAME + ".Members";
         if (metadata.DEFAULT_MEMBER) return metadata.DEFAULT_MEMBER;
         if (metadata.DEFAULT_MEASURE) return metadata.DEFAULT_MEASURE;
-        if (metadata.LEVEL_UNIQUE_NAME) return metadata.LEVEL_UNIQUE_NAME + ".Members";
         return null;
     },
     getDefaultMemberCaption: function(hierarchy) {
@@ -841,12 +841,8 @@ var QueryDesignerAxis;
         return this.hierarchies.length;
     },
     removeHierarchy: function(item){
-        if (iObj(item)) {
-            item = this.getHierarchyName(item);
-        }
-        if (iStr(item)) {
-            item = this.getHierarchyIndex(item);
-        }
+        if (iObj(item)) item = this.getHierarchyName(item);
+        if (iStr(item)) item = this.getHierarchyIndex(item);
         if (!iNum(item) || item === -1) return false;
         var hierarchy = this.getHierarchyByIndex(item);
         if (!hierarchy) return false;
@@ -866,8 +862,39 @@ var QueryDesignerAxis;
                 break;
         }
         this.getQueryDesigner().axisChanged(this);
+        return true;
     },
     removeMember: function(item) {
+        if (iObj(item)) item = this.getDefaultMemberExpression(item);
+        if (!iStr(item)) return false;
+        var member = this.getMemberByExpression(item);
+        if (!member) return false;
+        var metadata = member.metadata;
+        var hierarchyName = this.getHierarchyName(metadata);
+        var setDefs = this.setDefs[hierarchyName];
+        if (!setDefs) return false;
+        var i, n = setDefs.length, setDef;
+        for (i = 0; i < n; i ++) {
+            setDef = setDefs[i];
+            if (setDef.expression === item) break;
+        }
+        if (i === n) return false;
+        setDefs.splice(i, 1);
+        var hierarchyIndex = this.getHierarchyIndex(hierarchyName);
+        if (!setDefs.length) return this.removeHierarchy(hierarchyIndex);
+        var dom = this.getDom(), parent;
+        switch (this.getLayout()) {
+            case "horizontal":
+                parent = dom.rows[hierarchyIndex + 1].cells[1];
+                parent.removeChild(parent.childNodes[i]);
+                break;
+            case "vertical":
+                parent = dom.rows[1].cells[hierarchyIndex + 1];
+                parent.removeChild(parent.childNodes[i]);
+                break;
+        }
+        this.getQueryDesigner().axisChanged(this);
+        return true;
     },
     getMemberInfo: function(requestType, metadata){
         var expression = this.getDefaultMemberExpression(metadata), caption;
@@ -889,7 +916,8 @@ var QueryDesignerAxis;
         return {
             expression: expression,
             caption: caption,
-            type: requestType
+            type: requestType,
+            metadata: metadata
         };
     },
     addMember: function(memberIndex, requestType, metadata) {
@@ -1835,7 +1863,7 @@ function init() {
                     case "MDSCHEMA_LEVELS":
                     case "MDSCHEMA_MEMBERS":
                     case "MDSCHEMA_MEASURES":
-                        queryDesignerAxis.removeMember(data);
+                        queryDesignerAxis.removeMember(data.expression);
                         break;
                     default:
                 }
