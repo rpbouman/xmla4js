@@ -57,6 +57,10 @@
             #discover {
                 float:left;
             }
+            #discover:after {
+                content: "..."
+            }
+
             #url-label {
                 margin-left:5px;
                 float:left;
@@ -205,6 +209,7 @@
                 background-color: white;
                 border-style: solid;
                 border-width: 1px;
+                border-color: grey;
             }
 
             #ddDragProxy.MDSCHEMA_HIERARCHIES {
@@ -212,6 +217,7 @@
                 background-color: white;
                 border-style: solid;
                 border-width: 1px;
+                border-color: grey;
             }
 
             #ddDragProxy.MDSCHEMA_LEVELS {
@@ -219,6 +225,7 @@
                 background-color: white;
                 border-style: solid;
                 border-width: 1px;
+                border-color: grey;
             }
 
             #ddDragProxy.MDSCHEMA_MEMBERS {
@@ -226,6 +233,7 @@
                 background-color: white;
                 border-style: solid;
                 border-width: 1px;
+                border-color: grey;
             }
         </style>
         <style type="text/css" id="pivot-table-designer">
@@ -255,6 +263,7 @@
                 border-style: solid;
                 border-width: 1px;
             }
+
             table.query-designer {
             }
 
@@ -271,6 +280,7 @@
             .query-designer-axis td {
                 background-repeat: no-repeat;
                 background-position: 2px -1px;
+                border-color: grey;
             }
 
             .query-designer-axis td.query-designer-axis-header {
@@ -299,18 +309,17 @@
 
             .query-designer-axis td span {
                 background-repeat: no-repeat;
+                border-color: grey;
                 border-style: solid;
                 border-width: 1px;
                 white-space: nowrap;
                 padding: 2px;
                 margin: 2px;
                 text-indent: 2em;
-            }
-
-            .query-designer-axis0 td span, .query-designer-axis1 td span {
                 display: inline;
                 margin-top: 2px; padding: 2px;
             }
+
             .query-designer-axis0 td span:before, .query-designer-axis1 td span:before {
                 content: "\A0 \A0 \A0 \A0 \A0 \A0"
             }
@@ -331,7 +340,7 @@
             }
 
             .query-designer-axis td span.MDSCHEMA_MEASURES {
-                background-imagee: url('measure24.gif');
+                background-image: url('measure24.gif');
             }
 
             div.query-designer-horizontal-drag-proxy {
@@ -350,6 +359,8 @@
             table.pivot-table {
                 border-collapse: collapse;
                 margin: .5em;
+                font-size: 10pt;
+                table-layout: fixed;
             }
 
             table.pivot-table td {
