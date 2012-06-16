@@ -857,7 +857,7 @@ var QueryDesignerAxis;
             case "vertical":
                 var rows = dom.rows, n = rows.length, i;
                 for (i = 1; i < n; i++) {
-                    rows[i].deleteCell(item + 1);
+                    rows[i].deleteCell(item);
                 }
                 break;
         }
