@@ -1728,12 +1728,19 @@ function init() {
                 tagName = target.tagName, id,
                 className = target.className,
                 treeNode, title, queryAxis,
-                type, data, dragProxy, xy
+                type, data, dragProxy, xy,
+                dragProxy = ddHandler.dragProxy
             ;
             gEl("workspace").className = "no-user-select";
             //if (tagName !== "SPAN" || tagName !== "TD" || className.indexOf("label")!==0) return;
             startDragEvent = ddHandler.startDragEvent;
             startDragEvent.item = null;
+            xy = event.getXY();
+            if (className === "vertical-splitter") {
+                type = className;
+                dragProxy.style.backgroundColor = "silver";
+            }
+            else
             if (treeNode = TreeNode.lookupTreeNode(target)) {
                 type = treeNode.getCustomClass();
                 switch (type) {
@@ -1743,7 +1750,7 @@ function init() {
                     case "MDSCHEMA_MEMBERS":
                         break;
                     default:
-                        return;
+                        return false;
                 }
                 data = treeNode.getConf().metadata;
             }
@@ -1761,24 +1768,27 @@ function init() {
                         data = queryAxis.getMemberByExpression(id);
                         break;
                     default:
-                        return;
+                        return false;
                 }
             }
-            else {
-                return;
-            }
+            else return false;
+
             startDragEvent.item = {
                 data: data,
                 type: type
             };
-            xy = event.getXY();
-            dragProxy = ddHandler.dragProxy;
             dragProxy.style.position = "absolute";
             dragProxy.className = type;
             //dragProxy.innerHTML = treeNode.getTitle();
             dragProxy.innerHTML = target.innerHTML;
-            dragProxy.style.left = (xy.x) + "px";
-            dragProxy.style.top = (xy.y) + "px";
+            dragProxy.style.left = (xy.x - 15) + "px";
+            if (className === "vertical-splitter") {
+                dragProxy.style.height = target.clientHeight + "px";
+                dragProxy.style.top = target.clientTop + 40 + "px";
+            }
+            else {
+                dragProxy.style.top = (xy.y) + "px";
+            }
             return true;
         },
         whileDrag: function(event, ddHandler) {
@@ -1793,8 +1803,10 @@ function init() {
                 axisTable
             ;
             if (!item) return;
-            dragProxy.style.left = (xy.x + 2) + "px";
-            dragProxy.style.top = (xy.y + 2) + "px";
+            if (item.type !== "vertical-splitter") {
+                dragProxy.style.top = (xy.y + 2) + "px";
+            }
+            dragProxy.style.left = (xy.x -5) + "px";
             switch (tagName) {
                 case "TD":
                     axisTable = dropTarget.parentNode.parentNode.parentNode;
@@ -1823,6 +1835,17 @@ function init() {
                 className = target.className,
                 queryDesignerAxis, table
             ;
+            if (origin.className === "vertical-splitter") {
+                origin.style.left = dragProxy.offsetLeft + "px";
+                var el, diff;
+                el = gEl("metadata");
+                el.style.width = el.clientWidth + (origin.offsetLeft - el.clientWidth - 4) + "px";
+                el = gEl("workarea");
+                var right = el.offsetLeft + el.clientWidth + 4;
+                var width = right - (origin.offsetLeft + origin.clientWidth) - 8;
+                el.style.left = origin.offsetLeft + origin.clientWidth + "px";
+                el.style.width = width + "px";
+            }
             if (!item) return;
             type = item.type;
             data = item.data;
@@ -1872,6 +1895,8 @@ function init() {
                 queryDesigner.hideProxies();
             }
             dragProxy.className = "";
+            dragProxy.style.height = "";
+            dragProxy.style.backgroundColor = "";
             dragProxy.innerHTML = "";
             gEl("workspace").className = "";
         }

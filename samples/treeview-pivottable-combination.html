@@ -34,12 +34,17 @@
                 width: 79%
             }
             #metadata {
-                float: left;
                 width: 19%;
                 position:fixed;
                 left: 5px;
             }
-
+            .vertical-splitter {
+                position:absolute;
+                width: 8px;
+                top: 0px;
+                bottom: 0px;
+                cursor: ew-resize;
+            }
             .component {
                 border-style: solid;
                 border-radius: 10px;
@@ -111,6 +116,7 @@
                 border-style: outset;
                 text-indent: 2em;
                 background-color: lightgrey;
+                white-space: nowrap;
             }
 
             #datasources-head:hover {
@@ -171,6 +177,10 @@
 
             div.expanded > div.body {
                 display: block;
+            }
+
+            div.node > div.head > span.label {
+                white-space: nowrap;
             }
         </style>
         <style type="text/css" id="olap">
@@ -429,6 +439,7 @@
                     <div id="cube-body"></div>
                 </div>
             </div>
+            <div style="left:19.4%;" class="vertical-splitter"></div>
             <div id="workarea" class="component main-component">
                 <div id="query-designer"></div>
                 <div id="query-results"></div>
