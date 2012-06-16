@@ -678,8 +678,7 @@ var QueryDesignerAxis;
     createDom: function() {
         var dom = this.dom = cEl("TABLE", {
                 id: this.getId(),
-                "class": QueryDesignerAxis.prefix + " query-designer-axis" + this.conf.id,
-                cellspacing: 5
+                "class": QueryDesignerAxis.prefix + " query-designer-axis" + this.conf.id
             }),
             r = dom.insertRow(0),
             c = r.insertCell(0),
@@ -692,7 +691,92 @@ var QueryDesignerAxis;
             case 2: t = "Pages"; break;
         }
         c.innerHTML = t;
+        switch (this.getLayout()) {
+            case "horizontal":
+                break;
+            case "vertical":
+                dom.insertRow(1);
+                dom.insertRow(2);
+                break;
+        }
         return dom;
+    },
+    updateDom: function() {
+        switch (this.getLayout()) {
+            case "vertical":
+                this.updateDomVertical();
+                break;
+            case "horizontal":
+                this.updateDomHorizontal();
+                break;
+        }
+    },
+    updateDomSetDefs: function(hierarchyName, c) {
+        var hierarchySetDefs = this.setDefs[hierarchyName],
+            j, m = hierarchySetDefs.length, setDef
+        ;
+        for (j = 0; j < m; j++) {
+            setDef = hierarchySetDefs[j];
+            var el = cEl("SPAN", {
+                "class": setDef.type,
+                title: setDef.expression,
+                id: setDef.expression
+            }, setDef.caption, c);
+        }
+    },
+    updateDomVertical: function() {
+        var hierarchies = this.hierarchies,
+            hierarchy, hierarchyName,
+            i, n = hierarchies.length,
+            setDefs = this.setDefs, setDef,
+            j, m,
+            dom = this.getDom(),
+            rows = dom.rows,
+            r1 = rows[1], r2 = rows[2],
+            c
+        ;
+
+        while (r1.cells.length) {
+            r1.deleteCell(0);
+            r2.deleteCell(0);
+        }
+        for (i = 0; i < n; i++) {
+            hierarchy = hierarchies[i];
+            hierarchyName = this.getHierarchyName(hierarchy);
+
+            c = r1.insertCell(r1.cells.length);
+            c.id = hierarchyName;
+            c.innerHTML = this.getHierarchyCaption(hierarchy);
+            c.className = "MDSCHEMA_HIERARCHIES";
+            c = r2.insertCell(r2.cells.length);
+
+            this.updateDomSetDefs(hierarchyName, c);
+        }
+    },
+    updateDomHorizontal: function() {
+        var hierarchies = this.hierarchies,
+            hierarchy, hierarchyName,
+            i, n = hierarchies.length,
+            setDefs = this.setDefs, setDef,
+            j, m,
+            dom = this.getDom(),
+            rows = dom.rows,
+            r, c
+        ;
+        while (rows.length > 1) dom.deleteRow(rows.length - 1);
+        for (i = 0; i < n; i++) {
+            hierarchy = hierarchies[i];
+            hierarchyName = this.getHierarchyName(hierarchy);
+
+            r = dom.insertRow(rows.length);
+            c = r.insertCell(0);
+            c.id = hierarchyName;
+            c.innerHTML = this.getHierarchyCaption(hierarchy);
+            c.className = "MDSCHEMA_HIERARCHIES";
+
+            c = r.insertCell(1);
+            this.updateDomSetDefs(hierarchyName, c);
+        }
     },
     getDom: function() {
         var el = gEl(this.getId());
@@ -826,13 +910,17 @@ var QueryDesignerAxis;
         return null;
     },
     getMemberByExpression: function(expression){
-        var hierarchy, setDefs = this.setDefs, i, n, setDef;
+        var hierarchy, hierarchySetDefs, setDefs = this.setDefs, i, n, setDef;
         for (hierarchy in setDefs) {
-            hierarchy = setDefs[hierarchy];
-            n = hierarchy.length;
+            hierarchySetDefs = setDefs[hierarchy];
+            n = hierarchySetDefs.length;
             for (i = 0; i < n; i++){
-                setDef = hierarchy[i];
-                if (setDef.expression === expression) return setDef;
+                setDef = hierarchySetDefs[i];
+                if (setDef.expression === expression) return {
+                    hierarchy: hierarchy,
+                    setDef: setDef,
+                    index: i
+                };
             }
         }
         return null;
@@ -849,50 +937,24 @@ var QueryDesignerAxis;
         var hierarchyName = this.getHierarchyName(hierarchy);
         this.hierarchies.splice(item, 1);
         delete this.setDefs[hierarchyName];
-        var dom = this.getDom();
-        switch (this.getLayout()) {
-            case "horizontal":
-                dom.deleteRow(item + 1);
-                break;
-            case "vertical":
-                var rows = dom.rows, n = rows.length, i;
-                for (i = 1; i < n; i++) {
-                    rows[i].deleteCell(item);
-                }
-                break;
-        }
+        this.updateDom();
         this.getQueryDesigner().axisChanged(this);
         return true;
     },
-    removeMember: function(item) {
+    getMember: function(item) {
         if (iObj(item)) item = this.getDefaultMemberExpression(item);
         if (!iStr(item)) return false;
-        var member = this.getMemberByExpression(item);
+        return this.getMemberByExpression(item);
+    },
+    removeMember: function(item) {
+        var member = this.getMember(item);
         if (!member) return false;
-        var metadata = member.metadata;
-        var hierarchyName = this.getHierarchyName(metadata);
-        var setDefs = this.setDefs[hierarchyName];
-        if (!setDefs) return false;
-        var i, n = setDefs.length, setDef;
-        for (i = 0; i < n; i ++) {
-            setDef = setDefs[i];
-            if (setDef.expression === item) break;
-        }
-        if (i === n) return false;
-        setDefs.splice(i, 1);
-        var hierarchyIndex = this.getHierarchyIndex(hierarchyName);
+        var metadata = member.setDef.metadata;
+        var setDefs = this.setDefs[member.hierarchy];
+        setDefs.splice(member.index, 1);
+        var hierarchyIndex = this.getHierarchyIndex(member.hierarchy);
         if (!setDefs.length) return this.removeHierarchy(hierarchyIndex);
-        var dom = this.getDom(), parent;
-        switch (this.getLayout()) {
-            case "horizontal":
-                parent = dom.rows[hierarchyIndex + 1].cells[1];
-                parent.removeChild(parent.childNodes[i]);
-                break;
-            case "vertical":
-                parent = dom.rows[1].cells[hierarchyIndex + 1];
-                parent.removeChild(parent.childNodes[i]);
-                break;
-        }
+        this.updateDom();
         this.getQueryDesigner().axisChanged(this);
         return true;
     },
@@ -929,26 +991,8 @@ var QueryDesignerAxis;
             r,c,memberList
         ;
         if (hierarchyIndex === -1) throw "Hierarchy not present in this axis";
-        switch(layout) {
-            case "horizontal":
-                r = dom.rows.item(1 + hierarchyIndex);
-                c = r.cells.item(1);
-                break;
-            case "vertical":
-                r = dom.rows.item(2);
-                c = r.cells.item(hierarchyIndex);
-                break;
-        }
-        if (!c) {
-            debugger; //trace stack, we should never have arrived here!
-        };
-        var el = cEl("SPAN", {
-            "class": memberInfo.type,
-            title: memberInfo.expression,
-            id: memberInfo.expression
-        }, memberInfo.caption);
-        c.insertBefore(el, c.childNodes.item(memberIndex + 1));
         this.setDefs[hierarchyName].splice(memberIndex + 1, 0, memberInfo);
+        this.updateDom();
         this.getQueryDesigner().axisChanged(this);
     },
     addHierarchy: function(hierarchyIndex, requestType, metadata) {
@@ -961,44 +1005,20 @@ var QueryDesignerAxis;
         this.hierarchies.splice(hierarchyIndex, 0, metadata);
         this.dimensions[this.getDimensionName(metadata)] = hierarchyName;
         this.setDefs[hierarchyName] = [];
-        var dom = this.getDom(), r1, r, c,
-            hierarchyCaption = this.getHierarchyCaption(metadata),
-            hierarchyClassName = "MDSCHEMA_HIERARCHIES",
-            memberList = "";
-        ;
-
-        switch(layout) {
-            case "horizontal":
-                r = dom.insertRow(1 + hierarchyIndex);
-                c = r.insertCell(0);
-                c.id = hierarchyName;
-                c.innerHTML = hierarchyCaption;
-                c.className = hierarchyClassName;
-                c = r.insertCell(1);
-                c.innerHTML = memberList;
-                break;
-            case "vertical":
-                if ((r = dom.rows.item(1))) {
-                    r1 = dom.rows.item(2);
-                }
-                else {
-                    r1 = dom.insertRow(1);
-                    r = dom.insertRow(1);
-                }
-                c = r.insertCell(hierarchyIndex);
-                c.id = hierarchyName;
-                c.innerHTML = hierarchyCaption;
-                c.className = hierarchyClassName;
-                c = r1.insertCell(hierarchyIndex);
-                c.innerHTML = memberList;
-                break;
-        }
         this.addMember(-1, requestType, metadata);
+    },
+    moveMember: function(member, toIndex) {
+        if (member.index === toIndex) return;
+        var setDefs = this.setDefs[member.hierarchy];
+        setDefs.splice(member.index, 1);
+        if (member.index < toIndex) toIndex--;
+        member.index = toIndex;
+        setDefs[toIndex] = member;
+        this.updateDom();
     },
     itemDropped: function(target, requestType, metadata) {
         var hierarchyName = this.getHierarchyName(metadata),
             hierarchyIndex = this.getHierarchyIndex(hierarchyName),
-            layout = this.getLayout(),
             dropIndexes, dropHierarchyName,
             memberType, memberExpression, memberCaption,
             dropMemberIndex, dropHierarchyIndex
@@ -1020,16 +1040,23 @@ var QueryDesignerAxis;
         }
         else {
             //if the hierarchy is already present, add the member expression to the member list.
-            this.addMember(dropMemberIndex, requestType, metadata);
+            var member = this.getMember(metadata);
+            if (!member) {
+                this.addMember(dropMemberIndex, requestType, metadata);
+            }
+            else {
+                this.moveMember(member, dropMemberIndex);
+            }
         }
     },
     getMdx: function() {
         var hierarchies = this.hierarchies, i, n = hierarchies.length,
-            hierarchy, hierarchyName,
+            hierarchy, hierarchyName, minLevel, maxLevel
             setDefs = this.setDefs, setDef, member, members
             mdx = "";
         ;
         for (i = 0; i < n; i++) {
+            minLevel = null, maxLevel = null;
             hierarchy = hierarchies[i];
             hierarchyName = this.getHierarchyName(hierarchy);
             setDef = setDefs[hierarchyName];
@@ -1136,6 +1163,7 @@ var PivotTable;
                             memberCell = r.insertCell(cells.length);
                             memberCell.className = "th MDSCHEMA_MEMBERS";
                             memberCell.colSpan = 1;
+                            memberCell.title = member.UName;
                             memberCell.innerHTML = member.Caption;
                             c = null;
                         }
@@ -1172,21 +1200,31 @@ var PivotTable;
             for (i = 0; i < levels.length; i++){
                 var c = null,
                     memberCell = null,
-                    prevTupleName
+                    prevTupleName,
+                    level = levels[i],
+                    levelId,
+                    j, tuples = axis.tuples,
+                    m = tuples.length, tuple
                 ;
-                var j, tuples = axis.tuples, m = tuples.length, tuple;
-                for (var j = 0; j < m; j++){
+                for (j = 0; j < m; j++){
                     tuple = tuples[j];
-                    var r = (!hierarchy.index && !i) ? table.insertRow(rows.length) : rows[rowOffset + tuple.index],
-                        cells = r.cells,
+                    var r;
+                    if (!hierarchy.index && !i) {
+                        r = table.insertRow(rows.length);
+                    }
+                    else {
+                        r = rows[rowOffset + tuple.index];
+                    }
+                    var cells = r.cells,
                         member = tuple.members[hierarchy.index],
                         tupleName
                     ;
-                    if (member.LNum === levels[i]) {
+                    if (member.LNum === level) {
                         tupleName = me.getTupleName(tuple, hierarchy);
                         if (tupleName !== prevTupleName) {
                             memberCell = r.insertCell(r.cells.length);
                             memberCell.className = "th MDSCHEMA_MEMBERS";
+                            memberCell.title = member.UName;
                             memberCell.innerHTML = member.Caption;
                             c = null;
                         }
@@ -1196,7 +1234,7 @@ var PivotTable;
                         prevTupleName = tupleName;
                     }
                     else {
-                        if (member.LNum < levels[i]) {
+                        if (member.LNum < level) {
                             memberCell = cells.item(cells.length - 1);
                             if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS") memberCell.colSpan++;
                         }
@@ -1317,6 +1355,9 @@ var PivotTable;
     getColumnOffset: function() {
         return this.columnOffset;
     },
+    clear: function(){
+        this.getContainer().innerHTML = "No results to display";
+    },
     renderDataset: function (dataset) {
         var me = this,
             start,
@@ -1334,7 +1375,7 @@ var PivotTable;
         if (this.dataset) this.dataset.close();
         this.dataset = dataset;
         me.table = t;
-        container.innerHTML = "";
+        this.clear();
         if (columnAxis) {
             log.print("Rendering column axis...");
             start = (new Date()).getTime();
@@ -1367,6 +1408,7 @@ var PivotTable;
 
         log.print("Adding table to the dom...");
         start = (new Date()).getTime();
+        container.innerHTML = "";
         container.appendChild(t);
         log.print("Dom updated in " + ((new Date()).getTime() - start));
     }
@@ -1447,7 +1489,7 @@ function clearCubeTree() {
 function initWorkarea() {
     queryDesigner.reset();
     gEl("query-text").innerHTML = "";
-    gEl("query-results").innerHTML = "No results to display.";
+    pivotTable.clear();
 }
 function clearWorkarea() {
     gEl("query-designer").innerHTML = "";
@@ -1765,7 +1807,7 @@ function init() {
                     case "MDSCHEMA_MEASURES":
                     case "MDSCHEMA_LEVELS":
                     case "MDSCHEMA_MEMBERS":
-                        data = queryAxis.getMemberByExpression(id);
+                        data = queryAxis.getMemberByExpression(id).setDef.metadata;
                         break;
                     default:
                         return false;
@@ -1886,7 +1928,7 @@ function init() {
                     case "MDSCHEMA_LEVELS":
                     case "MDSCHEMA_MEMBERS":
                     case "MDSCHEMA_MEASURES":
-                        queryDesignerAxis.removeMember(data.expression);
+                        queryDesignerAxis.removeMember(data);
                         break;
                     default:
                 }
@@ -1902,11 +1944,14 @@ function init() {
         }
     });
     queryDesigner.queryChanged = function(queryDesigner) {
-        gEl("query-results").innerHTML = "<img src=\"../css/ajax-loader.gif\"/>";
+        log.clear();
         var mdx = queryDesigner.getMdx();
         gEl("query-text").innerHTML = mdx;
-        if (!mdx.length) return;
-        log.clear();
+        if (!mdx.length) {
+            pivotTable.clear();
+            return;
+        }
+        gEl("query-results").innerHTML = "<img src=\"../css/ajax-loader.gif\"/>";
         log.print("About to execute Query...");
         var start = (new Date()).getTime();
         xmla.execute({

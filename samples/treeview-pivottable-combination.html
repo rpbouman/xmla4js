@@ -28,15 +28,26 @@
                 font-family: Arial;
                 font-size: 10pt;
             }
+            .component {
+                border-width: 2px;
+                border-color: grey;
+                background-color: white;
+                padding: 2px;
+            }
+
             #workarea {
                 float: left;
                 left: 20%;
-                width: 79%
+                width: 79%;
+                border-style: solid none none solid;
+                border-radius: 10px 10px 0px 0px;
             }
             #metadata {
                 width: 19%;
                 position:fixed;
                 left: 5px;
+                border-style: solid solid none solid;
+                border-radius: 10px 10px;
             }
             .vertical-splitter {
                 position:absolute;
@@ -45,15 +56,6 @@
                 bottom: 0px;
                 cursor: ew-resize;
             }
-            .component {
-                border-style: solid;
-                border-radius: 10px;
-                border-width: 2px;
-                border-color: grey;
-                background-color: white;
-                padding: 2px;
-            }
-
             .main-component {
                 height: 95%;
                 position: absolute;
@@ -123,6 +125,10 @@
                 color: blue;
                 text-decoration: underline;
                 cursor: pointer;
+            }
+
+            #datasources-body {
+                overflow: hidden;
             }
 
             #cube-head {
@@ -388,7 +394,7 @@
 
             table.pivot-table td.th {
                 white-space: nowrap;
-                border-color: grey;
+                border-color: darkgrey;
                 border-style: none none none solid;
                 background-color: lightgrey;
             }
@@ -412,6 +418,11 @@
             table.pivot-table td.MDSCHEMA_MEMBERS {
                 border-style: solid solid none solid;
                 background-color: lightgrey;
+            }
+
+            table.pivot-table tr.level-break td {
+                border-top-color: black;
+                border-top-width: 1px;
             }
 
         </style>
