@@ -106,7 +106,7 @@ function aCh(e, chs) {
         if (iStr(c)) {
             c = doc.createTextNode(c);
         }
-        e.appendChild(c);
+        (e === doc ? body : e).appendChild(c);
     }
 }
 
@@ -411,7 +411,7 @@ function listen(node, type, listener, scope) {
 var DDHandler;
 (DDHandler = function (config) {
     config = merge(config, {
-        node: doc.body
+        node: doc
     });
     var me = this;
     me.listeners = [];
@@ -436,16 +436,19 @@ var DDHandler;
         if (e.getButton()===0) {
             me.handleMouseDown(e);
         }
+        return false;
     }, this);
     listen(this.node, "mouseup", function(e){
         me.event = e;
         if (e.getButton()===0) {
             me.handleMouseUp(e);
         }
+        return false;
     }, this);
     listen(this.node, "mousemove", function(e){
         me.event = e;
         me.handleMouseMove(e);
+        return false;
     }, this);
 }).prototype = {
     listen: function(listener){
@@ -459,6 +462,7 @@ var DDHandler;
         me.mousedown = true;
         if (!me.initdrag) {
             me.initdrag = true;
+            me.node.focus();
             me.startDrag(e);
         }
     },
@@ -1472,7 +1476,7 @@ var log = new Log({
         }
     }),
     ddHandler = new DDHandler({
-        node: "workspace",
+        node: document.body,
         dragProxy: "ddDragProxy"
     }),
     queryDesigner = new QueryDesigner({
@@ -1784,6 +1788,7 @@ function init() {
                 type, data, dragProxy, xy,
                 dragProxy = ddHandler.dragProxy
             ;
+            //gEl("cube-body").style.overflowY = "hidden";
             gEl("workspace").className = "no-user-select";
             startDragEvent = ddHandler.startDragEvent;
             startDragEvent.item = null;
@@ -1953,9 +1958,6 @@ function init() {
             dragProxy.style.backgroundColor = "";
             dragProxy.innerHTML = "";
             gEl("workspace").className = "";
-            var evt = document.createEvent("MouseEvents");
-            evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-            gEl("cube-body").dispatchEvent(evt);
         }
     });
     queryDesigner.queryChanged = function(queryDesigner) {
@@ -1999,6 +2001,7 @@ function init() {
             }
         }
     }
+    //gEl("cube-body").style.overflow = "auto";
 }
 
 init();
