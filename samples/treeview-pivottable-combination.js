@@ -294,6 +294,7 @@ var Event;
     return this;
 }).prototype = {
     getTarget: function(){
+        if (this.target) return this.target;
         var browserEvent = this.browserEvent;
         if (browserEvent.target) {
             target = browserEvent.target;
@@ -513,18 +514,18 @@ var DDHandler;
         }
         me.endDragListeners = null;
         me.whileDragListeners = null;
+        me.mouseMoveEvent = null;
     },
     whileDrag: function(e) {
         var me = this, i, n, listeners, listener;
-        if (me.startDragEvent) {
-            listeners = me.listeners;
-            n = listeners.length;
-            for (i = 0; i < n; i++) {
-                listener = listeners[i];
-                listener.whileDrag.call(listener.scope, e, me);
-            }
-            clearBrowserSelection();
+        if (!me.startDragEvent) return;
+        listeners = me.listeners;
+        n = listeners.length;
+        for (i = 0; i < n; i++) {
+            listener = listeners[i];
+            listener.whileDrag.call(listener.scope, e, me);
         }
+        clearBrowserSelection();
     }
 };
 
@@ -1011,9 +1012,7 @@ var QueryDesignerAxis;
         if (member.index === toIndex) return;
         var setDefs = this.setDefs[member.hierarchy];
         setDefs.splice(member.index, 1);
-        if (member.index < toIndex) toIndex--;
-        member.index = toIndex;
-        setDefs[toIndex] = member;
+        setDefs.splice(toIndex, 0, member.setDef);
         this.updateDom();
     },
     itemDropped: function(target, requestType, metadata) {
@@ -1051,8 +1050,8 @@ var QueryDesignerAxis;
     },
     getMdx: function() {
         var hierarchies = this.hierarchies, i, n = hierarchies.length,
-            hierarchy, hierarchyName, minLevel, maxLevel
-            setDefs = this.setDefs, setDef, member, members
+            hierarchy, hierarchyName, minLevel, maxLevel,
+            setDefs = this.setDefs, setDef, member, members,
             mdx = "";
         ;
         for (i = 0; i < n; i++) {
@@ -1774,7 +1773,6 @@ function init() {
                 dragProxy = ddHandler.dragProxy
             ;
             gEl("workspace").className = "no-user-select";
-            //if (tagName !== "SPAN" || tagName !== "TD" || className.indexOf("label")!==0) return;
             startDragEvent = ddHandler.startDragEvent;
             startDragEvent.item = null;
             xy = event.getXY();
@@ -1784,6 +1782,7 @@ function init() {
             }
             else
             if (treeNode = TreeNode.lookupTreeNode(target)) {
+                if (className !== "label") return;
                 type = treeNode.getCustomClass();
                 switch (type) {
                     case "MDSCHEMA_MEASURES":
@@ -1834,6 +1833,7 @@ function init() {
             return true;
         },
         whileDrag: function(event, ddHandler) {
+            ddHandler.dropTarget = event.getTarget();
             var dragProxy = ddHandler.dragProxy,
                 xy = event.getXY(),
                 startDragEvent = ddHandler.startDragEvent,
@@ -1941,6 +1941,9 @@ function init() {
             dragProxy.style.backgroundColor = "";
             dragProxy.innerHTML = "";
             gEl("workspace").className = "";
+            var evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            gEl("cube-body").dispatchEvent(evt);
         }
     });
     queryDesigner.queryChanged = function(queryDesigner) {
