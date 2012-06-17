@@ -870,7 +870,7 @@ var QueryDesignerAxis;
         }
         return true;
     },
-    getDefaultMemberExpression: function(metadata) {
+    getMemberExpression: function(metadata) {
         if (metadata.MEMBER_UNIQUE_NAME) return metadata.MEMBER_UNIQUE_NAME;
         if (metadata.MEASURE_UNIQUE_NAME) return metadata.MEASURE_UNIQUE_NAME;
         if (metadata.LEVEL_UNIQUE_NAME) return metadata.LEVEL_UNIQUE_NAME + ".Members";
@@ -880,13 +880,25 @@ var QueryDesignerAxis;
     },
     getDefaultMemberCaption: function(hierarchy) {
         var defaultMember = hierarchy.DEFAULT_MEMBER;
-        if (!defaultMember.indexOf(hierarchy.HIERARCHY_UNIQUE_NAME) + ".") {
+        if (!defaultMember || !defaultMember.indexOf(hierarchy.HIERARCHY_UNIQUE_NAME) + ".") {
             defaultMember = defaultMember.substr(hierarchy.HIERARCHY_UNIQUE_NAME.length + 1);
         }
         if (defaultMember[0]==="[" && defaultMember[defaultMember.length-1]==="]") {
             defaultMember = defaultMember.substr(1, defaultMember.length-2);
         }
         return defaultMember;
+    },
+    getMemberCaption: function(metadata) {
+        if (metadata.MEMBER_CAPTION) return metadata.MEMBER_CAPTION;
+        if (metadata.MEASURE_CAPTION) return metadata.MEASURE_CAPTION;
+        if (metadata.LEVEL_CAPTION) return metadata.LEVEL_CAPTION;
+        var caption;
+        if (metadata.DEFAULT_MEMBER) {
+            caption = metadata.DEFAULT_MEMBER.substr(metadata.HIERARCHY_UNIQUE_NAME.length + 1);
+            if (caption[0] === "[") caption = caption.substr(1, caption.length - 2);
+            return caption;
+        }
+        return null;
     },
     getHierarchyCaption: function(hierarchy) {
         return hierarchy.HIERARCHY_CAPTION ? hierarchy.HIERARCHY_CAPTION : "Measures";
@@ -943,7 +955,7 @@ var QueryDesignerAxis;
         return true;
     },
     getMember: function(item) {
-        if (iObj(item)) item = this.getDefaultMemberExpression(item);
+        if (iObj(item)) item = this.getMemberExpression(item);
         if (!iStr(item)) return false;
         return this.getMemberByExpression(item);
     },
@@ -960,10 +972,10 @@ var QueryDesignerAxis;
         return true;
     },
     getMemberInfo: function(requestType, metadata){
-        var expression = this.getDefaultMemberExpression(metadata), caption;
+        var expression = this.getMemberExpression(metadata), caption;
         switch (requestType) {
             case "MDSCHEMA_HIERARCHIES":
-                caption = this.getDefaultMemberCaption(metadata);
+                caption = this.getMemberCaption(metadata);
                 requestType = "MDSCHEMA_MEMBERS";
                 break;
             case "MDSCHEMA_LEVELS":
