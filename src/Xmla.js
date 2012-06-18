@@ -699,7 +699,7 @@ Xmla.METHOD_DISCOVER = "Discover";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Discover</code>
+*   @default Discover
 */
 Xmla.METHOD_EXECUTE = "Execute";
 
@@ -718,7 +718,7 @@ var _xmlaDBSCHEMA = "DBSCHEMA_";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DISCOVER_DATASOURCES</code>
+*   @default DISCOVER_DATASOURCES
 */
 Xmla.DISCOVER_DATASOURCES =     _xmlaDISCOVER + "DATASOURCES";
 /**
@@ -732,7 +732,7 @@ Xmla.DISCOVER_DATASOURCES =     _xmlaDISCOVER + "DATASOURCES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DISCOVER_PROPERTIES</code>
+*   @default DISCOVER_PROPERTIES
 */
 Xmla.DISCOVER_PROPERTIES =      _xmlaDISCOVER + "PROPERTIES";
 /**
@@ -746,7 +746,7 @@ Xmla.DISCOVER_PROPERTIES =      _xmlaDISCOVER + "PROPERTIES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DISCOVER_SCHEMA_ROWSETS</code>
+*   @default DISCOVER_SCHEMA_ROWSETS
 */
 Xmla.DISCOVER_SCHEMA_ROWSETS =  _xmlaDISCOVER + "SCHEMA_ROWSETS";
 /**
@@ -760,7 +760,7 @@ Xmla.DISCOVER_SCHEMA_ROWSETS =  _xmlaDISCOVER + "SCHEMA_ROWSETS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DISCOVER_ENUMERATORS</code>
+*   @default DISCOVER_ENUMERATORS
 */
 Xmla.DISCOVER_ENUMERATORS =     _xmlaDISCOVER + "ENUMERATORS";
 /**
@@ -774,7 +774,7 @@ Xmla.DISCOVER_ENUMERATORS =     _xmlaDISCOVER + "ENUMERATORS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DISCOVER_KEYWORDS</code>
+*   @default DISCOVER_KEYWORDS
 */
 Xmla.DISCOVER_KEYWORDS =        _xmlaDISCOVER + "KEYWORDS";
 /**
@@ -788,7 +788,7 @@ Xmla.DISCOVER_KEYWORDS =        _xmlaDISCOVER + "KEYWORDS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DISCOVER_LITERALS</code>
+*   @default DISCOVER_LITERALS
 */
 Xmla.DISCOVER_LITERALS =        _xmlaDISCOVER + "LITERALS";
 /**
@@ -802,7 +802,7 @@ Xmla.DISCOVER_LITERALS =        _xmlaDISCOVER + "LITERALS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DBSCHEMA_CATALOGS</code>
+*   @default DBSCHEMA_CATALOGS
 */
 Xmla.DBSCHEMA_CATALOGS =       _xmlaDBSCHEMA + "CATALOGS";
 /**
@@ -816,7 +816,7 @@ Xmla.DBSCHEMA_CATALOGS =       _xmlaDBSCHEMA + "CATALOGS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DBSCHEMA_COLUMNS</code>
+*   @default DBSCHEMA_COLUMNS
 */
 Xmla.DBSCHEMA_COLUMNS =        _xmlaDBSCHEMA + "COLUMNS";
 /**
@@ -830,7 +830,7 @@ Xmla.DBSCHEMA_COLUMNS =        _xmlaDBSCHEMA + "COLUMNS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DBSCHEMA_PROVIDER_TYPES</code>
+*   @default DBSCHEMA_PROVIDER_TYPES
 */
 Xmla.DBSCHEMA_PROVIDER_TYPES = _xmlaDBSCHEMA + "PROVIDER_TYPES";
 /**
@@ -844,7 +844,7 @@ Xmla.DBSCHEMA_PROVIDER_TYPES = _xmlaDBSCHEMA + "PROVIDER_TYPES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DBSCHEMA_SCHEMATA</code>
+*   @default DBSCHEMA_SCHEMATA
 */
 Xmla.DBSCHEMA_SCHEMATA =       _xmlaDBSCHEMA + "SCHEMATA";
 /**
@@ -858,7 +858,7 @@ Xmla.DBSCHEMA_SCHEMATA =       _xmlaDBSCHEMA + "SCHEMATA";
 *   @static
 *   @final
 *   @type string
-*   @default <code>DBSCHEMA_TABLES</code>
+*   @default DBSCHEMA_TABLES
 */
 Xmla.DBSCHEMA_TABLES =         _xmlaDBSCHEMA + "TABLES";
 /**
@@ -888,7 +888,7 @@ Xmla.DBSCHEMA_TABLES_INFO =    _xmlaDBSCHEMA + "TABLES_INFO";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_ACTIONS</code>
+*   @default MDSCHEMA_ACTIONS
 */
 Xmla.MDSCHEMA_ACTIONS =        _xmlaMDSCHEMA + "ACTIONS";
 /**
@@ -905,7 +905,7 @@ Xmla.MDSCHEMA_ACTIONS =        _xmlaMDSCHEMA + "ACTIONS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_CUBES</code>
+*   @default MDSCHEMA_CUBES
 */
 Xmla.MDSCHEMA_CUBES =          _xmlaMDSCHEMA + "CUBES";
 /**
@@ -922,7 +922,7 @@ Xmla.MDSCHEMA_CUBES =          _xmlaMDSCHEMA + "CUBES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_DIMENSIONS</code>
+*   @default MDSCHEMA_DIMENSIONS
 */
 Xmla.MDSCHEMA_DIMENSIONS =     _xmlaMDSCHEMA + "DIMENSIONS";
 /**
@@ -939,7 +939,7 @@ Xmla.MDSCHEMA_DIMENSIONS =     _xmlaMDSCHEMA + "DIMENSIONS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_FUNCTIONS</code>
+*   @default MDSCHEMA_FUNCTIONS
 */
 Xmla.MDSCHEMA_FUNCTIONS =      _xmlaMDSCHEMA + "FUNCTIONS";
 /**
@@ -956,7 +956,7 @@ Xmla.MDSCHEMA_FUNCTIONS =      _xmlaMDSCHEMA + "FUNCTIONS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_HIERARCHIES</code>
+*   @default MDSCHEMA_HIERARCHIES
 */
 Xmla.MDSCHEMA_HIERARCHIES =    _xmlaMDSCHEMA + "HIERARCHIES";
 /**
@@ -973,7 +973,7 @@ Xmla.MDSCHEMA_HIERARCHIES =    _xmlaMDSCHEMA + "HIERARCHIES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_LEVELS</code>
+*   @default MDSCHEMA_LEVELS
 */
 Xmla.MDSCHEMA_LEVELS =         _xmlaMDSCHEMA + "LEVELS";
 /**
@@ -990,7 +990,7 @@ Xmla.MDSCHEMA_LEVELS =         _xmlaMDSCHEMA + "LEVELS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_MEASURES</code>
+*   @default MDSCHEMA_MEASURES
 */
 Xmla.MDSCHEMA_MEASURES =       _xmlaMDSCHEMA + "MEASURES";
 /**
@@ -1007,7 +1007,7 @@ Xmla.MDSCHEMA_MEASURES =       _xmlaMDSCHEMA + "MEASURES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_MEMBERS</code>
+*   @default MDSCHEMA_MEMBERS
 */
 Xmla.MDSCHEMA_MEMBERS =        _xmlaMDSCHEMA + "MEMBERS";
 /**
@@ -1024,7 +1024,7 @@ Xmla.MDSCHEMA_MEMBERS =        _xmlaMDSCHEMA + "MEMBERS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_PROPERTIES</code>
+*   @default MDSCHEMA_PROPERTIES
 */
 Xmla.MDSCHEMA_PROPERTIES =     _xmlaMDSCHEMA + "PROPERTIES";
 /**
@@ -1041,7 +1041,7 @@ Xmla.MDSCHEMA_PROPERTIES =     _xmlaMDSCHEMA + "PROPERTIES";
 *   @static
 *   @final
 *   @type string
-*   @default <code>MDSCHEMA_SETS</code>
+*   @default MDSCHEMA_SETS
 */
 Xmla.MDSCHEMA_SETS = _xmlaMDSCHEMA + "SETS";
 /**
@@ -1061,7 +1061,7 @@ Xmla.MDSCHEMA_SETS = _xmlaMDSCHEMA + "SETS";
 *   @static
 *   @final
 *   @type string
-*   @default <code>request</code>
+*   @default request
 */
 Xmla.EVENT_REQUEST = "request";
 /**
@@ -1079,7 +1079,7 @@ Xmla.EVENT_REQUEST = "request";
 *   @static
 *   @final
 *   @type string
-*   @default <code>success</code>
+*   @default success
 */
 Xmla.EVENT_SUCCESS = "success";
 /**
@@ -1093,7 +1093,7 @@ Xmla.EVENT_SUCCESS = "success";
 *   @static
 *   @final
 *   @type string
-*   @default <code>error</code>
+*   @default error
 */
 Xmla.EVENT_ERROR = "error";
 
@@ -1112,7 +1112,7 @@ Xmla.EVENT_ERROR = "error";
 *   @static
 *   @final
 *   @type string
-*   @default <code>execute</code>
+*   @default execute
 */
 Xmla.EVENT_EXECUTE = "execute";
 /**
@@ -1128,7 +1128,7 @@ Xmla.EVENT_EXECUTE = "execute";
 *   @static
 *   @final
 *   @type string
-*   @default <code>executesuccess</code>
+*   @default executesuccess
 */
 Xmla.EVENT_EXECUTE_SUCCESS = "executesuccess";
 /**
@@ -1142,7 +1142,7 @@ Xmla.EVENT_EXECUTE_SUCCESS = "executesuccess";
 *   @static
 *   @final
 *   @type string
-*   @default <code>executeerror</code>
+*   @default executeerror
 */
 Xmla.EVENT_EXECUTE_ERROR = "executeerror";
 
@@ -1161,7 +1161,7 @@ Xmla.EVENT_EXECUTE_ERROR = "executeerror";
 *   @static
 *   @final
 *   @type string
-*   @default <code>discover</code>
+*   @default discover
 */
 Xmla.EVENT_DISCOVER = "discover";
 /**
@@ -1177,7 +1177,7 @@ Xmla.EVENT_DISCOVER = "discover";
 *   @static
 *   @final
 *   @type string
-*   @default <code>discoversuccess</code>
+*   @default discoversuccess
 */
 Xmla.EVENT_DISCOVER_SUCCESS = "discoversuccess";
 /**
@@ -1192,7 +1192,7 @@ Xmla.EVENT_DISCOVER_SUCCESS = "discoversuccess";
 *   @static
 *   @final
 *   @type string
-*   @default <code>discovererror</code>
+*   @default discovererror
 */
 Xmla.EVENT_DISCOVER_ERROR = "discovererror";
 
@@ -1206,7 +1206,7 @@ Xmla.EVENT_DISCOVER_ERROR = "discovererror";
 *   @static
 *   @final
 *   @type string[]
-*   @default <code>[EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]</code>
+*   @default [EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]
 */
 Xmla.EVENT_GENERAL = [
     Xmla.EVENT_REQUEST,
@@ -1223,7 +1223,7 @@ Xmla.EVENT_GENERAL = [
 *   @static
 *   @final
 *   @type string[]
-*   @default <code>[EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]</code>
+*   @default [EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]
 */
 Xmla.EVENT_DISCOVER_ALL = [
     Xmla.EVENT_DISCOVER,
@@ -1240,7 +1240,7 @@ Xmla.EVENT_DISCOVER_ALL = [
 *   @static
 *   @final
 *   @type string[]
-*   @default <code>[EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]</code>
+*   @default [EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]
 */
 Xmla.EVENT_EXECUTE_ALL = [
     Xmla.EVENT_EXECUTE,
@@ -1256,7 +1256,7 @@ Xmla.EVENT_EXECUTE_ALL = [
 *   @static
 *   @final
 *   @type string[]
-*   @default <code>[].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)</code>
+*   @default [].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)
 */
 Xmla.EVENT_ALL = [].concat(
     Xmla.EVENT_GENERAL,
@@ -1278,7 +1278,7 @@ Xmla.EVENT_ALL = [].concat(
 *   @static
 *   @final
 *   @type string
-*   @default <code>DataSourceInfo</code>
+*   @default DataSourceInfo
 */
 Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
 /**
@@ -1294,7 +1294,7 @@ Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Catalog</code>
+*   @default Catalog
 */
 Xmla.PROP_CATALOG = "Catalog";
 Xmla.PROP_CUBE = "Cube";
@@ -1309,7 +1309,7 @@ Xmla.PROP_CUBE = "Cube";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Format</code>
+*   @default Format
 */
 Xmla.PROP_FORMAT = "Format";
 /**
@@ -1326,7 +1326,7 @@ Xmla.PROP_FORMAT = "Format";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Tabular</code>
+*   @default Tabular
 */
 Xmla.PROP_FORMAT_TABULAR = "Tabular";
 /**
@@ -1345,7 +1345,7 @@ Xmla.PROP_FORMAT_TABULAR = "Tabular";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Multidimensional</code>
+*   @default Multidimensional
 */
 Xmla.PROP_FORMAT_MULTIDIMENSIONAL = "Multidimensional";
 
@@ -1363,7 +1363,7 @@ Xmla.PROP_FORMAT_MULTIDIMENSIONAL = "Multidimensional";
 *   @static
 *   @final
 *   @type string
-*   @default <code>AxisFormat</code>
+*   @default AxisFormat
 */
 Xmla.PROP_AXISFORMAT = "AxisFormat";
 /**
@@ -1376,7 +1376,7 @@ Xmla.PROP_AXISFORMAT = "AxisFormat";
 *   @static
 *   @final
 *   @type string
-*   @default <code>TupleFormat</code>
+*   @default TupleFormat
 */
 Xmla.PROP_AXISFORMAT_TUPLE = "TupleFormat";
 /**
@@ -1389,7 +1389,7 @@ Xmla.PROP_AXISFORMAT_TUPLE = "TupleFormat";
 *   @static
 *   @final
 *   @type string
-*   @default <code>ClusterFormat</code>
+*   @default ClusterFormat
 */
 Xmla.PROP_AXISFORMAT_CLUSTER = "ClusterFormat";
 /**
@@ -1402,7 +1402,7 @@ Xmla.PROP_AXISFORMAT_CLUSTER = "ClusterFormat";
 *   @static
 *   @final
 *   @type string
-*   @default <code>CustomFormat</code>
+*   @default CustomFormat
 */
 Xmla.PROP_AXISFORMAT_CUSTOM = "CustomFormat";
 
@@ -1426,7 +1426,7 @@ Xmla.PROP_AXISFORMAT_CUSTOM = "CustomFormat";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Content</code>
+*   @default Content
 */
 Xmla.PROP_CONTENT = "Content";
 /**
@@ -1441,7 +1441,7 @@ Xmla.PROP_CONTENT = "Content";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Data</code>
+*   @default Data
 */
 Xmla.PROP_CONTENT_DATA = "Data";
 /**
@@ -1454,7 +1454,7 @@ Xmla.PROP_CONTENT_DATA = "Data";
 *   @static
 *   @final
 *   @type string
-*   @default <code>None</code>
+*   @default None
 */
 Xmla.PROP_CONTENT_NONE = "None";
 /**
@@ -1466,7 +1466,7 @@ Xmla.PROP_CONTENT_NONE = "None";
 *   @static
 *   @final
 *   @type string
-*   @default <code>Schema</code>
+*   @default Schema
 */
 Xmla.PROP_CONTENT_SCHEMA = "Schema";
 /**
@@ -1478,7 +1478,7 @@ Xmla.PROP_CONTENT_SCHEMA = "Schema";
 *   @static
 *   @final
 *   @type string
-*   @default <code>SchemaData</code>
+*   @default SchemaData
 */
 Xmla.PROP_CONTENT_SCHEMADATA = "SchemaData";
 
@@ -1510,7 +1510,7 @@ Xmla.prototype = {
 *
 *   @property soapMessage
 *   @type {string}
-*   @default <code>null</code>
+*   @default null
 */
     soapMessage: null,
 /**
@@ -1518,7 +1518,7 @@ Xmla.prototype = {
 *   When a successfull response is received, it is processed and the response object is assigned to this property.
 *   The response object is either a
 *   <code><a href="Rowset.html#class_Rowset">Rowset</a></code> (after a successful invocation of XML/A <code>Discover</code> method, see: <code><a href="method_discover">discover()</a></code>) or a
-*   <code><a href="Resultset.html#class_Resultset">Resultset</a></code> (after a successful invocation of the XML/A <code>Execute</code> method, see: <code><a href="method_execute">executte()</a></code>)
+*   <code><a href="Resultset.html#class_Resultset">Resultset</a></code> (after a successful invocation of the XML/A <code>Execute</code> method, see: <code><a href="method_execute">execute()</a></code>)
 *   instance.
 *
 *   If you are interested in processing the raw response XML, see
@@ -1530,7 +1530,7 @@ Xmla.prototype = {
 *
 *   @property response
 *   @type Xmla.Rowset|Xmla.Dataset
-*   @default <code>null</code>
+*   @default null
 */
     response: null,
 /**
@@ -1548,7 +1548,7 @@ Xmla.prototype = {
 *
 *   @property responseText
 *   @type {string}
-*   @default <code>null</code>
+*   @default null
 */
     responseText: null,
 /**
@@ -1567,7 +1567,7 @@ Xmla.prototype = {
 *   @deprecated
 *   @property responseXML
 *   @type {DOMDocument}
-*   @default <code>null</code>
+*   @default null
 *   @see getRep
 */
     responseXML: null,
@@ -1652,13 +1652,28 @@ Xmla.prototype = {
 *   <dl>
 *       <dt><code>events</code></dt>
 *       <dd><code>string</code>|<code>string[]</code> REQUIRED.
-*       The event or events to listen to.
-*       You can specify a single event by using one of the <code>EVENT_XXX</code> string constant values.
-*       You can specify multiple events by using an array of <code>EVENT_XXX</code> string constant values.
-*       You can also use one of the predefined <code>EVENT_XXX</code> array constant values,
-*       or use array concatenation and compose a custom list of event names.
-*       To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>,
-*       or otherwise the <code>string</code> value <code>"all"</code>.
+*         The event or events to listen to.
+*         You can specify a single event by using one of the <code>EVENT_XXX</code> string constant values.
+*         You can specify multiple events by using an array of <code>EVENT_XXX</code> string constant values.
+*         You can also use one of the predefined <code>EVENT_XXX</code> array constant values,
+*         or use array concatenation and compose a custom list of event names.
+*         To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>,
+*         or otherwise the <code>string</code> value <code>"all"</code>.
+*         Below is the list of constants that may be used for the events or events property: <ul>
+*           <li><a href="#property_EVENT_ALL">EVENT_ALL</a> - All events. As a convenience, the string alias <code>"all"</code> may also be used.</li>
+*           <li><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a> - Fires before issueing a <a href="#method_discover">discover()</a> request.</li>
+*           <li><a href="#property_EVENT_DISCOVER_ALL">EVENT_DISCOVER_ALL</a> - All events related to <a href="#method_discover">discover()</a> requests, including <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a>, <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER_SUCCESS</a> and <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER_ERROR</a>.</li>
+*           <li><a href="#property_EVENT_DISCOVER_ERROR">EVENT_DISCOVER_ERROR</a> - Fired when an error occurred while servicing a <a href="#method_discover">discover()</a> request.</li>
+*           <li><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a> - Fired when a <a href="#method_discover">discover()</a> request completes successfully.</li>
+*           <li><a href="#property_EVENT_ERROR">EVENT_ERROR</a> - Fired when an error occurred while servicing any request.</li>
+*           <li><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a> - Fires before issueing a <a href="#method_execute">execute()</a> request.</li>
+*           <li><a href="#property_EVENT_EXECUTE_ALL">EVENT_EXECUTE_ALL</a> - All events related to <a href="#method_execute">execute()</a> requests, including <a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a>, <a href="#property_EVENT_DISCOVER">EVENT_EXECUTE_SUCCESS</a> and <a href="#property_EVENT_EXECUTE">EVENT_EXECUTE_ERROR</a>.</li>
+*           <li><a href="#property_EVENT_EXECUTE_ERROR">EVENT_EXECUTE_ERROR</a> - Fired when an error occurred while servicing a <a href="#method_execute">execute()</a> request.</li>
+*           <li><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a> - Fired when a <a href="#method_execute">execute()</a> request completes successfully.</li>
+*           <li><a href="#property_EVENT_GENERAL">EVENT_GENERAL</a> - All non-method specific events, including  <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a>, <a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a> and <a href="#property_EVENT_ERROR">EVENT_ERROR</a>.</li>
+*           <li><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a> - Fires before issueing any request.</li>
+*           <li><a href="#property_EVENT_REQUEST">EVENT_SUCCESS</a> - Fires to indicate a request was successful.</li>
+*         </ul>
 *       </dd>
 *       <dt><code>event</code></dt>
 *       <dd><code>string</code>|<code>string[]</code> Alias for <code>events</code></dd>
@@ -1717,7 +1732,7 @@ Xmla.prototype = {
                     if (_isArr(arg)) this._addListeners(arg)
                     else
                     if (events = arg.events || arg.event) {
-                        if (_isStr(events)) events = (events==="all") ? Xmla.EVENT_ALL : events.split(",");
+                        if (_isStr(events)) events = (events === "all") ? Xmla.EVENT_ALL : events.split(",");
                         if (!(_isArr(events))){
                             Xmla.Exception._newError(
                                 "WRONG_EVENTS_FORMAT",
@@ -4497,7 +4512,7 @@ Xmla.Rowset = function (node, requestType, xmla){
 *   @static
 *   @final
 *   @type int
-*   @default <code>0</code>
+*   @default 0
 */
 Xmla.Rowset.MD_DIMTYPE_UNKNOWN = 0;
 /**
@@ -4509,7 +4524,7 @@ Xmla.Rowset.MD_DIMTYPE_UNKNOWN = 0;
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default 1
 */
 Xmla.Rowset.MD_DIMTYPE_TIME = 1;
 /**
@@ -4521,7 +4536,7 @@ Xmla.Rowset.MD_DIMTYPE_TIME = 1;
 *   @static
 *   @final
 *   @type int
-*   @default <code>2</code>
+*   @default 2
 */
 Xmla.Rowset.MD_DIMTYPE_MEASURE = 2;
 /**
@@ -4533,7 +4548,7 @@ Xmla.Rowset.MD_DIMTYPE_MEASURE = 2;
 *   @static
 *   @final
 *   @type int
-*   @default <code>3</code>
+*   @default 3
 */
 Xmla.Rowset.MD_DIMTYPE_OTHER = 3;
 /**
@@ -4545,7 +4560,7 @@ Xmla.Rowset.MD_DIMTYPE_OTHER = 3;
 *   @static
 *   @final
 *   @type int
-*   @default <code>5</code>
+*   @default 5
 */
 Xmla.Rowset.MD_DIMTYPE_QUANTITATIVE = 5;
 /**
@@ -4557,7 +4572,7 @@ Xmla.Rowset.MD_DIMTYPE_QUANTITATIVE = 5;
 *   @static
 *   @final
 *   @type int
-*   @default <code>6</code>
+*   @default 6
 */
 Xmla.Rowset.MD_DIMTYPE_ACCOUNTS = 6;
 /**
@@ -4569,7 +4584,7 @@ Xmla.Rowset.MD_DIMTYPE_ACCOUNTS = 6;
 *   @static
 *   @final
 *   @type int
-*   @default <code>7</code>
+*   @default 7
 */
 Xmla.Rowset.MD_DIMTYPE_CUSTOMERS = 7;
 /**
@@ -4581,7 +4596,7 @@ Xmla.Rowset.MD_DIMTYPE_CUSTOMERS = 7;
 *   @static
 *   @final
 *   @type int
-*   @default <code>8</code>
+*   @default 8
 */
 Xmla.Rowset.MD_DIMTYPE_PRODUCTS = 8;
 /**
@@ -4593,7 +4608,7 @@ Xmla.Rowset.MD_DIMTYPE_PRODUCTS = 8;
 *   @static
 *   @final
 *   @type int
-*   @default <code>9</code>
+*   @default 9
 */
 Xmla.Rowset.MD_DIMTYPE_SCENARIO = 9;
 /**
@@ -4605,7 +4620,7 @@ Xmla.Rowset.MD_DIMTYPE_SCENARIO = 9;
 *   @static
 *   @final
 *   @type int
-*   @default <code>10</code>
+*   @default 10
 */
 Xmla.Rowset.MD_DIMTYPE_UTILIY = 10;
 /**
@@ -4617,7 +4632,7 @@ Xmla.Rowset.MD_DIMTYPE_UTILIY = 10;
 *   @static
 *   @final
 *   @type int
-*   @default <code>11</code>
+*   @default 11
 */
 Xmla.Rowset.MD_DIMTYPE_CURRENCY = 11;
 /**
@@ -4629,7 +4644,7 @@ Xmla.Rowset.MD_DIMTYPE_CURRENCY = 11;
 *   @static
 *   @final
 *   @type int
-*   @default <code>12</code>
+*   @default 12
 */
 Xmla.Rowset.MD_DIMTYPE_RATES = 12;
 /**
@@ -4641,7 +4656,7 @@ Xmla.Rowset.MD_DIMTYPE_RATES = 12;
 *   @static
 *   @final
 *   @type int
-*   @default <code>13</code>
+*   @default 13
 */
 Xmla.Rowset.MD_DIMTYPE_CHANNEL = 13;
 /**
@@ -4653,7 +4668,7 @@ Xmla.Rowset.MD_DIMTYPE_CHANNEL = 13;
 *   @static
 *   @final
 *   @type int
-*   @default <code>14</code>
+*   @default 14
 */
 Xmla.Rowset.MD_DIMTYPE_PROMOTION = 14;
 /**
@@ -4665,7 +4680,7 @@ Xmla.Rowset.MD_DIMTYPE_PROMOTION = 14;
 *   @static
 *   @final
 *   @type int
-*   @default <code>15</code>
+*   @default 15
 */
 Xmla.Rowset.MD_DIMTYPE_ORGANIZATION = 15;
 /**
@@ -4677,7 +4692,7 @@ Xmla.Rowset.MD_DIMTYPE_ORGANIZATION = 15;
 *   @static
 *   @final
 *   @type int
-*   @default <code>16</code>
+*   @default 16
 */
 Xmla.Rowset.MD_DIMTYPE_BILL_OF_MATERIALS = 16;
 /**
@@ -4689,7 +4704,7 @@ Xmla.Rowset.MD_DIMTYPE_BILL_OF_MATERIALS = 16;
 *   @static
 *   @final
 *   @type int
-*   @default <code>17</code>
+*   @default 17
 */
 Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
 
@@ -4700,7 +4715,7 @@ Xmla.Rowset.MD_DIMTYPE_GEOGRAPHY = 17;
 *   @static
 *   @final
 *   @type int
-*   @default <code>0</code>
+*   @default 0
 */
 Xmla.Rowset.MD_STRUCTURE_FULLYBALANCED = 0;
 /**
@@ -4710,7 +4725,7 @@ Xmla.Rowset.MD_STRUCTURE_FULLYBALANCED = 0;
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default 1
 */
 Xmla.Rowset.MD_STRUCTURE_RAGGEDBALANCED = 1;
 /**
@@ -4720,7 +4735,7 @@ Xmla.Rowset.MD_STRUCTURE_RAGGEDBALANCED = 1;
 *   @static
 *   @final
 *   @type int
-*   @default <code>2</code>
+*   @default 2
 */
 Xmla.Rowset.MD_STRUCTURE_UNBALANCED = 2;
 /**
@@ -4730,7 +4745,7 @@ Xmla.Rowset.MD_STRUCTURE_UNBALANCED = 2;
 *   @static
 *   @final
 *   @type int
-*   @default <code>3</code>
+*   @default 3
 */
 Xmla.Rowset.MD_STRUCTURE_NETWORK = 3;
 
@@ -4742,7 +4757,7 @@ Xmla.Rowset.MD_STRUCTURE_NETWORK = 3;
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default 1
 */
 Xmla.Rowset.MD_USER_DEFINED = 1
 /**
@@ -4753,7 +4768,7 @@ Xmla.Rowset.MD_USER_DEFINED = 1
 *   @static
 *   @final
 *   @type int
-*   @default <code>2</code>
+*   @default 2
 */
 Xmla.Rowset.MD_SYSTEM_ENABLED = 2
 /**
@@ -4764,7 +4779,7 @@ Xmla.Rowset.MD_SYSTEM_ENABLED = 2
 *   @static
 *   @final
 *   @type int
-*   @default <code>4</code>
+*   @default 4
 */
 Xmla.Rowset.MD_SYSTEM_INTERNAL = 4
 
@@ -4776,7 +4791,7 @@ Xmla.Rowset.MD_SYSTEM_INTERNAL = 4
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default 1
 */
 Xmla.Rowset.MDMEMBER_TYPE_REGULAR = 1;
 /**
@@ -4787,7 +4802,7 @@ Xmla.Rowset.MDMEMBER_TYPE_REGULAR = 1;
 *   @static
 *   @final
 *   @type int
-*   @default <code>2</code>
+*   @default 2
 */
 Xmla.Rowset.MDMEMBER_TYPE_ALL = 2;
 /**
@@ -4798,7 +4813,7 @@ Xmla.Rowset.MDMEMBER_TYPE_ALL = 2;
 *   @static
 *   @final
 *   @type int
-*   @default <code>3</code>
+*   @default 3
 */
 Xmla.Rowset.MDMEMBER_TYPE_FORMULA = 3;
 /**
@@ -4809,7 +4824,7 @@ Xmla.Rowset.MDMEMBER_TYPE_FORMULA = 3;
 *   @static
 *   @final
 *   @type int
-*   @default <code>4</code>
+*   @default 4
 */
 Xmla.Rowset.MDMEMBER_TYPE_MEASURE = 4;
 /**
@@ -4820,7 +4835,7 @@ Xmla.Rowset.MDMEMBER_TYPE_MEASURE = 4;
 *   @static
 *   @final
 *   @type int
-*   @default <code>0</code>
+*   @default 0
 */
 Xmla.Rowset.MDMEMBER_TYPE_UNKNOWN = 0;
 
