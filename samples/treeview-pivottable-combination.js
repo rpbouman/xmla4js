@@ -955,11 +955,12 @@ var QueryDesignerAxis;
             }
         }
         this.updateDom();
+        return true;
     },
     removeHierarchy: function(item){
-        this._removeHierarchy(item);
-        this.getQueryDesigner().axisChanged(this);
-        return true;
+        var change = this._removeHierarchy(item);
+        if (change) this.getQueryDesigner().axisChanged(this);
+        return change;
     },
     getMember: function(item) {
         if (iObj(item)) item = this.getMemberExpression(item);
@@ -975,11 +976,12 @@ var QueryDesignerAxis;
         var hierarchyIndex = this.getHierarchyIndex(member.hierarchy);
         if (!setDefs.length) return this.removeHierarchy(hierarchyIndex);
         this.updateDom();
+        return true;
     },
     removeMember: function(item) {
-        this._removeMember(item);
-        this.getQueryDesigner().axisChanged(this);
-        return true;
+        var change = this._removeMember(item);
+        if (change) this.getQueryDesigner().axisChanged(this);
+        return change;
     },
     getMemberInfo: function(requestType, metadata){
         var expression = this.getMemberExpression(metadata), caption;
@@ -1034,7 +1036,7 @@ var QueryDesignerAxis;
     },
     addHierarchy: function(hierarchyIndex, requestType, metadata) {
         this._addHierarchy(hierarchyIndex, metadata);
-        this.addMember(-1, requestType, metadata);
+        return this.addMember(-1, requestType, metadata);
     },
     importHierarchy: function(axis, hierarchyName, targetIndex){
         if (axis === this) throw "Can't import to itself";
@@ -1049,15 +1051,16 @@ var QueryDesignerAxis;
         this.getQueryDesigner().axisChanged(this);
     },
     _moveMember: function(member, toIndex) {
-        if (member.index === toIndex) return;
+        if (member.index === toIndex) return false;
         var setDefs = this.setDefs[member.hierarchy];
         setDefs.splice(member.index, 1);
         setDefs.splice(toIndex, 0, member.setDef);
         this.updateDom();
+        return true;
     },
     moveMember: function(member, toIndex) {
-        this._moveMember(member, toIndex);
-        this.getQueryDesigner().axisChanged(this);
+        var change = this._moveMember(member, toIndex);
+        if (change) this.getQueryDesigner().axisChanged(this);
     },
     itemDropped: function(target, requestType, metadata) {
         var hierarchyName = this.getHierarchyName(metadata),
