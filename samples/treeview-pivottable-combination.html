@@ -141,6 +141,12 @@
                 bottom: 0px;
                 left: 0px;
                 right: 0px;
+            /*
+                overflow: auto
+
+                Bug in firefox: with overflow auto, mouseup events
+                report the wrong target.
+            */
             }
         </style>
         <style type="text/css" id="tree">

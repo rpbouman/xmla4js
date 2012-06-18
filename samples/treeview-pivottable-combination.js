@@ -1048,12 +1048,16 @@ var QueryDesignerAxis;
         this.updateDom();
         this.getQueryDesigner().axisChanged(this);
     },
-    moveMember: function(member, toIndex) {
+    _moveMember: function(member, toIndex) {
         if (member.index === toIndex) return;
         var setDefs = this.setDefs[member.hierarchy];
         setDefs.splice(member.index, 1);
         setDefs.splice(toIndex, 0, member.setDef);
         this.updateDom();
+    },
+    moveMember: function(member, toIndex) {
+        this._moveMember(member, toIndex);
+        this.getQueryDesigner().axisChanged(this);
     },
     itemDropped: function(target, requestType, metadata) {
         var hierarchyName = this.getHierarchyName(metadata),
@@ -1104,9 +1108,12 @@ var QueryDesignerAxis;
                 members += setDef[j].expression;
             }
             setDef = "{" + members + "}";
+            if (hierarchyName !== "Measures") {
+                setDef = "Hierarchize(" + setDef + ")";
+            }
             mdx = mdx ? "CrossJoin(" + mdx + ", " + setDef + ")" : setDef;
         }
-        if (mdx.length) mdx  = "Hierarchize(" + mdx + ") ON Axis(" + this.conf.id + ")";
+        if (mdx.length) mdx = mdx + " ON Axis(" + this.conf.id + ")";
         return mdx;
     }
 };
@@ -2042,7 +2049,11 @@ function init() {
             }
         }
     }
-    //gEl("cube-body").style.overflow = "auto";
+    //bug in gecko: mouseup event does not report correct target
+    //in case overflow in anything but hidden.
+    if (!(navigator.userAgent.indexOf("Gecko") && navigator.userAgent.indexOf("WebKit") === -1)) {
+        gEl("cube-body").style.overflow = "auto";
+    }
 }
 
 init();
