@@ -62,6 +62,7 @@
             }
 
             #discover {
+                border-radius: 5px;
                 float:left;
             }
             #discover:after {
@@ -80,11 +81,19 @@
                 content: ": "
             }
             #url {
-                left: 3em;
-                margin-left:5px;
+                height: 24px;
+                padding-left: 20px;
                 float:left;
                 width: 93%;
                 border-style: none;
+                background-repeat: no-repeat;
+                background-image: url('schema24.gif');
+                background-position: -2px 2px;
+            }
+            .busy {
+                background-repeat: no-repeat;
+                background-image: url('ajax-loader-small.gif') !important;
+                background-position: 4px 5px !important;
             }
             #url:active {
                 border-style: none;
@@ -97,10 +106,10 @@
                 border-radius: 5px;
                 border-color: grey;
                 background-color: white;
-                position:fixed;
-                top: 5px;
-                left: 5px;
-                right: 5px;
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                right: 2px;
             }
 
             .toggle {

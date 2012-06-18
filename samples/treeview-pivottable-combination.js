@@ -150,138 +150,6 @@ function pos(e1, e2){
 }
 /***************************************************************
 *
-*   TreeNode
-*
-***************************************************************/
-var TreeNode;
-(TreeNode = function(conf){
-    this.conf = conf;
-    this.id = ++TreeNode.id;
-    TreeNode.instances[this.getId()] = this;
-    if (conf.parentTreeNode) {
-        TreeNode.getInstance(conf.parentTreeNode).appendTreeNode(this);
-    }
-    else
-    if (conf.parentElement) {
-        this.appendToElement(gEl(conf.parentElement));
-    }
-}).prototype = {
-    getConf: function() {
-        return this.conf;
-    },
-    appendToElement: function(el) {
-        aCh(el, this.getDom());
-    },
-    appendTreeNode: function(treeNode){
-        aCh(this.getDomBody(), treeNode.getDom());
-    },
-    getId: function(){
-        return TreeNode.prefix + this.id;
-    },
-    getState: function(){
-        return this.conf.state || TreeNode.states.collapsed;
-    },
-    getCustomClass: function(){
-        return this.conf.customClass;
-    },
-    getTitle: function(){
-        return this.conf.title;
-    },
-    getDom: function() {
-        var dom;
-        if (!(dom = gEl(this.getId()))){
-            dom = this.initDom();
-        }
-        return dom;
-    },
-    getDomBody: function() {
-        return gEls(this.getDom(), "DIV", 1);
-    },
-    toggle: function() {
-        var state = this.getState();
-        switch (state) {
-            case TreeNode.states.collapsed:
-                state = TreeNode.states.expanded;
-                break;
-            case TreeNode.states.expanded:
-                state = TreeNode.states.collapsed;
-                break;
-        }
-        this.setState(state);
-    },
-    setState: function(state){
-        this.conf.state = state;
-        this.initClass(this.getDom());
-        if (state === TreeNode.STATE_COLLAPSED || gEls(this.getDomBody(), "DIV").length) return;
-        this.loadChildren();
-    },
-    loadChildren: function() {
-        var me = this, loader = me.conf.loadChildren;
-        if (loader) {
-            var ajaxLoader = cEl("IMG", {
-                src: "ajax-loader-small.gif"
-            }, null, me.getDomBody()),
-            f = function(){
-                loader.call(me, function(){
-                    dEl(ajaxLoader);
-                });
-            }
-            setTimeout(f, 1);
-        }
-    },
-    initClass: function(dom) {
-        dom.className = TreeNode.prefix +
-                    " " + this.getState() +
-                    " " + this.getCustomClass()
-        ;
-    },
-    initDom: function() {
-        var dom = cEl("DIV", {
-            id: this.getId()
-        }, [
-            cEl("DIV", {
-                "class": "head",
-                title: this.conf.tooltip || this.conf.title
-            }, [
-                cEl("SPAN", {
-                    "class": "toggle"
-                }),
-                cEl("SPAN", {
-                    "class": "label"
-                }, this.getTitle())
-            ]),
-            cEl("DIV", {
-                "class": "body"
-            })
-        ]);
-        ;
-        this.initClass(dom);
-        return dom;
-    },
-    eachChild: function() {
-    }
-};
-TreeNode.states = {
-    collapsed: "collapsed",
-    expanded: "expanded",
-    leaf: "leaf"
-};
-TreeNode.id = 0;
-TreeNode.prefix = "node";
-TreeNode.instances = {};
-TreeNode.getInstance = function(id){
-    if (iInt(id)) id = TreeNode.prefix + id;
-    return TreeNode.instances[id];
-};
-TreeNode.lookupTreeNode = function(el){
-    while (el && el.className.indexOf(TreeNode.prefix)) {
-        if ((el = el.parentNode) === doc) return null;
-    }
-    return TreeNode.getInstance(el.id);
-};
-
-/***************************************************************
-*
 *   Event
 *
 ***************************************************************/
@@ -531,6 +399,137 @@ var DDHandler;
         }
         clearBrowserSelection();
     }
+};
+/***************************************************************
+*
+*   TreeNode
+*
+***************************************************************/
+var TreeNode;
+(TreeNode = function(conf){
+    this.conf = conf;
+    this.id = conf.id ? conf.id : ++TreeNode.id;
+    TreeNode.instances[this.getId()] = this;
+    if (conf.parentTreeNode) {
+        TreeNode.getInstance(conf.parentTreeNode).appendTreeNode(this);
+    }
+    else
+    if (conf.parentElement) {
+        this.appendToElement(gEl(conf.parentElement));
+    }
+}).prototype = {
+    getConf: function() {
+        return this.conf;
+    },
+    appendToElement: function(el) {
+        aCh(el, this.getDom());
+    },
+    appendTreeNode: function(treeNode){
+        aCh(this.getDomBody(), treeNode.getDom());
+    },
+    getId: function(){
+        return TreeNode.prefix + ":" + this.id;
+    },
+    getState: function(){
+        return this.conf.state || TreeNode.states.collapsed;
+    },
+    getCustomClass: function(){
+        return this.conf.customClass;
+    },
+    getTitle: function(){
+        return this.conf.title;
+    },
+    getDom: function() {
+        var dom;
+        if (!(dom = gEl(this.getId()))){
+            dom = this.initDom();
+        }
+        return dom;
+    },
+    getDomBody: function() {
+        return gEls(this.getDom(), "DIV", 1);
+    },
+    toggle: function() {
+        var state = this.getState();
+        switch (state) {
+            case TreeNode.states.collapsed:
+                state = TreeNode.states.expanded;
+                break;
+            case TreeNode.states.expanded:
+                state = TreeNode.states.collapsed;
+                break;
+        }
+        this.setState(state);
+    },
+    setState: function(state){
+        this.conf.state = state;
+        this.initClass(this.getDom());
+        if (state === TreeNode.STATE_COLLAPSED || gEls(this.getDomBody(), "DIV").length) return;
+        this.loadChildren();
+    },
+    loadChildren: function() {
+        var me = this, loader = me.conf.loadChildren;
+        if (loader) {
+            var ajaxLoader = cEl("IMG", {
+                src: "ajax-loader-small.gif"
+            }, null, me.getDomBody()),
+            f = function(){
+                loader.call(me, function(){
+                    dEl(ajaxLoader);
+                });
+            }
+            setTimeout(f, 1);
+        }
+    },
+    initClass: function(dom) {
+        dom.className = TreeNode.prefix +
+                    " " + this.getState() +
+                    " " + this.getCustomClass()
+        ;
+    },
+    initDom: function() {
+        var dom = cEl("DIV", {
+            id: this.getId()
+        }, [
+            cEl("DIV", {
+                "class": "head",
+                title: this.conf.tooltip || this.conf.title
+            }, [
+                cEl("SPAN", {
+                    "class": "toggle"
+                }),
+                cEl("SPAN", {
+                    "class": "label"
+                }, this.getTitle())
+            ]),
+            cEl("DIV", {
+                "class": "body"
+            })
+        ]);
+        ;
+        this.initClass(dom);
+        return dom;
+    },
+    eachChild: function() {
+    }
+};
+TreeNode.states = {
+    collapsed: "collapsed",
+    expanded: "expanded",
+    leaf: "leaf"
+};
+TreeNode.id = 0;
+TreeNode.prefix = "node";
+TreeNode.instances = {};
+TreeNode.getInstance = function(id){
+    if (iInt(id)) id = TreeNode.prefix + id;
+    return TreeNode.instances[id];
+};
+TreeNode.lookupTreeNode = function(el){
+    while (el && el.className.indexOf(TreeNode.prefix)) {
+        if ((el = el.parentNode) === doc) return null;
+    }
+    return TreeNode.getInstance(el.id);
 };
 
 /***************************************************************
@@ -1506,6 +1505,15 @@ var log = new Log({
             error: function(eventName, eventData, xmla){
                 var end = (new Date()).getTime();
                 log.print("Xmla error in " + (end - xmla.start) + "ms");
+            },
+            discover: function(eventName, eventData, xmla){
+                gEl("url").className = "busy";
+            },
+            discoversuccess: function(eventName, eventData, xmla){
+                gEl("url").className = "";
+            },
+            discovererror: function(eventName, eventData, xmla){
+                gEl("url").className = "";
             }
         }
     }),
@@ -1577,6 +1585,7 @@ function discoverClicked(){
             resp.eachRow(function(row){
                 var nodeId = (new TreeNode({
                     parentElement: "datasources-body",
+                    id: req.requestType + ":" + row.DataSourceName,
                     customClass: req.requestType,
                     title: row.DataSourceDescription,
                     tooltip: row.DataSourceInfo,
@@ -1594,6 +1603,7 @@ function discoverClicked(){
                                 Catalog: row.CATALOG_NAME
                             },
                             nodeId = (new TreeNode({
+                                id: req.requestType + ":" + row.CATALOG_NAME,
                                 parentTreeNode: req.nodeId,
                                 customClass: req.requestType,
                                 title: row.CATALOG_NAME,
@@ -1613,6 +1623,7 @@ function discoverClicked(){
                                             CUBE_NAME: row.CUBE_NAME
                                         },
                                         nodeId = (new TreeNode({
+                                            id: req.requestType + ":" + row.CATALOG_NAME + "." + row.CUBE_NAME,
                                             parentTreeNode: req.nodeId,
                                             customClass: req.requestType,
                                             title: row.CUBE_CAPTION,
@@ -1664,6 +1675,7 @@ function selectCube(cubeTreeNode) {
             resp.eachRow(function(row){
                 cubeMetaData.measures[row.MEASURE_UNIQUE_NAME] = row;
                 new TreeNode({
+                    id: req.requestType + ":" + row.MEASURE_UNIQUE_NAME,
                     parentElement: "cube-body",
                     customClass: req.requestType,
                     title: row.MEASURE_CAPTION,
@@ -1688,6 +1700,7 @@ function selectCube(cubeTreeNode) {
                             HIERARCHY_UNIQUE_NAME: row.HIERARCHY_UNIQUE_NAME
                         },
                         nodeId = (new TreeNode({
+                            id: req.requestType + ":" + row.HIERARCHY_UNIQUE_NAME,
                             parentElement: "cube-body",
                             customClass: req.requestType,
                             title: row.HIERARCHY_CAPTION,
@@ -1711,6 +1724,7 @@ function selectCube(cubeTreeNode) {
                                                 LEVEL_UNIQUE_NAME: row.LEVEL_UNIQUE_NAME
                                             },
                                             nodeId = (new TreeNode({
+                                                id: req.requestType + ":" + row.LEVEL_UNIQUE_NAME,
                                                 parentTreeNode: req.nodeId,
                                                 customClass: req.requestType,
                                                 title: row.LEVEL_CAPTION,
@@ -1757,6 +1771,7 @@ function selectCube(cubeTreeNode) {
                                                                             memberUniqueName = member.UName,
                                                                             memberCaption = member.Caption,
                                                                             nodeId = (new TreeNode({
+                                                                                id: "MDSCHEMA_MEMBERS:" + memberUniqueName,
                                                                                 parentTreeNode: req.nodeId,
                                                                                 customClass: req.requestType,
                                                                                 title: memberCaption,
@@ -1779,6 +1794,7 @@ function selectCube(cubeTreeNode) {
                                                             }
                                                             resp.eachRow(function(row){
                                                                 nodeId = (new TreeNode({
+                                                                    id: "MDSCHEMA_MEMBERS:" + row.MEMBER_UNIQUE_NAME,
                                                                     parentTreeNode: req.nodeId,
                                                                     customClass: req.requestType,
                                                                     title: row.MEMBER_CAPTION,
