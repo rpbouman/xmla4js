@@ -290,7 +290,7 @@ var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
             }
             else {
                 criteria = function(node){
-                    return (node.nodeType === 1 && node.namespaceURI === ns && node.nodeName === tagName);
+                    return (node.nodeType === 1 && node.namespaceURI === ns && node.localName === tagName);
                 };
             }
             _getElements(node, list, criteria);
@@ -4117,119 +4117,126 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *       <tr>
 *           <td>MEASURE_NAME</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The name of the measure.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_UNIQUE_NAME</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The Unique name of the measure. For providers that generate unique names by qualification, each component of this name is delimited.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_CAPTION</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>A label or caption associated with the measure. Used primarily for display purposes. If a caption does not exist, MEASURE_NAME is returned.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_GUID</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>Not supported.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_AGGREGATOR</td>
-*           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>int</td>
+*           <td>An enumeration that indicates how the measure was derived. See http://msdn.microsoft.com/en-us/library/ms126250.aspx</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DATA_TYPE</td>
-*           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>int</td>
+*           <td>The data type of the measure. See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>NUMERIC_PRECISION</td>
 *           <td>int</td>
-*           <td>Name of the cube.</td>
+*           <td>The maximum precision of the property if the measure object's data type is exact numeric. NULL for all other property types.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>NUMERIC_SCALE</td>
 *           <td>int</td>
-*           <td>Name of the cube.</td>
+*           <td>The number of digits to the right of the decimal point if the measure object's type indicator is DBTYPE_NUMERIC or DBTYPE_DECIMAL. Otherwise, this value is NULL.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>MEASURE_UNITS</td>
+*           <td>int</td>
+*           <td>Not supported.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>A human-readable description of the measure. NULL if no description exists.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>EXPRESSION</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>An expression for the member.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_IS_VISIBLE</td>
 *           <td>boolean</td>
-*           <td>Name of the cube.</td>
+*           <td>A Boolean that always returns True. If the measure is not visible, it will not be included in the schema rowset.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>LEVELS_LIST</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>A string that always returns NULL.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_NAME_SQL_COLUMN_NAME</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The name of the column in the SQL query that corresponds to the measure's name.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_UNQUALIFIED_CAPTION</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The name of the measure, not qualified with the measure group name.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASUREGROUP_NAME</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The name of the measure group to which the measure belongs.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_DISPLAY_FOLDER</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The path to be used when displaying the measure in the user interface. Folder names will be separated by a semicolon. Nested folders are indicated by a backslash (\).</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DEFAULT_FORMAT_STRING</td>
 *           <td>string</td>
-*           <td>Name of the cube.</td>
+*           <td>The default format string for the measure.</td>
 *           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
