@@ -46,7 +46,7 @@ function iStr(a){return typeof(a) === "string";}
 function iInt(a){return parseInt(a) === a;}
 function iArr(a){return a && a.constructor === Array;}
 function iObj(a){return a!==null && typeof(a) === "object";}
-function iNod(a){return iObj(el) && el.nodeType===1;}
+function iNod(a){return iObj(a) && a.nodeType===1;}
 function gEl(id) {
     if (iStr(id)) id = doc.getElementById(id);
     return id;
@@ -247,9 +247,7 @@ for (property in Event.prototype) {
 var GlobalEvent = new Event(null);
 
 Event.get = function(e) {
-    if (!e) {
-        e = win.event;
-    }
+    if (!e) e = win.event;
     GlobalEvent.browserEvent = e;
     return GlobalEvent;
 };
@@ -525,7 +523,7 @@ TreeNode.getInstance = function(id){
     if (iInt(id)) id = TreeNode.prefix + id;
     return TreeNode.instances[id];
 };
-TreeNode.lookupTreeNode = function(el){
+TreeNode.lookup = function(el){
     while (el && el.className.indexOf(TreeNode.prefix)) {
         if ((el = el.parentNode) === doc) return null;
     }
@@ -544,6 +542,7 @@ var QueryDesigner;
     this.conf = conf;
     this.axes = {};
     this.createAxes();
+    QueryDesigner.instances[this.getId()] = this;
 }).prototype = {
     setCube: function(cube) {
         this.cube = cube;
@@ -609,9 +608,7 @@ var QueryDesigner;
     },
     getDom: function() {
         var el = gEl(this.getId());
-        if (!el) {
-            el = this.createDom();
-        }
+        if (!el) el = this.createDom();
         return el;
     },
     render: function() {
@@ -654,6 +651,17 @@ var QueryDesigner;
 };
 QueryDesigner.id = 0;
 QueryDesigner.prefix = "query-designer";
+QueryDesigner.instances = {};
+QueryDesigner.getInstance = function(id){
+    return QueryDesigner.instances[id];
+};
+
+QueryDesigner.lookup = function(el){
+    while (el && el.className.indexOf(QueryDesigner.prefix + " ")) {
+        if ((el = el.parentNode) === doc) return null;
+    }
+    return QueryDesigner.getInstance(el.id);
+};
 
 /***************************************************************
 *
@@ -1125,8 +1133,8 @@ QueryDesignerAxis.getInstance = function(id){
     return QueryDesignerAxis.instances[id];
 };
 
-QueryDesignerAxis.lookupQueryDesignerAxis = function(el){
-    while (el && el.className.indexOf(QueryDesignerAxis.prefix)) {
+QueryDesignerAxis.lookup = function(el){
+    while (el && el.className.indexOf(QueryDesignerAxis.prefix + " ")) {
         if ((el = el.parentNode) === doc) return null;
     }
     return QueryDesignerAxis.getInstance(el.id);
@@ -1194,15 +1202,18 @@ var PivotTable;
             for (i = 0; i < levels.length; i++){
                 var r = table.insertRow(table.rows.length),
                     cells = r.cells,
+                    memberCell = null,
                     c = null,
-                    level = -1,
-                    prevTupleName = null
+                    level = -1, lnum,
+                    prevTupleName = null,
+                    j, tuples = axis.tuples, m = tuples.length, tuple,
+                    member
                 ;
-                var j, tuples = axis.tuples, m = tuples.length, tuple;
-                for (var j = 0; j < m; j++){
+                for (j = 0; j < m; j++){
                     tuple = tuples[j];
-                    var member = tuple.members[hierarchy.index];
-                    if (member.LNum === levels[i]) {
+                    member = tuple.members[hierarchy.index];
+                    lnum = member.LNum;
+                    if (lnum === levels[i]) {
                         tupleName = me.getTupleName(tuple, hierarchy);
                         if (tupleName === prevTupleName) {
                             memberCell.colSpan++;
@@ -1218,19 +1229,87 @@ var PivotTable;
                         prevTupleName = tupleName;
                     }
                     else
-                    if (member.LNum > levels[i]) {
+                    if (lnum > levels[i]) {
+                        if (!memberCell) {
+                            memberCell = r.insertCell(r.cells.length);
+                            memberCell.className = "th";
+                            c.innerHTML = "&#160;";
+                        }
                         memberCell.colSpan++;
                     }
                     else
-                    if (member.LNum < levels[i]) {
-                        if (level !== member.LNum || c === null) {
+                    if (lnum < levels[i]) {
+                        if (level !== lnum || c === null) {
                             c = r.insertCell(cells.length);
                             c.className = "th";
                             c.innerHTML = "&#160;";
-                            level = member.LNum;
+                            level = lnum;
                         }
                         else {
                             c.colSpan++;
+                        }
+                    }
+                }
+            }
+        });
+    },
+    renderAxisHorizontally: function(axis, table){
+        var me = this;
+        if (!table) table = me.table;
+        axis.eachHierarchy(function(hierarchy){
+            var i, levels = hierarchy.levels, n = levels.length;
+            for (i = 0; i < levels.length; i++){
+                var r = table.insertRow(table.rows.length),
+                    cells = r.cells,
+                    memberCell = null,
+                    c = null,
+                    level = levels[i], lnum,
+                    prevTupleName = null,
+                    j, tuples = axis.tuples, m = tuples.length, tuple,
+                    member
+                ;
+                for (j = 0; j < m; j++){
+                    tuple = tuples[j];
+                    cells = r.cells;
+                    member = tuple.members[hierarchy.index];
+                    lnum = member.LNum;
+                    if (lnum === level) {
+                        tupleName = me.getTupleName(tuple, hierarchy);
+                        if (tupleName === prevTupleName) {
+                            memberCell.colSpan++;
+                        }
+                        else {
+                            memberCell = r.insertCell(r.cells.length);
+                            memberCell.className = "th MDSCHEMA_MEMBERS";
+                            memberCell.title = member.UName;
+                            memberCell.innerHTML = member.Caption;
+                            c = null;
+                        }
+                        prevTupleName = tupleName;
+                    }
+                    else {
+                        if (lnum > level) {
+                            memberCell = cells.item(cells.length - 1);
+                            //if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS")
+                            if (!memberCell) {
+                                memberCell = r.insertCell(cells.length);
+                                memberCell.className = "th";
+                                memberCell.innerHTML = "&#160;";
+                            }
+                            else {
+                                memberCell.colSpan++;
+                            }
+                        }
+                        else {
+                            if (c === null) {
+                                c = r.insertCell(cells.length);
+                                c.className = "th";
+                                c.innerHTML = "&#160;";
+                                memberCell = null;
+                            }
+                            else {
+                                c.colSpan++;
+                            }
                         }
                     }
                 }
@@ -1250,39 +1329,38 @@ var PivotTable;
                     memberCell = null,
                     prevTupleName,
                     level = levels[i],
-                    levelId,
                     j, tuples = axis.tuples,
-                    m = tuples.length, tuple
+                    m = tuples.length, tuple,
+                    r, cells, member, tupleName,
+                    lnum
                 ;
                 for (j = 0; j < m; j++){
-                    tuple = tuples[j];
-                    var r;
                     if (!hierarchy.index && !i) {
                         r = table.insertRow(rows.length);
                     }
                     else {
-                        r = rows[rowOffset + tuple.index];
+                        r = rows[rowOffset + j];
                     }
-                    var cells = r.cells,
-                        member = tuple.members[hierarchy.index],
-                        tupleName
-                    ;
-                    if (member.LNum === level) {
+                    tuple = tuples[j];
+                    cells = r.cells;
+                    member = tuple.members[hierarchy.index];
+                    lnum = member.LNum;
+                    if (lnum === level) {
                         tupleName = me.getTupleName(tuple, hierarchy);
-                        if (tupleName !== prevTupleName) {
+                        if (tupleName === prevTupleName) {
+                            memberCell.rowSpan++;
+                        }
+                        else {
                             memberCell = r.insertCell(r.cells.length);
                             memberCell.className = "th MDSCHEMA_MEMBERS";
                             memberCell.title = member.UName;
                             memberCell.innerHTML = member.Caption;
                             c = null;
                         }
-                        else {
-                            memberCell.rowSpan++;
-                        }
                         prevTupleName = tupleName;
                     }
                     else {
-                        if (member.LNum < level) {
+                        if (lnum < level) {
                             memberCell = cells.item(cells.length - 1);
                             if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS") memberCell.colSpan++;
                         }
@@ -1424,6 +1502,8 @@ var PivotTable;
         this.dataset = dataset;
         me.table = t;
         this.clear();
+        container.innerHTML = "";
+        container.appendChild(t);
         if (columnAxis) {
             log.print("Rendering column axis...");
             start = (new Date()).getTime();
@@ -1486,6 +1566,95 @@ var Log;
 };
 /***************************************************************
 *
+*   Menu
+*
+***************************************************************/
+var Menu;
+(Menu = function(conf) {
+    this.conf = conf;
+    this.init();
+}).prototype = {
+    init: function(){
+        var conf = this.conf,
+            items = conf.items
+        ;
+        listen(this.getContainer(), "click", this.containerClicked, this);
+        if (iFun(conf.checkShowMenu)){
+            this.checkShowMenu = conf.checkShowMenu;
+        }
+        this.createDom();
+        if (items) this.addItems();
+        this.hide();
+    },
+    getId: function(){
+        return Menu.prefix + this.conf.id;
+    },
+    getContainer: function() {
+        var container = this.conf.container;
+        if (!container) return doc.body;
+        if (iNod(container)) return container;
+        if (iStr(container)) return gEl(container);
+    },
+    createDom: function(){
+        var conf = this.conf,
+            container = this.getContainer()
+        ;
+        var dom = cEl("div", {
+            "class": "menu " + (conf.customClass ? conf.customClass : ""),
+            id: this.getId()
+        }, null, container);
+        listen(dom, "click", this.menuClicked, this);
+        return dom;
+    },
+    containerClicked: function(event) {
+        if (iFun(this.checkShowMenu) && this.checkShowMenu(event) === true) {
+            var container = this.getContainer(),
+                p = pos(container),
+                xy = event.getXY()
+            ;
+            this.show(xy.x - p.left, xy.y - p.top);
+        }
+        else this.hide();
+    },
+    menuClicked: function(event) {
+        var target = event.getTarget();
+    },
+    getDom: function() {
+        var el = gEl(this.getId());
+        if (!el) el = this.createDom();
+        return el;
+    },
+    addItem: function(conf){
+        var dom = this.getDom(),
+            itemDom
+        ;
+        itemDom = cEl("div", {
+            "class": "menu-item " + (conf.customClass ? conf.customClass : "")
+        }, conf.text, dom);
+    },
+    addItems: function() {
+        var conf = this.conf,
+            items = conf.items,
+            i, n = items.length
+        ;
+        for (i = 0; i < n; i++) {
+            this.addItem(items[i]);
+        }
+    },
+    show: function(x, y) {
+        var dom = this.getDom();
+        dom.style.left = x + "px";
+        dom.style.top = y + "px";
+        dom.style.display = "";
+    },
+    hide: function(){
+        this.getDom().style.display = "none";
+    }
+};
+Menu.prefix = "menu";
+
+/***************************************************************
+*
 *   Application
 *
 ***************************************************************/
@@ -1526,6 +1695,17 @@ var log = new Log({
     }),
     pivotTable = new PivotTable({
         container: "query-results"
+    }),
+    queryDesignerMenu = new Menu({
+        container: "workarea",
+        items: [
+            {text: "Drill up"},
+            {text: "Drill down"}
+        ],
+        checkShowMenu: function(event) {
+            var target = event.getTarget();
+            return (QueryDesignerAxis.lookup(target)) ? true : false;
+        }
     });
     cubeMetaData = null;
 ;
@@ -1564,7 +1744,7 @@ function metadataClicked(e) {
     ;
     if (target.tagName === "DIV" && target.id === "datasources-head") toggleDataSources();
     else {
-        treeNode = TreeNode.lookupTreeNode(target);
+        treeNode = TreeNode.lookup(target);
         if (!treeNode) return;
         if (target.tagName === "SPAN" && target.className === "toggle") treeNode.toggle();
         else
@@ -1766,10 +1946,12 @@ function selectCube(cubeTreeNode) {
                                                                         resp.getColumnAxis().eachTuple(function(tuple){
                                                                             cellset.nextCell();
                                                                             var childCount = cellset.cellValue(),
-                                                                            metadata = req.metadata,
-                                                                            member = tuple.members[0],
-                                                                            memberUniqueName = member.UName,
-                                                                            memberCaption = member.Caption,
+                                                                                metadata = req.metadata,
+                                                                                member = tuple.members[0],
+                                                                                memberUniqueName = member.UName,
+                                                                                memberCaption = member.Caption,
+                                                                                nodeId
+                                                                            ;
                                                                             nodeId = (new TreeNode({
                                                                                 id: "MDSCHEMA_MEMBERS:" + memberUniqueName,
                                                                                 parentTreeNode: req.nodeId,
@@ -1848,7 +2030,7 @@ function init() {
                 dragProxy.style.backgroundColor = "silver";
             }
             else
-            if (treeNode = TreeNode.lookupTreeNode(target)) {
+            if (treeNode = TreeNode.lookup(target)) {
                 if (className !== "label") return;
                 type = treeNode.getCustomClass();
                 switch (type) {
@@ -1863,7 +2045,7 @@ function init() {
                 data = treeNode.getConf().metadata;
             }
             else
-            if (queryAxis = QueryDesignerAxis.lookupQueryDesignerAxis(target)){
+            if (queryAxis = QueryDesignerAxis.lookup(target)){
                 type = className;
                 id = target.id;
                 switch (type) {
@@ -1900,7 +2082,7 @@ function init() {
             return true;
         },
         whileDrag: function(event, ddHandler) {
-            ddHandler.dropTarget = event.getTarget();
+            event.browserEvent.stopPropagation();
             var dragProxy = ddHandler.dragProxy,
                 xy = event.getXY(),
                 startDragEvent = ddHandler.startDragEvent,
@@ -2003,7 +2185,7 @@ function init() {
                 }
             }
             else
-            if (queryDesignerAxis = QueryDesignerAxis.lookupQueryDesignerAxis(origin)) {
+            if (queryDesignerAxis = QueryDesignerAxis.lookup(origin)) {
                 //lets remove something from an axis.
                 switch (type) {
                     case "MDSCHEMA_HIERARCHIES":

@@ -147,7 +147,7 @@
             #cube-body {
                 position: absolute;
                 top: 50px;
-                bottom: 0px;
+                bottom: 10px;
                 left: 0px;
                 right: 0px;
             /*
@@ -393,6 +393,7 @@
             }
 
             table.pivot-table td {
+                vertical-align: top;
                 white-space: nowrap;
                 border-width: 1px;
                 padding: 2px;
@@ -444,6 +445,24 @@
                 margin: 0px;
                 padding: 0px;
                 font-size: 8pt;
+            }
+        </style>
+        <style type="text/css">
+            .menu {
+                position:absolute;
+                background-color: lightgrey;
+                border-radius: 10px;
+                border-style: solid;
+                border-width: 2px 1px 1px 2px;
+                padding: 2px;
+                border-color: ThreeDHighLight ThreeDDarkShadow ThreeDDarkShadow ThreeDHighLight;
+            }
+            .menu .menu-item {
+                margin: 2px;
+            }
+            .menu .menu-item:hover {
+                color: blue;
+                text-decoration: underline;
             }
         </style>
     </head>
