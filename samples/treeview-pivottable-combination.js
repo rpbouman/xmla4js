@@ -1273,8 +1273,8 @@ var PivotTable;
                     cells = r.cells;
                     member = tuple.members[hierarchy.index];
                     lnum = member.LNum;
+                    tupleName = me.getTupleName(tuple, hierarchy);
                     if (lnum === level) {
-                        tupleName = me.getTupleName(tuple, hierarchy);
                         if (tupleName === prevTupleName) {
                             memberCell.colSpan++;
                         }
@@ -1288,28 +1288,21 @@ var PivotTable;
                         prevTupleName = tupleName;
                     }
                     else {
-                        if (lnum > level) {
-                            memberCell = cells.item(cells.length - 1);
-                            //if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS")
-                            if (!memberCell) {
-                                memberCell = r.insertCell(cells.length);
-                                memberCell.className = "th";
-                                memberCell.innerHTML = "&#160;";
+
+                        if (level > lnum || tupleName.indexOf(prevTupleName) || !(memberCell = cells.item(cells.length - 1))) {
+                            memberCell = r.insertCell(cells.length);
+                            memberCell.className = "thh";
+                            memberCell.innerHTML = "&#160;";
+                            var sep = "].[";
+                            if (!prevTupleName) {
+                                var split = tupleName.split(sep);
+                                prevTupleName = split.slice(0, split.length-1).join(sep);
                             }
-                            else {
-                                memberCell.colSpan++;
-                            }
+                            prevTupleName = tupleName.split(sep).slice(0, prevTupleName.split(sep).length - (level < lnum ? 0 : 1)).join(sep);
+                            //prevTupleName = tupleName;
                         }
                         else {
-                            if (c === null) {
-                                c = r.insertCell(cells.length);
-                                c.className = "th";
-                                c.innerHTML = "&#160;";
-                                memberCell = null;
-                            }
-                            else {
-                                c.colSpan++;
-                            }
+                            memberCell.colSpan++;
                         }
                     }
                 }
@@ -2011,6 +2004,7 @@ function init() {
     //set up listeners
     listen("discover", "click", discoverClicked);
     listen("metadata", "click", metadataClicked);
+    var overflow;
     ddHandler.listen({
         startDrag: function(event, ddHandler) {
             var target = event.getTarget(), startDragEvent,
@@ -2063,13 +2057,15 @@ function init() {
             }
             else return false;
 
+            var cubeBody = gEl("cube-body").style
+            overflow = cubeBody.overflow;
+            cubeBody.overflow = "hidden";
             startDragEvent.item = {
                 data: data,
                 type: type
             };
             dragProxy.style.position = "absolute";
             dragProxy.className = type;
-            //dragProxy.innerHTML = treeNode.getTitle();
             dragProxy.innerHTML = target.innerHTML;
             dragProxy.style.left = (xy.x - 15) + "px";
             if (className === "vertical-splitter") {
@@ -2082,7 +2078,7 @@ function init() {
             return true;
         },
         whileDrag: function(event, ddHandler) {
-            event.browserEvent.stopPropagation();
+            //event.browserEvent.stopPropagation();
             var dragProxy = ddHandler.dragProxy,
                 xy = event.getXY(),
                 startDragEvent = ddHandler.startDragEvent,
@@ -2114,6 +2110,7 @@ function init() {
             }
         },
         endDrag: function(event, ddHandler) {
+            gEl("cube-body").style.overflow = overflow;
             var dragProxy = ddHandler.dragProxy,
                 startDragEvent = ddHandler.startDragEvent,
                 origin = startDragEvent.getTarget(),

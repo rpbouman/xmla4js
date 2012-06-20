@@ -100,13 +100,13 @@
             }
 
             #toolbar {
+                position:fixed;
                 height:26px;
                 border-style: solid;
                 border-width: 2px;
                 border-radius: 5px;
                 border-color: grey;
                 background-color: white;
-                position: absolute;
                 top: 2px;
                 left: 2px;
                 right: 2px;
@@ -404,41 +404,24 @@
                 border-style: solid;
                 border-color: darkgrey;
                 text-align: right;
+                font-family: monospace;
             }
 
             table.pivot-table td.th {
-                white-space: nowrap;
                 border-color: darkgrey;
                 border-style: none none none solid;
                 background-color: lightgrey;
             }
 
             table.pivot-table td.thh {
-                text-indent: 2em;
-                background-repeat: no-repeat;
-                font-weight: bold;
-            }
-
-            table.pivot-table td.MDSCHEMA_HIERARCHIES {
-                background-image: url('hierarchy24.gif');
-                border-style: solid none solid solid;
-            }
-
-            table.pivot-table td.MDSCHEMA_LEVELS {
-                background-image: url('level24.gif');
-                border-style: solid solid dotted none;
+                border-style: none;
+                background-color: lightgrey;
             }
 
             table.pivot-table td.MDSCHEMA_MEMBERS {
                 border-style: solid solid none solid;
                 background-color: lightgrey;
             }
-
-            table.pivot-table tr.level-break td {
-                border-top-color: black;
-                border-top-width: 1px;
-            }
-
         </style>
         <style type="text/css">
             #log pre {
