@@ -1197,69 +1197,14 @@ var PivotTable;
     renderAxisHorizontally: function(axis, table){
         var me = this;
         if (!table) table = me.table;
+        var thead = table.tHead;
+        if (!thead) {
+            thead = table.createTHead();
+        }
         axis.eachHierarchy(function(hierarchy){
             var i, levels = hierarchy.levels, n = levels.length;
             for (i = 0; i < levels.length; i++){
-                var r = table.insertRow(table.rows.length),
-                    cells = r.cells,
-                    memberCell = null,
-                    c = null,
-                    level = -1, lnum,
-                    prevTupleName = null,
-                    j, tuples = axis.tuples, m = tuples.length, tuple,
-                    member
-                ;
-                for (j = 0; j < m; j++){
-                    tuple = tuples[j];
-                    member = tuple.members[hierarchy.index];
-                    lnum = member.LNum;
-                    if (lnum === levels[i]) {
-                        tupleName = me.getTupleName(tuple, hierarchy);
-                        if (tupleName === prevTupleName) {
-                            memberCell.colSpan++;
-                        }
-                        else {
-                            memberCell = r.insertCell(cells.length);
-                            memberCell.className = "th MDSCHEMA_MEMBERS";
-                            memberCell.colSpan = 1;
-                            memberCell.title = member.UName;
-                            memberCell.innerHTML = member.Caption;
-                            c = null;
-                        }
-                        prevTupleName = tupleName;
-                    }
-                    else
-                    if (lnum > levels[i]) {
-                        if (!memberCell) {
-                            memberCell = r.insertCell(r.cells.length);
-                            memberCell.className = "th";
-                            c.innerHTML = "&#160;";
-                        }
-                        memberCell.colSpan++;
-                    }
-                    else
-                    if (lnum < levels[i]) {
-                        if (level !== lnum || c === null) {
-                            c = r.insertCell(cells.length);
-                            c.className = "th";
-                            c.innerHTML = "&#160;";
-                            level = lnum;
-                        }
-                        else {
-                            c.colSpan++;
-                        }
-                    }
-                }
-            }
-        });
-    },
-    renderAxisHorizontally: function(axis, table){
-        var me = this;
-        if (!table) table = me.table;
-        axis.eachHierarchy(function(hierarchy){
-            var i, levels = hierarchy.levels, n = levels.length;
-            for (i = 0; i < levels.length; i++){
-                var r = table.insertRow(table.rows.length),
+                var r = thead.insertRow(thead.rows.length),
                     cells = r.cells,
                     memberCell = null,
                     c = null,
@@ -1312,8 +1257,8 @@ var PivotTable;
     renderAxisVertically: function(axis, table) {
         var me = this;
         if (!table) table = me.table;
-        var rows = table.rows,
-            rowOffset = rows.length
+        var tbody = table.tBodies[0] || cEl("TBODY", null, null, table),
+            rows = tbody.rows
         ;
         axis.eachHierarchy(function(hierarchy){
             var i, levels = hierarchy.levels, n = levels.length;
@@ -1329,10 +1274,10 @@ var PivotTable;
                 ;
                 for (j = 0; j < m; j++){
                     if (!hierarchy.index && !i) {
-                        r = table.insertRow(rows.length);
+                        r = tbody.insertRow(rows.length);
                     }
                     else {
-                        r = rows[rowOffset + j];
+                        r = rows[j];
                     }
                     tuple = tuples[j];
                     cells = r.cells;
@@ -1374,12 +1319,12 @@ var PivotTable;
         });
     },
     renderCells: function() {
-        var rowOffset = this.getRowOffset(),
-            dataset = this.dataset,
+        var dataset = this.dataset,
             rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
             columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
             table = this.table,
-            rows = table.rows,
+            tbody = table.tBodies[0] || cEl("TBODY", null, null, table),
+            rows = tbody.rows,
             r, c,
             i, n = columnAxis.tupleCount(), colTuples, colTuple,
             j, m, rowTuples, rowTuple
@@ -1387,14 +1332,14 @@ var PivotTable;
         if (rowAxis) {
             m = rowAxis.tupleCount();
             for (j = 0; j < m; j++){
-                r = rows[rowOffset + j];
+                r = rows[j];
                 for (i = 0; i < n; i++){
                     r.insertCell(r.cells.length).className = "td";
                 }
             }
         }
         else {
-            r = table.insertRow(rowOffset);
+            r = tbody.insertRow(0);
             for (i = 0; i < n; i++) {
                 r.insertCell(r.cells.length).className = "td";
             }
@@ -1403,8 +1348,8 @@ var PivotTable;
     loadCells: function(columnAxis, rowAxis, pageAxis){
         var args = [],
             table = this.table,
-            rows = table.rows,
-            rowOffset = this.getRowOffset(),
+            tbody = table.tBodies[0],
+            rows = tbody.rows,
             dataset = this.dataset,
             cellset = dataset.getCellset(),
             cell, cells, from, to,
@@ -1433,7 +1378,7 @@ var PivotTable;
             cells = cellset.fetchRangeAsArray(from, to);
             cell = cells.length ? cells[0] : null;
             for (l = 0, j = 0, k=0; j < m; j++){
-                r = rows[rowOffset + j];
+                r = rows[j];
                 var columnOffset = -1;
                 while (r.cells[++columnOffset].className.indexOf("th") !== -1);
                 for (i = 0; i < n; i++, k++) {
@@ -1450,7 +1395,7 @@ var PivotTable;
         }
         else
         if (dataset.hasColumnAxis()) {
-            r = rows[rowOffset];
+            r = rows[0];
             from = cellset.cellOrdinalForTupleIndexes(0);
             to = cellset.cellOrdinalForTupleIndexes(n - 1);
             cells = cellset.fetchRangeAsArray(from, to);
@@ -1468,9 +1413,6 @@ var PivotTable;
             }
         }
     },
-    getRowOffset: function() {
-        return this.rowOffset;
-    },
     getColumnOffset: function() {
         return this.columnOffset;
     },
@@ -1485,8 +1427,10 @@ var PivotTable;
                 "class": "pivot-table",
                 cellpadding: 0,
                 cellspacing: 0
-            }),
-            rows = t.rows, c,
+            }, [
+                cEl("THEAD"),
+                cEl("TBODY")
+            ]),
             columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
             rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
             pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null
@@ -1504,14 +1448,14 @@ var PivotTable;
             me.renderAxisHorizontally(columnAxis);
             log.print("Column axis rendered in " + ((new Date()).getTime() - start));
         }
-        this.rowOffset = rows.length;
         if (rowAxis) {
             log.print("Rendering row axis...");
             start = (new Date()).getTime();
             this.columnOffset = me.computeAxisLevels(rowAxis);
+            var tHead = t.tHead, rows = tHead.rows, c;
             c = rows[0].insertCell(0);
             c.colSpan = this.columnOffset;
-            c.rowSpan = this.rowOffset;
+            c.rowSpan = rows.length;
             me.renderAxisVertically(rowAxis);
             log.print("Row axis rendered in " + ((new Date()).getTime() - start));
         }
