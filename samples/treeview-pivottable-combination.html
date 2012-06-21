@@ -385,11 +385,51 @@
             }
         </style>
         <style type="text/css" id="pivot-table">
+            .pivot-table-widget {
+                position: relative;
+                left: 0px;
+                right: 0px;
+                margin-right: 5px;
+            }
+
+            .pivot-table-axis {
+                position: absolute;
+                overflow: hidden;
+                border-style:solid;
+                border-width:1px;
+                border-color: darkgrey;
+            }
+
+            .pivot-table-columns {
+                right: 0px;
+            }
+
+            .pivot-table-rows {
+                left: 0px;
+            }
+
+            .pivot-table-cells {
+                overflow: auto;
+            }
+
+            table.pivot-table tr.positioning-row {
+                font-size:0px;
+                height:0px;
+            }
+
+            table.pivot-table tr.positioning-row td {
+                padding: 0px !important;
+                border-style:none !important;
+            }
+
+            table.pivot-table tr.positioning-row div {
+                position:relative;
+            }
+
             table.pivot-table {
                 border-collapse: collapse;
-                margin: .5em;
                 font-size: 10pt;
-                table-layout: fixed;
+                position:absolute;
             }
 
             table.pivot-table td {
@@ -398,6 +438,7 @@
                 border-width: 1px;
                 padding: 2px;
                 background-repeat: repeat-y;
+                overflow: hidden;
             }
 
             table.pivot-table td.td {
@@ -405,6 +446,7 @@
                 border-color: darkgrey;
                 text-align: right;
                 font-family: monospace;
+                font-size: 9pt;
             }
 
             table.pivot-table td.th {
@@ -422,6 +464,7 @@
                 border-style: solid solid none solid;
                 background-color: lightgrey;
             }
+
         </style>
         <style type="text/css">
             #log pre {
@@ -468,9 +511,9 @@
             <div style="left:19.4%;" class="vertical-splitter"></div>
             <div id="workarea" class="component main-component">
                 <div id="query-designer"></div>
-                <div id="query-results"></div>
                 <pre id="query-text"></pre>
-                <div id="log"></div>
+                <div id="query-results"></div>
+                <div id="log" style="display:none"></div>
             </div>
         </div>
         <script type="text/javascript" src="../src/Xmla.js"></script>

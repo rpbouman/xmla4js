@@ -1148,7 +1148,7 @@ var PivotTable;
 
 (PivotTable = function(conf){
     this.conf = conf || {};
-    this.table = null;
+    this.createDom();
 }).prototype = {
     getContainer: function() {
         return gEl(this.conf.container);
@@ -1191,12 +1191,116 @@ var PivotTable;
         }
         return numLevels;
     },
-    getDom: function() {
+    getContainer: function(){
         return gEl(this.conf.id);
+    },
+    createDom: function() {
+        var container = this.getContainer(),
+            id = this.conf.id
+        ;
+        container.className = "pivot-table-widget";
+        cEl("DIV", {
+            "class": "pivot-table-axis pivot-table-columns",
+            id: id + "-columns"
+        }, null, container);
+        cEl("DIV", {
+            "class": "pivot-table-axis pivot-table-rows",
+            id: id + "-rows"
+        }, null, container);
+        cEl("DIV", {
+            "class": "pivot-table-message",
+            id: id + "-message"
+        }, null, container);
+        var cells = cEl("DIV", {
+            "class": "pivot-table-axis pivot-table-cells",
+            id: id + "-cells"
+        }, null, container);
+        listen(cells, "scroll", this.scrollHandler, this);
+    },
+    scrollHandler: function(event) {
+        var cells = this.getCellsDom(),
+            rowsTable = this.getRowsTableDom(),
+            colsTable = this.getColumnsTableDom()
+        ;
+        if (rowsTable) {
+            rowsTable.style.top = (-cells.scrollTop) + "px";
+        }
+        colsTable.style.left = (-cells.scrollLeft) + "px";
+    },
+    getRowsDom: function(){
+        return gEl(this.conf.id + "-rows");
+    },
+    getColumnsDom: function(){
+        return gEl(this.conf.id + "-columns");
+    },
+    getCellsDom: function(){
+        return gEl(this.conf.id + "-cells");
+    },
+    getRowsTableDom: function(){
+        return gEl(this.conf.id + "-rows-table");
+    },
+    getColumnsTableDom: function(){
+        return gEl(this.conf.id + "-columns-table");
+    },
+    getCellsTableDom: function(){
+        return gEl(this.conf.id + "-cells-table");
+    },
+    getMessageDom: function(){
+        return gEl(this.conf.id + "-message");
+    },
+    getDom: function() {
+        if (!this.dom) {
+            this.createDom();
+        }
+        return this.dom;
+    },
+    addPositionableRow: function(table, n, last) {
+        var c, i, r = table.insertRow(last ? table.rows.length : 0);
+        r.className = "positioning-row";
+        for (i = 0; i < n; i++){
+            c = r.insertCell(i);
+            c.innerHTML = "<div>&#160;</div>"
+        }
+    },
+    doLayout: function() {
+        var container = this.getContainer(),
+            rows = this.getRowsDom(),
+            rowsTable = this.getRowsTableDom(),
+            rowsTableWidth = (rowsTable ? rowsTable.clientWidth : 0),
+            rowsTableHeight = (rowsTable ? rowsTable.clientHeight : 0),
+            cols = this.getColumnsDom(),
+            colsTable = this.getColumnsTableDom(),
+            cells = this.getCellsDom(),
+            cellsTable = this.getCellsTableDom(),
+            width, height
+        ;
+        cells.style.left = cols.style.left = rows.style.width = rowsTableWidth + "px";
+        cells.style.top = cols.style.height = rows.style.top = colsTable.clientHeight + "px";
+
+        width = Math.min(container.parentNode.clientWidth, rowsTableWidth + colsTable.clientWidth);
+        container.style.width = width + "px";
+        cols.style.width = (width - rows.clientWidth) + "px";
+
+        height = Math.min(container.parentNode.clientHeight - (container.offsetTop + container.clientTop), rowsTableHeight + colsTable.clientHeight);
+        container.style.height = height + "px";
+        rows.style.height = (height - cols.clientHeight) + "px";
+        cells.style.width = (cols.clientWidth + (cellsTable.clientHeight + rowsTableHeight > height ? 16 : 0)) + "px";
+        cells.style.height = ((rowsTable ? rows.clientHeight: cellsTable.clientHeight) + (cellsTable.clientWidth + cellsTable.clientLeft > width ? 16 : 0)) + "px";
+        cells.style.overflowX = (rowsTableWidth + colsTable.clientWidth < container.parentNode.clientWidth) ? "hidden" : "auto";
+        cells.style.overflowY = (rowsTableHeight + colsTable.clientHeight < (container.parentNode.clientHeight - (container.offsetTop + container.clientTop))) ? "hidden" : "auto";
     },
     renderAxisHorizontally: function(axis, table){
         var me = this;
-        if (!table) table = me.table;
+        if (!table) {
+            table = cEl("TABLE", {
+                "class": "pivot-table",
+                id: this.conf.id + "-columns-table",
+                cellpadding: 0,
+                cellspacing: 0
+            }, [
+                cEl("THEAD")
+            ]);
+        }
         var thead = table.tHead;
         if (!thead) {
             thead = table.createTHead();
@@ -1213,6 +1317,7 @@ var PivotTable;
                     j, tuples = axis.tuples, m = tuples.length, tuple,
                     member
                 ;
+                if (!i && !hierarchy.index) me.addPositionableRow(table, m);
                 for (j = 0; j < m; j++){
                     tuple = tuples[j];
                     cells = r.cells;
@@ -1233,7 +1338,6 @@ var PivotTable;
                         prevTupleName = tupleName;
                     }
                     else {
-
                         if (level > lnum || tupleName.indexOf(prevTupleName) || !(memberCell = cells.item(cells.length - 1))) {
                             memberCell = r.insertCell(cells.length);
                             memberCell.className = "thh";
@@ -1253,10 +1357,20 @@ var PivotTable;
                 }
             }
         });
+        this.getColumnsDom().appendChild(table);
     },
     renderAxisVertically: function(axis, table) {
         var me = this;
-        if (!table) table = me.table;
+        if (!table) {
+            table = cEl("TABLE", {
+                "class": "pivot-table",
+                id: this.conf.id + "-rows-table",
+                cellpadding: 0,
+                cellspacing: 0
+            }, [
+                cEl("TBODY")
+            ]);
+        }
         var tbody = table.tBodies[0] || cEl("TBODY", null, null, table),
             rows = tbody.rows
         ;
@@ -1317,15 +1431,25 @@ var PivotTable;
                 }
             }
         });
+        this.getRowsDom().appendChild(table);
     },
-    renderCells: function() {
+    renderCells: function(table) {
+        if (!table) {
+            table = cEl("TABLE", {
+                "class": "pivot-table",
+                id: this.conf.id + "-cells-table",
+                cellpadding: 0,
+                cellspacing: 0
+            }, [
+                cEl("TBODY")
+            ]);
+        }
         var dataset = this.dataset,
             rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
             columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
-            table = this.table,
             tbody = table.tBodies[0] || cEl("TBODY", null, null, table),
             rows = tbody.rows,
-            r, c,
+            r,
             i, n = columnAxis.tupleCount(), colTuples, colTuple,
             j, m, rowTuples, rowTuple
         ;
@@ -1333,6 +1457,7 @@ var PivotTable;
             m = rowAxis.tupleCount();
             for (j = 0; j < m; j++){
                 r = rows[j];
+                if (!r) r = tbody.insertRow(j);
                 for (i = 0; i < n; i++){
                     r.insertCell(r.cells.length).className = "td";
                 }
@@ -1344,10 +1469,12 @@ var PivotTable;
                 r.insertCell(r.cells.length).className = "td";
             }
         }
+        this.addPositionableRow(table, n, true);
+        this.getCellsDom().appendChild(table);
     },
     loadCells: function(columnAxis, rowAxis, pageAxis){
         var args = [],
-            table = this.table,
+            table = this.getCellsTableDom(),
             tbody = table.tBodies[0],
             rows = tbody.rows,
             dataset = this.dataset,
@@ -1356,15 +1483,19 @@ var PivotTable;
             func = cellset.getByTupleIndexes,
             columnAxis = dataset.getColumnAxis(),
             axisCount = dataset.axisCount(),
-            td,
             i, n = columnAxis.tupleCount(), colTuples, colTuple,
             j, m, rowTuples, rowTuple,
-            k, l;
+            k, l,
+            r, c, tds, r1, c1,
+            columnsTable = this.getColumnsTableDom(),
+            columnspositioningCells = columnsTable.rows[0].cells,
+            positioningCells = rows[rows.length - 1].cells;
         ;
         if (dataset.hasPageAxis()) {
             args.push(dataset.getPageAxis().tupleIndex());
         }
         if (dataset.hasRowAxis()) {
+            var rowsTableDom = this.getRowsTableDom();
             m = dataset.getRowAxis().tupleCount();
 
             args[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = 0;
@@ -1379,18 +1510,21 @@ var PivotTable;
             cell = cells.length ? cells[0] : null;
             for (l = 0, j = 0, k=0; j < m; j++){
                 r = rows[j];
+                tds = r.cells;
                 var columnOffset = -1;
-                while (r.cells[++columnOffset].className.indexOf("th") !== -1);
+                while (tds[++columnOffset].className.indexOf("th") !== -1);
                 for (i = 0; i < n; i++, k++) {
-                    td = r.cells[columnOffset + i];
+                    c = tds[columnOffset + i];
                     if (cell && cell.ordinal === k) {
-                        td.innerHTML = (typeof(cell["FmtValue"]) === "undefined") ? cell.Value : cell.FmtValue;
+                        c.innerHTML = (typeof(cell["FmtValue"]) === "undefined") ? cell.Value : cell.FmtValue;
                         cell = cells[++l];
                     }
                     else {
-                        td.innerHTML = "";
+                        c.innerHTML = "";
                     }
                 }
+                r1 = rowsTableDom.rows[j];
+                r.style.height = r1.style.height = (Math.max(r.clientHeight, r1.clientHeight)) + "px";
             }
         }
         else
@@ -1402,45 +1536,42 @@ var PivotTable;
             cell = cells.length ? cells[0] : null;
             for (i = 0, l = 0; i < n; i++) {
                 args[0] = i;
-                td = r.cells[i];
+                c = r.cells[i];
                 if (cell && cell.ordinal === i) {
-                    td.innerHTML = (typeof(cell["FmtValue"]) === "undefined") ? cell.Value : cell.FmtValue;
+                    c.innerHTML = (typeof(cell["FmtValue"]) === "undefined") ? cell.Value : cell.FmtValue;
                     cell = cells[++l];
                 }
                 else {
-                    td.innerHTML = "";
+                    c.innerHTML = "";
                 }
             }
+        }
+        for (i = 0; i < n; i++) {
+            c = columnspositioningCells[i];
+            c1 = positioningCells[i];
+            c.firstChild.style.width = c1.firstChild.style.width = Math.max(c.clientWidth, c1.clientWidth) + "px";
         }
     },
     getColumnOffset: function() {
         return this.columnOffset;
     },
-    clear: function(){
-        this.getContainer().innerHTML = "No results to display";
+    clear: function(text){
+        this.getRowsDom().innerHTML = "";
+        this.getCellsDom().innerHTML = "";
+        this.getColumnsDom().innerHTML = "";
+        this.setMessage(typeof(text) === "undefined" ? "No results to display" : text);
     },
     renderDataset: function (dataset) {
         var me = this,
             start,
             container = me.getContainer(),
-            t = cEl("TABLE", {
-                "class": "pivot-table",
-                cellpadding: 0,
-                cellspacing: 0
-            }, [
-                cEl("THEAD"),
-                cEl("TBODY")
-            ]),
             columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
             rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
             pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null
         ;
         if (this.dataset) this.dataset.close();
         this.dataset = dataset;
-        me.table = t;
-        this.clear();
-        container.innerHTML = "";
-        container.appendChild(t);
+        this.clear("");
         if (columnAxis) {
             log.print("Rendering column axis...");
             start = (new Date()).getTime();
@@ -1452,10 +1583,6 @@ var PivotTable;
             log.print("Rendering row axis...");
             start = (new Date()).getTime();
             this.columnOffset = me.computeAxisLevels(rowAxis);
-            var tHead = t.tHead, rows = tHead.rows, c;
-            c = rows[0].insertCell(0);
-            c.colSpan = this.columnOffset;
-            c.rowSpan = rows.length;
             me.renderAxisVertically(rowAxis);
             log.print("Row axis rendered in " + ((new Date()).getTime() - start));
         }
@@ -1471,11 +1598,10 @@ var PivotTable;
         me.loadCells();
         log.print("Cells loaded in " + ((new Date()).getTime() - start));
 
-        log.print("Adding table to the dom...");
-        start = (new Date()).getTime();
-        container.innerHTML = "";
-        container.appendChild(t);
-        log.print("Dom updated in " + ((new Date()).getTime() - start));
+        this.doLayout();
+    },
+    setMessage: function(text) {
+        this.getMessageDom().innerHTML = text;
     }
 };
 /***************************************************************
@@ -1631,7 +1757,7 @@ var log = new Log({
         container: "query-designer"
     }),
     pivotTable = new PivotTable({
-        container: "query-results"
+        id: "query-results"
     }),
     queryDesignerMenu = new Menu({
         container: "workarea",
@@ -1668,7 +1794,7 @@ function initWorkarea() {
 function clearWorkarea() {
     gEl("query-designer").innerHTML = "";
     gEl("query-text").innerHTML = "";
-    gEl("query-results").innerHTML = "";
+    pivotTable.clear();
 }
 function clearUI() {
     gEl("datasources-body").innerHTML = "";
@@ -2158,7 +2284,6 @@ function init() {
             pivotTable.clear();
             return;
         }
-        gEl("query-results").innerHTML = "<img src=\"../css/ajax-loader.gif\"/>";
         log.print("About to execute Query...");
         var start = (new Date()).getTime();
         xmla.execute({
