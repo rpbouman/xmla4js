@@ -293,7 +293,19 @@
                 border-width: 1px;
             }
 
+            #query-text {
+                font-size: 8pt;
+                position: relative;
+                overflow: auto;
+                left: 0px;
+                right: 0px;
+            }
+
             table.query-designer {
+                position: relative;
+                left: 0px;
+                right: 0px;
+                overflow: hidden;
             }
 
             table.query-designer td {
@@ -508,10 +520,10 @@
                     <div id="cube-body"></div>
                 </div>
             </div>
-            <div style="left:19.4%;" class="vertical-splitter"></div>
+            <div style="left:19.4%;" id="vertical-splitter" class="vertical-splitter"></div>
             <div id="workarea" class="component main-component">
-                <div id="query-designer"></div>
                 <pre id="query-text"></pre>
+                <div id="query-designer"></div>
                 <div id="query-results"></div>
                 <div id="log" style="display:none"></div>
             </div>

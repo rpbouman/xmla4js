@@ -600,11 +600,26 @@ var QueryDesigner;
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(r.cells.length);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_ROWS).getDom());
+        c.rowSpan = 2;
 
         c = r.insertCell(r.cells.length);
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_COLUMNS).getDom());
 
+        r = dom.insertRow(dom.rows.length);
+        c = r.insertCell(r.cells.length);
+        c.setAttribute("colspan", "100%");
+        cEl("IMG", {
+            id: "ajax-spinner",
+            src: "ajax-loader.gif",
+            style: {
+                visibility: "hidden"
+            }
+        }, null, c);
         return dom;
+    },
+    busy: function(busy) {
+        var spinner = gEl("ajax-spinner");
+        spinner.style.visibility = busy ? "" : "hidden";
     },
     getDom: function() {
         var el = gEl(this.getId());
@@ -966,7 +981,7 @@ var QueryDesignerAxis;
     },
     removeHierarchy: function(item){
         var change = this._removeHierarchy(item);
-        if (change) this.getQueryDesigner().axisChanged(this);
+        if (change) this.notifyAxisChanged();
         return change;
     },
     getMember: function(item) {
@@ -987,7 +1002,7 @@ var QueryDesignerAxis;
     },
     removeMember: function(item) {
         var change = this._removeMember(item);
-        if (change) this.getQueryDesigner().axisChanged(this);
+        if (change) this.notifyAxisChanged();
         return change;
     },
     getMemberInfo: function(requestType, metadata){
@@ -1028,7 +1043,7 @@ var QueryDesignerAxis;
     },
     addMember: function(memberIndex, requestType, metadata) {
         this._addMember(memberIndex, requestType, metadata);
-        this.getQueryDesigner().axisChanged(this);
+        this.notifyAxisChanged();
     },
     _addHierarchy: function(hierarchyIndex, metadata) {
         var hierarchyName = this.getHierarchyName(metadata),
@@ -1055,7 +1070,7 @@ var QueryDesignerAxis;
         this._addHierarchy(targetIndex, hierarchy);
         this.setDefs[hierarchyName] = setDefs;
         this.updateDom();
-        this.getQueryDesigner().axisChanged(this);
+        this.notifyAxisChanged();
     },
     _moveMember: function(member, toIndex) {
         if (member.index === toIndex) return false;
@@ -1067,7 +1082,25 @@ var QueryDesignerAxis;
     },
     moveMember: function(member, toIndex) {
         var change = this._moveMember(member, toIndex);
-        if (change) this.getQueryDesigner().axisChanged(this);
+        if (change) this.notifyAxisChanged();
+    },
+    _moveHierarchy: function(hierarchyName, newIndex) {
+        var oldIndex = this.getHierarchyIndex(hierarchyName);
+        if (oldIndex === newIndex) return false;
+        var hierarchies = this.hierarchies,
+            hierarchy = this.getHierarchyByIndex(oldIndex)
+        ;
+        hierarchies.splice(oldIndex, 1);
+        if (oldIndex < newIndex) newIndex--;
+        hierarchies.splice(newIndex, 0, hierarchy);
+        this.updateDom();
+        return true;
+    },
+    moveHierarchy: function(hierarchyName, index) {
+        if (this._moveHierarchy(hierarchyName, index)) this.notifyAxisChanged();
+    },
+    notifyAxisChanged: function(){
+        this.getQueryDesigner().axisChanged(this);
     },
     itemDropped: function(target, requestType, metadata) {
         var hierarchyName = this.getHierarchyName(metadata),
@@ -1606,6 +1639,28 @@ var PivotTable;
 };
 /***************************************************************
 *
+*   TableExporter
+*
+***************************************************************/
+var TableExporter;
+(PivotTableExporter = function(){
+}).prototype = {
+    toCsv: function(pivotTable){
+
+    },
+    toExcelSpreadSheetML: function(pivotTable){
+        var lines = [
+            ,
+            '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet">',
+            '</Workbook>'
+        ]
+        lines.push('<?xml version="1.0"?>');
+        lines.push('<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet">');
+        return lines.join("\r\n");
+    }
+};
+/***************************************************************
+*
 *   Log
 *
 ***************************************************************/
@@ -1793,7 +1848,8 @@ function initWorkarea() {
 }
 function clearWorkarea() {
     gEl("query-designer").innerHTML = "";
-    gEl("query-text").innerHTML = "";
+    var queryText = gEl("query-text");
+    if (queryText) queryText.innerHTML = "";
     pivotTable.clear();
 }
 function clearUI() {
@@ -2070,10 +2126,29 @@ function selectCube(cubeTreeNode) {
     });
 }
 
+function workAreaResized(x){
+    var splitter = gEl("vertical-splitter"),
+        el, right, width
+    ;
+    splitter.style.left = x + "px";
+    splitterLeft = splitter.offsetLeft + splitter.clientWidth;
+    el = gEl("metadata");
+    el.style.width = el.clientWidth + (splitter.offsetLeft - el.clientWidth - 4) + "px";
+    el = gEl("workarea");
+    right = el.offsetLeft + el.clientWidth + 4;
+    width = right - splitterLeft - 8;
+    el.style.left = splitterLeft + "px";
+    el.style.width = width + "px";
+    pivotTable.doLayout();
+}
+
 function init() {
     //set up listeners
     listen("discover", "click", discoverClicked);
     listen("metadata", "click", metadataClicked);
+    listen(window, "resize", function(){
+        pivotTable.doLayout();
+    });
     var overflow;
     ddHandler.listen({
         startDrag: function(event, ddHandler) {
@@ -2194,15 +2269,7 @@ function init() {
                 queryDesignerAxis, table
             ;
             if (origin.className === "vertical-splitter") {
-                origin.style.left = dragProxy.offsetLeft + "px";
-                var el, diff;
-                el = gEl("metadata");
-                el.style.width = el.clientWidth + (origin.offsetLeft - el.clientWidth - 4) + "px";
-                el = gEl("workarea");
-                var right = el.offsetLeft + el.clientWidth + 4;
-                var width = right - (origin.offsetLeft + origin.clientWidth) - 8;
-                el.style.left = origin.offsetLeft + origin.clientWidth + "px";
-                el.style.width = width + "px";
+                workAreaResized(dragProxy.offsetLeft);
             }
             if (!item) return;
             type = item.type;
@@ -2229,7 +2296,14 @@ function init() {
                             oldQueryDesignerAxis = queryDesigner.getAxisForHierarchy(hierarchyName)
                         ;
                         if (oldQueryDesignerAxis) {
-                            if (oldQueryDesignerAxis !== queryDesignerAxis) {
+                            if (oldQueryDesignerAxis === queryDesignerAxis) {
+                                var index = queryDesignerAxis.getHierarchyIndexForTd(target);
+                                queryDesignerAxis.moveHierarchy(
+                                    hierarchyName,
+                                    index + 1
+                                );
+                            }
+                            else {
                                 var index = queryDesignerAxis.getHierarchyIndexForTd(target);
                                 queryDesigner.moveHierarchy(
                                     hierarchyName,
@@ -2277,6 +2351,8 @@ function init() {
         }
     });
     queryDesigner.queryChanged = function(queryDesigner) {
+        var me = this;
+        me.busy(true);
         log.clear();
         var mdx = queryDesigner.getMdx();
         gEl("query-text").innerHTML = mdx;
@@ -2296,6 +2372,9 @@ function init() {
             error: function(a, b, c) {
                 log.print("Error executing mdx in " + ((new Date()).getTime() - start) + "ms");
                 alert(c.toString());
+            },
+            callback: function() {
+                me.busy(false);
             }
         });
     }
