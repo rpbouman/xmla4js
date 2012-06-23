@@ -595,6 +595,7 @@ var QueryDesigner;
         ;
         r = dom.insertRow(dom.rows.length);
         c = r.insertCell(r.cells.length);
+        c.setAttribute("colspan", "100%");
         c.appendChild(this.getAxis(Xmla.Dataset.AXIS_PAGES).getDom());
 
         r = dom.insertRow(dom.rows.length);
@@ -1193,6 +1194,7 @@ var PivotTable;
         return mName;
     },
     computeAxisLevels: function (axis) {
+        if (axis.tuples) return;
         var numLevels = 0,
             tuples = [],
             n = tuples.length, i,
@@ -1233,11 +1235,15 @@ var PivotTable;
         ;
         container.className = "pivot-table-widget";
         cEl("DIV", {
-            "class": "pivot-table-axis pivot-table-columns",
+            "class": "pivot-table-axis pivot-table-axis-pages",
+            id: id + "-pages"
+        }, null, container);
+        cEl("DIV", {
+            "class": "pivot-table-axis pivot-table-axis-columns",
             id: id + "-columns"
         }, null, container);
         cEl("DIV", {
-            "class": "pivot-table-axis pivot-table-rows",
+            "class": "pivot-table-axis pivot-table-axis-rows",
             id: id + "-rows"
         }, null, container);
         cEl("DIV", {
@@ -1260,6 +1266,9 @@ var PivotTable;
         }
         colsTable.style.left = (-cells.scrollLeft) + "px";
     },
+    getPagesDom: function(){
+        return gEl(this.conf.id + "-pages");
+    },
     getRowsDom: function(){
         return gEl(this.conf.id + "-rows");
     },
@@ -1268,6 +1277,9 @@ var PivotTable;
     },
     getCellsDom: function(){
         return gEl(this.conf.id + "-cells");
+    },
+    getPagesTableDom: function(){
+        return gEl(this.conf.id + "-pages-table");
     },
     getRowsTableDom: function(){
         return gEl(this.conf.id + "-rows-table");
@@ -1297,6 +1309,9 @@ var PivotTable;
     },
     doLayout: function() {
         var container = this.getContainer(),
+            pages = this.getPagesDom(),
+            pagesTable = this.getPagesTableDom(),
+            pagesTableHeight = (pagesTable ? pagesTable.clientHeight + 20 : 0),
             rows = this.getRowsDom(),
             rowsTable = this.getRowsTableDom(),
             rowsTableWidth = (rowsTable ? rowsTable.clientWidth : 0),
@@ -1307,24 +1322,46 @@ var PivotTable;
             cellsTable = this.getCellsTableDom(),
             width, height
         ;
+        if (pagesTable) {
+            width = Math.min(container.parentNode.clientWidth, pagesTable.clientWidth + 2);
+            pages.style.width = width + "px";
+            pages.style.height = pagesTable.clientHeight + ((pagesTable.clientWidth > (container.parentNode.clientWidth + 5)) ? 16 : 0) + "px";
+        }
+
+        cols.style.top = pagesTableHeight + "px";
+
         cells.style.left = cols.style.left = rows.style.width = rowsTableWidth + "px";
-        cells.style.top = cols.style.height = rows.style.top = colsTable.clientHeight + "px";
+        cells.style.top = rows.style.top = (pagesTableHeight + colsTable.clientHeight) + "px";
+        cols.style.height = colsTable.clientHeight + "px";
 
         width = Math.min(container.parentNode.clientWidth, rowsTableWidth + colsTable.clientWidth);
         container.style.width = width + "px";
         cols.style.width = (width - rows.clientWidth) + "px";
 
-        height = Math.min(container.parentNode.clientHeight - (container.offsetTop + container.clientTop), rowsTableHeight + colsTable.clientHeight);
+        height = Math.min(container.parentNode.clientHeight - (container.offsetTop + container.clientTop), cellsTable.clientHeight + colsTable.clientHeight + pagesTableHeight);
         container.style.height = height + "px";
-        rows.style.height = (height - cols.clientHeight) + "px";
-        cells.style.width = (cols.clientWidth + (cellsTable.clientHeight + rowsTableHeight > height ? 16 : 0)) + "px";
-        cells.style.height = ((rowsTable ? rows.clientHeight: cellsTable.clientHeight) + (cellsTable.clientWidth + cellsTable.clientLeft > width ? 16 : 0)) + "px";
+        rows.style.height = (height - (cols.clientHeight + pagesTableHeight)) + "px";
+        cells.style.width = (cols.clientWidth + (cellsTable.clientHeight + colsTable.clientHeight > (height + 5) ? 16 : 0)) + "px";
+        cells.style.height = ((rowsTable ? rows.clientHeight: cellsTable.clientHeight) + (cellsTable.clientWidth + cellsTable.clientLeft > (width + 5) ? 16 : 0)) + "px";
         cells.style.overflowX = (rowsTableWidth + colsTable.clientWidth < container.parentNode.clientWidth) ? "hidden" : "auto";
         cells.style.overflowY = (rowsTableHeight + colsTable.clientHeight < (container.parentNode.clientHeight - (container.offsetTop + container.clientTop))) ? "hidden" : "auto";
     },
-    renderAxisHorizontally: function(axis, table){
-        var me = this;
-        if (!table) {
+    renderDataset: function (dataset) {
+        var me = this,
+            start,
+            container = me.getContainer(),
+            columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
+            rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
+            pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null,
+            table
+        ;
+        if (this.dataset) this.dataset.close();
+        this.dataset = dataset;
+        this.clear("");
+        if (columnAxis) {
+            log.print("Rendering column axis...");
+            start = (new Date()).getTime();
+            me.computeAxisLevels(columnAxis);
             table = cEl("TABLE", {
                 "class": "pivot-table",
                 id: this.conf.id + "-columns-table",
@@ -1333,7 +1370,59 @@ var PivotTable;
             }, [
                 cEl("THEAD")
             ]);
+            me.renderAxisHorizontally(columnAxis, table);
+            this.getColumnsDom().innerHTML = "";
+            this.getColumnsDom().appendChild(table);
+            log.print("Column axis rendered in " + ((new Date()).getTime() - start));
         }
+        if (rowAxis) {
+            log.print("Rendering row axis...");
+            start = (new Date()).getTime();
+            table = cEl("TABLE", {
+                "class": "pivot-table",
+                id: this.conf.id + "-rows-table",
+                cellpadding: 0,
+                cellspacing: 0
+            }, [
+                cEl("THEAD")
+            ]);
+            this.columnOffset = me.computeAxisLevels(rowAxis);
+            me.renderAxisVertically(rowAxis, table);
+            this.getRowsDom().innerHTML = "";
+            this.getRowsDom().appendChild(table);
+            log.print("Row axis rendered in " + ((new Date()).getTime() - start));
+        }
+        if (pageAxis) {
+            log.print("Rendering page axis...");
+            start = (new Date()).getTime();
+            me.computeAxisLevels(pageAxis);
+            table = cEl("TABLE", {
+                "class": "pivot-table",
+                id: this.conf.id + "-pages-table",
+                cellpadding: 0,
+                cellspacing: 0
+            }, [
+                cEl("THEAD")
+            ]);
+            me.renderAxisHorizontally(pageAxis, table);
+            this.getPagesDom().innerHTML = "";
+            this.getPagesDom().appendChild(table);
+            log.print("Column axis rendered in " + ((new Date()).getTime() - start));
+        }
+        log.print("Rendering cells...");
+        start = (new Date()).getTime();
+        me.renderCells();
+        log.print("Cells rendered in " + ((new Date()).getTime() - start));
+
+        log.print("Loading cells...");
+        start = (new Date()).getTime();
+        me.loadCells();
+        log.print("Cells loaded in " + ((new Date()).getTime() - start));
+
+        this.doLayout();
+    },
+    renderAxisHorizontally: function(axis, table){
+        var me = this;
         var thead = table.tHead;
         if (!thead) {
             thead = table.createTHead();
@@ -1390,20 +1479,9 @@ var PivotTable;
                 }
             }
         });
-        this.getColumnsDom().appendChild(table);
     },
     renderAxisVertically: function(axis, table) {
         var me = this;
-        if (!table) {
-            table = cEl("TABLE", {
-                "class": "pivot-table",
-                id: this.conf.id + "-rows-table",
-                cellpadding: 0,
-                cellspacing: 0
-            }, [
-                cEl("TBODY")
-            ]);
-        }
         var tbody = table.tBodies[0] || cEl("TBODY", null, null, table),
             rows = tbody.rows
         ;
@@ -1450,21 +1528,20 @@ var PivotTable;
                             if (memberCell && memberCell.className === "th MDSCHEMA_MEMBERS") memberCell.colSpan++;
                         }
                         else {
-                            if (c === null) {
+//                            if (c === null) {
                                 c = r.insertCell(cells.length);
                                 c.className = "th";
                                 c.innerHTML = "&#160;";
                                 memberCell = null;
-                            }
-                            else {
-                                c.rowSpan++;
-                            }
+//                            }
+//                            else {
+//                                c.rowSpan++;
+//                            }
                         }
                     }
                 }
             }
         });
-        this.getRowsDom().appendChild(table);
     },
     renderCells: function(table) {
         if (!table) {
@@ -1594,71 +1671,307 @@ var PivotTable;
         this.getColumnsDom().innerHTML = "";
         this.setMessage(typeof(text) === "undefined" ? "No results to display" : text);
     },
-    renderDataset: function (dataset) {
-        var me = this,
-            start,
-            container = me.getContainer(),
-            columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
-            rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
-            pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null
-        ;
-        if (this.dataset) this.dataset.close();
-        this.dataset = dataset;
-        this.clear("");
-        if (columnAxis) {
-            log.print("Rendering column axis...");
-            start = (new Date()).getTime();
-            me.computeAxisLevels(columnAxis);
-            me.renderAxisHorizontally(columnAxis);
-            log.print("Column axis rendered in " + ((new Date()).getTime() - start));
-        }
-        if (rowAxis) {
-            log.print("Rendering row axis...");
-            start = (new Date()).getTime();
-            this.columnOffset = me.computeAxisLevels(rowAxis);
-            me.renderAxisVertically(rowAxis);
-            log.print("Row axis rendered in " + ((new Date()).getTime() - start));
-        }
-        if (pageAxis) {
-        }
-        log.print("Rendering cells...");
-        start = (new Date()).getTime();
-        me.renderCells();
-        log.print("Cells rendered in " + ((new Date()).getTime() - start));
-
-        log.print("Loading cells...");
-        start = (new Date()).getTime();
-        me.loadCells();
-        log.print("Cells loaded in " + ((new Date()).getTime() - start));
-
-        this.doLayout();
-    },
     setMessage: function(text) {
         this.getMessageDom().innerHTML = text;
     }
 };
 /***************************************************************
 *
-*   TableExporter
+*   DatasetExporter
 *
 ***************************************************************/
-var TableExporter;
-(PivotTableExporter = function(){
+var DatasetExporter;
+(DatasetExporter = function(){
 }).prototype = {
-    toCsv: function(pivotTable){
+    toODFSpreadSheet: function(dataset) {
+        var axisCount = dataset.axisCount();
+        if (axisCount > 3) throw "Can export only upto 3 axes, this data set has " + axisCount;
+        var pageAxis = (axisCount === 3 ? dataset.getPageAxis() : null),
+            rowAxis = (axisCount >= 2 ? dataset.getRowAxis() : null),
+            rowTupleCount = (axisCount >= 2 ? rowAxis.tupleCount() : 0),
+            rowHierarchyCount = (rowAxis ? rowAxis.hierarchyCount() : 0),
+            columnAxis = (axisCount >= 1 ? dataset.getColumnAxis() : null),
+            columnTupleCount = columnAxis.tupleCount(),
+            cellset = dataset.getCellset(),
+            val, fmtVal,
+            lines = []
+        ;
 
-    },
-    toExcelSpreadSheetML: function(pivotTable){
-        var lines = [
-            ,
-            '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet">',
-            '</Workbook>'
-        ]
-        lines.push('<?xml version="1.0"?>');
-        lines.push('<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet">');
-        return lines.join("\r\n");
+        var colHeaderLeader = "", columns = "";
+        function toODFTable(pageTuple) {
+            var name, members, member, i, n,
+                ordinalArgs = [], from, to,
+                cells, cell
+            ;
+
+            if (pageTuple) {
+                ordinalArgs[0] = pageTuple.index;
+                members =  pageTuple.members;
+                n = members.length;
+                name = "";
+                for (i = 0; i < n; i++){
+                    if (name.length) name += " / ";
+                    name += members[i].Caption;
+                }
+            }
+            else name = "Sheet1";
+
+            if (!columns) {
+                switch (rowHierarchyCount) {
+                    case 0:
+                        break;
+                    default:
+                        for (i = 0; i < rowHierarchyCount; i++) {
+                            columns += '<table:table-column/>';
+                            colHeaderLeader += '<table:table-cell/>';
+                        }
+                }
+                for (i = 0; i < columnTupleCount; i++) {
+                    columns += '<table:table-column/>';
+                }
+            }
+
+            lines.push('<table:table table:name="' + name + '">');
+            lines.push(columns);
+            columnAxis.eachHierarchy(function(hierarchy){
+                lines.push('<table:table-row>');
+                lines.push(colHeaderLeader);
+                columnAxis.eachTuple(function(tuple){
+                    member = tuple.members[hierarchy.index];
+                    lines.push('<table:table-cell>');
+                    lines.push('<text:p>');
+                    lines.push(member.Caption);
+                    lines.push('</text:p>');
+                    lines.push('</table:table-cell>');
+                });
+                lines.push('</table:table-row>');
+            });
+            if (rowAxis) {
+                ordinalArgs[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = 0;
+                ordinalArgs[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = 0;
+                from = cellset.cellOrdinalForTupleIndexes.apply(cellset, ordinalArgs);
+
+                ordinalArgs[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = rowTupleCount - 1;
+                ordinalArgs[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = columnTupleCount - 1;
+                to = cellset.cellOrdinalForTupleIndexes.apply(cellset, ordinalArgs);
+
+                cells = cellset.fetchRangeAsArray(from, to);
+                cell = cells.length ? cells[i = 0] : null;
+
+                rowAxis.eachTuple(function(tuple){
+                    lines.push('<table:table-row>');
+                    ordinalArgs[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = tuple.index;
+                    rowAxis.eachHierarchy(function(hierarchy) {
+                        member = tuple.members[hierarchy.index];
+                        lines.push('<table:table-cell>');
+                        lines.push('<text:p>');
+                        lines.push(member.Caption);
+                        lines.push('</text:p>');
+                        lines.push('</table:table-cell>');
+                    });
+                    columnAxis.eachTuple(function (tuple) {
+                        lines.push('<table:table-cell');
+                        ordinalArgs[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = tuple.index
+                        if (cell && cell.ordinal === cellset.cellOrdinalForTupleIndexes.apply(cellset, ordinalArgs)) {
+                            val = cell.Value;
+                            fmtVal = cell.FmtValue;
+                            lines.push('>');
+                            lines.push('<text:p>');
+                            lines.push((typeof(fmtVal) === "undefined") ? val : fmtVal);
+                            lines.push('</text:p>');
+                            lines.push('</table:table-cell>');
+                            cell = cells[++i];
+                        }
+                        else {
+                            lines.push('/>');
+                        }
+                    });
+                    lines.push('</table:table-row>');
+                });
+            }
+            else {
+                cells = cellset.fetchRangeAsArray(0, columnTupleCount - 1);
+                cell = cells.length ? cells[i = 0] : null;
+
+                lines.push('<table:table-row>');
+                columnAxis.eachTuple(function (tuple) {
+                    lines.push('<table:table-cell');
+                    if (cell && cell.ordinal === tuple.index) {
+                        val = cell.Value;
+                        fmtVal = cell.FmtValue;
+                        lines.push(' office:value="' + val + '"');
+                        lines.push(' office:value-type="float"');
+                        lines.push('>');
+                        lines.push('<text:p>');
+                        lines.push((typeof(fmtVal) === "undefined") ? val : fmtVal);
+                        lines.push('</text:p>');
+                        lines.push('</table:table-cell>');
+                        cell = cells[++i];
+                    }
+                    else {
+                        lines.push('/>');
+                    }
+                });
+                lines.push('</table:table-row>');
+            }
+            lines.push('</table:table>');
+        }
+
+        function toODFTables() {
+            if (pageAxis) {
+                pageAxis.eachTuple(function(tuple){
+                    toODFTable(tuple);
+                });
+            }
+            else {
+                toODFTable();
+            }
+        }
+        toODFTables(dataset);
+        //see: http://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part1.html
+        //http://odf-validator.rhcloud.com/
+        var jsZip = new JSZip(),
+            date = new Date(),
+            year = date.getFullYear(),
+            month = date.getMonth(),
+            day = date.getDate(),
+            hours = date.getHours(),
+            minutes = date.getMinutes(),
+            seconds = date.getSeconds(),
+            mimetype = "application/vnd.oasis.opendocument.spreadsheet",
+            xDecl = '<?xml version="1.0" encoding="UTF-8"?>',
+            table = lines.join(""),
+            content = [
+              xDecl,
+              '<office:document-content',
+              ' xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"',
+              ' xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"',
+              ' xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"',
+              ' xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"',
+              ' xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"',
+              ' xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"',
+              ' office:version="1.2"',
+              '>',
+              ' <office:font-face-decls>',
+              '  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>',
+              '  <style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;" style:font-family-generic="system" style:font-pitch="variable"/>',
+              '  <style:font-face style:name="Lohit Hindi" svg:font-family="&apos;Lohit Hindi&apos;" style:font-family-generic="system" style:font-pitch="variable"/>',
+              '  <style:font-face style:name="WenQuanYi Micro Hei" svg:font-family="&apos;WenQuanYi Micro Hei&apos;" style:font-family-generic="system" style:font-pitch="variable"/>',
+              ' </office:font-face-decls>',
+              ' <office:automatic-styles>',
+              '  <style:style style:name="co1" style:family="table-column">',
+              '   <style:table-column-properties fo:break-before="auto" style:column-width="0.889in"/>',
+              '  </style:style>',
+              '  <style:style style:name="ro1" style:family="table-row">',
+              '   <style:table-row-properties style:row-height="0.1681in" fo:break-before="auto" style:use-optimal-row-height="true"/>',
+              '  </style:style>',
+              '  <style:style style:name="ro2" style:family="table-row">',
+              '   <style:table-row-properties style:row-height="0.178in" fo:break-before="auto" style:use-optimal-row-height="true"/>',
+              '  </style:style>',
+              '  <style:style style:name="ta1" style:family="table" style:master-page-name="Default">',
+              '   <style:table-properties table:display="true" style:writing-mode="lr-tb"/>',
+              '  </style:style>',
+              '  <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">',
+              '   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" style:vertical-align="middle"/>',
+              '   <style:paragraph-properties fo:text-align="center"/>',
+              '  </style:style>',
+              ' </office:automatic-styles>',
+              ' <office:body>',
+              '  <office:spreadsheet>',
+              table,
+              '  </office:spreadsheet>',
+              ' </office:body>',
+              '</office:document-content>'
+            ].join(""),
+            meta = [
+              xDecl,
+              '<office:document-meta',
+              ' xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"',
+              ' xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"',
+              ' office:version="1.2"',
+              '>',
+              '<office:meta>',
+              '<meta:creation-date>',
+                year                                   , "-",
+                (month   > 9 ? month   : "0" + month)  , "-",
+                (day     > 9 ? day     : "0" + day)    , "T",
+                (hours   > 9 ? hours   : "0" + hours)  , ":",
+                (minutes > 9 ? minutes : "0" + minutes), ":",
+                (seconds > 9 ? seconds : "0" + seconds),
+              '</meta:creation-date>',
+              '<meta:generator>xmla4js</meta:generator>',
+              '<meta:document-statistic meta:table-count="1" meta:cell-count="0" meta:object-count="0"/>',
+              '</office:meta>',
+              '</office:document-meta>'
+            ].join(""),
+            settings = [
+              xDecl
+            ].join(""),
+            styles = [
+              xDecl,
+              '<office:document-styles',
+              ' xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"',
+              ' xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"',
+              ' xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"',
+              ' xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"',
+              ' xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"',
+              ' xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"',
+              ' xmlns:xlink="http://www.w3.org/1999/xlink"',
+              ' xmlns:dc="http://purl.org/dc/elements/1.1/"',
+              ' xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"',
+              ' xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"',
+              ' xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"',
+              ' xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"',
+              ' xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"',
+              ' xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"',
+              ' xmlns:math="http://www.w3.org/1998/Math/MathML"',
+              ' xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"',
+              ' xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"',
+              ' xmlns:ooo="http://openoffice.org/2004/office"',
+              ' xmlns:ooow="http://openoffice.org/2004/writer"',
+              ' xmlns:oooc="http://openoffice.org/2004/calc"',
+              ' xmlns:dom="http://www.w3.org/2001/xml-events"',
+              ' xmlns:rpt="http://openoffice.org/2005/report"',
+              ' xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"',
+              ' xmlns:xhtml="http://www.w3.org/1999/xhtml"',
+              ' xmlns:grddl="http://www.w3.org/2003/g/data-view#"',
+              ' xmlns:tableooo="http://openoffice.org/2009/table"',
+              ' xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2"',
+              '>',
+              '<office:font-face-decls>',
+              '</office:font-face-decls>',
+              '</office:document-styles>'
+            ].join(""),
+            manifest = [
+              xDecl,
+              '<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.2">',
+               '<manifest:file-entry manifest:media-type="' + mimetype + '" manifest:version="1.2" manifest:full-path="/"/>',
+               '<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="meta.xml"/>',
+//               '<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="settings.xml"/>',
+               '<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="content.xml"/>',
+//               '<manifest:file-entry manifest:media-type="image/png" manifest:full-path="Thumbnails/thumbnail.png"/>',
+//               '<manifest:file-entry manifest:media-type="" manifest:full-path="Configurations2/accelerator/current.xml"/>',
+//               '<manifest:file-entry manifest:media-type="application/vnd.sun.xml.ui.configuration" manifest:full-path="Configurations2/"/>',
+               '<manifest:file-entry manifest:media-type="text/xml" manifest:full-path="styles.xml"/>',
+              '</manifest:manifest>'
+            ].join(""),
+            metaInf, thumbnails
+        ;
+        jsZip.file("mimetype", mimetype);
+        jsZip.file("meta.xml", meta);
+        jsZip.file("styles.xml", styles);
+        jsZip.file("content.xml", content);
+        //jsZip.file("settings.xml", settings);
+        metaInf = jsZip.folder("META-INF");
+        metaInf.file("manifest.xml", manifest);
+        //thumbnails = jsZip.folder("Thumbnails");
+        return "data:" + mimetype + ";base64," + encodeURIComponent(jsZip.generate());
     }
 };
+listen(gEl("export"), "click", function(){
+    var uri = new DatasetExporter().toODFSpreadSheet(pivotTable.dataset);
+    window.open(uri);
+});
 /***************************************************************
 *
 *   Log

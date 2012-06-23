@@ -361,7 +361,7 @@
                 margin-top: 2px; padding: 2px;
             }
 
-            .query-designer-axis0 td span:before, .query-designer-axis1 td span:before {
+            .query-designer-axis td span:before {
                 content: "\A0 \A0 \A0 \A0 \A0 \A0"
             }
 
@@ -412,12 +412,8 @@
                 border-color: darkgrey;
             }
 
-            .pivot-table-columns {
-                right: 0px;
-            }
-
-            .pivot-table-rows {
-                left: 0px;
+            .pivot-table-axis-pages {
+                overflow-x: auto;
             }
 
             .pivot-table-cells {
@@ -522,6 +518,7 @@
             </div>
             <div style="left:19.4%;" id="vertical-splitter" class="vertical-splitter"></div>
             <div id="workarea" class="component main-component">
+                <button id="export">Export</button>
                 <pre id="query-text"></pre>
                 <div id="query-designer"></div>
                 <div id="query-results"></div>
@@ -535,5 +532,7 @@
         </script>
         <div id="ddDragProxy"></div>
         <script type="text/javascript" src="treeview-pivottable-combination.js"></script>
+        <script type="text/javascript" src="jszip.js"></script>
+        <script type="text/javascript" src="jszip-deflate.js"></script>
     </body>
 </html>
