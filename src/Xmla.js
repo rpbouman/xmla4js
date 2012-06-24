@@ -101,7 +101,7 @@ if (typeof(require)==="function") _createXhr = function(){
             }
             options.method = "POST";//method;
             options.headers = {};
-            if (username) options.headers.Authorization = "Basic " + (new Buffer(user + ":" + (password || ""))).toString("base64");
+            if (username) options.headers.Authorization = "Basic " + (new Buffer(username + ":" + (password || ""))).toString("base64");
             this.options = options;
             this.changeStatus(-1, 1);
         },
@@ -5864,7 +5864,7 @@ Xmla.Dataset.prototype = {
  */
     fetchAsObject: function() {
         var axes = [], axis, slicerAxis,
-            cellset = [], cells = [],
+            cellset = [], cells = [], cell,
             i, n;
 
         //loop through all non slicer axes
@@ -6819,7 +6819,7 @@ Xmla.Dataset.Cellset.prototype = {
  *  @return {int} The physical index.
  */
     indexForOrdinal: function(ordinal){
-        var index = ordinal, cellOrdinal;
+        var index = ordinal, cellOrdinal, node;
         while(true) {
             node = this._cellNodes[index];
             if (!node) node = this._cellNodes[this._cellNodes.length - 1];
@@ -6848,8 +6848,8 @@ Xmla.Dataset.Cellset.prototype = {
         to = this.indexForOrdinal(to);
         if (to === -1) to = cellNodes.length -1;
         to = Math.min(to, cellNodes.length - 1);
-        for (i = from; i <= to; i++){
-            range[i] = this._readCell(cellNodes[i], {});
+        for (var i = from; i <= to; i++){
+            range.push(this._readCell(cellNodes[i], {}));
         }
         return range;
     },
