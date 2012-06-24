@@ -1717,7 +1717,7 @@ Xmla.prototype = {
 *   @param {Object|Array} listener An object that defines the events and the notification function to be called, or an array of such objects.
 */
     addListener: function(){
-        var n = arguments.length;
+        var n = arguments.length, handler, scope;
         switch(n) {
             case 0:
                 Xmla.Exception._newError(
@@ -1728,7 +1728,7 @@ Xmla.prototype = {
             case 1:
                 var arg = arguments[0];
                 if (_isObj(arg)) {
-                    var events, handlers;
+                    var events;
                     if (_isArr(arg)) this._addListeners(arg)
                     else
                     if (events = arg.events || arg.event) {
@@ -1740,11 +1740,12 @@ Xmla.prototype = {
                                 arg
                             )._throw();
                         }
-                        var i, n = events.length;
+                        var i;
+                        n = events.length;
                         for (i = 0; i < n; i++) this._addListener(events[i], arg);
                     }
                     else {
-                        var scope = arg.scope, handler;
+                        scope = arg.scope;
                         if (_isUnd(scope)) scope = null;
                         else delete arg.scope;
                         for (events in arg) {
@@ -1763,7 +1764,9 @@ Xmla.prototype = {
                 break;
             case 2:
             case 3:
-                var event = arguments[0], handler = arguments[1], scope = arguments[2];
+                var event = arguments[0];
+                scope = arguments[2];
+                handler = arguments[1];
                 if (_isStr(event) && (_isFun(handler)||(_isObj(handler)))) this._addListener(event, handler, scope);
                 else {
                     var arr = [event, handler];
@@ -4938,11 +4941,8 @@ var _typeConverterMap = {
 }
 
 function _getValueConverter(type){
-    var func = _typeConverterMap[type], valueConverter;
-    if (!func) {
-        func = _textConverter;
-    }
-    return func;
+    var func;
+    return (func = _typeConverterMap[type]) ? func : _textConverter;
 }
 
 function _getElementValue(el) {
@@ -5050,7 +5050,6 @@ Xmla.Rowset.prototype = {
         }
     },
     _createFieldGetter: function(fieldName, valueConverter, minOccurs, maxOccurs){
-        var me = this;
         var getter;
         if (maxOccurs===1) {
             if(minOccurs===1)
@@ -5620,7 +5619,7 @@ Xmla.Dataset.prototype = {
         this._initAxes();
         this._initCells();
 
-        var a, i, j, axis, func, funcBody = "", mul;
+        var a, i, j, func, funcBody = "", mul;
         func = "var ordinal = 0, a;" +
             "\nif (arguments.length !== " + this._numAxes + ") new Xmla.Exception._newError(\"ERROR_ILLEGAL_ARGUMENT\", \"cellOrdinalForTupleIndexes\", this)._throw();"
         for (a = 0, i = this._numAxes-1; i >= 0; i--, a++) {
@@ -6334,7 +6333,7 @@ Xmla.Dataset.Axis.prototype = {
 */
     member: function(hierarchyIndexOrName){
         if (_isUnd(hierarchyIndexOrName)) index = this._hierarchyIndex;
-        var index, hierarchyName, hierarchy;
+        var index, hierarchyName;
         switch(typeof(hierarchyIndexOrName)){
             case "string":
                 index = this.hierarchyIndex(hierarchyIndexOrName);
@@ -6523,7 +6522,7 @@ Xmla.Dataset.Cellset.prototype = {
     _initCellset: function(){
         var root = this._dataset._root,
             cellSchema, cellSchemaElements, numCellSchemaElements, cellSchemaElement,
-            cellInfoNodes, cellInfoNode, cellNodes, type,
+            cellInfoNodes, cellInfoNode, type,
             propertyNodes, propertyNode, propertyNodeTagName, numPropertyNodes, i, j
         ;
         cellSchema = _getComplexType(root, "CellData");
@@ -7254,7 +7253,7 @@ Xmla.Exception.prototype = {
 *   @return an array of objects describing the function on the stack
 */
     getStackTrace: function(){
-        var funcstring, stack = "", regexp = /^\sfunction\s*([^\(]+)?\s*\(\)$/;
+        var funcstring, stack = "";
         if (this.args) {
             var func = this.args.callee;
             while (func){
