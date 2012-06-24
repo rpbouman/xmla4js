@@ -1322,6 +1322,7 @@ var PivotTable;
             cellsTable = this.getCellsTableDom(),
             width, height
         ;
+        if (!colsTable) return;
         if (pagesTable) {
             width = Math.min(container.parentNode.clientWidth, pagesTable.clientWidth + 2);
             pages.style.width = width + "px";
@@ -1693,16 +1694,42 @@ var DatasetExporter;
             columnAxis = (axisCount >= 1 ? dataset.getColumnAxis() : null),
             columnTupleCount = columnAxis.tupleCount(),
             cellset = dataset.getCellset(),
-            val, fmtVal,
             lines = []
         ;
 
         var colHeaderLeader = "", columns = "";
+
         function toODFTable(pageTuple) {
             var name, members, member, i, n,
                 ordinalArgs = [], from, to,
                 cells, cell
             ;
+            function writeMember(){
+                lines.push('<table:table-cell>');
+                lines.push('<text:p>');
+                lines.push(member.Caption);
+                lines.push('</text:p>');
+                lines.push('</table:table-cell>');
+            }
+            function writeCell(ordinal) {
+                var val, fmtVal;
+                lines.push('<table:table-cell');
+                if (cell && cell.ordinal === ordinal) {
+                    val = cell.Value;
+                    fmtVal = cell.FmtValue;
+                    lines.push(' office:value="' + val + '"');
+                    lines.push(' office:value-type="float"');
+                    lines.push('>');
+                    lines.push('<text:p>');
+                    lines.push((typeof(fmtVal) === "undefined") ? val : fmtVal);
+                    lines.push('</text:p>');
+                    lines.push('</table:table-cell>');
+                    cell = cells[++i];
+                }
+                else {
+                    lines.push('/>');
+                }
+            }
 
             if (pageTuple) {
                 ordinalArgs[0] = pageTuple.index;
@@ -1738,11 +1765,7 @@ var DatasetExporter;
                 lines.push(colHeaderLeader);
                 columnAxis.eachTuple(function(tuple){
                     member = tuple.members[hierarchy.index];
-                    lines.push('<table:table-cell>');
-                    lines.push('<text:p>');
-                    lines.push(member.Caption);
-                    lines.push('</text:p>');
-                    lines.push('</table:table-cell>');
+                    writeMember();
                 });
                 lines.push('</table:table-row>');
             });
@@ -1763,28 +1786,11 @@ var DatasetExporter;
                     ordinalArgs[axisCount - Xmla.Dataset.AXIS_ROWS - 1] = tuple.index;
                     rowAxis.eachHierarchy(function(hierarchy) {
                         member = tuple.members[hierarchy.index];
-                        lines.push('<table:table-cell>');
-                        lines.push('<text:p>');
-                        lines.push(member.Caption);
-                        lines.push('</text:p>');
-                        lines.push('</table:table-cell>');
+                        writeMember();
                     });
                     columnAxis.eachTuple(function (tuple) {
-                        lines.push('<table:table-cell');
-                        ordinalArgs[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = tuple.index
-                        if (cell && cell.ordinal === cellset.cellOrdinalForTupleIndexes.apply(cellset, ordinalArgs)) {
-                            val = cell.Value;
-                            fmtVal = cell.FmtValue;
-                            lines.push('>');
-                            lines.push('<text:p>');
-                            lines.push((typeof(fmtVal) === "undefined") ? val : fmtVal);
-                            lines.push('</text:p>');
-                            lines.push('</table:table-cell>');
-                            cell = cells[++i];
-                        }
-                        else {
-                            lines.push('/>');
-                        }
+                        ordinalArgs[axisCount - Xmla.Dataset.AXIS_COLUMNS - 1] = tuple.index;
+                        writeCell(cellset.cellOrdinalForTupleIndexes.apply(cellset, ordinalArgs));
                     });
                     lines.push('</table:table-row>');
                 });
@@ -1795,22 +1801,7 @@ var DatasetExporter;
 
                 lines.push('<table:table-row>');
                 columnAxis.eachTuple(function (tuple) {
-                    lines.push('<table:table-cell');
-                    if (cell && cell.ordinal === tuple.index) {
-                        val = cell.Value;
-                        fmtVal = cell.FmtValue;
-                        lines.push(' office:value="' + val + '"');
-                        lines.push(' office:value-type="float"');
-                        lines.push('>');
-                        lines.push('<text:p>');
-                        lines.push((typeof(fmtVal) === "undefined") ? val : fmtVal);
-                        lines.push('</text:p>');
-                        lines.push('</table:table-cell>');
-                        cell = cells[++i];
-                    }
-                    else {
-                        lines.push('/>');
-                    }
+                    writeCell(tuple.index);
                 });
                 lines.push('</table:table-row>');
             }
@@ -2183,6 +2174,19 @@ function metadataClicked(e) {
         if (treeNode.getCustomClass() === "MDSCHEMA_CUBES") selectCube(treeNode);
     }
 }
+function showMdxClicked(){
+    var el = gEl("show-mdx");
+    gEl("query").style.display = el.checked ? "block" : "none";
+    pivotTable.doLayout();
+}
+
+function executeClicked(){
+    var el = gEl("query-text"),
+        mdx = el.value
+    ;
+    execute(mdx);
+}
+
 function discoverClicked(){
     clearWorkarea();
     showCube(false);
@@ -2455,9 +2459,35 @@ function workAreaResized(x){
     pivotTable.doLayout();
 }
 
+function execute(mdx) {
+    if (!mdx.length) {
+        pivotTable.clear();
+        return;
+    }
+    log.print("About to execute Query...");
+    var start = (new Date()).getTime();
+    xmla.execute({
+        async: true,
+        statement: mdx,
+        success: function(xmla, req, resp) {
+            log.print("Succes executing mdx in " + ((new Date()).getTime() - start) + "ms");
+            pivotTable.renderDataset(resp);
+        },
+        error: function(a, b, c) {
+            log.print("Error executing mdx in " + ((new Date()).getTime() - start) + "ms");
+            alert(c.toString());
+        },
+        callback: function() {
+            queryDesigner.busy(false);
+        }
+    });
+}
+
 function init() {
     //set up listeners
     listen("discover", "click", discoverClicked);
+    listen("show-mdx", "click", showMdxClicked);
+    listen("execute", "click", executeClicked);
     listen("metadata", "click", metadataClicked);
     listen(window, "resize", function(){
         pivotTable.doLayout();
@@ -2669,27 +2699,7 @@ function init() {
         log.clear();
         var mdx = queryDesigner.getMdx();
         gEl("query-text").innerHTML = mdx;
-        if (!mdx.length) {
-            pivotTable.clear();
-            return;
-        }
-        log.print("About to execute Query...");
-        var start = (new Date()).getTime();
-        xmla.execute({
-            async: true,
-            statement: mdx,
-            success: function(xmla, req, resp) {
-                log.print("Succes executing mdx in " + ((new Date()).getTime() - start) + "ms");
-                pivotTable.renderDataset(resp);
-            },
-            error: function(a, b, c) {
-                log.print("Error executing mdx in " + ((new Date()).getTime() - start) + "ms");
-                alert(c.toString());
-            },
-            callback: function() {
-                me.busy(false);
-            }
-        });
+        execute(mdx);
     }
     //init the ui
     showCube(false);

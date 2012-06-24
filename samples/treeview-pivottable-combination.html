@@ -84,7 +84,7 @@
                 height: 24px;
                 padding-left: 20px;
                 float:left;
-                width: 93%;
+                width: 300px;
                 border-style: none;
                 background-repeat: no-repeat;
                 background-image: url('schema24.gif');
@@ -112,6 +112,10 @@
                 right: 2px;
             }
 
+            #toolbar label:after {
+                content: ":"
+            }
+
             .toggle {
                 font-family: monospace;
             }
@@ -130,6 +134,9 @@
                 white-space: nowrap;
             }
 
+            #datasources {
+            }
+
             #datasources-head:hover {
                 color: blue;
                 text-decoration: underline;
@@ -146,7 +153,7 @@
             }
             #cube-body {
                 position: absolute;
-                top: 50px;
+                top: 75px;
                 bottom: 10px;
                 left: 0px;
                 right: 0px;
@@ -264,8 +271,15 @@
                 border-width: 1px;
                 border-color: grey;
             }
+            #ddDragProxy {
+                position: absolute;
+                background-repeat: no-repeat;
+                padding: 2px;
+                height: 20px;
+                text-indent: 2em;
+            }
         </style>
-        <style type="text/css" id="pivot-table-designer">
+        <style type="text/css">
             .no-user-select {
               -moz-user-select: none;
               -khtml-user-select: none;
@@ -277,30 +291,33 @@
                 position:absolute;
                 left: 0px;
                 right: 0px;
-                top: 40px;
+                top: 25px;
                 bottom: 0px;
             }
-            #ddDragProxy {
-                position: absolute;
-                background-repeat: no-repeat;
-                padding: 2px;
-                height: 20px;
-                text-indent: 2em;
-            }
             #workarea > table {
-                margin: .5em;
                 border-style: solid;
                 border-width: 1px;
             }
 
-            #query-text {
-                font-size: 8pt;
+            #query {
                 position: relative;
-                overflow: auto;
                 left: 0px;
                 right: 0px;
+                display: none;
             }
-
+            #query-text {
+                font-size: 8pt;
+                left: 0px;
+                right: 0px;
+                overflow: auto;
+                width: 100%;
+                font-family: monospace;
+            }
+            #execute:after {
+                content: "...";
+            }
+        </style>
+        <style type="text/css" >
             table.query-designer {
                 position: relative;
                 left: 0px;
@@ -313,7 +330,6 @@
             }
 
             table.query-designer-axis {
-                margin: .5em;
                 border-style: solid;
                 border-width: 1px;
             }
@@ -504,12 +520,15 @@
         <div id="toolbar">
             <button id="discover">Discover</button>
             <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
+            <label>Show mdx</label><input id="show-mdx" type="checkbox" />
+            <button id="export">Export</button>
         </div>
         <div id="workspace">
             <div id="metadata" class="component main-component">
                 <div id="datasources">
                     <div id="datasources-head" class="section-header">Data Sources</div>
-                    <div id="datasources-body"></div>
+                    <div id="datasources-body">
+                    </div>
                 </div>
                 <div id="cube">
                     <div id="cube-head" class="section-header"></div>
@@ -518,8 +537,10 @@
             </div>
             <div style="left:19.4%;" id="vertical-splitter" class="vertical-splitter"></div>
             <div id="workarea" class="component main-component">
-                <button id="export">Export</button>
-                <pre id="query-text"></pre>
+                <div id="query">
+                  <textarea rows="10" id="query-text"></textarea>
+                  <button id="execute">Execute</button>
+                </div>
                 <div id="query-designer"></div>
                 <div id="query-results"></div>
                 <div id="log" style="display:none"></div>
