@@ -233,6 +233,11 @@ function _xmlEncode(value){
     return value;
 };
 
+function _decodeXmlaTagName(tagName) {
+    return tagName.replace(/_x(\d\d\d\d)_/g, function(match, hex, offset){
+        return String.fromCharCode(parseInt(hex, 16));
+    });
+}
 //this is here to support (partial) dom interface on top of our own document implementation
 //we don't need this in the browser, it's here when running in environments without a native xhr
 //where the xhr object does not offer a DOM responseXML object.
@@ -5993,7 +5998,8 @@ Xmla.Dataset.Axis.prototype = {
             ),
             numHierarchies = hierarchyInfoNodes.length,
             i, j, hierarchyInfoNode, hierarchyName,
-            properties, numPropertyNodes, propertyNodes, propertyNode
+            properties, numPropertyNodes, propertyNodes, propertyNode,
+            nodeName, type, memberProperties = this._memberProperties
         ;
         this._hierarchyDefs = {};
         this._hierarchyOrder = [];
@@ -6008,11 +6014,21 @@ Xmla.Dataset.Axis.prototype = {
                 index: i,
                 name: hierarchyName
             };
-            propertyNodes = _getElementsByTagNameNS(_axisInfoNode, _xmlnsDataset, "", "*");
+            propertyNodes = _getElementsByTagNameNS(hierarchyInfoNode, _xmlnsDataset, "", "*");
             numPropertyNodes = propertyNodes.length;
             for (j = 0; j < numPropertyNodes; j++) {
                 propertyNode = propertyNodes[j];
-                properties[propertyNode.nodeName] = null;
+                //TODO: we're assigning null but I think we should grab a value if it exits
+                //If I recall the XML/A spec correctly, this value represents the default value
+                //of the property if it does not exist in a particular member
+                nodeName = propertyNode.nodeName;
+                properties[nodeName] = null;
+                if (memberProperties[nodeName]) continue;
+                type = _getAttribute(propertyNode, "type");
+                memberProperties[nodeName] = {
+                    converter: _typeConverterMap[type],
+                    name: _decodeXmlaTagName(nodeName)
+                };
             }
             this._hierarchyDefs[hierarchyName] = properties;
         }
@@ -6020,7 +6036,7 @@ Xmla.Dataset.Axis.prototype = {
     _initMembers: function(){
         var root = this._dataset._root,
             memberSchema, memberSchemaElements, numMemberSchemaElements, memberSchemaElement,
-            type, name, i
+            type, name, i, memberProperties = this._memberProperties = {}
         ;
         memberSchema = _getComplexType(root, "MemberType");
         if (!memberSchema)
@@ -6032,18 +6048,20 @@ Xmla.Dataset.Axis.prototype = {
         memberSchema = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence")[0],
         memberSchemaElements = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "element");
         numMemberSchemaElements = memberSchemaElements.length;
-        this._memberProperties = {};
         for (i = 0; i < numMemberSchemaElements; i++) {
             memberSchemaElement = memberSchemaElements[i];
             type = _getAttribute(memberSchemaElement, "type");
             name = _getAttribute(memberSchemaElement, "name");
-            this._memberProperties[name] = _typeConverterMap[type];
+            memberProperties[name] = {
+                converter: _typeConverterMap[type],
+                name: _decodeXmlaTagName(name)
+            };
         }
     },
     _initAxis: function(_axisInfoNode, _axisNode){
         this.name = _getAttribute(_axisNode, "name");
-        this._initHierarchies(_axisInfoNode);
         this._initMembers();
+        this._initHierarchies(_axisInfoNode);
         this._tuples = _getElementsByTagNameNS(_axisNode, _xmlnsDataset, "", "Tuple");
         this.numTuples = this._tuples.length;
         this.reset();
@@ -6355,8 +6373,9 @@ Xmla.Dataset.Axis.prototype = {
     },
     _member: function(index){
         var memberNode = this._members[index],
+            childNodes = memberNode.childNodes,
+            i, n = childNodes.length,
             hierarchyName = this.hierarchyName(index),
-            hierarchy = this.hierarchy(hierarchyName),
             property,
             member = {
                 index: index,
@@ -6366,24 +6385,10 @@ Xmla.Dataset.Axis.prototype = {
             memberProperties = this._memberProperties,
             valueConverter
         ;
-        for (property in memberProperties){
-            if (property === "index" || property === "name") continue;
-            el = _getElementsByTagNameNS(memberNode, _xmlnsDataset, "", property);
-            switch (el.length) {
-                case 0: //no element found for property, use the default
-                    member[property] = hierarchy[property]
-                    break;
-                case 1: //this is expected, single element for property, get value
-                    valueConverter = memberProperties[property];
-                    member[property] = valueConverter(_getElementText(el[0]));
-                    break;
-                default:
-                    Xmla.Exception._newError(
-                        "UNEXPECTED_ERROR_READING_MEMBER",
-                        "Xmla.Dataset.Axis.member",
-                        property
-                    )._throw();
-            }
+        for (i = 0; i < n; i++) {
+            el = childNodes[i];
+            if (el.nodeType !== 1 || (!(property = memberProperties[el.nodeName]))) continue;
+            member[property.name] = property.converter(_getElementText(el));
         }
         return member;
     },
