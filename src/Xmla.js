@@ -435,54 +435,6 @@ function _getXmlaSoapList(container, listType, items, indent){
 
 var _xmlRequestType = "RequestType";
 
-function _getXmlaSoapMessage(options){
-    var method = options.method,
-        msg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-        "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope" +
-        " " + _xmlnsIsSOAPenvelope +
-        " " + _SOAPencodingStyle + ">" +
-        "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" +
-        "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
-    ;
-    switch(method){
-        case Xmla.METHOD_DISCOVER:
-            if (!options.requestType) {
-                Xmla.Exception._newError(
-                    "MISSING_REQUEST_TYPE",
-                    "Xmla._getXmlaSoapMessage",
-                    options
-                )._throw();
-            }
-            msg += "\n   <" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" +
-                _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions, "   ") +
-                _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ");
-            break;
-        case Xmla.METHOD_EXECUTE:
-            if (!options.statement){
-                Xmla.Exception._newError(
-                    "MISSING_REQUEST_TYPE",
-                    "Xmla._getXmlaSoapMessage",
-                    options
-                )._throw();
-            }
-            msg += "\n   <Command>" +
-                "\n    <Statement>" + _xmlEncode(options.statement) + "</Statement>" +
-                "\n   </Command>" +
-                _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
-            ;
-            break;
-        default:
-            //we used to throw an exception here,
-            //but this would make it impossible
-            //to execute service or provider specific methods.
-    }
-    msg += "\n  </" + method + ">" +
-        "\n </" + _xmlnsSOAPenvelopePrefix + ":Body>" +
-        "\n</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
-    ;
-    return msg;
-};
-
 function _applyProps(object, properties, overwrite){
     if (properties && (!object)) {
         object = {};
@@ -1845,6 +1797,59 @@ Xmla.prototype = {
         return outcome;
     },
 /**
+*   Create a XML/A SOAP message that may be used as message body for a XML/A request
+*   @method getXmlaSoapMessage
+*   @param {object} options An object representing the message. The object can have these properties:
+*   @return {string} The SOAP message.
+**/
+    getXmlaSoapMessage: function getXmlaSoapMessage(options){
+        var method = options.method,
+            msg = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            "\n<" + _xmlnsSOAPenvelopePrefix + ":Envelope" +
+            " " + _xmlnsIsSOAPenvelope +
+            " " + _SOAPencodingStyle + ">" +
+            "\n <" + _xmlnsSOAPenvelopePrefix + ":Body>" +
+            "\n  <" + method + " " + _xmlnsIsXmla + " " + _SOAPencodingStyle + ">"
+        ;
+        switch(method){
+            case Xmla.METHOD_DISCOVER:
+                if (!options.requestType) {
+                    Xmla.Exception._newError(
+                        "MISSING_REQUEST_TYPE",
+                        "Xmla._getXmlaSoapMessage",
+                        options
+                    )._throw();
+                }
+                msg += "\n   <" + _xmlRequestType + ">" + options.requestType + "</" + _xmlRequestType + ">" +
+                    _getXmlaSoapList("Restrictions", "RestrictionList", options.restrictions, "   ") +
+                    _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ");
+                break;
+            case Xmla.METHOD_EXECUTE:
+                if (!options.statement){
+                    Xmla.Exception._newError(
+                        "MISSING_REQUEST_TYPE",
+                        "Xmla._getXmlaSoapMessage",
+                        options
+                    )._throw();
+                }
+                msg += "\n   <Command>" +
+                    "\n    <Statement>" + _xmlEncode(options.statement) + "</Statement>" +
+                    "\n   </Command>" +
+                    _getXmlaSoapList("Properties", "PropertyList", options.properties, "   ")
+                ;
+                break;
+            default:
+                //we used to throw an exception here,
+                //but this would make it impossible
+                //to execute service or provider specific methods.
+        }
+        msg += "\n  </" + method + ">" +
+            "\n </" + _xmlnsSOAPenvelopePrefix + ":Body>" +
+            "\n</" + _xmlnsSOAPenvelopePrefix + ":Envelope>"
+        ;
+        return msg;
+    },
+/**
 *   Sends a request to the XML/A server.
 *   This method is rather low-level and allows full control over the request
 *   by passing an options object. General properties of the options object are:
@@ -1982,7 +1987,7 @@ Xmla.prototype = {
         options.properties = _applyProps(options.properties, this.options.properties, false);
         options.restrictions = _applyProps(options.restrictions, this.options.restrictions, false);
 
-        var soapMessage = _getXmlaSoapMessage(options);
+        var soapMessage = this.getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
         var myXhr;
         var ajaxOptions = {
