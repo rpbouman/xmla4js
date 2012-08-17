@@ -246,7 +246,7 @@ function _getElements(parent, list, criteria){
     if (!childNodes) return list;
     for (var node, i = 0, n = childNodes.length; i < n; i++){
         node = childNodes[i];
-        if (criteria && criteria(node) === true) list.push(node);
+        if (criteria && criteria.call(null, node) === true) list.push(node);
         _getElements(node, list, criteria);
     }
 };
@@ -289,20 +289,21 @@ var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
         func = function(node, ns, prefix, tagName){
             var list = [], criteria;
             if (tagName === "*") {
-                criteria = function(node){
-                    return (node.nodeType === 1 && node.namespaceURI === ns);
+                criteria = function(_node){
+                    return (_node.nodeType === 1 && _node.namespaceURI === ns);
                 };
             }
             else {
-                criteria = function(node){
-                    return (node.nodeType === 1 && node.namespaceURI === ns && node.localName === tagName);
+                criteria = function(_node){
+                    return (_node.nodeType === 1 && _node.namespaceURI === ns && _node.nodeName === tagName);
                 };
             }
             _getElements(node, list, criteria);
             return list;
         };
     }
-    return (_getElementsByTagNameNS = func)(node, ns, prefix, tagName);
+    _getElementsByTagNameNS = func;
+    return func(node, ns, prefix, tagName);
 };
 
 var _getAttributeNS = function(element, ns, prefix, attributeName) {
@@ -7255,7 +7256,7 @@ Xmla.Exception.prototype = {
 *   @return a string representing this exception
 */
     toString: function(){
-        return this.type + " " + this.code + ": " + this.message;
+        return this.type + " " + this.code + ": " + this.message + " (source: " + this.source  + ")";
     },
 /**
  *  Get a stack trace.
