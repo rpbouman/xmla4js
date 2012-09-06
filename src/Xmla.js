@@ -5873,38 +5873,64 @@ Xmla.Dataset.prototype = {
  * @return {Object}
  */
     fetchAsObject: function() {
-        var axes = [], axis, slicerAxis,
+	
+		var getHierarchyArray = function(axis){
+			var h = axis.getHierarchies();
+			var hierarchies = [];
+			var i, n = axis.numHierarchies;
+			for (i = 0; i < n; i++) {
+				hierarchies.push(axis.hierarchy(i));
+			}
+			return hierarchies;
+		}
+        var axes = [], axis, filterAxis,
             cellset = [], cells = [], cell,
-            i, n;
+            i, n, tuples=1, idx=0;
 
         //loop through all non slicer axes
         for (i = 0, n = this.axisCount(); i < n; i++){
             axis = this.getAxis(i);
+			tuples = tuples * axis.tupleCount();
             axes.push({
                 positions: axis.fetchAllAsObject(),
-                hierarchies: axis.getHierarchies()
+                hierarchies: getHierarchyArray(axis)
             });
         }
 
         //get Slicer information
-        slicerAxis = (axis = this.getSlicerAxis()) ? {
-            positions: axis.fetchAllAsObject(),
-            hierarchies: axis.getHierarchies()
-        } : null;
+		if (this.hasSlicerAxis) {
+			axis = this.getSlicerAxis();
+			filterAxis =  {
+				positions: axis.fetchAllAsObject(),
+				hierarchies:  getHierarchyArray(axis)
+			}
+		} else {
+			filterAxis =  {
+				positions: {},
+				hierarchies: []
+			}
+        };
 
         //get Cellset data
         cellset = this.getCellset();
-        //console.log(xmla_cells.cellCount())
-        for (i = 0, n = cellset.cellCount(); i < n; i++){
+        for (i = 0, n = tuples; i < n; i++){
             cell = cellset.readCell();
-            cells.push(cell);
-            cellset.nextCell();
+			if (idx == cell.ordinal) {
+ 				cells.push(cell);
+				cellset.nextCell();
+			} else {
+				//console.debug('skipping: '+idx+':'+cell.ordinal);
+				cells.push({Value:null, FmtValue:null, FormatString: null, ordinal:idx });
+			}
+			idx++;
         }
-        cellset.close();
+		//do not close, it might be used later.....
+        cellset.reset();
 
         return {
+			cubeName: this.cubeName,
             axes: axes,
-            slicerAxis: slicerAxis,
+            filterAxis: filterAxis,
             cells: cells
         };
     },
@@ -6584,6 +6610,7 @@ Xmla.Dataset.Cellset.prototype = {
         this.reset();
     },
     _getCellNode: function(index){
+		//console.debug(index);
         if (!_isUnd(index)) this._idx = index;
         this._cellNode = this._cellNodes[this._idx];
         this._cellOrd = this._getCellOrdinal(this._cellNode);
