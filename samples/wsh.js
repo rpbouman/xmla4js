@@ -8,12 +8,12 @@
 *   it under the terms of the GNU General Public License as published by
 *   the Free Software Foundation, either version 3 of the License, or
 *   (at your option) any later version.
-*   
+*
 *   This program is distributed in the hope that it will be useful,
 *   but WITHOUT ANY WARRANTY; without even the implied warranty of
 *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *   GNU General Public License for more details.
-*   
+*
 *   You should have received a copy of the GNU General Public License
 *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -59,7 +59,7 @@ wsh.WebShell.defaultNonCharKeyHandlers = {
                         var tail = html.slice(this.colNr);
                         this.setLineText(
                             line,
-                            html.slice(0, --this.colNr) + 
+                            html.slice(0, --this.colNr) +
                             tail
                         );
                     }
@@ -116,7 +116,7 @@ wsh.WebShell.defaultNonCharKeyHandlers = {
                 if (this.colNr < this.lineLen) {
                     this.setLineText(
                         line,
-                        html.slice(0, this.colNr) + 
+                        html.slice(0, this.colNr) +
                         html.slice(this.colNr + 1)
                     );
                 }
@@ -138,7 +138,7 @@ wsh.WebShell.defaultConfig = {
     enabled: true
 };
 
-wsh.WebShell.prototype = {   
+wsh.WebShell.prototype = {
     setEnabled: function(enabled){
         this.config.enabled = enabled;
         if (enabled) {
@@ -226,18 +226,18 @@ wsh.WebShell.prototype = {
             ed.setAttribute("id", id);
         }
         this.dom.editor = ed;
-        
+
         var style = document.createElement("style");
-        style.setAttribute("type", "text/css");        
+        style.setAttribute("type", "text/css");
         this.dom.style = style;
         document.getElementsByTagName("head").item(0).appendChild(style);
-        
+
         var textarea = this.dom.textarea = document.createElement("textarea");
-        document.body.appendChild(textarea);        
+        document.body.appendChild(textarea);
         var focusTextArea = function(){
             textarea.focus();
         };
-        
+
         ed.onclick = focusTextArea;
         ed.onfocus = focusTextArea;
         textarea.onkeydown = function(e) {me.handleKeyEvent(e);};
@@ -253,15 +253,16 @@ wsh.WebShell.prototype = {
 
         this.dom.linestart = document.createElement("span");
         this.dom.caret = document.createElement("span");
+        this.dom.caret.className = "wshCaret";
         ed.appendChild(this.dom.caret);
-                
-        this.configure();        
-        this.createLine(this.config.lines);        
+
+        this.configure();
+        this.createLine(this.config.lines);
         this.createLine(this.config.prompt);
-        this.moveCaret();        
+        this.moveCaret();
         this.fireEvent("afterrender");
     },
-    handleKeyEvent: function (e) {            //code taken from http://santrajan.blogspot.com/2007/03/cross-browser-keyboard-handler.html        
+    handleKeyEvent: function (e) {            //code taken from http://santrajan.blogspot.com/2007/03/cross-browser-keyboard-handler.html
         var evt = e || window.event, ch, handler;
         if (evt.type == "keydown") {
             ch = evt.keyCode;
@@ -277,8 +278,8 @@ wsh.WebShell.prototype = {
             } else {
                 this.charKey = true;
             }
-        } 
-        else 
+        }
+        else
         if (this.charKey) {                     // Already Handled on keydown
             ch = (evt.charCode) ? evt.charCode : evt.keyCode;
             if (ch > 31 && ch < 256) {          // safari and opera
@@ -300,7 +301,7 @@ wsh.WebShell.prototype = {
             html = this.getLineText(line)
         ;
         this.setLineText(
-            line,   
+            line,
             html.slice(0, this.colNr) + //piece before the caret
             ch +                        //character just typed
             html.slice(                 //piece after the caret
@@ -308,13 +309,17 @@ wsh.WebShell.prototype = {
                 (this.insert ? 0 : 1)   //don't overwrite in insert mode
             )
         );
-        //in insert mode, increase line length. 
+        //in insert mode, increase line length.
         //In overwrite mode, only increase line length when at end of line
-        //this.lineLen += (this.insert ? 1 : (this.colNr===this.lineLen ? 1 : 0));    
+        //this.lineLen += (this.insert ? 1 : (this.colNr===this.lineLen ? 1 : 0));
         this.colNr++;
-        this.moveCaret();
+        var me = this;
+        var f = function(){
+            me.moveCaret();
+        };
+        setTimeout(f, 0);
     },
-    handleNonCharKey: function(evt, keyCode){        
+    handleNonCharKey: function(evt, keyCode){
         var f = this.config.nonCharKeyHandlers[evt.keyCode.toString(10)];
         switch (typeof(f)){
             case "function":
@@ -331,15 +336,19 @@ wsh.WebShell.prototype = {
                 break;
             case "undefined":
             default:
-        } 
+        }
     },
     moveCaret: function moveCaret(){
         var caret = this.dom.caret, caretStyle = caret.style;
+        var color = caretStyle.color;
+        caretStyle.color = "black";
         caretStyle.left = ((((this.config.prompt.length + this.colNr)*this.config.fontSize)*(10/16)) + "px");
         if (this.dom.line){
-            caretStyle.top = this.dom.line.offsetTop + "px";
+            caretStyle.top = this.dom.line.offsetTop + 2 + "px";
+            //this.dom.line.style.height = 17 + "pt";
         }
         caret.scrollIntoView(true);
+        caretStyle.color = color;
     },
     setLineText: function(line, text){
         var textNode = document.createTextNode(text);
@@ -384,10 +393,10 @@ wsh.WebShell.prototype = {
         this.fireEvent("beforeaddline", text);
         var line = this.dom.historyLine = this.dom.line = document.createElement("div");
         var linestart = this.dom.linestart;
-        line.appendChild(linestart); 
+        line.appendChild(linestart);
         this.dom.editor.appendChild(line);
         line.removeChild(linestart);
-        
+
         line.setAttribute("class", "wshLine");
         if (typeof(text)!=="undefined"){
             this.setLineText(line, text);
@@ -419,7 +428,7 @@ wsh.WebShell.prototype = {
         if (!config){
             config = {};
         }
-        this.applyIf(config, dc);        
+        this.applyIf(config, dc);
         this.config = config;
     },
     configure: function(conf){
@@ -437,7 +446,7 @@ wsh.WebShell.prototype = {
             s = this.dom.style,
             me = this
         ;
-                
+
         edStyle.position = "absolute";
         edStyle.fontFamily = c.fontFamily;
         edStyle.fontSize = c.fontSize + "px";
@@ -450,8 +459,8 @@ wsh.WebShell.prototype = {
         tStyle.position = "absolute";
         tStyle.top = "-100px";
         tStyle.left = "-100px";
-        
-        var cssSelector = ".wshLine", 
+
+        var cssSelector = ".wshLine",
             cssProperties = "height: " + this.getLineHeight() + "px !important;",
             rule = cssSelector + "{" + cssProperties + "}";
         if (s.sheet) {  //chrome, opera, firefox
@@ -460,7 +469,7 @@ wsh.WebShell.prototype = {
             }
             s.sheet.insertRule(rule, s.sheet.cssRules.length);
         }
-        else 
+        else
         if (s.styleSheet) { //IE
             if (s.styleSheet.rules.length){
                 s.styleSheet.removeRule(0);
@@ -470,17 +479,17 @@ wsh.WebShell.prototype = {
         else {  //desperate
             s.innerHTML = rule;
         }
-        
+
         //this works around an issue in opera.
         //when you assign el.style.color = "white" and then evalutate el.style.color, opera returns #ffffff
         //this fucks op our caret blinking which relies on comparing the style color with the configer color.
         c.bgCol = edStyle.backgroundColor;
         c.col = edStyle.color
-        
+
         caret.innerHTML = this.config.caret.slice(0,1);
         cStyle.position = "absolute";
         cStyle.height = this.getLineHeight();
-        
+
         if (this.caretInterval){
             clearInterval(this.caretInterval);
         }
@@ -489,7 +498,7 @@ wsh.WebShell.prototype = {
             cStyle.backgroundColor = me.insert ? "" : cStyle.color===c.col? cStyle.color : "";
         }, c.blinkInterval);
         this.moveCaret();
-        
+
         if (c.hasFocus) {
             this.focus();
         }
