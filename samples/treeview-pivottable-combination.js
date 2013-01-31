@@ -2165,13 +2165,15 @@ function metadataClicked(e) {
     var target = e.getTarget(),
         treeNode
     ;
-    if (target.tagName === "DIV" && target.id === "datasources-head") toggleDataSources();
+    treeNode = TreeNode.lookup(target);
+    if (treeNode) {
+      if (target.tagName === "SPAN" && target.className === "toggle") treeNode.toggle();
+      else
+      if (treeNode.getCustomClass() === "MDSCHEMA_CUBES") selectCube(treeNode);
+    }
     else {
-        treeNode = TreeNode.lookup(target);
-        if (!treeNode) return;
-        if (target.tagName === "SPAN" && target.className === "toggle") treeNode.toggle();
-        else
-        if (treeNode.getCustomClass() === "MDSCHEMA_CUBES") selectCube(treeNode);
+      if (target.tagName === "SPAN") target = target.parentNode;
+      if (target.tagName === "DIV" && target.id === "datasources-head") toggleDataSources();
     }
 }
 function showMdxClicked(){
@@ -2459,6 +2461,30 @@ function workAreaResized(x){
     pivotTable.doLayout();
 }
 
+function workAreaResized(x){
+    var splitter = gEl("vertical-splitter"),
+        el, right, width
+    ;
+    if (iUnd(x)) {
+      x = splitter.offsetLeft;
+    }
+    else {
+      splitter.style.left = x + "px";
+    }
+    splitterLeft = splitter.offsetLeft + splitter.clientWidth;
+    el = gEl("metadata");
+    //el.style.width = el.clientWidth + (splitter.offsetLeft - el.clientWidth - 15) + "px";
+    el.style.width = x + "px";
+    el = gEl("workarea");
+    //right = el.offsetLeft + el.clientWidth;
+    el.style.left = (x + splitter.clientWidth) + "px";
+    el.style.width = (el.parentNode.clientWidth - (x + splitter.clientWidth)) + "px"
+    el.style.right = "0px";
+    //width = right - splitterLeft;
+    //el.style.left = splitterLeft + "px";
+    //el.style.width = width + "px";
+}
+
 function execute(mdx) {
     if (!mdx.length) {
         pivotTable.clear();
@@ -2723,6 +2749,7 @@ function init() {
     if (!(navigator.userAgent.indexOf("Gecko") && navigator.userAgent.indexOf("WebKit") === -1)) {
         gEl("cube-body").style.overflow = "auto";
     }
+    workAreaResized(200);
 }
 
 init();
