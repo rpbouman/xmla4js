@@ -1,0 +1,37 @@
+{
+  "name": "xmla4js",
+  "version": "0.0.1",
+  "description": "Javascript interface for XML for Analysis",
+  "main": "Xmla.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rpbouman/xmla4js.git"
+  },
+  "keywords": [
+    "javascript",
+    "xmla",
+    "mdx",
+    "bi",
+    "business",
+    "intelligence",
+	"soap",
+	"OLAP",
+	"query"
+  ],
+  "author": {
+    "name": "Roland Bouman"
+  },
+  "contributors": [
+    {
+      "name": "Joel Latino",
+      "email": "jlatino@sapo.pt"
+    }
+  ],
+  "license": "LGPL"
+}
