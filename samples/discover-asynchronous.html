@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<!--
+    Copyright 2009,2010,2011 Roland Bouman
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    Twitter: @rolandbouman
+
+    execute-asynchronous.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+    <head>
+        <title>xmla4js: discover asynchronous</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+        <style type="text/css">
+            .node {
+            }
+
+            span.toggle {
+                font-family: monospace;
+                font-size: 12pt;
+            }
+
+            div.nodebody {
+                padding-left: 1em;
+            }
+
+            div.nodehead {
+                margin: 3px 0px 3px 0px;
+            }
+
+            div.node > div.nodehead > span.toggle:before {
+                background-repeat: no-repeat;
+                background-position: 13px -3px;
+                font-family: monospace;
+                font-size: 12pt;
+            }
+
+            div.leaf > div.nodehead > span.toggle:before {
+                content: "\00A0\00A0\00A0\00A0";
+            }
+            div.collapsed > div.nodehead > span.toggle:before {
+                content: "+\00A0\00A0\00A0";
+            }
+            div.expanded > div.nodehead > span.toggle:before {
+                content: "-\00A0\00A0\00A0";
+            }
+
+            div.collapsed > div.nodebody {
+                display: none;
+            }
+            div.expanded > div.nodebody {
+                display: block;
+            }
+
+            div.DBSCHEMA_CATALOGS > div.nodehead > span.toggle:before {
+                background-image: url('schema24.gif');
+            }
+
+            div.MDSCHEMA_CUBES > div.nodehead > span.toggle:before {
+                background-image: url('cube24.gif');
+            }
+
+            div.MDSCHEMA_DIMENSIONS > div.nodehead > span.toggle:before {
+                background-image: url('dimension24.gif');
+            }
+
+            div.MDSCHEMA_MEASURES > div.nodehead > span.toggle:before {
+                background-image: url('measure24.gif');
+            }
+
+            div.MDSCHEMA_HIERARCHIES > div.nodehead > span.toggle:before {
+                background-image: url('hierarchy24.gif');
+            }
+
+            div.MDSCHEMA_LEVELS > div.nodehead > span.toggle:before {
+                background-image: url('level24.gif');
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <a href="../index.html">Home</a>
+            |
+            <a href="http://code.google.com/p/xmla4js/">Google Code Project page</a>
+            |
+            <a href="index.html">Samples</a>
+            |
+            <a href="../doc/api/index.html">API Reference Documentation</a>
+        </div>
+        <h1>Sample: Discover asynchronous</h1>
+        <div>
+            URL:
+            <input size="100" type="text" id="url" name="url"
+                value="http://localhost:8080/pentaho/Xmla?userid=joe&amp;password=password"
+            />
+            <button id="discover">Discover...</button>
+            <div>Tree:</div>
+            <div id="node0"></div>
+        </div>
+
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
+        <script type="text/javascript">
+            (function() {
+                (TreeNode = function(conf){
+                    this.conf = conf;
+                    this.id = ++TreeNode.id;
+                    TreeNode.nodes[this.getId()] = this;
+                    this.conf.state = conf.state || TreeNode.STATE_COLLAPSED;
+                    if (conf.loadChildren) this.loadChildren = conf.loadChildren;
+                    if (conf.parentNode) conf.parentNode.appendNode(this);
+                }).prototype = {
+                    createDom: function() {
+                        var node = document.createElement("div"),
+                            conf = this.conf,
+                            className
+                        ;
+                        className = "node " + conf.state;
+                        if (conf.className) className += " " + conf.className;
+                        node.className = className;
+                        node.id = this.getId();
+                        node.innerHTML= "<div class=\"nodehead\">" +
+                                            "<span class=\"toggle\"></span>" +
+                                            "<span>" + conf.title + "</span>" +
+                                        "</div>" +
+                                        "<div class=\"nodebody\"></div>"
+                        ;
+                        return node;
+                    },
+                    appendNode: function(node) {
+                        var dom = node.getDom();
+                        this.getBody().appendChild(dom);
+                        if (node.parentNode!==this) node.parentNode = this;
+                    },
+                    getId: function() {
+                        return "node" + this.id;
+                    },
+                    getDom: function(){
+                        var dom = document.getElementById(this.getId());
+                        if (!dom) dom = this.createDom();
+                        return dom;
+                    },
+                    getBody: function() {
+                        return this.getDom().getElementsByTagName("DIV").item(1);
+                    },
+                    toggle: function() {
+                        var state = this.conf.state;
+                        switch (state) {
+                            case TreeNode.STATE_COLLAPSED:
+                                state = TreeNode.STATE_EXPANDED;
+                                break;
+                            case TreeNode.STATE_EXPANDED:
+                                state = TreeNode.STATE_COLLAPSED;
+                                break;
+                            default:
+                                return;
+                        }
+                        this.setState(state);
+                    },
+                    setState: function(state) {
+                        var conf = this.conf, dom = this.getDom(), className;
+                        conf.state = state;
+                        className = "node " + state;
+                        if (conf.className) className += " " + conf.className;
+                        dom.className = className;
+                        dom = this.getBody();
+                        if (state === TreeNode.STATE_COLLAPSED || dom.childNodes.length) return
+                        this.loadChildren();
+                    },
+                    loadChildren: function() {
+                    }
+                };
+                TreeNode.STATE_COLLAPSED = "collapsed";
+                TreeNode.STATE_EXPANDED = "expanded";
+                TreeNode.STATE_LEAF = "leaf";
+                TreeNode.id = 0;
+                TreeNode.nodes = {};
+                TreeNode.clickHandler = function(e) {
+                    if (!e) e = window.event;
+                    var target = e.target || e.srcElement;
+                    if (target.tagName !== "SPAN" || target.className !== "toggle") return;
+                    var node = TreeNode.nodes[target.parentNode.parentNode.id];
+                    node.toggle();
+                };
+            })();
+        </script>
+        <script type="text/javascript">
+            var xmla = new Xmla({
+                async: true,
+                listeners: [
+                    {events: "error", handler: function(){
+                        debugger;
+                    }},
+                    {events: "request", handler: function(){
+                    }}
+                ]
+            });
+            function getTree() {
+                return document.getElementById("node0");
+            }
+            document.getElementById("discover").onclick = function(){
+                getTree().innerHTML = "";
+                //Datasources
+                xmla.discoverDataSources({
+                    url: document.getElementById("url").value,
+                    success: function(xmla, request, response){
+                        response.eachRow(function(row){
+                            var url = row["URL"] || document.getElementById("url").value,
+                                dataSourceInfo = row["DataSourceInfo"]
+                            ;
+                            getTree().appendChild(new TreeNode({
+                                title: dataSourceInfo,
+                                className: request.requestType,
+                                loadChildren: function() {
+                                    node = this;
+                //Catalogs
+                                    xmla.discoverDBCatalogs({
+                                        url: url,
+                                        properties: {DataSourceInfo: dataSourceInfo},
+                                        success: function(xmla, request, response) {
+                                            response.eachRow(function(row) {
+                                                var catalogName = row["CATALOG_NAME"];
+                                                new TreeNode({
+                                                    parentNode: node,
+                                                    title: catalogName,
+                                                    className: request.requestType,
+                                                    loadChildren: function(){
+                                                        node = this;
+                //Cubes
+                                                        xmla.discoverMDCubes({
+                                                            url: request.url,
+                                                            properties: {
+                                                                DataSourceInfo: request.properties.DataSourceInfo,
+                                                                Catalog: catalogName
+                                                            },
+                                                            restrictions: {CATALOG_NAME: catalogName},
+                                                            success: function(xmla, request, response){
+                                                                response.eachRow(function(row) {
+                                                                    var cubeName = row["CUBE_NAME"];
+                                                                    new TreeNode({
+                                                                        parentNode: node,
+                                                                        title: cubeName,
+                                                                        className: request.requestType,
+                                                                        loadChildren: function(){
+                                                                            node = this;
+                //Dimensions
+                                                                            xmla.discoverMDDimensions({
+                                                                                url: request.url,
+                                                                                properties: request.properties,
+                                                                                restrictions: {
+                                                                                    CATALOG_NAME: request.restrictions.CATALOG_NAME,
+                                                                                    CUBE_NAME: cubeName
+                                                                                },
+                                                                                success: function(xmla, request, response){
+                                                                                    response.eachRow(function(row) {
+                                                                                        var dimensionName = row["DIMENSION_NAME"],
+                                                                                            dimensionUniqueName = row["DIMENSION_UNIQUE_NAME"],
+                                                                                            dimensionType = row["DIMENSION_TYPE"],
+                                                                                            className, loadChildren
+                                                                                        ;
+                                                                                        if (dimensionType === 2) {
+                                                                                            className = "MDSCHEMA_MEASURES";
+                                                                                            loadChildren = function(){
+                                                                                                node = this;
+                //Measures
+                                                                                                xmla.discoverMDMeasures({
+                                                                                                    url: request.url,
+                                                                                                    properties: request.properties,
+                                                                                                    restrictions: {
+                                                                                                        CATALOG_NAME: request.restrictions.CATALOG_NAME,
+                                                                                                        CUBE_NAME: request.restrictions.CUBE_NAME
+                                                                                                    },
+                                                                                                    success: function(xmla, request, response){
+                                                                                                        response.eachRow(function(row) {
+                                                                                                            new TreeNode({
+                                                                                                                parentNode: node,
+                                                                                                                title: row["MEASURE_NAME"],
+                                                                                                                state: TreeNode.STATE_LEAF
+                                                                                                            });
+                                                                                                        });
+                                                                                                    }
+                                                                                                });
+                                                                                            }
+                                                                                        }
+                                                                                        else {
+                                                                                            className = request.requestType;
+                                                                                            loadChildren = function() {
+                                                                                                node = this;
+                //Hierarchies
+                                                                                                xmla.discoverMDHierarchies({
+                                                                                                    url: request.url,
+                                                                                                    properties: request.properties,
+                                                                                                    restrictions: {
+                                                                                                        CATALOG_NAME: request.restrictions.CATALOG_NAME,
+                                                                                                        CUBE_NAME: request.restrictions.CUBE_NAME,
+                                                                                                        DIMENSION_UNIQUE_NAME: dimensionUniqueName
+                                                                                                    },
+                                                                                                    success: function(xmla, request, response){
+                                                                                                        response.eachRow(function(row) {
+                                                                                                            var hierarchyName = row["HIERARCHY_NAME"],
+                                                                                                                hierarchyUniqueName = row["HIERARCHY_UNIQUE_NAME"]
+                                                                                                            ;
+                                                                                                            new TreeNode({
+                                                                                                                parentNode: node,
+                                                                                                                title: hierarchyName,
+                                                                                                                className: request.requestType,
+                                                                                                                loadChildren: function(){
+                                                                                                                    node = this;
+                //Levels
+                                                                                                                    xmla.discoverMDLevels({
+                                                                                                                        url: request.url,
+                                                                                                                        properties: request.properties,
+                                                                                                                        restrictions: {
+                                                                                                                            CATALOG_NAME: request.restrictions.CATALOG_NAME,
+                                                                                                                            CUBE_NAME: request.restrictions.CUBE_NAME,
+                                                                                                                            DIMENSION_UNIQUE_NAME: request.restrictions.DIMENSION_UNIQUE_NAME,
+                                                                                                                            HIERARCHY_UNIQUE_NAME: hierarchyUniqueName
+                                                                                                                        },
+                                                                                                                        success: function(xmla, request, response){
+                                                                                                                            response.eachRow(function(row) {
+                                                                                                                                var levelName = row["LEVEL_NAME"],
+                                                                                                                                    levelUniqueName = row["LEVEL_UNIQUE_NAME"]
+                                                                                                                                ;
+                                                                                                                                new TreeNode({
+                                                                                                                                    parentNode: node,
+                                                                                                                                    title: levelName,
+                                                                                                                                    className: request.requestType,
+                                                                                                                                    loadChildren: function(){
+                                                                                                                                        node = this;
+                //Members
+                                                                                                                                        xmla.discoverMDMembers({
+                                                                                                                                            url: request.url,
+                                                                                                                                            properties: request.properties,
+                                                                                                                                            restrictions: {
+                                                                                                                                                CATALOG_NAME: request.restrictions.CATALOG_NAME,
+                                                                                                                                                CUBE_NAME: request.restrictions.CUBE_NAME,
+                                                                                                                                                DIMENSION_UNIQUE_NAME: request.restrictions.DIMENSION_UNIQUE_NAME,
+                                                                                                                                                HIERARCHY_UNIQUE_NAME: hierarchyUniqueName,
+                                                                                                                                                LEVEL_UNIQUE_NAME: levelUniqueName
+                                                                                                                                            },
+                                                                                                                                            success: function(xmla, request, response){
+                                                                                                                                                response.eachRow(function(row) {
+                                                                                                                                                    new TreeNode({
+                                                                                                                                                        parentNode: node,
+                                                                                                                                                        title: row["MEMBER_NAME"],
+                                                                                                                                                        state: TreeNode.STATE_LEAF
+                                                                                                                                                    });
+                                                                                                                                                });
+                                                                                                                                            }
+                                                                                                                                        });
+                                                                                                                                    }
+                                                                                                                                });
+                                                                                                                            });
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                }
+                                                                                                            });
+                                                                                                        });
+                                                                                                    }
+                                                                                                });
+                                                                                            }
+                                                                                        }
+                                                                                        new TreeNode({
+                                                                                            parentNode: node,
+                                                                                            title: dimensionName,
+                                                                                            className: className,
+                                                                                            loadChildren: loadChildren
+                                                                                        });
+                                                                                    });
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    });
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                        }
+                                    })
+                                }
+                            }).createDom());
+                        });
+                    }
+                });
+            };
+
+/*
+            var tree = getTree();
+            if (tree.addEventListener) {
+                tree.addEventListener("click", function(e){
+                    TreeNode.clickHandler(e);
+                }, true);
+            }
+            else
+            if (tree.attachEvent){
+                tree.attachEvent("onclick", function(){
+                    TreeNode.clickHandler(window.event);
+                });
+            }
+*/
+            getTree().onclick = TreeNode.clickHandler;
+        </script>
+    </body>
+</html>

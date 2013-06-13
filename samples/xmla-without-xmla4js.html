@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+    Copyright 2009,2010,2011 Roland Bouman 
+    (Roland.Bouman@gmail.com, http://rpbouman.blogspot.com/, http://code.google.com/p/xmla4js)
+    
+    xmla-without-xmla4js.html - this software is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->    
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>xmla4js: XML/A without xmla4js</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css"/>
+    </head>
+    <body>
+        <div>Raw Output</div>
+        <pre id="raw"></pre>
+        <div>Xmla Output</div>
+        <pre id="xmla"></pre>
+        <script type="text/javascript">            
+            var output = document.getElementById("output");
+            var url = "http://localhost:8080/pentaho/Xmla?userid=joe&password=password";            
+            var datasource = "Pentaho Analysis Services";
+            var catalog = "FoodMart";
+            var mdx = "SELECT [Measures].[Profit] ON COLUMNS," +
+                      "       [Product].[All Products].Children ON ROWS " +
+                      "FROM   [Sales]";
+            var request = "<SOAP-ENV:Envelope" +
+            "  xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"" +
+            "  SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +            
+            "  <SOAP-ENV:Body>" +
+            "    <Execute" +
+            "      xmlns=\"urn:schemas-microsoft-com:xml-analysis\"" +
+            "      SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
+            "      <Command>" +
+            "        <Statement>" + mdx + "</Statement>" +
+            "      </Command>" +
+            "      <Properties>" +
+            "        <PropertyList>" +
+            "          <DataSourceInfo>" + datasource + "</DataSourceInfo>" +
+            "          <Catalog>" + catalog + "</Catalog>" +
+            "          <Format>Tabular</Format>" +
+            "        </PropertyList>" +
+            "      </Properties>" +            
+            "    </Execute>" +
+            "  </SOAP-ENV:Body>" +
+            "</SOAP-ENV:Envelope>";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, false);
+            xhr.setRequestHeader("Content-Type", "text/xml");            
+            xhr.send(request);
+            var response = xhr.responseXML;
+            var rows = response.getElementsByTagNameNS(
+                "urn:schemas-microsoft-com:xml-analysis:rowset", "row"
+            );
+            var colHeaders = response.getElementsByTagNameNS(
+                "urn:schemas-microsoft-com:xml-analysis:rowset", "row"
+            );
+            var rowArray = [];
+            for (var i=0; i<rows.length; i++){
+                var row = rows.item(i);
+                var cols = row.getElementsByTagName("*");
+                var rowArrayEntry = {};
+                rowArray.push(rowArrayEntry);
+                for (var j=0; j<cols.length; j++){
+                    var col = cols.item(j);
+                    rowArrayEntry[col.nodeName] = col.firstChild.data
+                }
+            }                        
+            document.getElementById("raw").innerHTML = JSON.stringify(rowArray).replace(/\}/g, "}\n");
+        </script>
+        
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript">
+            var output = document.getElementById("output");        
+            var rowArray = new Xmla().execute({
+                async: false,
+                url: "http://localhost:8080/pentaho/Xmla?userid=joe&password=password", 
+                statement: "SELECT [Measures].[Profit] ON COLUMNS," +
+                           "       [Product].[All Products].Children ON ROWS " +
+                           "FROM   [Sales]",
+                properties: {
+                    DataSourceInfo: "Pentaho Analysis Services",
+                    Catalog: "FoodMart",
+                    Format: "Tabular"
+                }                
+            }).fetchAllAsObject();
+            document.getElementById("xmla").innerHTML = JSON.stringify(rowArray).replace(/\}/g, "}\n");
+        </script>
+        
+        <script type="text/javascript">
+            var output = document.getElementById("output");        
+            var xmla = new Xmla();
+            var rowset = xmla.execute({
+                async: false,
+                url: "http://localhost:8080/pentaho/Xmla?userid=joe&password=password", 
+                statement: "SELECT [Measures].[Profit] ON COLUMNS," +
+                           "       [Product].[All Products].Children ON ROWS " +
+                           "FROM   [Sales]",
+                properties: {
+                    DataSourceInfo: "Pentaho Analysis Services",
+                    Catalog: "FoodMart",
+                    Format: "Tabular"
+                }                
+            });
+            var rowArray = rowset.fetchAllAsObject();
+            document.getElementById("xmla").innerHTML = JSON.stringify(rowArray).replace(/\}/g, "}\n");
+        </script>
+        
+    </body>
+</html>

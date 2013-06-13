@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="xmla4js - XML/A for javascript, OLAP for client-side web applications">
+    <menu-items>
+        <menu-item 
+            id="xmla4js"
+            anchor="tools-submenu"
+            label="Xmla4Js Home"
+            command="content/xmla4js/index.html"
+            type="MENU_ITEM" 
+            how="LAST_CHILD"
+        />
+        <menu-item 
+            id="xmlash"
+            anchor="tools-submenu"
+            label="Xmla4Js Shell"
+            command="content/xmla4js/samples/xmlash.html"
+            type="MENU_ITEM" 
+            how="LAST_CHILD"
+        />
+        <menu-item 
+            id="xmla4js-analyzer"
+            anchor="tools-submenu"
+            label="Xmla4Js Analyzer"
+            command="content/xmla4js/samples/treeview-pivottable-combination.html?url=http%3A%2F%2Flocalhost%3A8080%2Fpentaho%2FXmla%3Fuserid%3Djoe%26password%3Dpassword"
+            type="MENU_ITEM" 
+            how="LAST_CHILD"
+        />
+    </menu-items>
+
+    <static-paths>
+        <static-path url="/xmla4js" localFolder="."/>
+    </static-paths> 
+    
+</plugin>
