@@ -1,0 +1,50 @@
+table.pivot {
+    font-family: Sans-serif;
+    font-size: 8pt;
+    border-style: none solid solid none; 
+    border-color: rgb(225,225,225);
+    border-width: 1px;
+}
+
+table.pivot th {
+    font-weight: normal;
+    white-space:nowrap;
+    min-width: .2em;
+    vertical-align: top;
+    background-color: rgb(200,200,200);
+    text-align: left;
+    background-image: url(../css/bgtop3.png);
+    background-repeat: repeat-x;
+}
+
+table.pivot th, table.pivot td {
+    border-style:solid none none solid ; 
+    border-color: rgb(225,225,225);
+    border-width: 1px;
+    padding:1px;                            
+}
+
+table.pivot th.spacer {
+    border-top-style: none;
+    min-width: 1em !important;
+    width: 1em !important;                            
+    background-image: url();
+}
+table.pivot th.hierarchy {
+    font-weight: bold;
+    text-align: center;
+}
+table.pivot td {
+    text-align: right;
+    background-color: rgb(250,250,155);
+    font-family: monospace;
+    padding: 1px 2px 1px 1em !important;
+    background-image: url(../css/bgleft1.png);
+    background-repeat: repeat-y;
+}
+table.pivot span.driller {
+    font-family: monospace;
+    cursor: pointer;
+    padding: 2px;
+    
+}

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<!--
+    Copyright 2009, 2010, 2011 Roland Bouman
+    Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
+    Twitter: @rolandbouman
+
+    index.html - this documentation is part of xmla4js
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title></title>
+        <script type="text/javascript">
+          var mantle_win;
+          if (parent) mantle_win = parent;
+          if (window.opener) {
+            if (window.opener.parent) mantle_win = window.opener.parent;
+            else mantle_win = window.opener;
+          }
+
+          var active_theme = mantle_win.active_theme;
+          var core_theme_tree = mantle_win.core_theme_tree;
+          var module_theme_tree = mantle_win.module_theme_tree;
+          var CONTEXT_PATH = mantle_win.CONTEXT_PATH;
+        </script>
+        <script type="text/javascript" src="../../../js/themeResources.js"></script>
+        <style type="text/css" id="main">
+            html, body, .workspace {
+              overflow: hidden;
+            }
+
+            body {
+                font-family: Arial;
+                font-size: 10pt;
+            }
+            .component {
+                border-width: 2px;
+                border-color: grey;
+                background-color: white;
+            }
+
+            #workarea {
+                top: 6px;
+                left: 20%;
+                width: 79%;
+                border-style: solid none none solid;
+                border-top-right-radius: 10px;
+                border-bottom-right-radius: 10px;
+            }
+            #metadata {
+                position: fixed;
+                width: 19%;
+                left: 5px;
+                border-style: solid solid none solid;
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+            }
+            .vertical-splitter {
+                position:absolute;
+                width: 8px;
+                top: 0px;
+                bottom: 0px;
+                cursor: ew-resize;
+            }
+            .main-component {
+                position: absolute;
+                top: 38px;
+                bottom: 0px;
+            }
+
+            #discover {
+                border-radius: 5px;
+                float:left;
+            }
+            #discover:after {
+                content: "..."
+            }
+
+            #url-label {
+                margin-left:5px;
+                float:left;
+                width: 2em;
+                border-style: none;
+                margin: 2px;
+                font-weight:bold;
+            }
+            #url-label:after {
+                content: ": "
+            }
+            #url {
+                height: 24px;
+                padding-left: 20px;
+                float:left;
+                width: 300px;
+                border-style: none;
+                background-repeat: no-repeat;
+                background-image: url('schema24.gif');
+                background-position: -2px 2px;
+            }
+            .busy {
+                background-repeat: no-repeat;
+                background-image: url('ajax-loader-small.gif') !important;
+                background-position: 4px 5px !important;
+            }
+            #url:active {
+                border-style: none;
+            }
+
+            .toolbar {
+              padding-top:2px;
+              padding-left: 2px;
+              position: absolute;
+              height: 32px;
+              left: 0px;
+              right: 0px;
+            }
+
+            #toolbar label:after {
+                content: ":"
+            }
+
+            .toggle {
+                font-family: monospace;
+            }
+
+        </style>
+        <style type="text/css" id="tree-section">
+            .section-header {
+              padding: 3px;
+              font-size: 1em;
+              text-indent: 20px;
+            }
+
+            .pentaho-titled-toolbar .pentaho-titled-toolbar-label {
+              font-size: 0.9em;
+            }
+
+            #datasources {
+            }
+
+            #datasources-head:hover {
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            #datasources-body {
+            }
+
+            #cube-head {
+                background-image: url('cube24.png');
+                background-position: 0px -1px;
+                background-repeat: no-repeat;
+            }
+            #cube-body {
+                position: absolute;
+                top: 75px;
+                bottom: 10px;
+                left: 0px;
+                right: 0px;
+            /*
+                overflow: auto
+
+                Bug in firefox: with overflow auto, mouseup events
+                report the wrong target.
+            */
+            }
+        </style>
+        <style type="text/css" id="tree">
+            div.node > div.head > span.toggle {
+                height: 26px!important;
+            }
+
+            div.node > div.body {
+                margin-left: 1em;
+            }
+
+            div.node > div.head {
+                cursor: default;
+            }
+
+            div.node > div.head > span.toggle:before {
+                background-repeat: no-repeat;
+                background-position: 13px -1px;
+                font-family: monospace;
+                font-size: 13pt;
+            }
+
+            div.leaf > div.head > span.toggle:before {
+                content: "\00A0\00A0\00A0\00A0";
+            }
+
+            div.collapsed > div.head > span.toggle:before {
+                content: "+\00A0\00A0\00A0";
+            }
+
+            div.expanded > div.head > span.toggle:before {
+                content: "-\00A0\00A0\00A0";
+            }
+
+            div.collapsed > div.body {
+                display: none;
+            }
+
+            div.expanded > div.body {
+                display: block;
+            }
+
+            div.node > div.head > span.label {
+                white-space: nowrap;
+            }
+        </style>
+        <style type="text/css" id="olap">
+            div.DBSCHEMA_CATALOGS > div.head > span.toggle:before {
+                background-image: url('schema24.gif');
+            }
+
+            div.MDSCHEMA_CUBES > div.head > span.toggle:before {
+                background-image: url('cube24.png');
+            }
+
+            div.MDSCHEMA_CUBES > div.head > span.label:hover {
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            div.MDSCHEMA_MEASURES > div.head > span.toggle:before {
+                background-image: url('measure24.gif');
+            }
+
+            div.MDSCHEMA_HIERARCHIES > div.head > span.toggle:before {
+                background-image: url('hierarchy24.gif');
+            }
+
+            div.MDSCHEMA_LEVELS > div.head > span.toggle:before {
+                background-image: url('level24.gif');
+            }
+
+            div.MDSCHEMA_MEMBERS > div.head > span.toggle:before {
+                background-image: url('property24.gif');
+            }
+
+            #ddDragProxy.MDSCHEMA_MEASURES {
+                background-image: url('measure24.gif');
+                background-color: white;
+                border-style: solid;
+                border-width: 1px;
+                border-color: grey;
+            }
+
+            #ddDragProxy.MDSCHEMA_HIERARCHIES {
+                background-image: url('hierarchy24.gif');
+                background-color: white;
+                border-style: solid;
+                border-width: 1px;
+                border-color: grey;
+            }
+
+            #ddDragProxy.MDSCHEMA_LEVELS {
+                background-image: url('level24.gif');
+                background-color: white;
+                border-style: solid;
+                border-width: 1px;
+                border-color: grey;
+            }
+
+            #ddDragProxy.MDSCHEMA_MEMBERS {
+                background-image: url('property24.gif');
+                background-color: white;
+                border-style: solid;
+                border-width: 1px;
+                border-color: grey;
+            }
+            #ddDragProxy {
+                position: absolute;
+                background-repeat: no-repeat;
+                padding: 2px;
+                height: 20px;
+                text-indent: 2em;
+            }
+        </style>
+        <style type="text/css">
+            .no-user-select {
+              -moz-user-select: none;
+              -khtml-user-select: none;
+              -webkit-user-select: none;
+              user-select: none;
+            }
+            #workspace {
+                cursor: default;
+                position:absolute;
+                left: 0px;
+                right: 0px;
+                top: 32px;
+                bottom: 0px;
+            }
+            #workarea > table {
+                border-style: solid;
+                border-width: 1px;
+            }
+
+            #query {
+                position: relative;
+                left: 0px;
+                right: 0px;
+                display: none;
+            }
+            #query-text {
+                font-size: 8pt;
+                left: 0px;
+                right: 0px;
+                overflow: auto;
+                width: 100%;
+                font-family: monospace;
+            }
+            #execute:after {
+                content: "...";
+            }
+        </style>
+        <style type="text/css" >
+            table.query-designer {
+                position: relative;
+                left: 0px;
+                right: 0px;
+                overflow: hidden;
+            }
+
+            table.query-designer td {
+                vertical-align: top
+            }
+
+            table.query-designer-axis {
+                border-style: solid;
+                border-width: 1px;
+            }
+
+            .query-designer-axis td {
+                background-repeat: no-repeat;
+                background-position: 2px -1px;
+                border-color: grey;
+            }
+
+            .query-designer-axis td.query-designer-axis-header {
+                border-style: none;
+                vertical-align: top;
+                align: left;
+            }
+
+            td.query-designer-axis-header:after {
+                content: ": ";
+            }
+
+            .query-designer-axis td.MDSCHEMA_HIERARCHIES {
+                border-style: solid;
+                border-width: 1px;
+                padding: 2px;
+                text-indent: 2em;
+                background-image: url('hierarchy24.gif');
+                background-color: lightgrey;
+            }
+
+            .query-designer-axis td ul {
+                padding-left: 1em;
+                margin: 0px;
+            }
+
+            .query-designer-axis td span {
+                background-repeat: no-repeat;
+                border-color: grey;
+                border-style: solid;
+                border-width: 1px;
+                white-space: nowrap;
+                padding: 2px;
+                margin: 2px;
+                text-indent: 2em;
+                display: inline;
+                margin-top: 2px; padding: 2px;
+            }
+
+            .query-designer-axis td span:before {
+                content: "\A0 \A0 \A0 \A0 \A0 \A0"
+            }
+
+            .query-designer-axis1 td span {
+                display: block;
+            }
+            .query-designer-axis1 td span:before {
+                content: "\A0"
+            }
+
+            .query-designer-axis td span.MDSCHEMA_LEVELS {
+                background-image: url('level24.gif');
+            }
+
+            .query-designer-axis td span.MDSCHEMA_MEMBERS {
+                background-image: url('property24.gif');
+            }
+
+            .query-designer-axis td span.MDSCHEMA_MEASURES {
+                background-image: url('measure24.gif');
+            }
+
+            div.query-designer-horizontal-drag-proxy {
+                position: absolute;
+                height: 1px;
+                background-color:black;
+            }
+
+            div.query-designer-vertical-drag-proxy {
+                position: absolute;
+                width: 1px;
+                background-color:black;
+            }
+        </style>
+        <style type="text/css" id="pivot-table">
+            .pivot-table-widget {
+                position: relative;
+                left: 0px;
+                right: 0px;
+                margin-right: 5px;
+            }
+
+            .pivot-table-axis {
+                position: absolute;
+                overflow: hidden;
+                border-style:solid;
+                border-width:1px;
+                border-color: darkgrey;
+            }
+
+            .pivot-table-axis-pages {
+                overflow-x: auto;
+            }
+
+            .pivot-table-cells {
+                overflow: auto;
+            }
+
+            table.pivot-table tr.positioning-row {
+                font-size:0px;
+                height:0px;
+            }
+
+            table.pivot-table tr.positioning-row td {
+                padding: 0px !important;
+                border-style:none !important;
+            }
+
+            table.pivot-table tr.positioning-row div {
+                position:relative;
+            }
+
+            table.pivot-table {
+                border-collapse: collapse;
+                font-size: 10pt;
+                position:absolute;
+            }
+
+            table.pivot-table td {
+                vertical-align: top;
+                white-space: nowrap;
+                border-width: 1px;
+                padding: 2px;
+                background-repeat: repeat-y;
+                overflow: hidden;
+            }
+
+            table.pivot-table td.td {
+                border-style: solid;
+                border-color: darkgrey;
+                text-align: right;
+                font-family: monospace;
+                font-size: 9pt;
+            }
+
+            table.pivot-table td.th {
+                border-color: darkgrey;
+                border-style: none none none solid;
+                background-color: lightgrey;
+            }
+
+            table.pivot-table td.thh {
+                border-style: none;
+                background-color: lightgrey;
+            }
+
+            table.pivot-table td.MDSCHEMA_MEMBERS {
+                border-style: solid solid none solid;
+                background-color: lightgrey;
+            }
+
+        </style>
+        <style type="text/css">
+            #log pre {
+                margin: 0px;
+                padding: 0px;
+                font-size: 8pt;
+            }
+        </style>
+        <style type="text/css">
+            .menu {
+                position:absolute;
+                background-color: lightgrey;
+                border-radius: 10px;
+                border-style: solid;
+                border-width: 2px 1px 1px 2px;
+                padding: 2px;
+                border-color: ThreeDHighLight ThreeDDarkShadow ThreeDDarkShadow ThreeDHighLight;
+            }
+            .menu .menu-item {
+                margin: 2px;
+            }
+            .menu .menu-item:hover {
+                color: blue;
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;">
+        <div id="toolbar" class="toolbar pentaho-titled-toolbar pentaho-rounded-panel2-shadowed pentaho-shine pentaho-background">
+            <button id="discover">Discover</button>
+            <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
+            <label>Show mdx</label><input id="show-mdx" type="checkbox" />
+            <button id="export">Export</button>
+        </div>
+        <div id="workspace">
+            <div id="metadata" class="component main-component puc-navigator-panel">
+                <div id="datasources">
+                    <div id="datasources-head" class="section-header pentaho-titled-toolbar">
+                      <span class="pentaho-titled-toolbar-label">Data Sources</span>
+                    </div>
+                    <div id="datasources-body">
+                    </div>
+                </div>
+                <div id="cube">
+                    <div id="cube-head" class="section-header pentaho-titled-toolbar"></div>
+                    <div id="cube-body"></div>
+                </div>
+            </div>
+            <div style="left:19.4%;" id="vertical-splitter" class="vertical-splitter"></div>
+            <div id="workarea" class="component main-component">
+                <div id="query">
+                  <textarea rows="10" id="query-text"></textarea>
+                  <button id="execute">Execute</button>
+                </div>
+                <div id="query-designer"></div>
+                <div id="query-results"></div>
+                <div id="log" style="display:none"></div>
+            </div>
+        </div>
+        <script type="text/javascript" src="../src/Xmla.js"></script>
+        <script type="text/javascript" src="defaultXmlaUrl.js"></script>
+        <script type="text/javascript">
+            document.getElementById("url").value = defaultXmlaUrl;
+        </script>
+        <div id="ddDragProxy"></div>
+        <script type="text/javascript" src="treeview-pivottable-combination.js"></script>
+        <script type="text/javascript" src="jszip.js"></script>
+        <script type="text/javascript" src="jszip-deflate.js"></script>
+    </body>
+</html>

@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Xmla.Exception</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Xmla.html">Xmla</a></li>
+            
+                <li><a href="..&#x2F;classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
+            
+                <li><a href="..&#x2F;classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
+            
+                <li><a href="..&#x2F;classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
+            
+                <li><a href="..&#x2F;classes/Xmla.Exception.html">Xmla.Exception</a></li>
+            
+                <li><a href="..&#x2F;classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/xmla.html">xmla</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Xmla.Exception Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6705"><code>src&#x2F;Xmla.js:6705</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/xmla.html">xmla</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>
+This class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.
+</p>
+
+<p>
+You do not need to instantiate objects of this class yourself.
+Rather, instances of this class are created and thrown at runtime whenever an error occurs.
+The purpose is to provide a clean and clear way for applications that use xmla4js to recognize and handle Xmla4js specific runtime errors.
+</p>
+
+<p>
+To handle Xmla4js errors, you can use a <code>try...catch</code> block like this:
+</p>
+
+<pre>
+&nbsp;try {
+&nbsp;    ...general xmla4js work...
+&nbsp;} catch (exception) {
+&nbsp;    if (exception instanceof Xmla.Exception) {
+&nbsp;        ...use exception.code, exception.message and exception.data to handle the exception.
+&nbsp;    } else {
+&nbsp;        ...handle other errors...
+&nbsp;    }
+&nbsp;}
+</pre>
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_Xmla.Exception" class="method item">
+    <h3 class="name"><code>Xmla.Exception</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6705"><code>src&#x2F;Xmla.js:6705</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_getStackTrace">getStackTrace</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_toString">toString</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_args">args</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_code">code</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_data">data</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_ERROR_INSTANTIATING_XMLHTTPREQUEST">ERROR_INSTANTIATING_XMLHTTPREQUEST</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_ERROR_PARSING_RESPONSE_CDE">ERROR_PARSING_RESPONSE_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_helpfile">helpfile</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_HTTP_ERROR_CDE">HTTP_ERROR_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_ILLEGAL_ARGUMENT">ILLEGAL_ARGUMENT</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_INVALID_AXIS">INVALID_AXIS</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_INVALID_EVENT_HANDLER_CDE">INVALID_EVENT_HANDLER_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_INVALID_FIELD_CDE">INVALID_FIELD_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_INVALID_HIERARCHY_CDE">INVALID_HIERARCHY_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_message">message</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_MISSING_REQUEST_TYPE_CDE">MISSING_REQUEST_TYPE_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_MISSING_STATEMENT_CDE">MISSING_STATEMENT_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_MISSING_URL_CDE">MISSING_URL_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_NO_EVENTS_SPECIFIED_CDE">NO_EVENTS_SPECIFIED_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_source">source</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_type">type</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_TYPE_ERROR">TYPE_ERROR</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_TYPE_WARNING">TYPE_WARNING</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_UNEXPECTED_ERROR_READING_MEMBER_CDE">UNEXPECTED_ERROR_READING_MEMBER_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_UNKNOWN_EVENT_CDE">UNKNOWN_EVENT_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_WRONG_EVENTS_FORMAT_CDE">WRONG_EVENTS_FORMAT_CDE</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_getStackTrace" class="method item">
+    <h3 class="name"><code>getStackTrace</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7070"><code>src&#x2F;Xmla.js:7070</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get a stack trace.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    an array of objects describing the function on the stack
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_toString" class="method item">
+    <h3 class="name"><code>toString</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7062"><code>src&#x2F;Xmla.js:7062</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a string representing this exception</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    a string representing this exception
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_args" class="property item">
+    <h3 class="name"><code>args</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7055"><code>src&#x2F;Xmla.js:7055</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A reference to the built-in <code>arguments</code> array of the function that is throwing the exception
+This can be used to get a "stack trace"</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_code" class="property item">
+    <h3 class="name"><code>code</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7016"><code>src&#x2F;Xmla.js:7016</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A code that can be used to identify this particular kind of exception.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> {null}</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_data" class="property item">
+    <h3 class="name"><code>data</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7044"><code>src&#x2F;Xmla.js:7044</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Additional data captured when the exception was instantiated.
+The type of information stored here is dependent upon the nature of the error.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> {null}</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_ERROR_INSTANTIATING_XMLHTTPREQUEST" class="property item">
+    <h3 class="name"><code>ERROR_INSTANTIATING_XMLHTTPREQUEST</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6979"><code>src&#x2F;Xmla.js:6979</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating that we couldn't instantiate a xml http request object</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-15&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_ERROR_PARSING_RESPONSE_CDE" class="property item">
+    <h3 class="name"><code>ERROR_PARSING_RESPONSE_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6870"><code>src&#x2F;Xmla.js:6870</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating that the rrepsonse could not be parsed</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-8&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_helpfile" class="property item">
+    <h3 class="name"><code>helpfile</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7037"><code>src&#x2F;Xmla.js:7037</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A path or url that points to a document that contains more information about this error.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> {null}</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_HTTP_ERROR_CDE" class="property item">
+    <h3 class="name"><code>HTTP_ERROR_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6899"><code>src&#x2F;Xmla.js:6899</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a general XMLHttpRequest error.
+If this error occurs, the data object of the exception will have these members:</p>
+
+<ul>
+    <li>request: the options that make up the original HTTP request</li>
+    <li>status: the HTTP status code</li>
+    <li>statusText: the HTTP status text</li>
+</ul>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-10&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_ILLEGAL_ARGUMENT" class="property item">
+    <h3 class="name"><code>ILLEGAL_ARGUMENT</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6964"><code>src&#x2F;Xmla.js:6964</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating illegal number of axis arguments</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-14&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_INVALID_AXIS" class="property item">
+    <h3 class="name"><code>INVALID_AXIS</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6949"><code>src&#x2F;Xmla.js:6949</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating the requested axis does not exist</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-13&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_INVALID_EVENT_HANDLER_CDE" class="property item">
+    <h3 class="name"><code>INVALID_EVENT_HANDLER_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6856"><code>src&#x2F;Xmla.js:6856</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating that no proper handler was passed for the events.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-7&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_INVALID_FIELD_CDE" class="property item">
+    <h3 class="name"><code>INVALID_FIELD_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6884"><code>src&#x2F;Xmla.js:6884</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating the field name is not valid.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-9&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_INVALID_HIERARCHY_CDE" class="property item">
+    <h3 class="name"><code>INVALID_HIERARCHY_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6919"><code>src&#x2F;Xmla.js:6919</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating the hierarchy name is not valid.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-11&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_message" class="property item">
+    <h3 class="name"><code>message</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7023"><code>src&#x2F;Xmla.js:7023</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A human readable message that describes the nature of the error or warning.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> {null}</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_MISSING_REQUEST_TYPE_CDE" class="property item">
+    <h3 class="name"><code>MISSING_REQUEST_TYPE_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6768"><code>src&#x2F;Xmla.js:6768</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a <code>requestType</code> option was expected but ommitted.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-1&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_MISSING_STATEMENT_CDE" class="property item">
+    <h3 class="name"><code>MISSING_STATEMENT_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6782"><code>src&#x2F;Xmla.js:6782</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a <code>statement</code> option was expected but ommitted.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-2&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_MISSING_URL_CDE" class="property item">
+    <h3 class="name"><code>MISSING_URL_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6797"><code>src&#x2F;Xmla.js:6797</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a <code>url</code> option was expected but ommitted.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-3&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_NO_EVENTS_SPECIFIED_CDE" class="property item">
+    <h3 class="name"><code>NO_EVENTS_SPECIFIED_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6812"><code>src&#x2F;Xmla.js:6812</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a <code>events</code> were expected but ommitted.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-4&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_source" class="property item">
+    <h3 class="name"><code>source</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7030"><code>src&#x2F;Xmla.js:7030</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A name that indicates in what component (on the client or server side) this error or warning occurred.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> {null}</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_type" class="property item">
+    <h3 class="name"><code>type</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l7006"><code>src&#x2F;Xmla.js:7006</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This propery indicates what kind of exception occurred. It can have one of the following values: <dl>
+    <dt><code><a href="property_TYPE_WARNING">TYPE<em>WARNING</a></code></dt><dd>Indicates a warning</dd>
+    <dt><code><a href="property_TYPE_ERROR">TYPE</em>ERROR</a></code></dt><dd>Indicates an error</dd>
+</dl></p>
+    </div>
+
+    
+        <p><strong>Default:</strong> {null}</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_TYPE_ERROR" class="property item">
+    <h3 class="name"><code>TYPE_ERROR</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6754"><code>src&#x2F;Xmla.js:6754</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class,
+and indicates that this <code>Xmla.Exception</code> signals an error.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;error&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_TYPE_WARNING" class="property item">
+    <h3 class="name"><code>TYPE_WARNING</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6743"><code>src&#x2F;Xmla.js:6743</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Can appear as value for the <code><a href="#property_type">type</a></code> property of instances of the <code><a href="#class_Xmla.Exception">Xmla.Exception</a></code> class,
+and indicates that this <code>Xmla.Exception</code> signals a warning.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;warning&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_UNEXPECTED_ERROR_READING_MEMBER_CDE" class="property item">
+    <h3 class="name"><code>UNEXPECTED_ERROR_READING_MEMBER_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6934"><code>src&#x2F;Xmla.js:6934</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a problem reading a member property</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-12&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_UNKNOWN_EVENT_CDE" class="property item">
+    <h3 class="name"><code>UNKNOWN_EVENT_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6842"><code>src&#x2F;Xmla.js:6842</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating that the event name was unrecognized.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-6&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_WRONG_EVENTS_FORMAT_CDE" class="property item">
+    <h3 class="name"><code>WRONG_EVENTS_FORMAT_CDE</code></h3>
+    <span class="type">Int</span>
+
+    
+
+    
+
+    
+        <span class="flag final">final</span>
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l6827"><code>src&#x2F;Xmla.js:6827</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Exception code indicating a <code>events</code> were specifeid in the wrong format.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &lt;code&gt;-5&lt;&#x2F;code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
