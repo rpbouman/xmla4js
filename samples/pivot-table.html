@@ -928,7 +928,9 @@
                         }
                         mdx += "\nFROM [" + node.cube + "]";
                         axis = axes["SlicerAxis"];
-                        if (axis){
+                        // filtering out empty slicer to avoid WHERE {} when mondrian sends
+                        // <Axis name="SlicerAxis"> <Tuples> <Tuple/> </Tuples> </Axis>
+                        if (axis && !(axis.tuples[0].members.length==0 && axis.tuples.length==1)){
                             mdx += "\nWHERE " + getMDX(axis);
                         }
                         break;
