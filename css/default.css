@@ -1,8 +1,8 @@
 /*
-    Copyright 2009, 2010, 2011 Roland Bouman 
+    Copyright 2009, 2010, 2011 Roland Bouman
     Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
     Twitter: @rolandbouman
-    
+
     default.css - this software is part of xmla4js
 
     This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/    
+*/
 body {
     background-color: white;
     font-family: Arial, sans;
@@ -32,7 +32,7 @@ legend {
 }
 
 h1 {
-    background-image: url(xmla4js_logo80x58.png);
+    background-image: url(logo80x58.png);
     background-repeat:no-repeat;
     padding-left: 90px;
     height: 70px;
