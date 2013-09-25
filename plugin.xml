@@ -1,61 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin title="xmla4js - XML/A for javascript, OLAP for client-side web applications">
-    <menu-items>
-        <menu-item
-            id="xmla4js"
-            anchor="tools-submenu"
-            label="Xmla4Js Home"
-            command="content/xmla4js/index.html"
-            type="MENU_ITEM"
-            how="LAST_CHILD"
-        />
-        <menu-item
-            id="xmlash"
-            anchor="tools-submenu"
-            label="Xmla4Js Shell"
-            command="content/xmla4js/samples/xmlash.html"
-            type="MENU_ITEM"
-            how="LAST_CHILD"
-        />
-        <menu-item
-            id="xmla4js-analyzer"
-            anchor="tools-submenu"
-            label="Xmla4Js Analyzer"
-            command="content/xmla4js/samples/treeview-pivottable-combination.html?url=http%3A%2F%2Flocalhost%3A8080%2Fpentaho%2FXmla%3Fuserid%3Djoe%26password%3Dpassword"
-            type="MENU_ITEM"
-            how="LAST_CHILD"
-        />
-    </menu-items>
 
   <overlays>
-    <overlay id="startup.iadhocToolbar" resourcebundle="api/repos/xmla4js/resources/messages/launchermessages.properties" priority="2">
-      <toolbar id="mainToolbar">
-        <toolbarbutton
-          id="xmlash"
-          image="../api/repos/xmla4js/resources/images/xmlash.png"
-          onclick="mantleXulHandler.openUrl('xmlash','xmlash','api/repos/xmla4js/samples/xmlash.html')"
-          tooltiptext="${Launcher.SPOON_TOOLTIP}"
-          insertbefore="dummyPluginContentButton"
-        />
-      </toolbar>
+    <overlay id="startup.xmla4js" resourcebundle="api/repos/spuc/resources/messages/launchermessages.properties" priority="10">
       <menubar id="toolsmenu">
         <menuitem
-          id="xmla4jsodcs"
-          label="xmla4js docs"
-          command="mantleXulHandler.openUrl('xmla4jsdocs','xmla4jsdocs','content/xmla4js/index.html')"
-          type="MENU_ITEM" how="LAST_CHILD"
+            id="xmla4js"
+            label="Xmla4Js Home"
+            command="mantleXulHandler.openUrl('Xmla4js', 'Xmla4js', 'content/xmla4js/index.html')"
         />
         <menuitem
-          id="xmlash"
-          label="XML/A shell"
-          command="mantleXulHandler.openUrl('xmlash','xmlash','content/xmla4js/samples/xmlash.html')"
-          type="MENU_ITEM" how="LAST_CHILD"
+            id="xmla4jsShell"
+            label="Xmla4Js Shell"
+            command="mantleXulHandler.openUrl('Xmla4js Shell', 'Xmla4js Shell', 'content/xmla4js/samples/xmlash.html')"
         />
         <menuitem
-          id="xmla4jsanalyzer"
-          label="Xmla4js Analyzer"
-          command="mantleXulHandler.openUrl('xmlash','xmlash','content/xmla4js/samples/treeview-pivottable-combination.html')"
-          type="MENU_ITEM" how="LAST_CHILD"
+            id="xmla4jsAnalyzer"
+            label="Xmla4Js Analyzer"
+            command="mantleXulHandler.openUrl('Xmla4js Analyzer', 'Xmla4js Analyzer', 'content/xmla4js/samples/treeview-pivottable-combination.html')"
         />
       </menubar>
     </overlay>
