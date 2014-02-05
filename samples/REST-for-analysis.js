@@ -371,3 +371,6 @@ http.createServer(function (request, response) {
 }).listen(port);
 
 console.log('Server running at http://127.0.0.1:8124/');
+console.log('Start by passing a url parameter that points to your Xmla server.');
+console.log('For instance, to access Pentaho\'s XML/A servlet, you could do:');
+console.log('http://127.0.0.1:8124/?url=http://localhost:8080/pentaho/Xmla%3fuserid=admin%26password=password');
