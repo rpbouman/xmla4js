@@ -5873,66 +5873,65 @@ Xmla.Dataset.prototype = {
  * @return {Object}
  */
     fetchAsObject: function() {
-	
-		var getHierarchyArray = function(axis){
-			var h = axis.getHierarchies();
-			var hierarchies = [];
-			var i, n = axis.numHierarchies;
-			for (i = 0; i < n; i++) {
-				hierarchies.push(axis.hierarchy(i));
-			}
-			return hierarchies;
-		}
-        var axes = [], axis, filterAxis,
-            cellset = [], cells = [], cell,
-            i, n, tuples=1, idx=0;
-
-        //loop through all non slicer axes
-        for (i = 0, n = this.axisCount(); i < n; i++){
-            axis = this.getAxis(i);
-			tuples = tuples * axis.tupleCount();
-            axes.push({
-                positions: axis.fetchAllAsObject(),
-                hierarchies: getHierarchyArray(axis)
-            });
+      var getHierarchyArray = function(axis){
+        var h = axis.getHierarchies();
+        var hierarchies = [];
+        var i, n = axis.numHierarchies;
+        for (i = 0; i < n; i++) {
+          hierarchies.push(axis.hierarchy(i));
         }
+        return hierarchies;
+      }
+      var axes = [], axis, filterAxis,
+          cellset = [], cells = [], cell,
+          i, n, tuples=1, idx=0;
+
+      //loop through all non slicer axes
+      for (i = 0, n = this.axisCount(); i < n; i++){
+          axis = this.getAxis(i);
+          tuples = tuples * axis.tupleCount();
+          axes.push({
+              positions: axis.fetchAllAsObject(),
+              hierarchies: getHierarchyArray(axis)
+          });
+      }
 
         //get Slicer information
-		if (this.hasSlicerAxis) {
-			axis = this.getSlicerAxis();
-			filterAxis =  {
-				positions: axis.fetchAllAsObject(),
-				hierarchies:  getHierarchyArray(axis)
-			}
-		} else {
-			filterAxis =  {
-				positions: {},
-				hierarchies: []
-			}
-        };
-
-        //get Cellset data
-        cellset = this.getCellset();
-        for (i = 0, n = tuples; i < n; i++){
-            cell = cellset.readCell();
-			if (idx == cell.ordinal) {
- 				cells.push(cell);
-				cellset.nextCell();
-			} else {
-				//console.debug('skipping: '+idx+':'+cell.ordinal);
-				cells.push({Value:null, FmtValue:null, FormatString: null, ordinal:idx });
-			}
-			idx++;
+      if (this.hasSlicerAxis) {
+        axis = this.getSlicerAxis();
+        filterAxis =  {
+          positions: axis.fetchAllAsObject(),
+          hierarchies:  getHierarchyArray(axis)
         }
-		//do not close, it might be used later.....
-        cellset.reset();
+      } else {
+        filterAxis =  {
+          positions: {},
+          hierarchies: []
+        }
+      }
 
-        return {
-			cubeName: this.cubeName,
-            axes: axes,
-            filterAxis: filterAxis,
-            cells: cells
-        };
+      //get Cellset data
+      cellset = this.getCellset();
+      for (i = 0, n = tuples; i < n; i++){
+          cell = cellset.readCell();
+          if (idx == cell.ordinal) {
+            cells.push(cell);
+            cellset.nextCell();
+          } else {
+            //console.debug('skipping: '+idx+':'+cell.ordinal);
+            cells.push({Value:null, FmtValue:null, FormatString: null, ordinal:idx });
+          }
+          idx++;
+      }
+      //do not close, it might be used later.....
+      cellset.reset();
+
+      return {
+        cubeName: this.cubeName,
+        axes: axes,
+        filterAxis: filterAxis,
+        cells: cells
+      };
     },
 /**
 *   Cleanup this Dataset object.
@@ -6602,6 +6601,15 @@ Xmla.Dataset.Cellset.prototype = {
                 this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
                 break;
             }
+            //extra: if the schema doesn't explicitly define this property, we somehow have to
+            if (!this._cellProperties[propertyNodeTagName]) {
+                type = _getAttribute(propertyNode, "type");
+                if (!type) {
+                  type = (propertyNodeTagName === "Value") ? "xs:decimal" : "xs:string";
+                }
+                this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
+                this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
+            }
         }
         this._cellNodes = _getElementsByTagNameNS(
             root, _xmlnsDataset, "", "Cell"
@@ -6610,7 +6618,7 @@ Xmla.Dataset.Cellset.prototype = {
         this.reset();
     },
     _getCellNode: function(index){
-		//console.debug(index);
+    //console.debug(index);
         if (!_isUnd(index)) this._idx = index;
         this._cellNode = this._cellNodes[this._idx];
         this._cellOrd = this._getCellOrdinal(this._cellNode);
