@@ -473,7 +473,40 @@ function _xjs(xml) {
   function popNs() {
       ns = namespaces.pop();
   }
-
+  function unescapeEntities(text) {
+    var t = "", match, value, i = 0, re = /&((#x([\dA-Fa-f]+))|(\w+));/g;
+    while (match = re.exec(text)) {
+      t += text.substr(i, match.index - i);
+      if (value = match[3]){
+        t += String.fromCharCode(parseInt(value, 16));
+      }
+      else
+      if (value = match[4]){
+        switch (value) {
+          case "lt":
+            t += "<";
+            break;
+          case "gt":
+            t += ">";
+            break;
+          case "amp":
+            t += "&";
+            break;
+          case "apos":
+            t += "'";
+            break;
+          case "quot":
+            t += "\"";
+            break;
+          default:
+            throw "Don't recognize named entity " + value;
+        }
+      }
+      i = re.lastIndex;
+    }
+    t += text.substr(i);
+    return t;
+  }
   while (match = re.exec(xml)) {
       node = null;
       if (name = match[5]) {
@@ -504,7 +537,7 @@ function _xjs(xml) {
                           nodeType: 2,
                           prefix: pfx,
                           nodeName: attMatch[4],
-                          value: value
+                          value: unescapeEntities(value)
                       };
                       nsUri = (pfx === "") ? "" : ns[pfx];
                       if (typeof(nsUri) === "undefined") {
@@ -562,7 +595,7 @@ function _xjs(xml) {
               offset: match.index,
               parentNode: parentNode,
               nodeType: 3,
-              data: text
+              data: unescapeEntities(text)
           };
       }
       if (node) {
