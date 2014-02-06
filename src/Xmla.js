@@ -5967,6 +5967,19 @@ Xmla.Dataset.prototype = {
       };
     },
 /**
+*   Reset this object so it can be used again.
+*   @reset
+*/
+    reset: function(){
+      if (this._cellset) this._cellset.reset();
+      if (this._axes) {
+        var i, n, axis;
+        for (i = 0, n = this.axisCount(); i < n; i++){
+            this.getAxis(i).reset();
+        }
+      }
+    },
+/**
 *   Cleanup this Dataset object.
 *   @method close
 */
@@ -5975,6 +5988,7 @@ Xmla.Dataset.prototype = {
         var i, n = this._numAxes;
         for (i = 0; i < n; i++) this.getAxis(i).close();
         this._cellset.close();
+        this._cellset = null;
         this._root = null;
         this._axes = null;
         this._axesOrder = null;
@@ -6543,6 +6557,7 @@ Xmla.Dataset.Axis.prototype = {
         var row;
         if (!rows) rows = [];
         while((row = this.fetchAsArray())) rows.push(row);
+        this.reset();
         return rows;
     },
 /**
@@ -6558,6 +6573,7 @@ Xmla.Dataset.Axis.prototype = {
         var row;
         if (!rows) rows = [];
         while((row = this.fetchAsObject())) rows.push(row);
+        this.reset();
         return rows;
     }
 }
