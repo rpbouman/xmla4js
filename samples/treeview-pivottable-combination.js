@@ -530,6 +530,33 @@ TreeNode.lookup = function(el){
     return TreeNode.getInstance(el.id);
 };
 
+//scrollbar dimensions:
+cEl("div", {
+	id: "_scrollbars1",
+	style: 	{
+		"background-color": "blue",
+		position: "absolute",
+		overflow: "auto",
+		width: "50px",
+		height: "50px",
+		left: "-50px",
+		top: "-50px"
+	}
+}, cEl("div", {
+	id: "_scrollbars2",
+	style: {
+		"background-color": "red",
+		position: "absolute",
+		left: "0px",
+		top: "0px",
+		width: "100px",
+		height: "100px"
+	}
+}), body);
+var _scrollbars1 = gEl("_scrollbars1");
+var scrollbarWidth = (_scrollbars1.offsetWidth - _scrollbars1.clientWidth) + 2;
+var scrollbarHeight = (_scrollbars1.offsetHeight - _scrollbars1.clientHeight) + 2;
+
 /***************************************************************
 *
 *   QueryDesigner
@@ -1329,17 +1356,22 @@ var PivotTable;
             pages.style.height = pagesTable.clientHeight + ((pagesTable.clientWidth > (container.parentNode.clientWidth + 5)) ? 16 : 0) + "px";
         }
 
+		//put the column axis table right beneath the pages axis table
         cols.style.top = pagesTableHeight + "px";
 
-        cells.style.left = cols.style.left = rows.style.width = rowsTableWidth + "px";
-        cells.style.top = rows.style.top = (pagesTableHeight + colsTable.clientHeight) + "px";
+		rows.style.width = rowsTableWidth + "px";
+        cells.style.left = cols.style.left = rows.style.width;
+        
+        rows.style.top = (pagesTableHeight + colsTable.clientHeight) + "px";
+        cells.style.top = rows.style.top;
+        
         cols.style.height = colsTable.clientHeight + "px";
 
-        width = Math.min(container.parentNode.clientWidth, rowsTableWidth + colsTable.clientWidth);
+        width = Math.min(container.parentNode.clientWidth - scrollbarWidth, rowsTableWidth + colsTable.clientWidth);
         container.style.width = width + "px";
         cols.style.width = (width - rows.clientWidth) + "px";
 
-        height = Math.min(container.parentNode.clientHeight - (container.offsetTop + container.clientTop), cellsTable.clientHeight + colsTable.clientHeight + pagesTableHeight);
+        height = Math.min(container.parentNode.clientHeight - (container.offsetTop + container.clientTop + scrollbarHeight), cellsTable.clientHeight + colsTable.clientHeight + pagesTableHeight);
         container.style.height = height + "px";
         rows.style.height = (height - (cols.clientHeight + pagesTableHeight)) + "px";
         cells.style.width = (cols.clientWidth + (cellsTable.clientHeight + colsTable.clientHeight > (height + 5) ? 16 : 0)) + "px";
@@ -2528,7 +2560,7 @@ function init() {
                 type, data, dragProxy, xy,
                 dragProxy = ddHandler.dragProxy
             ;
-            //gEl("cube-body").style.overflowY = "hidden";
+            gEl("cube-body").style.overflowY = "hidden";
             gEl("workspace").className = "no-user-select";
             startDragEvent = ddHandler.startDragEvent;
             startDragEvent.item = null;
@@ -2573,7 +2605,7 @@ function init() {
 
             var cubeBody = gEl("cube-body").style
             overflow = cubeBody.overflow;
-            cubeBody.overflow = "hidden";
+            //cubeBody.overflow = "hidden";
             startDragEvent.item = {
                 data: data,
                 type: type

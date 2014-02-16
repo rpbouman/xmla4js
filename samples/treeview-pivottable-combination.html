@@ -55,7 +55,6 @@
             #workarea {
                 top: 6px;
                 left: 20%;
-                width: 79%;
                 border-style: solid none none solid;
                 border-top-right-radius: 10px;
                 border-bottom-right-radius: 10px;
@@ -531,6 +530,17 @@
         </style>
     </head>
     <body style="position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px;">
+		<div>
+			<div style="
+				position:absolute;
+				overflow:auto;
+				width:50px;
+				height:50px;
+				left:-50px;
+				top:-50px;
+			">
+			</div>
+		</div>
         <div id="toolbar" class="toolbar pentaho-titled-toolbar pentaho-rounded-panel2-shadowed pentaho-shine pentaho-background">
             <button id="discover">Discover</button>
             <input type="text" id="url" value="http://localhost:8080/pentaho/Xmla?userid=joe&password=password" />
