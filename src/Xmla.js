@@ -197,7 +197,8 @@ function _ajax(options){
     xhr = _createXhr();
     args = ["POST", options.url, options.async];
     if (options.username && options.password) args = args.concat([options.username, options.password]);
-    if (options.async !== false) xhr.timeout = options.timeout;
+    //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
+    if (!(window && window.document) || (options.async !== false)) xhr.timeout = options.timeout;
     xhr.open.apply(xhr, args);
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
