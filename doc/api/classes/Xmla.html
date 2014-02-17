@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Xmla</title>
-    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
-    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
-    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
-    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
-    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+                <h1><img src="../assets/css/logo.png" title=""></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -41,23 +41,23 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/Xmla.html">Xmla</a></li>
+                <li><a href="../classes/Xmla.html">Xmla</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
+                <li><a href="../classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
+                <li><a href="../classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
+                <li><a href="../classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Exception.html">Xmla.Exception</a></li>
+                <li><a href="../classes/Xmla.Exception.html">Xmla.Exception</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
+                <li><a href="../classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
             
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="..&#x2F;modules/xmla.html">xmla</a></li>
+                <li><a href="../modules/xmla.html">xmla</a></li>
             
             </ul>
         </div>
@@ -102,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l617"><code>src&#x2F;Xmla.js:617</code></a>
+            Defined in: <a href="../files/.._src_Xmla.js.html#l594"><code>..&#x2F;src&#x2F;Xmla.js:594</code></a>
         </div>
     
 
@@ -123,7 +123,10 @@
    To fully understand the scope and purpose of this utility, it is highly recommended
    to read <a href="http://xmla.org/xmla1.1.doc">the XML/A specification</a>
    (MS Word format. For other formats,
-   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification</a>).</p>
+   see: <a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1 specification"><a href="http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1">http://code.google.com/p/xmla4js/source/browse/#svn/trunk/doc/xmla1.1</a> specification</a>).
+The optional options parameter sets standard options for this Xmla instnace.
+   If ommitted, a copy of the <code><a href="#property_defaultOptions">defaultOptions</code></a> will be used.</p>
+
 </div>
 
 
@@ -171,7 +174,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l617"><code>src&#x2F;Xmla.js:617</code></a>
+        <a href="../files/.._src_Xmla.js.html#l594"><code>..&#x2F;src&#x2F;Xmla.js:594</code></a>
         
         </p>
 
@@ -201,6 +204,7 @@
 
                     <div class="param-description">
                         <p>Object standard options</p>
+
                     </div>
 
                     
@@ -439,6 +443,13 @@
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_getXmlaSoapMessage">getXmlaSoapMessage</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_request">request</a>
 
                                 
@@ -509,6 +520,15 @@
                         
                             <li class="index-item property">
                                 <a href="#property_DBSCHEMA_TABLES_INFO">DBSCHEMA_TABLES_INFO</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaultOptions">defaultOptions</a>
 
                                 
                                     <span class="flag static">static</span>
@@ -1014,7 +1034,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1591"><code>src&#x2F;Xmla.js:1591</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1585"><code>..&#x2F;src&#x2F;Xmla.js:1585</code></a>
         
         </p>
 
@@ -1026,35 +1046,30 @@
 
     <div class="description">
         <p>This method can be used to register one or more listeners. On such listener can listen for one or more events.</p>
-
-<p>For a single listener, you can pass a <code>listener</code> object literal with the following structure:</p><pre>{
+<p><p>For a single listener, you can pass a <code>listener</code> object literal with the following structure:</p><pre>{
     events: ...event name or array of event names...,
     handler: ...function or array of functions...,
     scope: object
-}</pre>
-<p>
+}</pre></p>
+<p><p>
     You can use <code>event</code> as an alias for <code>events</code>.
     Likewise, you can use <code>handlers</code> as an alias for <code>handler</code>.
-</p>
-
-<p>
+</p></p>
+<p><p>
     Alternatively, you can pass the element as separate arguments instead of as an object literal:
     <code>addListener(name, func, scope)</code>
     where name is a valid event name, func is the function that is to be called when the event occurs.
     The last argument is optional and can be used to specify the scope that will be used as context for executing the function.
-</p>
-
-<p>
+</p></p>
+<p><p>
     To register multiple listeners, pass an array of listener objects:
     <code>addListener([listener1, ..., listenerN])</code>
-</p>
-
-<p>
+</p></p>
+<p><p>
     Alternatively, pass multiple listener objects as separate arguments:
     <code>addListener(listener1, ..., listenerN)</code>
-</p>
-
-<p>
+</p></p>
+<p><p>
     Or, pass a single object literal with event names as keys and listener objects or functions as values:
     <pre>addListener({
         discover: function() {
@@ -1069,20 +1084,33 @@
         scope: defaultscope
     })</pre>
     In this case, you can use scope as a key to specify the default scope for the handler functions.
-</p>
-
-<p>Below is a more detailed description of the listener object and its components:</p>
-
+</p></p>
+<p><p>Below is a more detailed description of the listener object and its components:</p></p>
 <dl>
     <dt><code>events</code></dt>
     <dd><code>string</code>|<code>string[]</code> REQUIRED.
-    The event or events to listen to.
-    You can specify a single event by using one of the <code>EVENT_XXX</code> string constant values.
-    You can specify multiple events by using an array of <code>EVENT_XXX</code> string constant values.
-    You can also use one of the predefined <code>EVENT_XXX</code> array constant values,
-    or use array concatenation and compose a custom list of event names.
-    To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>,
-    or otherwise the <code>string</code> value <code>"all"</code>.
+      The event or events to listen to.
+      You can specify a single event by using one of the <code>EVENT_XXX</code> string constant values.
+      You can specify multiple events by using an array of <code>EVENT_XXX</code> string constant values.
+      You can also use one of the predefined <code>EVENT_XXX</code> array constant values,
+      or use array concatenation and compose a custom list of event names.
+      To listen to all events, either use <code><a href="#property_EVENT_ALL">EVENT_ALL</a></code>,
+      or otherwise the <code>string</code> value <code>&quot;all&quot;</code>.
+      Below is the list of constants that may be used for the events or events property: <ul>
+        <li><a href="#property_EVENT_ALL">EVENT_ALL</a> - All events. As a convenience, the string alias <code>&quot;all&quot;</code> may also be used.</li>
+        <li><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a> - Fires before issueing a <a href="#method_discover">discover()</a> request.</li>
+        <li><a href="#property_EVENT_DISCOVER_ALL">EVENT_DISCOVER_ALL</a> - All events related to <a href="#method_discover">discover()</a> requests, including <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a>, <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER_SUCCESS</a> and <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER_ERROR</a>.</li>
+        <li><a href="#property_EVENT_DISCOVER_ERROR">EVENT_DISCOVER_ERROR</a> - Fired when an error occurred while servicing a <a href="#method_discover">discover()</a> request.</li>
+        <li><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a> - Fired when a <a href="#method_discover">discover()</a> request completes successfully.</li>
+        <li><a href="#property_EVENT_ERROR">EVENT_ERROR</a> - Fired when an error occurred while servicing any request.</li>
+        <li><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a> - Fires before issueing a <a href="#method_execute">execute()</a> request.</li>
+        <li><a href="#property_EVENT_EXECUTE_ALL">EVENT_EXECUTE_ALL</a> - All events related to <a href="#method_execute">execute()</a> requests, including <a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a>, <a href="#property_EVENT_DISCOVER">EVENT_EXECUTE_SUCCESS</a> and <a href="#property_EVENT_EXECUTE">EVENT_EXECUTE_ERROR</a>.</li>
+        <li><a href="#property_EVENT_EXECUTE_ERROR">EVENT_EXECUTE_ERROR</a> - Fired when an error occurred while servicing a <a href="#method_execute">execute()</a> request.</li>
+        <li><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a> - Fired when a <a href="#method_execute">execute()</a> request completes successfully.</li>
+        <li><a href="#property_EVENT_GENERAL">EVENT_GENERAL</a> - All non-method specific events, including  <a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a>, <a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a> and <a href="#property_EVENT_ERROR">EVENT_ERROR</a>.</li>
+        <li><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a> - Fires before issueing any request.</li>
+        <li><a href="#property_EVENT_REQUEST">EVENT_SUCCESS</a> - Fires to indicate a request was successful.</li>
+      </ul>
     </dd>
     <dt><code>event</code></dt>
     <dd><code>string</code>|<code>string[]</code> Alias for <code>events</code></dd>
@@ -1140,6 +1168,7 @@
 
                     <div class="param-description">
                         <p>An object that defines the events and the notification function to be called, or an array of such objects.</p>
+
                     </div>
 
                     
@@ -1201,7 +1230,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2141"><code>src&#x2F;Xmla.js:2141</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2206"><code>..&#x2F;src&#x2F;Xmla.js:2206</code></a>
         
         </p>
 
@@ -1215,8 +1244,7 @@
         <p>Sends a request to invoke the XML/A <code>Discover</code> method and returns a schema rowset specified by the <code>requestType</code> option.
 Options are passed using a generic <code>options</code> object.
 Applicable properties of the <code>options</code> object are:</p>
-
-<ul>
+<p><ul>
     <li><code>requestType</code> - {string} Indicates the kind of schema rowset to retrieve.
         You can use one of the following predefined XML for Analysis Schema Rowset constants:
         <ul>
@@ -1290,9 +1318,9 @@ Applicable properties of the <code>options</code> object are:</p>
         </ul>
     </li>
 </ul>
-
-<p>Instead of calling this method directly, consider calling
+Instead of calling this method directly, consider calling
 or one of the specialized <code>discoverXXX()</code> methods to obtain a particular schema rowset.</p>
+
     </div>
 
     
@@ -1311,6 +1339,7 @@ or one of the specialized <code>discoverXXX()</code> methods to obtain a particu
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A <code>Discover</code> request.</p>
+
                     </div>
 
                     
@@ -1329,7 +1358,8 @@ or one of the specialized <code>discoverXXX()</code> methods to obtain a particu
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT<em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT</em>DISCOVER_SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the requested schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -1385,7 +1415,7 @@ or one of the specialized <code>discoverXXX()</code> methods to obtain a particu
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2232"><code>src&#x2F;Xmla.js:2232</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2297"><code>..&#x2F;src&#x2F;Xmla.js:2297</code></a>
         
         </p>
 
@@ -1399,7 +1429,6 @@ or one of the specialized <code>discoverXXX()</code> methods to obtain a particu
         <p>Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_DATASOURCES"></a></code> as value for the <code>requestType</code>,
 and retrieves the <code>DISCOVER_DATASOURCES</code> schema rowset.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -1559,6 +1588,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</p>
+
                     </div>
 
                     
@@ -1577,7 +1607,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER<em>DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -1633,7 +1664,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2725"><code>src&#x2F;Xmla.js:2725</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2790"><code>..&#x2F;src&#x2F;Xmla.js:2790</code></a>
         
         </p>
 
@@ -1648,7 +1679,6 @@ The rowset has the following columns:</p>
 <code><a href="#property_DBSCHEMA_CATALOGS"></a></code> as value for the <code>requestType</code>,
 and retrieves the <code>DBSCHEMA_CATALOGS</code> schema rowset.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -1704,6 +1734,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA_CATALOGS</code> request.</p>
+
                     </div>
 
                     
@@ -1722,7 +1753,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA<em>CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_CATALOGS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -1778,7 +1810,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2777"><code>src&#x2F;Xmla.js:2777</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2842"><code>..&#x2F;src&#x2F;Xmla.js:2842</code></a>
         
         </p>
 
@@ -1794,8 +1826,7 @@ The rowset has the following columns:</p>
 and retrieves the <code>DBSCHEMA_COLUMNS</code> schema rowset.
 Provides column information for all columns meeting the provided restriction criteria.
 The rowset has the following columns:</p>
-
-<table border="1" class="schema-rowset">
+<p><table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
         <th>Type</th>
@@ -1869,7 +1900,7 @@ The rowset has the following columns:</p>
      <tr>
          <td>COLUMN_FLAGS</td>
          <td>int</td>
-         <td>A DBCOLUMNFLAGS bitmask indicating column properties. See 'DBCOLUMNFLAGS Enumerated Type' in IColumnsInfo::GetColumnInfo</td>
+         <td>A DBCOLUMNFLAGS bitmask indicating column properties. See &#39;DBCOLUMNFLAGS Enumerated Type&#39; in IColumnsInfo::GetColumnInfo</td>
          <td>No</td>
          <td>No</td>
      </tr>
@@ -2007,8 +2038,8 @@ The rowset has the following columns:</p>
          <td>No</td>
      </tr>
 </table>
+ The rowset is sorted on TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME.</p>
 
-<p>The rowset is sorted on TABLE<em>CATALOG, TABLE</em>SCHEMA, TABLE_NAME.</p>
     </div>
 
     
@@ -2027,6 +2058,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA_COLUMNS</code> request.</p>
+
                     </div>
 
                     
@@ -2045,7 +2077,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA<em>COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_COLUMNS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -2101,7 +2134,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3006"><code>src&#x2F;Xmla.js:3006</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3071"><code>..&#x2F;src&#x2F;Xmla.js:3071</code></a>
         
         </p>
 
@@ -2114,10 +2147,9 @@ The rowset has the following columns:</p>
     <div class="description">
         <p>Invokes the <code><a href="#method_discover">discover()</a></code> method using
 <code><a href="#property_DBSCHEMA_PROVIDER_TYPES"></a></code> as value for the <code>requestType</code>,
-and retrieves the <code>DBSCHEMA<em>PROVIDER</em>TYPES</code> schema rowset.
+and retrieves the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -2164,7 +2196,7 @@ The rowset has the following columns:</p>
      <tr>
          <td>CREATE_PARAMS
          <td>string</td>
-         <td>The creation parameters specified by the consumer when creating a column of this data type. For example, the SQL data type, DECIMAL, needs a precision and a scale. In this case, the creation parameters might be the string "precision,scale". In a text command to create a DECIMAL column with a precision of 10 and a scale of 2, the value of the TYPE_NAME column might be DECIMAL() and the complete type specification would be DECIMAL(10,2). The creation parameters appear as a comma-separated list of values, in the order they are to be supplied and with no surrounding parentheses. If a creation parameter is length, maximum length, precision, scale, seed, or increment, use "length", "max length", "precision", "scale", "seed", and "increment", respectively. If the creation parameter is some other value, the provider determines what text is to be used to describe the creation parameter. If the data type requires creation parameters, "()" usually appears in the type name. This indicates the position at which to insert the creation parameters. If the type name does not include "()", the creation parameters are enclosed in parentheses and appended to the data type name. </td>
+         <td>The creation parameters specified by the consumer when creating a column of this data type. For example, the SQL data type, DECIMAL, needs a precision and a scale. In this case, the creation parameters might be the string &quot;precision,scale&quot;. In a text command to create a DECIMAL column with a precision of 10 and a scale of 2, the value of the TYPE_NAME column might be DECIMAL() and the complete type specification would be DECIMAL(10,2). The creation parameters appear as a comma-separated list of values, in the order they are to be supplied and with no surrounding parentheses. If a creation parameter is length, maximum length, precision, scale, seed, or increment, use &quot;length&quot;, &quot;max length&quot;, &quot;precision&quot;, &quot;scale&quot;, &quot;seed&quot;, and &quot;increment&quot;, respectively. If the creation parameter is some other value, the provider determines what text is to be used to describe the creation parameter. If the data type requires creation parameters, &quot;()&quot; usually appears in the type name. This indicates the position at which to insert the creation parameters. If the type name does not include &quot;()&quot;, the creation parameters are enclosed in parentheses and appended to the data type name. </td>
          <td>false</td>
          <td>true</td>
      </tr>
@@ -2206,7 +2238,7 @@ The rowset has the following columns:</p>
      <tr>
          <td>AUTO_UNIQUE_VALUE</td>
          <td>boolean</td>
-         <td>A Boolean that indicates whether the data type is autoincrementing. VARIANT_TRUE indicates that values of this type can be autoincrementing. VARIANT_FALSE indicates that values of this type cannot be autoincrementing. If this value is VARIANT_TRUE, whether or not a column of this type is always autoincrementing depends on the provider's DBPROP_COL_AUTOINCREMENT column property. If the DBPROP_COL_AUTOINCREMENT property is read/write, whether or not a column of this type is autoincrementing depends on the setting of the DBPROP_COL_AUTOINCREMENT property. If DBPROP_COL_AUTOINCREMENT is a read-only property, either all or none of the columns of this type are autoincrementing. </td>
+         <td>A Boolean that indicates whether the data type is autoincrementing. VARIANT_TRUE indicates that values of this type can be autoincrementing. VARIANT_FALSE indicates that values of this type cannot be autoincrementing. If this value is VARIANT_TRUE, whether or not a column of this type is always autoincrementing depends on the provider&#39;s DBPROP_COL_AUTOINCREMENT column property. If the DBPROP_COL_AUTOINCREMENT property is read/write, whether or not a column of this type is autoincrementing depends on the setting of the DBPROP_COL_AUTOINCREMENT property. If DBPROP_COL_AUTOINCREMENT is a read-only property, either all or none of the columns of this type are autoincrementing. </td>
          <td>false</td>
          <td>true</td>
      </tr>
@@ -2291,7 +2323,8 @@ The rowset has the following columns:</p>
                     
 
                     <div class="param-description">
-                        <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA<em>PROVIDER</em>TYPES</code> request.</p>
+                        <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA_PROVIDER_TYPES</code> request.</p>
+
                     </div>
 
                     
@@ -2310,7 +2343,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA<em>PROVIDER</em>TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT<em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT</em>DISCOVER_SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -2366,7 +2400,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3178"><code>src&#x2F;Xmla.js:3178</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3243"><code>..&#x2F;src&#x2F;Xmla.js:3243</code></a>
         
         </p>
 
@@ -2382,7 +2416,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>DBSCHEMA_SCHEMATA</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -2410,6 +2443,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA_SCHEMATA</code> request.</p>
+
                     </div>
 
                     
@@ -2428,7 +2462,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA<em>SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_SCHEMATA</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -2484,7 +2519,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3203"><code>src&#x2F;Xmla.js:3203</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3268"><code>..&#x2F;src&#x2F;Xmla.js:3268</code></a>
         
         </p>
 
@@ -2500,7 +2535,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>DBSCHEMA_TABLES</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -2528,6 +2562,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA_TABLES</code> request.</p>
+
                     </div>
 
                     
@@ -2546,7 +2581,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA<em>TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -2602,7 +2638,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3228"><code>src&#x2F;Xmla.js:3228</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3293"><code>..&#x2F;src&#x2F;Xmla.js:3293</code></a>
         
         </p>
 
@@ -2615,10 +2651,9 @@ The rowset has the following columns:</p>
     <div class="description">
         <p>Invokes the <code><a href="#method_discover">discover()</a></code> method using
 <code><a href="#property_DBSCHEMA_TABLES_INFO"></a></code> as value for the <code>requestType</code>,
-and retrieves the <code>DBSCHEMA<em>TABLES</em>INFO</code> schema rowset.
+and retrieves the <code>DBSCHEMA_TABLES_INFO</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -2645,7 +2680,8 @@ The rowset has the following columns:</p>
                     
 
                     <div class="param-description">
-                        <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA<em>TABLES</em>INFO</code> request.</p>
+                        <p>An object whose properties convey the options for the XML/A a <code>DBSCHEMA_TABLES_INFO</code> request.</p>
+
                     </div>
 
                     
@@ -2664,7 +2700,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA<em>TABLES</em>INFO</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT<em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT</em>DISCOVER_SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DBSCHEMA_TABLES_INFO</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -2720,7 +2757,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2566"><code>src&#x2F;Xmla.js:2566</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2631"><code>..&#x2F;src&#x2F;Xmla.js:2631</code></a>
         
         </p>
 
@@ -2735,7 +2772,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>DISCOVER_ENUMERATORS</code> schema rowset.
 This rowset lists the names, data types, and enumeration values of enumerators supported by the XMLA Provider for a specific data source.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -2805,6 +2841,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DISCOVER_ENUMERATORS</code> request.</p>
+
                     </div>
 
                     
@@ -2823,7 +2860,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER<em>ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -2879,7 +2917,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2633"><code>src&#x2F;Xmla.js:2633</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2698"><code>..&#x2F;src&#x2F;Xmla.js:2698</code></a>
         
         </p>
 
@@ -2894,7 +2932,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>DISCOVER_KEYWORDS</code> schema rowset.
 This rowset is a list of reserved words for this XML/A provider.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -2929,6 +2966,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DISCOVER_KEYWORDS</code> request.</p>
+
                     </div>
 
                     
@@ -2947,7 +2985,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER<em>ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_ENUMERATORS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -3003,7 +3042,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2665"><code>src&#x2F;Xmla.js:2665</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2730"><code>..&#x2F;src&#x2F;Xmla.js:2730</code></a>
         
         </p>
 
@@ -3018,7 +3057,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>DISCOVER_LITERALS</code> schema rowset.
 This rowset is a list of reserved words for this XML/A provider.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -3081,6 +3119,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DISCOVER_LITERALS</code> request.</p>
+
                     </div>
 
                     
@@ -3099,7 +3138,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER<em>LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_LITERALS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -3155,7 +3195,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3257"><code>src&#x2F;Xmla.js:3257</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3322"><code>..&#x2F;src&#x2F;Xmla.js:3322</code></a>
         
         </p>
 
@@ -3171,7 +3211,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_ACTIONS</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -3199,6 +3238,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_ACTIONS</code> request.</p>
+
                     </div>
 
                     
@@ -3217,7 +3257,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_ACTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -3273,7 +3314,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3282"><code>src&#x2F;Xmla.js:3282</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3347"><code>..&#x2F;src&#x2F;Xmla.js:3347</code></a>
         
         </p>
 
@@ -3289,7 +3330,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_CUBES</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -3443,6 +3483,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_CUBES</code> request.</p>
+
                     </div>
 
                     
@@ -3461,7 +3502,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_CUBES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -3517,7 +3559,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3433"><code>src&#x2F;Xmla.js:3433</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3498"><code>..&#x2F;src&#x2F;Xmla.js:3498</code></a>
         
         </p>
 
@@ -3533,7 +3575,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_DIMENSIONS</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -3700,6 +3741,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_DIMENSIONS</code> request.</p>
+
                     </div>
 
                     
@@ -3718,7 +3760,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_DIMENSIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -3774,7 +3817,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3597"><code>src&#x2F;Xmla.js:3597</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3662"><code>..&#x2F;src&#x2F;Xmla.js:3662</code></a>
         
         </p>
 
@@ -3790,7 +3833,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_FUNCTIONS</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -3818,6 +3860,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_FUNCTIONS</code> request.</p>
+
                     </div>
 
                     
@@ -3836,7 +3879,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_FUNCTIONS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -3892,7 +3936,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3622"><code>src&#x2F;Xmla.js:3622</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3687"><code>..&#x2F;src&#x2F;Xmla.js:3687</code></a>
         
         </p>
 
@@ -3908,7 +3952,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_HIERARCHIES</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -4111,6 +4154,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_HIERARCHIES</code> request.</p>
+
                     </div>
 
                     
@@ -4129,7 +4173,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_HIERARCHIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -4185,7 +4230,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l3822"><code>src&#x2F;Xmla.js:3822</code></a>
+        <a href="../files/.._src_Xmla.js.html#l3887"><code>..&#x2F;src&#x2F;Xmla.js:3887</code></a>
         
         </p>
 
@@ -4200,7 +4245,6 @@ The rowset has the following columns:</p>
 <code><a href="#property_MDSCHEMA_LEVELS"></a></code> as value for the <code>requestType</code>,
 and retrieves the <code>MDSCHEMA_LEVELS</code> schema rowset.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -4430,6 +4474,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_LEVELS</code> request.</p>
+
                     </div>
 
                     
@@ -4448,7 +4493,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_LEVELS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -4504,7 +4550,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4048"><code>src&#x2F;Xmla.js:4048</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4113"><code>..&#x2F;src&#x2F;Xmla.js:4113</code></a>
         
         </p>
 
@@ -4520,7 +4566,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_MEASURES</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -4553,119 +4598,126 @@ The rowset has the following columns:</p>
     <tr>
         <td>MEASURE_NAME</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The name of the measure.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_UNIQUE_NAME</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The Unique name of the measure. For providers that generate unique names by qualification, each component of this name is delimited.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_CAPTION</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>A label or caption associated with the measure. Used primarily for display purposes. If a caption does not exist, MEASURE_NAME is returned.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_GUID</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>Not supported.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_AGGREGATOR</td>
-        <td>string</td>
-        <td>Name of the cube.</td>
+        <td>int</td>
+        <td>An enumeration that indicates how the measure was derived. See <a href="http://msdn.microsoft.com/en-us/library/ms126250.aspx">http://msdn.microsoft.com/en-us/library/ms126250.aspx</a></td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>DATA_TYPE</td>
-        <td>string</td>
-        <td>Name of the cube.</td>
+        <td>int</td>
+        <td>The data type of the measure. See: <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx">http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx</a></td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>NUMERIC_PRECISION</td>
         <td>int</td>
-        <td>Name of the cube.</td>
+        <td>The maximum precision of the property if the measure object&#39;s data type is exact numeric. NULL for all other property types.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>NUMERIC_SCALE</td>
         <td>int</td>
-        <td>Name of the cube.</td>
+        <td>The number of digits to the right of the decimal point if the measure object&#39;s type indicator is DBTYPE_NUMERIC or DBTYPE_DECIMAL. Otherwise, this value is NULL.</td>
+        <td>Yes</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>MEASURE_UNITS</td>
+        <td>int</td>
+        <td>Not supported.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>DESCRIPTION</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>A human-readable description of the measure. NULL if no description exists.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>EXPRESSION</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>An expression for the member.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_IS_VISIBLE</td>
         <td>boolean</td>
-        <td>Name of the cube.</td>
+        <td>A Boolean that always returns True. If the measure is not visible, it will not be included in the schema rowset.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>LEVELS_LIST</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>A string that always returns NULL.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_NAME_SQL_COLUMN_NAME</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The name of the column in the SQL query that corresponds to the measure&#39;s name.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_UNQUALIFIED_CAPTION</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The name of the measure, not qualified with the measure group name.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASUREGROUP_NAME</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The name of the measure group to which the measure belongs.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>MEASURE_DISPLAY_FOLDER</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The path to be used when displaying the measure in the user interface. Folder names will be separated by a semicolon. Nested folders are indicated by a backslash ().</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
     <tr>
         <td>DEFAULT_FORMAT_STRING</td>
         <td>string</td>
-        <td>Name of the cube.</td>
+        <td>The default format string for the measure.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
@@ -4688,6 +4740,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_MEASURES</code> request.</p>
+
                     </div>
 
                     
@@ -4706,7 +4759,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEASURES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -4762,7 +4816,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4213"><code>src&#x2F;Xmla.js:4213</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4285"><code>..&#x2F;src&#x2F;Xmla.js:4285</code></a>
         
         </p>
 
@@ -4777,7 +4831,6 @@ The rowset has the following columns:</p>
 <code><a href="#property_MDSCHEMA_MEMBERS"></a></code> as value for the <code>requestType</code>,
 and retrieves the <code>MDSCHEMA_MEMBERS</code> schema rowset.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -4896,7 +4949,7 @@ The rowset has the following columns:</p>
     <tr>
         <td>PARENT_LEVEL</td>
         <td>int</td>
-        <td>The distance of the member's parent from the root level of the hierarchy. The root level is zero (0).</td>
+        <td>The distance of the member&#39;s parent from the root level of the hierarchy. The root level is zero (0).</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
@@ -4917,7 +4970,7 @@ The rowset has the following columns:</p>
     <tr>
         <td>MEMBER_KEY</td>
         <td>string</td>
-        <td>The value of the member's key column. Returns NULL if the member has a composite key.</td>
+        <td>The value of the member&#39;s key column. Returns NULL if the member has a composite key.</td>
         <td>Yes</td>
         <td>No</td>
     </tr>
@@ -4940,6 +4993,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_MEMBERS</code> request.</p>
+
                     </div>
 
                     
@@ -4958,7 +5012,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_MEMBERS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -5014,7 +5069,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4372"><code>src&#x2F;Xmla.js:4372</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4444"><code>..&#x2F;src&#x2F;Xmla.js:4444</code></a>
         
         </p>
 
@@ -5030,7 +5085,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_PROPERTIES</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -5058,6 +5112,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_PROPERTIES</code> request.</p>
+
                     </div>
 
                     
@@ -5076,7 +5131,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_PROPERTIES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -5132,7 +5188,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4397"><code>src&#x2F;Xmla.js:4397</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4469"><code>..&#x2F;src&#x2F;Xmla.js:4469</code></a>
         
         </p>
 
@@ -5148,7 +5204,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>MDSCHEMA_SETS</code> schema rowset.
 ...todo...
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -5176,6 +5231,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>MDSCHEMA_SETS</code> request.</p>
+
                     </div>
 
                     
@@ -5194,7 +5250,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA<em>SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>MDSCHEMA_SETS</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -5250,7 +5307,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2388"><code>src&#x2F;Xmla.js:2388</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2453"><code>..&#x2F;src&#x2F;Xmla.js:2453</code></a>
         
         </p>
 
@@ -5265,7 +5322,6 @@ The rowset has the following columns:</p>
 and retrieves the <code>DISCOVER_PROPERTIES</code> schema rowset.
 This rowset provides information on the properties that are supported by the XML/A provider.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -5316,7 +5372,7 @@ The rowset has the following columns:</p>
             string
         </td>
         <td>
-            The property's datatype (as an XML Schema data type)
+            The property&#39;s datatype (as an XML Schema data type)
         </td>
         <td>
             No
@@ -5372,7 +5428,7 @@ The rowset has the following columns:</p>
             string
         </td>
         <td>
-            The property's current value.
+            The property&#39;s current value.
         </td>
         <td>
             No
@@ -5400,6 +5456,7 @@ The rowset has the following columns:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A a <code>DISCOVER_DATASOURCES</code> request.</p>
+
                     </div>
 
                     
@@ -5418,7 +5475,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER<em>DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -5474,7 +5532,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2520"><code>src&#x2F;Xmla.js:2520</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2585"><code>..&#x2F;src&#x2F;Xmla.js:2585</code></a>
         
         </p>
 
@@ -5486,10 +5544,9 @@ The rowset has the following columns:</p>
 
     <div class="description">
         <p>Invokes the <code><a href="#method_discover">discover()</a></code> method using <code><a href="#property_DISCOVER_SCHEMA_ROWSETS"></a></code> as value for the <code>requestType</code>,
-and retrieves the <code>DISCOVER<em>SCHEMA</em>ROWSETS</code> schema rowset.
+and retrieves the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
 This rowset lists all possible request types supported by this provider.
 The rowset has the following columns:</p>
-
 <table border="1" class="schema-rowset">
     <tr>
         <th>Column Name</th>
@@ -5537,7 +5594,8 @@ The rowset has the following columns:</p>
                     
 
                     <div class="param-description">
-                        <p>An object whose properties convey the options for the XML/A a <code>DISCOVER<em>SCHEMA</em>ROWSETS</code> request.</p>
+                        <p>An object whose properties convey the options for the XML/A a <code>DISCOVER_SCHEMA_ROWSETS</code> request.</p>
+
                     </div>
 
                     
@@ -5556,7 +5614,8 @@ The rowset has the following columns:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER<em>DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT</em>SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>) events.
+                    <p>The result of the invoking the XML/A <code>Discover</code> method. For synchronous requests, an instance of a <code><a href="Xmla.Rowset.html#Xmla.Rowset">Xmla.Rowset</a></code> that represents the <code>DISCOVER_DATASOURCES</code> schema rowset. For an asynchronous request, the return value is not defined: you should add a listener (see: <code><a href="#method_addListener">addListener()</a></code>) and listen for the <code>success</code> (see: <code><a href="#property_EVENT_SUCCESS">EVENT_SUCCESS</a></code>) or <code>discoversuccess</code> (see: <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>) events.</p>
+
                 
             </div>
         </div>
@@ -5612,7 +5671,7 @@ The rowset has the following columns:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2050"><code>src&#x2F;Xmla.js:2050</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2115"><code>..&#x2F;src&#x2F;Xmla.js:2115</code></a>
         
         </p>
 
@@ -5626,7 +5685,6 @@ The rowset has the following columns:</p>
         <p>Sends an MDX query to a XML/A DataSource to invoke the XML/A <code>Execute</code> method and obtain the multi-dimensional resultset.
 Options are passed using a generic <code>options</code> object.
 Applicable properties of the <code>options</code> object are:</p>
-
 <ul>
     <li><code>url</code> {string} REQUIRED the URL of a XML/A datasource.
         This should be a value obtained from the <code>URL</code> column of the <code>DISCOVER_DATASOURCES</code> rowset
@@ -5691,6 +5749,7 @@ Applicable properties of the <code>options</code> object are:</p>
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A <code>Execute</code> request.</p>
+
                     </div>
 
                     
@@ -5709,8 +5768,9 @@ Applicable properties of the <code>options</code> object are:</p>
                     
                         <span class="type"><a href="../classes/Xmla.Dataset.html" class="crosslink">Xmla.Dataset</a> | <a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Dataset</code> that represents the multi-dimensional result set of the MDX query. If the <code>Format</code> property in the request was set to <code>Tabular</code>, then an instance of the
-<code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code> class is returned to represent the <code>Resultset</code>.
+                    <p>The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Dataset</code> that represents the multi-dimensional result set of the MDX query. If the <code>Format</code> property in the request was set to <code>Tabular</code>, then an instance of the
+<code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code> class is returned to represent the <code>Resultset</code>.</p>
+
                 
             </div>
         </div>
@@ -5762,7 +5822,7 @@ Applicable properties of the <code>options</code> object are:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2130"><code>src&#x2F;Xmla.js:2130</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2195"><code>..&#x2F;src&#x2F;Xmla.js:2195</code></a>
         
         </p>
 
@@ -5773,8 +5833,9 @@ Applicable properties of the <code>options</code> object are:</p>
     </div>
 
     <div class="description">
-        <p>Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method<em>execute</a></code> method using <code><a href="#property_PROP_FORMAT_MULTIDIMENSIONAL">PROP</em>FORMAT<em>MULTIDIMENSIONAL</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP</em>FORMAT</a></code> property. In this case, the result is available only as XML text or XML document in the <code><a href="#property_responseText">responseText</a></code>
+        <p>Sends an MDX query to a XML/A DataSource to invoke the <code>&lt;a href=&quot;#method_execute</a></code> method using <code><a href="#property_PROP_FORMAT_MULTIDIMENSIONAL">PROP_FORMAT_MULTIDIMENSIONAL</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. In this case, the result is available only as XML text or XML document in the <code><a href="#property_responseText">responseText</a></code>
 and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p>
+
     </div>
 
     
@@ -5793,6 +5854,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A <code>Execute</code> request.</p>
+
                     </div>
 
                     
@@ -5854,7 +5916,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l2119"><code>src&#x2F;Xmla.js:2119</code></a>
+        <a href="../files/.._src_Xmla.js.html#l2184"><code>..&#x2F;src&#x2F;Xmla.js:2184</code></a>
         
         </p>
 
@@ -5865,7 +5927,8 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
     </div>
 
     <div class="description">
-        <p>Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute">execute()</a></code> method using <code><a href="#property_PROP_FORMAT_TABULAR">PROP<em>FORMAT</em>TABULAR</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. This has the effect of obtaining the multi-dimensional resultset as a <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code>.</p>
+        <p>Sends an MDX query to a XML/A DataSource to invoke the <code><a href="#method_execute">execute()</a></code> method using <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT_TABULAR</a></code> as value for the <code><a href="#property_PROP_FORMAT_TABULAR">PROP_FORMAT</a></code> property. This has the effect of obtaining the multi-dimensional resultset as a <code><a href="Xmla.Rowset#class_Xmla.Rowset">Rowset</a></code>.</p>
+
     </div>
 
     
@@ -5884,6 +5947,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the XML/A <code>Execute</code> request.</p>
+
                     </div>
 
                     
@@ -5902,7 +5966,8 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a></span>:
                     
-                    The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Rowset</code> that represents the multi-dimensional result set of the MDX query.
+                    <p>The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Rowset</code> that represents the multi-dimensional result set of the MDX query.</p>
+
                 
             </div>
         </div>
@@ -5948,7 +6013,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1555"><code>src&#x2F;Xmla.js:1555</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1549"><code>..&#x2F;src&#x2F;Xmla.js:1549</code></a>
         
         </p>
 
@@ -5973,6 +6038,113 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
                     
                         <span class="type">DOMDocument</span>:
                     
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getXmlaSoapMessage" class="method item">
+    <h3 class="name"><code>getXmlaSoapMessage</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>options</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_Xmla.js.html#l1817"><code>..&#x2F;src&#x2F;Xmla.js:1817</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Create a XML/A SOAP message that may be used as message body for a XML/A request</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">options</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An object representing the message. The object can have these properties:</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    <p>The SOAP message.</p>
+
                 
             </div>
         </div>
@@ -6028,7 +6200,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1805"><code>src&#x2F;Xmla.js:1805</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1870"><code>..&#x2F;src&#x2F;Xmla.js:1870</code></a>
         
         </p>
 
@@ -6042,8 +6214,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.</p
         <p>Sends a request to the XML/A server.
 This method is rather low-level and allows full control over the request
 by passing an options object. General properties of the options object are:</p>
-
-<ul>
+<p><ul>
     <li><code>method</code> {string} REQUIRED the XML/A method to invoke. This should be one of the following constants:
         <dl>
             <dt><code><a href="#property_METHOD_DISCOVER">METHOD_DISCOVER</a></code></dt>
@@ -6077,7 +6248,7 @@ by passing an options object. General properties of the options object are:</p>
         </dl>
     </li>
     <li><code>url</code> {string} REQUIRED the URL of XML/A service, or of a XML/A datasource.
-        Typically, you first use the URL of a XML/A service (like <code>http://your.pentaho.server:8080/pentaho/Xmla?userid=joe&amp;password=password</code>)
+        Typically, you first use the URL of a XML/A service (like <code><a href="http://your.pentaho.server:8080/pentaho/Xmla?userid=joe&amp;password=password">http://your.pentaho.server:8080/pentaho/Xmla?userid=joe&amp;password=password</a></code>)
         and use that to retrieve the <code>DISCOVER_DATASOURCES</code> rowset.
         Then, you can connect to a XML/A datasource using the value returned by the <code>URL</code> column of the <code>DISCOVER_DATASOURCES</code> rowset
         (typically, you also have to set a <code>DataSourceInfo</code> property using the value found in the <code>DataSourceInfo</code> column of the <code>DISCOVER_DATASOURCES</code> rowset).
@@ -6096,41 +6267,38 @@ by passing an options object. General properties of the options object are:</p>
             <li><code>true</code>: The request is performed asynchronously: the call to <code>request()</code> will not block and return immediately.
             In this case, the return value of the <code>request()</code> method is not defined,
             and the response must be received by registering a listener.
-            (see <code><a href="#method_addListener">addListener()</a></code>).
-
-            As an alternative to using listeners, you can also pass
-            <code>success</code>, <code>error</code> and <code>callback</code> callback functions.
-            Callbacks are described in more detail below.
-            </li>
-            <li><code>false</code>: The request is performed synchronously: the call to <code>request()</code> will block until it receives a response from the XML/A server or times out.
-            In this case, the <code>request()</code> method returns
-            a <code>Rowset</code> (for <code>Discover</code> requests) or
-            a <code>Resultset</code> (for <code>Execute</code> requests).
-            If you registered any listeners (see <code><a href="#method_addListener">addListener()</a></code>),
-            then these will still be notified of any events (such as receiving the response).
-            </li>
-        </ul>
-    </li>
-    <li><code>success</code> (function)
-        A function that is to be called after the requests is executed and a successful response is receieved.
-        Any listeners appropriate for the request are called after this handler is executed.
-    </li>
-    <li><code>error</code> (function)
-        A function that is to be called after the requests is executed and an error was encountered.
-        Any listeners appropriate for the request are called after this handler is executed.
-    </li>
-    <li><code>callback</code> (function)
-        A function that is to be called after the requests is executed and the response is receieved,
-        and after calling any listeners that are appropriate for the request.
-        This function will be called both in case of success and of error.
-        If the options also contain a <code>success</code> and/or <code>error</code> handler, then
-        <code>callback</code> will be called after those more specific handlers are called.
-    </li>
-</ul>
-
-<p>Other parts of the <code>options</code> object are method-specific.</p>
-
-<ul>
+            (see <code><a href="#method_addListener">addListener()</a></code>).</p>
+<pre class="code prettyprint"><code>        As an alternative to using listeners, you can also pass
+        &lt;code&gt;success&lt;/code&gt;, &lt;code&gt;error&lt;/code&gt; and &lt;code&gt;callback&lt;/code&gt; callback functions.
+        Callbacks are described in more detail below.
+        &lt;/li&gt;
+        &lt;li&gt;&lt;code&gt;false&lt;/code&gt;: The request is performed synchronously: the call to &lt;code&gt;request()&lt;/code&gt; will block until it receives a response from the XML/A server or times out.
+        In this case, the &lt;code&gt;request()&lt;/code&gt; method returns
+        a &lt;code&gt;Rowset&lt;/code&gt; (for &lt;code&gt;Discover&lt;/code&gt; requests) or
+        a &lt;code&gt;Resultset&lt;/code&gt; (for &lt;code&gt;Execute&lt;/code&gt; requests).
+        If you registered any listeners (see &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt;),
+        then these will still be notified of any events (such as receiving the response).
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;success&lt;/code&gt; (function)
+    A function that is to be called after the requests is executed and a successful response is receieved.
+    Any listeners appropriate for the request are called after this handler is executed.
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;error&lt;/code&gt; (function)
+    A function that is to be called after the requests is executed and an error was encountered.
+    Any listeners appropriate for the request are called after this handler is executed.
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;callback&lt;/code&gt; (function)
+    A function that is to be called after the requests is executed and the response is receieved,
+    and after calling any listeners that are appropriate for the request.
+    This function will be called both in case of success and of error.
+    If the options also contain a &lt;code&gt;success&lt;/code&gt; and/or &lt;code&gt;error&lt;/code&gt; handler, then
+    &lt;code&gt;callback&lt;/code&gt; will be called after those more specific handlers are called.
+&lt;/li&gt;</code></pre>
+<p></ul>
+Other parts of the <code>options</code> object are method-specific.</p>
+<p><ul>
     <li>The following options are applicable in case the <code>method</code> is <code>METHOD_DISCOVER</code>:
         <ul>
             <li><code>requestType</code> - {string} Applies to the Discover method and indicates the kind of schema rowset to retrieve.
@@ -6152,11 +6320,11 @@ by passing an options object. General properties of the options object are:</p>
         </ul>
     </li>
 </ul>
-
-<p>Instead of calling this method directly, consider calling
+Instead of calling this method directly, consider calling
 <code><a href="#method_discover">discover()</a></code> (to obtain a schema rowset),
 <code><a href="#method_execute">execute()</a></code> (to issue a MDX query),
 or one of the specialized <code>discoverXXX()</code> methods (to obtain a particular schema rowset).</p>
+
     </div>
 
     
@@ -6175,6 +6343,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 
                     <div class="param-description">
                         <p>An object whose properties convey the options for the request.</p>
+
                     </div>
 
                     
@@ -6193,7 +6362,8 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
                     
                         <span class="type"><a href="../classes/Xmla.Rowset.html" class="crosslink">Xmla.Rowset</a> | <a href="../classes/Xmla.Dataset.html" class="crosslink">Xmla.Dataset</a></span>:
                     
-                    The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Dataset</code>.
+                    <p>The result of the invoking the XML/A method. For an asynchronous request, the return value is not defined. For synchronous requests, <code>Discover</code> requests return an instance of a <code>Xmla.Rowset</code>, and <code>Execute</code> results return an instance of a <code>Xmla.Dataset</code>.</p>
+
                 
             </div>
         </div>
@@ -6245,7 +6415,7 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1563"><code>src&#x2F;Xmla.js:1563</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1557"><code>..&#x2F;src&#x2F;Xmla.js:1557</code></a>
         
         </p>
 
@@ -6257,24 +6427,23 @@ or one of the specialized <code>discoverXXX()</code> methods (to obtain a partic
 
     <div class="description">
         <p>This method can be used to set a number of default options for the Xmla instance.
-This is especially useful if you don't want to pass each and every option to each method call all the time.
+This is especially useful if you don&#39;t want to pass each and every option to each method call all the time.
 Where appropriate, information that is missing from the parameter objects passed to the methods of the Xmla object
    may be augmented with the values set through this method.
 For example, if you plan to do a series of requests pertaining to one particular datasource,
 you can set the mandatory options like url, async, datasource and catalog just once:</p>
-
-<pre>
+<p><pre>
 &nbsp;   xml.setOptions({
-&nbsp;       url: "http://localhost:8080/pentaho/Xmla",
+&nbsp;       url: &quot;<a href="http://localhost:8080/pentaho/Xmla">http://localhost:8080/pentaho/Xmla</a>&quot;,
 &nbsp;       async: true,
 &nbsp;       properties: {
-&nbsp;           DataSourceInfo: "Pentaho Analysis Services",
-&nbsp;           Catalog: "Foodmart"
+&nbsp;           DataSourceInfo: &quot;Pentaho Analysis Services&quot;,
+&nbsp;           Catalog: &quot;Foodmart&quot;
 &nbsp;       }
 &nbsp;   });
 </pre>
+Then, a subsequent <code></code></p>
 
-<p>Then, a subsequent <code></code></p>
     </div>
 
     
@@ -6343,7 +6512,7 @@ you can set the mandatory options like url, async, datasource and catalog just o
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l775"><code>src&#x2F;Xmla.js:775</code></a>
+        <a href="../files/.._src_Xmla.js.html#l769"><code>..&#x2F;src&#x2F;Xmla.js:769</code></a>
         
         </p>
 
@@ -6354,14 +6523,15 @@ you can set the mandatory options like url, async, datasource and catalog just o
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA<em>CATALOGS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_CATALOGS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBCatalogs">discoverDBCatalogs()</a></code> method.
-The <code>discoverDBCatalogs()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA</em>CATALOGS</code> as requestType.</p>
+The <code>discoverDBCatalogs()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_CATALOGS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_CATALOGS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DBSCHEMA_CATALOGS</p>
     
 
     
@@ -6397,7 +6567,7 @@ The <code>discoverDBCatalogs()</code> method issues a request to invoke the Disc
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l789"><code>src&#x2F;Xmla.js:789</code></a>
+        <a href="../files/.._src_Xmla.js.html#l783"><code>..&#x2F;src&#x2F;Xmla.js:783</code></a>
         
         </p>
 
@@ -6408,14 +6578,15 @@ The <code>discoverDBCatalogs()</code> method issues a request to invoke the Disc
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA<em>COLUMNS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_COLUMNS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBColumns">discoverDBColumns()</a></code> method.
-The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA</em>COLUMNS</code> as requestType.</p>
+The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_COLUMNS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_COLUMNS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DBSCHEMA_COLUMNS</p>
     
 
     
@@ -6451,7 +6622,7 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l803"><code>src&#x2F;Xmla.js:803</code></a>
+        <a href="../files/.._src_Xmla.js.html#l797"><code>..&#x2F;src&#x2F;Xmla.js:797</code></a>
         
         </p>
 
@@ -6462,14 +6633,15 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA<em>PROVIDER</em>TYPES</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_PROVIDER_TYPES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBProviderTypes">discoverDBProviderTypes()</a></code> method.
-The <code>discoverDBProviderTypes()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA<em>PROVIDER</em>TYPES</code> as requestType.</p>
+The <code>discoverDBProviderTypes()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_PROVIDER_TYPES</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_PROVIDER_TYPES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DBSCHEMA_PROVIDER_TYPES</p>
     
 
     
@@ -6505,7 +6677,7 @@ The <code>discoverDBProviderTypes()</code> method issues a request to invoke the
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l817"><code>src&#x2F;Xmla.js:817</code></a>
+        <a href="../files/.._src_Xmla.js.html#l811"><code>..&#x2F;src&#x2F;Xmla.js:811</code></a>
         
         </p>
 
@@ -6516,14 +6688,15 @@ The <code>discoverDBProviderTypes()</code> method issues a request to invoke the
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA<em>SCHEMATA</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_SCHEMATA</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBSchemata">discoverDBSchemata()</a></code> method.
-The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA</em>SCHEMATA</code> as requestType.</p>
+The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_SCHEMATA</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_SCHEMATA&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DBSCHEMA_SCHEMATA</p>
     
 
     
@@ -6559,7 +6732,7 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l831"><code>src&#x2F;Xmla.js:831</code></a>
+        <a href="../files/.._src_Xmla.js.html#l825"><code>..&#x2F;src&#x2F;Xmla.js:825</code></a>
         
         </p>
 
@@ -6570,14 +6743,15 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA<em>TABLES</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverDBTables">discoverDBTables()</a></code> method.
-The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA</em>TABLES</code> as requestType.</p>
+The <code>discoverDBColumns()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_TABLES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DBSCHEMA_TABLES</p>
     
 
     
@@ -6613,7 +6787,7 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l845"><code>src&#x2F;Xmla.js:845</code></a>
+        <a href="../files/.._src_Xmla.js.html#l839"><code>..&#x2F;src&#x2F;Xmla.js:839</code></a>
         
         </p>
 
@@ -6624,15 +6798,69 @@ The <code>discoverDBColumns()</code> method issues a request to invoke the Disco
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA<em>TABLES</em>INFO</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DBSCHEMA_TABLES_INFO</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverDBTablesInfo">discoverDBTablesInfo()</a></code> method.
-The <code>discoverDBTablesInfo()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA<em>TABLES</em>INFO</code> as requestType.</p>
+The <code>discoverDBTablesInfo()</code> method issues a request to invoke the Discover method using <code>DBSCHEMA_TABLES_INFO</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaultOptions" class="property item">
+    <h3 class="name"><code>defaultOptions</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_Xmla.js.html#l634"><code>..&#x2F;src&#x2F;Xmla.js:634</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>These are the default options used for new Xmla instances in case no custom properties are set.
+It sets the following properties:</p>
+<ul>
+  <li><code>requestTimeout</code> int: 30000 - number of milliseconds before a request to the XML/A server will timeout </li>
+  <li><code>async</code> boolean: false - determines whether synchronous or asynchronous communication with the XML/A server will be used.</li>
+  <li><code>addFieldGetters</code> boolean: true - determines whether Xml.Rowset objects will be created with a getter method for each column.</li>
+  <li><code>forceResponseXMLEmulation</code> boolean: false - determines whether to parse responseText or to use the native responseXML from the xhr object.</li>
+</ul>
+    </div>
+
     
 
     
@@ -6668,7 +6896,7 @@ The <code>discoverDBTablesInfo()</code> method issues a request to invoke the Di
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l691"><code>src&#x2F;Xmla.js:691</code></a>
+        <a href="../files/.._src_Xmla.js.html#l685"><code>..&#x2F;src&#x2F;Xmla.js:685</code></a>
         
         </p>
 
@@ -6679,14 +6907,15 @@ The <code>discoverDBTablesInfo()</code> method issues a request to invoke the Di
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER<em>DATASOURCES</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_DATASOURCES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this constant as requestType yourself, consider calling the <code><a href="#method_discoverDataSources">discoverDataSources()</a></code> method.
-The <code>discoverDataSources()</code> method passes <code>DISCOVER</em>DATASOURCES</code> automatically as requestType for Discover requests.</p>
+The <code>discoverDataSources()</code> method passes <code>DISCOVER_DATASOURCES</code> automatically as requestType for Discover requests.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DISCOVER_DATASOURCES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DISCOVER_DATASOURCES</p>
     
 
     
@@ -6722,7 +6951,7 @@ The <code>discoverDataSources()</code> method passes <code>DISCOVER</em>DATASOUR
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l733"><code>src&#x2F;Xmla.js:733</code></a>
+        <a href="../files/.._src_Xmla.js.html#l727"><code>..&#x2F;src&#x2F;Xmla.js:727</code></a>
         
         </p>
 
@@ -6733,14 +6962,15 @@ The <code>discoverDataSources()</code> method passes <code>DISCOVER</em>DATASOUR
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER<em>ENUMERATORS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_ENUMERATORS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverEnumerators">discoverEnumerators()</a></code> method.
-The <code>discoverSchemaRowsets()</code> method issues a request to invoke the Discover method using <code>DISCOVER</em>SCHEMA_ROWSETS</code> as requestType.</p>
+The <code>discoverSchemaRowsets()</code> method issues a request to invoke the Discover method using <code>DISCOVER_SCHEMA_ROWSETS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DISCOVER_ENUMERATORS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DISCOVER_ENUMERATORS</p>
     
 
     
@@ -6776,7 +7006,7 @@ The <code>discoverSchemaRowsets()</code> method issues a request to invoke the D
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l747"><code>src&#x2F;Xmla.js:747</code></a>
+        <a href="../files/.._src_Xmla.js.html#l741"><code>..&#x2F;src&#x2F;Xmla.js:741</code></a>
         
         </p>
 
@@ -6787,14 +7017,15 @@ The <code>discoverSchemaRowsets()</code> method issues a request to invoke the D
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER<em>KEYWORDS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_KEYWORDS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this requestType yourself, consider calling the <code><a href="#method_discoverLiterals">discoverKeywords()</a></code> method.
-The <code>discoverKeywords()</code> method issues a request to invoke the Discover method using DISCOVER</em>KEYWORDS as requestType.</p>
+The <code>discoverKeywords()</code> method issues a request to invoke the Discover method using DISCOVER_KEYWORDS as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DISCOVER_KEYWORDS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DISCOVER_KEYWORDS</p>
     
 
     
@@ -6830,7 +7061,7 @@ The <code>discoverKeywords()</code> method issues a request to invoke the Discov
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l761"><code>src&#x2F;Xmla.js:761</code></a>
+        <a href="../files/.._src_Xmla.js.html#l755"><code>..&#x2F;src&#x2F;Xmla.js:755</code></a>
         
         </p>
 
@@ -6841,14 +7072,15 @@ The <code>discoverKeywords()</code> method issues a request to invoke the Discov
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER<em>LITERALS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_LITERALS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverLiterals">discoverLiterals()</a></code> method.
-The <code>discoverLiterals()</code> method issues a request to invoke the Discover method using DISCOVER</em>LITERALS as requestType.</p>
+The <code>discoverLiterals()</code> method issues a request to invoke the Discover method using DISCOVER_LITERALS as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DISCOVER_LITERALS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DISCOVER_LITERALS</p>
     
 
     
@@ -6884,7 +7116,7 @@ The <code>discoverLiterals()</code> method issues a request to invoke the Discov
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l705"><code>src&#x2F;Xmla.js:705</code></a>
+        <a href="../files/.._src_Xmla.js.html#l699"><code>..&#x2F;src&#x2F;Xmla.js:699</code></a>
         
         </p>
 
@@ -6895,14 +7127,15 @@ The <code>discoverLiterals()</code> method issues a request to invoke the Discov
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER<em>PROPERTIES</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_PROPERTIES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverProperties">discoverProperties()</a></code> method.
-The <code>discoverProperties()</code> method passes <code>DISCOVER</em>PROPERTIES</code> automatically as requestType for Discover requests.</p>
+The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</code> automatically as requestType for Discover requests.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DISCOVER_PROPERTIES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DISCOVER_PROPERTIES</p>
     
 
     
@@ -6938,7 +7171,7 @@ The <code>discoverProperties()</code> method passes <code>DISCOVER</em>PROPERTIE
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l719"><code>src&#x2F;Xmla.js:719</code></a>
+        <a href="../files/.._src_Xmla.js.html#l713"><code>..&#x2F;src&#x2F;Xmla.js:713</code></a>
         
         </p>
 
@@ -6949,14 +7182,15 @@ The <code>discoverProperties()</code> method passes <code>DISCOVER</em>PROPERTIE
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER<em>SCHEMA</em>ROWSETS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>DISCOVER_SCHEMA_ROWSETS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the <code><a href="#method_discoverSchemaRowsets">discoverSchemaRowsets()</a></code> method.
 The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</code> automatically as requestType for Discover requests.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DISCOVER_SCHEMA_ROWSETS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DISCOVER_SCHEMA_ROWSETS</p>
     
 
     
@@ -6992,7 +7226,7 @@ The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</c
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1232"><code>src&#x2F;Xmla.js:1232</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1226"><code>..&#x2F;src&#x2F;Xmla.js:1226</code></a>
         
         </p>
 
@@ -7004,10 +7238,11 @@ The <code>discoverProperties()</code> method passes <code>DISCOVER_PROPERTIES</c
     <div class="description">
         <p>Unifies all method-specific and non method-specific events.
 This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;[].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> [].concat(Xmla.EVENT_GENERAL, Xmla.EVENT_DISCOVER_ALL, Xmla.EVENT_EXECUTE_ALL)</p>
     
 
     
@@ -7043,7 +7278,7 @@ This constant can be used as events array argument for the <code><a href="#metho
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1130"><code>src&#x2F;Xmla.js:1130</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1124"><code>..&#x2F;src&#x2F;Xmla.js:1124</code></a>
         
         </p>
 
@@ -7058,14 +7293,15 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>discover</code> event is method-specific, and is fired before submitting a <code>Discover</code> request
 (see: <code><a href="#method_discover">discover()</a></code>)
 to the server, but after firing the <code>request</code> event
-(see: <code><a href="#property_EVENT_DISCOVER">EVENT<em>DISCOVER</a></code>).
-The <code>EVENT</em>DISCOVER</code> event is <em>cancelable</em>:
+(see: <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>).
+The <code>EVENT_DISCOVER</code> event is <em>cancelable</em>:
 the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating
 whether the respective operation should be canceled.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;discover&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> discover</p>
     
 
     
@@ -7101,7 +7337,7 @@ whether the respective operation should be canceled.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1198"><code>src&#x2F;Xmla.js:1198</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1192"><code>..&#x2F;src&#x2F;Xmla.js:1192</code></a>
         
         </p>
 
@@ -7114,10 +7350,11 @@ whether the respective operation should be canceled.</p>
         <p>Unifies all events specific for the <code>Discover</code> method.
 This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method,
 or you can use array concatenation to combine it with other arrays of <code>EVENT_XXX</code> constants.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;[EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> [EVENT_DISCOVER,EVENT_DISCOVER_SUCCESS,EVENT_DISCOVER_ERROR]</p>
     
 
     
@@ -7153,7 +7390,7 @@ or you can use array concatenation to combine it with other arrays of <code>EVEN
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1164"><code>src&#x2F;Xmla.js:1164</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1158"><code>..&#x2F;src&#x2F;Xmla.js:1158</code></a>
         
         </p>
 
@@ -7169,10 +7406,11 @@ The <code>discovererror</code> is method-specific and fired when an error occurs
 or receiving a response to an <code>Discover</code method.
 (see: <code><a href="#method_discover">discover()</a></code>).
 This is event is not cancelable.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;discovererror&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> discovererror</p>
     
 
     
@@ -7208,7 +7446,7 @@ This is event is not cancelable.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1148"><code>src&#x2F;Xmla.js:1148</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1142"><code>..&#x2F;src&#x2F;Xmla.js:1142</code></a>
         
         </p>
 
@@ -7225,10 +7463,11 @@ The <code>discoversuccess</code> event is method-specific and fired only after r
 to an incovation of the XML/A <code>Discover</code> method
 (see: <code><a href="#method_discover">discover()</a></code>).
 This is event is not cancelable.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;discoversuccess&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> discoversuccess</p>
     
 
     
@@ -7264,7 +7503,7 @@ This is event is not cancelable.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1066"><code>src&#x2F;Xmla.js:1066</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1060"><code>..&#x2F;src&#x2F;Xmla.js:1060</code></a>
         
         </p>
 
@@ -7279,10 +7518,11 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>error</code> is fired when an error occurs while sending a request or receiving a response.
 The <code>error</code> event is not method-specific, and fires for errors encountered during both <code>Execute</code> as well as <code>Discover</code> method invocations.
 This is event is not cancelable.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;error&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> error</p>
     
 
     
@@ -7318,7 +7558,7 @@ This is event is not cancelable.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1081"><code>src&#x2F;Xmla.js:1081</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1075"><code>..&#x2F;src&#x2F;Xmla.js:1075</code></a>
         
         </p>
 
@@ -7333,14 +7573,15 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>execute</code> event is method-specific, and is fired before submitting an <code>Execute</code> request
 (see: <code><a href="#method_execute">execute()</a></code>)
 to the server, but after firing the <code>request</code> event
-(see: <code><a href="#property_EVENT_REQUEST">EVENT<em>REQUEST</a></code>).
-The <code>EVENT</em>EXECUTE</code> event is <em>cancelable</em>:
+(see: <code><a href="#property_EVENT_REQUEST">EVENT_REQUEST</a></code>).
+The <code>EVENT_EXECUTE</code> event is <em>cancelable</em>:
 the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating
 whether the respective operation should be canceled.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;execute&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> execute</p>
     
 
     
@@ -7376,7 +7617,7 @@ whether the respective operation should be canceled.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1215"><code>src&#x2F;Xmla.js:1215</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1209"><code>..&#x2F;src&#x2F;Xmla.js:1209</code></a>
         
         </p>
 
@@ -7389,10 +7630,11 @@ whether the respective operation should be canceled.</p>
         <p>Unifies all events specific for the <code>Execute</code> method.
 This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method,
 or you can use array concatenation to combine it with other arrays of <code>EVENT_XXX</code> constants.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;[EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> [EVENT_EXECUTE,EVENT_EXECUTE_SUCCESS,EVENT_EXECUTE_ERROR]</p>
     
 
     
@@ -7428,7 +7670,7 @@ or you can use array concatenation to combine it with other arrays of <code>EVEN
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1115"><code>src&#x2F;Xmla.js:1115</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1109"><code>..&#x2F;src&#x2F;Xmla.js:1109</code></a>
         
         </p>
 
@@ -7443,10 +7685,11 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>executeerror</code> event is method-specific and fired when an error occurs while sending an <code>Execute</code> request, or receiving a response to an <code>Execute</code method.
 (see: <code><a href="#method_execute">execute()</a></code>).
 This is event is not cancelable.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;executeerror&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> executeerror</p>
     
 
     
@@ -7482,7 +7725,7 @@ This is event is not cancelable.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1099"><code>src&#x2F;Xmla.js:1099</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1093"><code>..&#x2F;src&#x2F;Xmla.js:1093</code></a>
         
         </p>
 
@@ -7499,10 +7742,11 @@ The <code>executesuccess</code> event is method-specific and fired only after re
 to an incovation of the XML/A <code>Execute</code> method
 (see: <code><a href="#method_execute">execute()</a></code>).
 This is event is not cancelable.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;executesuccess&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> executesuccess</p>
     
 
     
@@ -7538,7 +7782,7 @@ This is event is not cancelable.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1180"><code>src&#x2F;Xmla.js:1180</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1174"><code>..&#x2F;src&#x2F;Xmla.js:1174</code></a>
         
         </p>
 
@@ -7552,10 +7796,11 @@ This is event is not cancelable.</p>
 This constant can be used as events array argument for the <code><a href="#method_addListener">addListener()</a></code> method,
 or you can use array concatenation to combine it with other arrays of <code>EVENT_XXX</code> constants.
 This constant is especially intended for asyncronous handling of Schema rowset data.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;[EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> [EVENT_REQUEST,EVENT_SUCCESS,EVENT_ERROR]</p>
     
 
     
@@ -7591,7 +7836,7 @@ This constant is especially intended for asyncronous handling of Schema rowset d
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1028"><code>src&#x2F;Xmla.js:1028</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1022"><code>..&#x2F;src&#x2F;Xmla.js:1022</code></a>
         
         </p>
 
@@ -7606,16 +7851,17 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>request</code> event is the first event that is fired before submitting a request
 (see: <code><a href="#method_request">request()</a></code>)
 to the server, and before firing the method-specific request events
-(see <code><a href="#property_EVENT_EXECUTE">EVENT<em>EXECUTE</a></code>
-and <code><a href="#property_EVENT_DISCOVER">EVENT</em>DISCOVER</a></code>).
+(see <code><a href="#property_EVENT_EXECUTE">EVENT_EXECUTE</a></code>
+and <code><a href="#property_EVENT_DISCOVER">EVENT_DISCOVER</a></code>).
 The <code>request</code> event itself is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> requests.
 The <code>EVENT_REQUEST</code> event is <em>cancelable</em>:
 the <code>handler</code> function specified in the listener object passed to <code>addListener</code> should return a boolen, indicating
 whether the respective operation should be canceled.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;request&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> request</p>
     
 
     
@@ -7651,7 +7897,7 @@ whether the respective operation should be canceled.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1048"><code>src&#x2F;Xmla.js:1048</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1042"><code>..&#x2F;src&#x2F;Xmla.js:1042</code></a>
         
         </p>
 
@@ -7666,14 +7912,15 @@ This constant can be used as en entry in the events array argument for the <code
 The <code>success</code> event  is the last event that is fired after receiving and processing a normal response
 (that is, a response that does not contain an XML/A <code>SoapFault</code>),
 after firing the method-specific success events
-(see <code><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT<em>EXECUTE</em>SUCCESS</a></code>
-and <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT<em>DISCOVER</em>SUCCESS</a></code>).
+(see <code><a href="#property_EVENT_EXECUTE_SUCCESS">EVENT_EXECUTE_SUCCESS</a></code>
+and <code><a href="#property_EVENT_DISCOVER_SUCCESS">EVENT_DISCOVER_SUCCESS</a></code>).
 The <code>success</code> event is not method-specific, and fires for <code>Execute</code> as well as <code>Discover</code> responses.
 This is event is not cancelable.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;success&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> success</p>
     
 
     
@@ -7707,7 +7954,7 @@ This is event is not cancelable.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1467"><code>src&#x2F;Xmla.js:1467</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1461"><code>..&#x2F;src&#x2F;Xmla.js:1461</code></a>
         
         </p>
 
@@ -7720,6 +7967,7 @@ This is event is not cancelable.</p>
         <p>This object stores listeners.
 Each key is a listener type (see the static final <code>EVENT_XXX</code> constants),
 each value is an array of listener objects that are subscribed to that particular event.</p>
+
     </div>
 
     
@@ -7734,7 +7982,7 @@ each value is an array of listener objects that are subscribed to that particula
 &amp;nbsp;,   &quot;execute&quot;: []
 &amp;nbsp;,   &quot;executesuccss&quot;: []
 &amp;nbsp;,   &quot;executeerror&quot;: []
-}&lt;&#x2F;pre&gt;</p>
+}&lt;/pre&gt;</p>
     
 
     
@@ -7770,7 +8018,7 @@ each value is an array of listener objects that are subscribed to that particula
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l860"><code>src&#x2F;Xmla.js:860</code></a>
+        <a href="../files/.._src_Xmla.js.html#l854"><code>..&#x2F;src&#x2F;Xmla.js:854</code></a>
         
         </p>
 
@@ -7781,15 +8029,16 @@ each value is an array of listener objects that are subscribed to that particula
 
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
-<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>MDSCHEMA<em>ACTIONS</code> schema rowset.
+<code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the <code>MDSCHEMA_ACTIONS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDActions">discoverMDActions()</a></code> method.
-The <code>discoverMDActions()</code> method issues a request to invoke the Discover method using <code>MDSCHEMA</em>ACTIONS</code> as requestType.</p>
+The <code>discoverMDActions()</code> method issues a request to invoke the Discover method using <code>MDSCHEMA_ACTIONS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_ACTIONS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_ACTIONS</p>
     
 
     
@@ -7825,7 +8074,7 @@ The <code>discoverMDActions()</code> method issues a request to invoke the Disco
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l875"><code>src&#x2F;Xmla.js:875</code></a>
+        <a href="../files/.._src_Xmla.js.html#l869"><code>..&#x2F;src&#x2F;Xmla.js:869</code></a>
         
         </p>
 
@@ -7837,16 +8086,17 @@ The <code>discoverMDActions()</code> method issues a request to invoke the Disco
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>CUBES</code> schema rowset.
+<code>MDSCHEMA_CUBES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDCubes">discoverMDCubes()</a></code> method.
 The <code>discoverMDCubes()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>CUBES</code> as requestType.</p>
+<code>MDSCHEMA_CUBES</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_CUBES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_CUBES</p>
     
 
     
@@ -7882,7 +8132,7 @@ The <code>discoverMDCubes()</code> method issues a request to invoke the Discove
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l892"><code>src&#x2F;Xmla.js:892</code></a>
+        <a href="../files/.._src_Xmla.js.html#l886"><code>..&#x2F;src&#x2F;Xmla.js:886</code></a>
         
         </p>
 
@@ -7894,16 +8144,17 @@ The <code>discoverMDCubes()</code> method issues a request to invoke the Discove
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>DIMENSIONS</code> schema rowset.
+<code>MDSCHEMA_DIMENSIONS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDDimensions">discoverMDDimensions()</a></code> method.
 The <code>discoverMDDimensions()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>DIMENSIONS</code> as requestType.</p>
+<code>MDSCHEMA_DIMENSIONS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_DIMENSIONS</p>
     
 
     
@@ -7939,7 +8190,7 @@ The <code>discoverMDDimensions()</code> method issues a request to invoke the Di
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l909"><code>src&#x2F;Xmla.js:909</code></a>
+        <a href="../files/.._src_Xmla.js.html#l903"><code>..&#x2F;src&#x2F;Xmla.js:903</code></a>
         
         </p>
 
@@ -7951,16 +8202,17 @@ The <code>discoverMDDimensions()</code> method issues a request to invoke the Di
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>FUNCTIONS</code> schema rowset.
+<code>MDSCHEMA_FUNCTIONS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDFunctions">discoverMDFunctions()</a></code> method.
 The <code>discoverMDFunctions()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>FUNCTIONS</code> as requestType.</p>
+<code>MDSCHEMA_FUNCTIONS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_FUNCTIONS</p>
     
 
     
@@ -7996,7 +8248,7 @@ The <code>discoverMDFunctions()</code> method issues a request to invoke the Dis
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l926"><code>src&#x2F;Xmla.js:926</code></a>
+        <a href="../files/.._src_Xmla.js.html#l920"><code>..&#x2F;src&#x2F;Xmla.js:920</code></a>
         
         </p>
 
@@ -8008,16 +8260,17 @@ The <code>discoverMDFunctions()</code> method issues a request to invoke the Dis
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>HIERARCHIES</code> schema rowset.
+<code>MDSCHEMA_HIERARCHIES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDHierarchies">discoverMDHierarchies()</a></code> method.
 The <code>discoverMDHierarchies()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>HIERARCHIES</code> as requestType.</p>
+<code>MDSCHEMA_HIERARCHIES</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_HIERARCHIES</p>
     
 
     
@@ -8053,7 +8306,7 @@ The <code>discoverMDHierarchies()</code> method issues a request to invoke the D
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l943"><code>src&#x2F;Xmla.js:943</code></a>
+        <a href="../files/.._src_Xmla.js.html#l937"><code>..&#x2F;src&#x2F;Xmla.js:937</code></a>
         
         </p>
 
@@ -8065,16 +8318,17 @@ The <code>discoverMDHierarchies()</code> method issues a request to invoke the D
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>LEVELS</code> schema rowset.
+<code>MDSCHEMA_LEVELS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDLevels">discoverMDLevels()</a></code> method.
 The <code>discoverMDLevels()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>LEVELS</code> as requestType.</p>
+<code>MDSCHEMA_LEVELS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_LEVELS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_LEVELS</p>
     
 
     
@@ -8110,7 +8364,7 @@ The <code>discoverMDLevels()</code> method issues a request to invoke the Discov
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l960"><code>src&#x2F;Xmla.js:960</code></a>
+        <a href="../files/.._src_Xmla.js.html#l954"><code>..&#x2F;src&#x2F;Xmla.js:954</code></a>
         
         </p>
 
@@ -8122,16 +8376,17 @@ The <code>discoverMDLevels()</code> method issues a request to invoke the Discov
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>MEASURES</code> schema rowset.
+<code>MDSCHEMA_MEASURES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDMeasures">discoverMDMeasures()</a></code> method.
 The <code>discoverMDMeasures()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>MEASURES</code> as requestType.</p>
+<code>MDSCHEMA_MEASURES</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_MEASURES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_MEASURES</p>
     
 
     
@@ -8167,7 +8422,7 @@ The <code>discoverMDMeasures()</code> method issues a request to invoke the Disc
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l977"><code>src&#x2F;Xmla.js:977</code></a>
+        <a href="../files/.._src_Xmla.js.html#l971"><code>..&#x2F;src&#x2F;Xmla.js:971</code></a>
         
         </p>
 
@@ -8179,16 +8434,17 @@ The <code>discoverMDMeasures()</code> method issues a request to invoke the Disc
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>MEMBERS</code> schema rowset.
+<code>MDSCHEMA_MEMBERS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDMembers">discoverMDMembers()</a></code> method.
 The <code>discoverMDMembers()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>MEMBERS</code> as requestType.</p>
+<code>MDSCHEMA_MEMBERS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_MEMBERS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_MEMBERS</p>
     
 
     
@@ -8224,7 +8480,7 @@ The <code>discoverMDMembers()</code> method issues a request to invoke the Disco
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l994"><code>src&#x2F;Xmla.js:994</code></a>
+        <a href="../files/.._src_Xmla.js.html#l988"><code>..&#x2F;src&#x2F;Xmla.js:988</code></a>
         
         </p>
 
@@ -8236,16 +8492,17 @@ The <code>discoverMDMembers()</code> method issues a request to invoke the Disco
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>PROPERTIES</code> schema rowset.
+<code>MDSCHEMA_PROPERTIES</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDProperties">discoverMDProperties()</a></code> method.
 The <code>discoverMDProperties()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>PROPERTIES</code> as requestType.</p>
+<code>MDSCHEMA_PROPERTIES</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_PROPERTIES&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_PROPERTIES</p>
     
 
     
@@ -8281,7 +8538,7 @@ The <code>discoverMDProperties()</code> method issues a request to invoke the Di
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1011"><code>src&#x2F;Xmla.js:1011</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1005"><code>..&#x2F;src&#x2F;Xmla.js:1005</code></a>
         
         </p>
 
@@ -8293,16 +8550,17 @@ The <code>discoverMDProperties()</code> method issues a request to invoke the Di
     <div class="description">
         <p>Can be used as value for the <code>requestType</code> option in the options object passed to the to
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server to return the
-<code>MDSCHEMA<em>SETS</code> schema rowset.
+<code>MDSCHEMA_SETS</code> schema rowset.
 The <code>requestType</code> option applies only to Discover requests.
 Instead of passing this <code>requestType</code> yourself, consider calling the
 <code><a href="#method_discoverMDSets">discoverMDSets()</a></code> method.
 The <code>discoverMDSets()</code> method issues a request to invoke the Discover method using
-<code>MDSCHEMA</em>SETS</code> as requestType.</p>
+<code>MDSCHEMA_SETS</code> as requestType.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;MDSCHEMA_SETS&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> MDSCHEMA_SETS</p>
     
 
     
@@ -8338,7 +8596,7 @@ The <code>discoverMDSets()</code> method issues a request to invoke the Discover
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l662"><code>src&#x2F;Xmla.js:662</code></a>
+        <a href="../files/.._src_Xmla.js.html#l656"><code>..&#x2F;src&#x2F;Xmla.js:656</code></a>
         
         </p>
 
@@ -8352,10 +8610,11 @@ The <code>discoverMDSets()</code> method issues a request to invoke the Discover
 <code><a href="#method_request">request()</a></code> method to invoke the XML/A Discover method on the server.
 Instead of explicitly setting the method yourself, consider using the <code><a href="#method_request">discover()</a></code> method.
 The <code>discover()</code> method automatically sets the method option to <code>METHOD_DISCOVER</code>.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Discover&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Discover</p>
     
 
     
@@ -8391,7 +8650,7 @@ The <code>discover()</code> method automatically sets the method option to <code
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l674"><code>src&#x2F;Xmla.js:674</code></a>
+        <a href="../files/.._src_Xmla.js.html#l668"><code>..&#x2F;src&#x2F;Xmla.js:668</code></a>
         
         </p>
 
@@ -8405,10 +8664,11 @@ The <code>discover()</code> method automatically sets the method option to <code
 <code><a href="#method_request">request()</code></a> method to invoke the XML/A Execute method on the server.
 Instead of explicitly setting the method yourself, consider using the <code><a href="#method_execute">execute()</a></code> method.
 The <code>execute()</code> method automatically sets the method option to <code>METHOD_EXECUTE</code>.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Discover&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Discover</p>
     
 
     
@@ -8444,7 +8704,7 @@ The <code>execute()</code> method automatically sets the method option to <code>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1333"><code>src&#x2F;Xmla.js:1333</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1327"><code>..&#x2F;src&#x2F;Xmla.js:1327</code></a>
         
         </p>
 
@@ -8459,13 +8719,14 @@ passed to the <code><a href="#method_execute">execute()</a></code> method
 to specify the XML/A <code>AxisFormat</code> property.
 The XML/A <code>AxisFormat</code> property specifies how the client wants to receive the multi-dimensional resultset of a MDX query.
 Valid values for the <code>AxisFormat</code> property are available as the static final properties
-<code><a href="#property_PROP_AXISFORMAT_TUPLE">PROP<em>AXISFORMAT</em>TUPLE</a></code>,
-<code><a href="#property_PROP_AXISFORMAT_CLUSTER">PROP<em>AXISFORMAT</em>CLUSTER</a></code>,
-<code><a href="#property_PROP_AXISFORMAT_CUSTOM">PROP<em>AXISFORMAT</em>CUSTOM</a></code>.</p>
+<code><a href="#property_PROP_AXISFORMAT_TUPLE">PROP_AXISFORMAT_TUPLE</a></code>,
+<code><a href="#property_PROP_AXISFORMAT_CLUSTER">PROP_AXISFORMAT_CLUSTER</a></code>,
+<code><a href="#property_PROP_AXISFORMAT_CUSTOM">PROP_AXISFORMAT_CUSTOM</a></code>.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;AxisFormat&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> AxisFormat</p>
     
 
     
@@ -8501,7 +8762,7 @@ Valid values for the <code>AxisFormat</code> property are available as the stati
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1363"><code>src&#x2F;Xmla.js:1363</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1357"><code>..&#x2F;src&#x2F;Xmla.js:1357</code></a>
         
         </p>
 
@@ -8515,10 +8776,11 @@ Valid values for the <code>AxisFormat</code> property are available as the stati
 (see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>)
 in invocations of the <code>Execute</code> method
 (see: <code><a href="#method_execute">execute()</a></code>).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;ClusterFormat&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> ClusterFormat</p>
     
 
     
@@ -8554,7 +8816,7 @@ in invocations of the <code>Execute</code> method
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1376"><code>src&#x2F;Xmla.js:1376</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1370"><code>..&#x2F;src&#x2F;Xmla.js:1370</code></a>
         
         </p>
 
@@ -8568,10 +8830,11 @@ in invocations of the <code>Execute</code> method
 (see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>)
 in invocations of the <code>Execute</code> method
 (see: <code><a href="#method_execute">execute()</a></code>).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;CustomFormat&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> CustomFormat</p>
     
 
     
@@ -8607,7 +8870,7 @@ in invocations of the <code>Execute</code> method
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1350"><code>src&#x2F;Xmla.js:1350</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1344"><code>..&#x2F;src&#x2F;Xmla.js:1344</code></a>
         
         </p>
 
@@ -8621,10 +8884,11 @@ in invocations of the <code>Execute</code> method
 (see: <code><a href="#property_PROP_AXISFORMAT">PROP_AXISFORMAT</a></code>)
 in invocations of the <code>Execute</code> method
 (see: <code><a href="#method_execute">execute()</a></code>).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;TupleFormat&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> TupleFormat</p>
     
 
     
@@ -8660,7 +8924,7 @@ in invocations of the <code>Execute</code> method
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1265"><code>src&#x2F;Xmla.js:1265</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1259"><code>..&#x2F;src&#x2F;Xmla.js:1259</code></a>
         
         </p>
 
@@ -8675,12 +8939,13 @@ passed to the <code><a href="#method_request">execute()</a></code> method
 to specify the XML/A <code>Catalog</code> property.
 The XML/A <code>Catalog</code> spefifies where to look for cubes that are referenced in th MDX statment.
 Valid values for the <code>Catalog</code> should be obtained
-by querying the <code>CATALOG<em>NAME</code> of the <code>DBSCHEMA</em>CATALOGS</code>
+by querying the <code>CATALOG_NAME</code> of the <code>DBSCHEMA_CATALOGS</code>
 rowset (see <code><a href="method_discoverCatalogs">discoverCatalogs()</a></code>).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Catalog&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Catalog</p>
     
 
     
@@ -8716,7 +8981,7 @@ rowset (see <code><a href="method_discoverCatalogs">discoverCatalogs()</a></code
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1390"><code>src&#x2F;Xmla.js:1390</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1384"><code>..&#x2F;src&#x2F;Xmla.js:1384</code></a>
         
         </p>
 
@@ -8731,19 +8996,19 @@ passed to the <code><a href="#method_request">request()</a></code> method
 to specify the XML/A <code>Content</code> property.
 The XML/A <code>Content</code> property specifies whether to return data and/or XML Schema metadata by the <code>Discover</code> and <code>Execute</code> invocations.
 Valid values for the <code>Content</code> property are available as the static final properties
-<code><a href="#property_PROP_CONTENT_DATA">PROP<em>CONTENT</em>DATA</a></code>,
-<code><a href="#property_PROP_CONTENT_NONE">PROP<em>CONTENT</em>NONE</a></code>,
-<code><a href="#property_PROP_CONTENT_SCHEMA">PROP<em>CONTENT</em>SCHEMA</a></code>,
-<code><a href="#property_PROP_CONTENT_SCHEMADATA">PROP<em>CONTENT</em>SCHEMADATA</a></code>.</p>
-
+<code><a href="#property_PROP_CONTENT_DATA">PROP_CONTENT_DATA</a></code>,
+<code><a href="#property_PROP_CONTENT_NONE">PROP_CONTENT_NONE</a></code>,
+<code><a href="#property_PROP_CONTENT_SCHEMA">PROP_CONTENT_SCHEMA</a></code>,
+<code><a href="#property_PROP_CONTENT_SCHEMADATA">PROP_CONTENT_SCHEMADATA</a></code>.</p>
 <p>Note: This key is primarily intended for clients that use the low-level <code><a href="#method_request">request()</a></code> method.
 You should not set this property when calling the <code><a href="#method_request">discover()</a></code> method,
 the <code><a href="#method_execute">execute()</a></code> method,
 or any of the <code>discoverXXX()</code> methods.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Content&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Content</p>
     
 
     
@@ -8779,7 +9044,7 @@ or any of the <code>discoverXXX()</code> methods.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1413"><code>src&#x2F;Xmla.js:1413</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1407"><code>..&#x2F;src&#x2F;Xmla.js:1407</code></a>
         
         </p>
 
@@ -8792,13 +9057,13 @@ or any of the <code>discoverXXX()</code> methods.</p>
         <p>Can be used as value for the XML/A <code>Content</code> property
 (see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
 This value specifies that the response should contain only data, but no XML Schema metadata.</p>
-
 <p>As the <code>Xmla</code> class relies on the XML Schema metadata to construct Rowset and Resultset instances,
 this option is primarily useful if you know how to process the XML response directly.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Data&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Data</p>
     
 
     
@@ -8834,7 +9099,7 @@ this option is primarily useful if you know how to process the XML response dire
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1428"><code>src&#x2F;Xmla.js:1428</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1422"><code>..&#x2F;src&#x2F;Xmla.js:1422</code></a>
         
         </p>
 
@@ -8848,10 +9113,11 @@ this option is primarily useful if you know how to process the XML response dire
 (see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
 This value specifies that the response should contain neither data nor XML Schema metadata.
 This is useful to check the validity of the request.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;None&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> None</p>
     
 
     
@@ -8887,7 +9153,7 @@ This is useful to check the validity of the request.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1441"><code>src&#x2F;Xmla.js:1441</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1435"><code>..&#x2F;src&#x2F;Xmla.js:1435</code></a>
         
         </p>
 
@@ -8900,10 +9166,11 @@ This is useful to check the validity of the request.</p>
         <p>Can be used as value for the XML/A <code>Content</code> property
 (see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
 This value specifies that the response should only return XML Schema metadata, but no data.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Schema&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Schema</p>
     
 
     
@@ -8939,7 +9206,7 @@ This value specifies that the response should only return XML Schema metadata, b
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1453"><code>src&#x2F;Xmla.js:1453</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1447"><code>..&#x2F;src&#x2F;Xmla.js:1447</code></a>
         
         </p>
 
@@ -8952,10 +9219,11 @@ This value specifies that the response should only return XML Schema metadata, b
         <p>Can be used as value for the XML/A <code>Content</code> property
 (see: <code><a href="#property_PROP_CONTENT">PROP_CONTENT</a></code>).
 This value specifies that the response should return both data as well as XML Schema metadata.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;SchemaData&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> SchemaData</p>
     
 
     
@@ -8991,7 +9259,7 @@ This value specifies that the response should return both data as well as XML Sc
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1248"><code>src&#x2F;Xmla.js:1248</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1242"><code>..&#x2F;src&#x2F;Xmla.js:1242</code></a>
         
         </p>
 
@@ -9009,10 +9277,11 @@ connect to a particular OLAP datasource.
 Valid values for the <code>DataSourceInfo</code> as well as the corresponding URL should be obtained
 by querying the <code>DataSourceInfo</code> and <code>URL</code> columns of the <code>DISCOVER_DATASOURCES</code>
 rowset respectively (see <code><a href="method_discoverDataSources">discoverDataSources()</a></code>).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;DataSourceInfo&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> DataSourceInfo</p>
     
 
     
@@ -9048,7 +9317,7 @@ rowset respectively (see <code><a href="method_discoverDataSources">discoverData
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1283"><code>src&#x2F;Xmla.js:1283</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1277"><code>..&#x2F;src&#x2F;Xmla.js:1277</code></a>
         
         </p>
 
@@ -9062,10 +9331,11 @@ rowset respectively (see <code><a href="method_discoverDataSources">discoverData
 passed to the <code><a href="#method_execute">execute()</a></code> method
 to specify the XML/A <code>Format</code> property.
 This property controls the structure of the resultset.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Format&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Format</p>
     
 
     
@@ -9101,7 +9371,7 @@ This property controls the structure of the resultset.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1313"><code>src&#x2F;Xmla.js:1313</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1307"><code>..&#x2F;src&#x2F;Xmla.js:1307</code></a>
         
         </p>
 
@@ -9112,7 +9382,7 @@ This property controls the structure of the resultset.</p>
 
     <div class="description">
         <p>Can be used as value for the
-<code><a href="#property<em>PROP</em>FORMAT>PROP_FORMAT</a></code> key of the
+<code>&lt;a href=&quot;#property_PROP_FORMAT&gt;PROP_FORMAT</a></code> key of the
 <code>properties</code> member of the
 <code>options</code> object passed to the
 <code><a href="#method_execute">execute()</a></code> method.
@@ -9121,10 +9391,11 @@ Currently, Xmla4js does not provide a class to represent the resultset in this f
 However, you can access the results as xml through the
 <code><a href="#property_responseText">responseText</a></code> and
 <code><a href="#property_responseXML">responseXML</a></code> properties.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Multidimensional&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Multidimensional</p>
     
 
     
@@ -9160,7 +9431,7 @@ However, you can access the results as xml through the
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1296"><code>src&#x2F;Xmla.js:1296</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1290"><code>..&#x2F;src&#x2F;Xmla.js:1290</code></a>
         
         </p>
 
@@ -9171,17 +9442,18 @@ However, you can access the results as xml through the
 
     <div class="description">
         <p>Can be used as value for the
-<code><a href="#property<em>PROP</em>FORMAT>PROP_FORMAT</a></code> key of the
+<code>&lt;a href=&quot;#property_PROP_FORMAT&gt;PROP_FORMAT</a></code> key of the
 <code>properties</code> member of the
 <code>options</code> object passed to the
 <code><a href="#method_execute">execute()</a></code> method.
 When used, this specifies that the multidimensional resultset should be returned in a tabular format,
 causeing the multidimensional resultset to be represented with an instance of the
 <code><a href="Xmla.Rowset#class_Xmla.Rowset">Xmla.Rowset</a></code> class.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;Tabular&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> Tabular</p>
     
 
     
@@ -9213,7 +9485,7 @@ causeing the multidimensional resultset to be represented with an instance of th
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1497"><code>src&#x2F;Xmla.js:1497</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1491"><code>..&#x2F;src&#x2F;Xmla.js:1491</code></a>
         
         </p>
 
@@ -9227,19 +9499,18 @@ causeing the multidimensional resultset to be represented with an instance of th
 When a successfull response is received, it is processed and the response object is assigned to this property.
 The response object is either a
 <code><a href="Rowset.html#class_Rowset">Rowset</a></code> (after a successful invocation of XML/A <code>Discover</code> method, see: <code><a href="method_discover">discover()</a></code>) or a
-<code><a href="Resultset.html#class_Resultset">Resultset</a></code> (after a successful invocation of the XML/A <code>Execute</code> method, see: <code><a href="method_execute">executte()</a></code>)
+<code><a href="Resultset.html#class_Resultset">Resultset</a></code> (after a successful invocation of the XML/A <code>Execute</code> method, see: <code><a href="method_execute">execute()</a></code>)
 instance.</p>
-
 <p>If you are interested in processing the raw response XML, see
 <code><a href="#property_responseXML">responseXML</a></code> and
 <code><a href="#property_responseText">responseText</a></code>.</p>
-
 <p>Note that it is not safe to read this property immediately after doing an asynchronous request.
 For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;null&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> null</p>
     
 
     
@@ -9271,7 +9542,7 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1517"><code>src&#x2F;Xmla.js:1517</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1511"><code>..&#x2F;src&#x2F;Xmla.js:1511</code></a>
         
         </p>
 
@@ -9283,19 +9554,17 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
     <div class="description">
         <p>This property is set to <code>null</code> right before sending an XML/A request.
 When a successfull response is received, the XML response is stored to this property as plain text.</p>
-
 <p>If you are interested in processing a DOM document rather than the raw XML text, see the
 <code><a href="#property_responseXML">responseXML</a></code> property.</p>
-
 <p>If you are interested in traversing the dataset returned in the XML/A response, see the
 <code><a href="#property_response">response</a></code> property.</p>
-
 <p>Note that it is not safe to read this property immediately after doing an asynchronous request.
 For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;null&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> null</p>
     
 
     
@@ -9329,7 +9598,7 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1535"><code>src&#x2F;Xmla.js:1535</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1529"><code>..&#x2F;src&#x2F;Xmla.js:1529</code></a>
         
         </p>
 
@@ -9341,19 +9610,17 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
     <div class="description">
         <p>This property is set to <code>null</code> right before sending an XML/A request.
 When a successfull response is received, the XML response is stored to this property as a DOM Document.</p>
-
 <p>If you are interested in processing the raw XML text rather than a DOM document, see the
 <code><a href="#property_responseText">responseText</a></code> property.</p>
-
 <p>If you are interested in traversing the dataset returned in the XML/A response, see the
 <code><a href="#property_response">response</a></code> property.</p>
-
 <p>Note that it is not safe to read this property immediately after doing an asynchronous request.
 For asynchronous requests, you can read this property by the time the <code>XXX_SUCCESS</code> event handlers are notified (until it is set to <code>null</code> again by a subsequent request).</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;null&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> null</p>
     
 
     
@@ -9385,7 +9652,7 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l1489"><code>src&#x2F;Xmla.js:1489</code></a>
+        <a href="../files/.._src_Xmla.js.html#l1483"><code>..&#x2F;src&#x2F;Xmla.js:1483</code></a>
         
         </p>
 
@@ -9396,10 +9663,11 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
 
     <div class="description">
         <p>The soap message sent in the last request to the server.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;null&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> null</p>
     
 
     
@@ -9423,13 +9691,13 @@ For asynchronous requests, you can read this property by the time the <code>XXX_
         </div>
     </div>
 </div>
-<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
 <script>prettyPrint();</script>
-<script src="..&#x2F;assets/js/yui-prettify.js"></script>
-<script src="..&#x2F;assets/../api.js"></script>
-<script src="..&#x2F;assets/js/api-filter.js"></script>
-<script src="..&#x2F;assets/js/api-list.js"></script>
-<script src="..&#x2F;assets/js/api-search.js"></script>
-<script src="..&#x2F;assets/js/apidocs.js"></script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
 </body>
 </html>

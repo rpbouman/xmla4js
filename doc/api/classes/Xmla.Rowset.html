@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Xmla.Rowset</title>
-    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
-    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
-    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
-    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
-    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+                <h1><img src="../assets/css/logo.png" title=""></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -41,23 +41,23 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/Xmla.html">Xmla</a></li>
+                <li><a href="../classes/Xmla.html">Xmla</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
+                <li><a href="../classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
+                <li><a href="../classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
+                <li><a href="../classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Exception.html">Xmla.Exception</a></li>
+                <li><a href="../classes/Xmla.Exception.html">Xmla.Exception</a></li>
             
-                <li><a href="..&#x2F;classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
+                <li><a href="../classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
             
             </ul>
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="..&#x2F;modules/xmla.html">xmla</a></li>
+                <li><a href="../modules/xmla.html">xmla</a></li>
             
             </ul>
         </div>
@@ -102,7 +102,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4436"><code>src&#x2F;Xmla.js:4436</code></a>
+            Defined in: <a href="../files/.._src_Xmla.js.html#l4508"><code>..&#x2F;src&#x2F;Xmla.js:4508</code></a>
         </div>
     
 
@@ -121,7 +121,6 @@
     <p>
 This class implements an XML/A Rowset object.
 </p>
-
 <p>
 You do not need to instantiate objects of this class yourself.
 Rather, the <code><a href="Xmla.html#class_Xmla">Xmla</a></code> class will instantiate this class to convey the result of any of the various <code>discoverXXX()</code> methods
@@ -133,7 +132,6 @@ In addition, this class is also used to instantiate a Resultset for the
 The <code><a href="Xmla.html#method_request">request()</a></code> method itself will also return an instance of this class in case the <code>method</code> is used to do a
 <code>Discover</code> request, or in case it is used to do a <code>Execute</code> request and the <code>Format</code> property is set to <code>Tabular</code>.
 </p>
-
 <p>
 An instance of the <code>Xmla.Rowset</code> class is returned immediately as return value from the <code>disoverXXX()</code> or <code>execute()</code> method when doing a synchronous request.
 In addition, the rowset is available in the eventdata passed to any registered listeners
@@ -199,7 +197,7 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4436"><code>src&#x2F;Xmla.js:4436</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4508"><code>..&#x2F;src&#x2F;Xmla.js:4508</code></a>
         
         </p>
 
@@ -229,6 +227,7 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
 
                     <div class="param-description">
                         <p>The responseXML result returned by server in response to a <code>Discover</code> request.</p>
+
                     </div>
 
                     
@@ -244,6 +243,7 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
 
                     <div class="param-description">
                         <p>The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</p>
+
                     </div>
 
                     
@@ -259,6 +259,7 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
 
                     <div class="param-description">
                         <p>The Xmla instance that created this Rowset. This is mainly used to allow the Rowset to access the options passed to the Xmla constructor.</p>
+
                     </div>
 
                     
@@ -799,7 +800,7 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5262"><code>src&#x2F;Xmla.js:5262</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5330"><code>..&#x2F;src&#x2F;Xmla.js:5330</code></a>
         
         </p>
 
@@ -812,6 +813,7 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
     <div class="description">
         <p>Releases references to the DomDocument passed to the Rowset constructor.
 This should facilitate automatic garbage collection by the browser.</p>
+
     </div>
 
     
@@ -858,7 +860,7 @@ This should facilitate automatic garbage collection by the browser.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5161"><code>src&#x2F;Xmla.js:5161</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5229"><code>..&#x2F;src&#x2F;Xmla.js:5229</code></a>
         
         </p>
 
@@ -873,6 +875,7 @@ This should facilitate automatic garbage collection by the browser.</p>
 Note that no check is performed to ensure this points to a valid row:
 you should call this function only when it is safe to do so.
 This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows()</a></code>.</p>
+
     </div>
 
     
@@ -884,7 +887,8 @@ This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows
             <div class="returns-description">
                 
                     
-                    int
+                    <p>int</p>
+
                 
             </div>
         </div>
@@ -952,7 +956,7 @@ This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5128"><code>src&#x2F;Xmla.js:5128</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5196"><code>..&#x2F;src&#x2F;Xmla.js:5196</code></a>
         
         </p>
 
@@ -967,10 +971,8 @@ This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows
 
 <p>The callback function gets passed an object that represents the row.
 The keys of the row object are the column names, and the values are the respective column values.</p>
-
 <p>The scope for calling the callback can be passed  as the second argument to this method.
-If the scope is not defined (or if it is <code>null</code>), the Rowset's <code>this</code> pointer is used instead.</p>
-
+If the scope is not defined (or if it is <code>null</code>), the Rowset&#39;s <code>this</code> pointer is used instead.</p>
 <p>You can pass additional data to the callback by passing in a third argument. This is then passed as is as second argument to the callback.</p>
 
 <p>The <code>eachRow</code> method will iterate untill the callback returns <code>false</code>, or until all rows have been traversed.
@@ -994,6 +996,7 @@ If iteration is not aborted, then eachRow returns <code>true</code>.</p>
 
                     <div class="param-description">
                         <p>Function to be called for each row.</p>
+
                     </div>
 
                     
@@ -1009,6 +1012,7 @@ If iteration is not aborted, then eachRow returns <code>true</code>.</p>
 
                     <div class="param-description">
                         <p>Optional. Scope in which the callback is called. Defaults to this, that is, the Rowset.</p>
+
                     </div>
 
                     
@@ -1024,6 +1028,7 @@ If iteration is not aborted, then eachRow returns <code>true</code>.</p>
 
                     <div class="param-description">
                         <p>Optional. Object that is passed as extra argument to the callback.</p>
+
                     </div>
 
                     
@@ -1042,7 +1047,8 @@ If iteration is not aborted, then eachRow returns <code>true</code>.</p>
                     
                         <span class="type">Bool</span>:
                     
-                    true if all rows were itereated. If the callback returns false, iteration stops and false is returned.
+                    <p>true if all rows were itereated. If the callback returns false, iteration stops and false is returned.</p>
+
                 
             </div>
         </div>
@@ -1098,7 +1104,7 @@ If iteration is not aborted, then eachRow returns <code>true</code>.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5382"><code>src&#x2F;Xmla.js:5382</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5450"><code>..&#x2F;src&#x2F;Xmla.js:5450</code></a>
         
         </p>
 
@@ -1111,6 +1117,7 @@ If iteration is not aborted, then eachRow returns <code>true</code>.</p>
     <div class="description">
         <p>Fetch all values from all fields from all rows, and return it as an array of arrays.
 See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.</p>
+
     </div>
 
     
@@ -1129,6 +1136,7 @@ See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.</p>
 
                     <div class="param-description">
                         <p>OPTIONAL. An array to append the rows to. If not specified, a new array is created</p>
+
                     </div>
 
                     
@@ -1202,7 +1210,7 @@ See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5395"><code>src&#x2F;Xmla.js:5395</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5463"><code>..&#x2F;src&#x2F;Xmla.js:5463</code></a>
         
         </p>
 
@@ -1215,6 +1223,7 @@ See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.</p>
     <div class="description">
         <p>Fetch all values from all fields from all rows, and return it as an array of objects.
 See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.</p>
+
     </div>
 
     
@@ -1233,6 +1242,7 @@ See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.</p>
 
                     <div class="param-description">
                         <p>OPTIONAL. An array to append the rows to. If not specified, a new array is created</p>
+
                     </div>
 
                     
@@ -1318,7 +1328,7 @@ See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5408"><code>src&#x2F;Xmla.js:5408</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5476"><code>..&#x2F;src&#x2F;Xmla.js:5476</code></a>
         
         </p>
 
@@ -1331,6 +1341,7 @@ See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.</p>
     <div class="description">
         <p>Fetch all rows using a custom function, and return the return values as an array.
 See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.</p>
+
     </div>
 
     
@@ -1349,6 +1360,7 @@ See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.</p>
 
                     <div class="param-description">
                         <p>OPTIONAL. An array to append the rows to. If not specified, a new array is created</p>
+
                     </div>
 
                     
@@ -1364,6 +1376,7 @@ See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.</p>
 
                     <div class="param-description">
                         <p>a callback function to extract the fields.</p>
+
                     </div>
 
                     
@@ -1379,6 +1392,7 @@ See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.</p>
 
                     <div class="param-description">
                         <p>an object to pass data to the callback.</p>
+
                     </div>
 
                     
@@ -1442,7 +1456,7 @@ See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5295"><code>src&#x2F;Xmla.js:5295</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5363"><code>..&#x2F;src&#x2F;Xmla.js:5363</code></a>
         
         </p>
 
@@ -1458,7 +1472,6 @@ The position of the values in the array corresponds to the column order of the r
 The internal row pointer is also increased so the next call will read the next row.
 The method returns false when there are no more rows to traverse.
 You can use this method to drive a loop to travere all rows in the Rowset:</p>
-
 <pre>
 while (rowArray = rowset.fetchAsArray()){
 &nbsp;   ...process array...
@@ -1522,7 +1535,7 @@ while (rowArray = rowset.fetchAsArray()){
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5340"><code>src&#x2F;Xmla.js:5340</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5408"><code>..&#x2F;src&#x2F;Xmla.js:5408</code></a>
         
         </p>
 
@@ -1538,7 +1551,6 @@ The property names of the returned object correspond to the fieldName (actually 
 The internal row pointer is also increased so the next call will read the next row.
 The method returns false when there are no more rows to traverse.
 You can use this method to drive a loop to travere all rows in the Rowset:</p>
-
 <pre>
 while (rowObject = rowset.fetchAsObject()){
 &nbsp;   ...process object...
@@ -1618,7 +1630,7 @@ while (rowObject = rowset.fetchAsObject()){
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5362"><code>src&#x2F;Xmla.js:5362</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5430"><code>..&#x2F;src&#x2F;Xmla.js:5430</code></a>
         
         </p>
 
@@ -1633,6 +1645,7 @@ while (rowObject = rowset.fetchAsObject()){
 If there are rows to fetch, the custom function is called in scope of the rowset, so you can use <code>this</code> inside the custom function to refer to the rowset object.
 Then, the internal row pointer is increased so the next call will read the next row.
 The method returns whatever object or value is returned by the custom function, or false when there are no more rows to traverse.</p>
+
     </div>
 
     
@@ -1651,6 +1664,7 @@ The method returns whatever object or value is returned by the custom function, 
 
                     <div class="param-description">
                         <p>a custom function to extract and return the data from the current row of the xml result.</p>
+
                     </div>
 
                     
@@ -1666,6 +1680,7 @@ The method returns whatever object or value is returned by the custom function, 
 
                     <div class="param-description">
                         <p>an object that will be passed to the function. Useful to hold any data required in addition to the rowset itself (which can be referred to as this inside the function).</p>
+
                     </div>
 
                     
@@ -1729,7 +1744,7 @@ The method returns whatever object or value is returned by the custom function, 
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5254"><code>src&#x2F;Xmla.js:5254</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5322"><code>..&#x2F;src&#x2F;Xmla.js:5322</code></a>
         
         </p>
 
@@ -1741,6 +1756,7 @@ The method returns whatever object or value is returned by the custom function, 
 
     <div class="description">
         <p>Returns the number of fields in this rowset.</p>
+
     </div>
 
     
@@ -1754,7 +1770,8 @@ The method returns whatever object or value is returned by the custom function, 
                     
                         <span class="type">Int</span>:
                     
-                    The number of fields in this rowset.
+                    <p>The number of fields in this rowset.</p>
+
                 
             </div>
         </div>
@@ -1810,7 +1827,7 @@ The method returns whatever object or value is returned by the custom function, 
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5191"><code>src&#x2F;Xmla.js:5191</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5259"><code>..&#x2F;src&#x2F;Xmla.js:5259</code></a>
         
         </p>
 
@@ -1823,14 +1840,13 @@ The method returns whatever object or value is returned by the custom function, 
     <div class="description">
         <p>Retrieves a <code>fieldDef</code> object by name.
 A fieldDef describes a field (column). It has the following properties:</p>
-
 <dl>
     <dt>label</dt><dd>string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions. This is also the name used for matching againstt the <code>name</code> argument passed to the <code>fieldDef()</code> method.</dd>
     <dt>name</dt><dd>string. This is the (possibly escaped) name of the field as it appears in the XML document</dd>
     <dt>index</dt><dd>int. The ordinal position of this field. Fields are numbered starting from 0.</dd>
     <dt>type</dt><dd>string. The name of the XML data type for the values that appear in this column</dd>
-    <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. "0" means the field is optional.</dd>
-    <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. "unbounded" means there is no declared limit.</dd>
+    <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. &quot;0&quot; means the field is optional.</dd>
+    <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. &quot;unbounded&quot; means there is no declared limit.</dd>
     <dt>getter</dt><dd>function. This function is used to extract a value from the XML document for this field.</dd>
 </dl>
     </div>
@@ -1851,6 +1867,7 @@ A fieldDef describes a field (column). It has the following properties:</p>
 
                     <div class="param-description">
                         <p>The name of the field to retrieve.</p>
+
                     </div>
 
                     
@@ -1869,7 +1886,8 @@ A fieldDef describes a field (column). It has the following properties:</p>
                     
                         <span class="type">FieldDef</span>:
                     
-                    The <code>fieldDef</code> object that matches the argument.
+                    <p>The <code>fieldDef</code> object that matches the argument.</p>
+
                 
             </div>
         </div>
@@ -1925,7 +1943,7 @@ A fieldDef describes a field (column). It has the following properties:</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5217"><code>src&#x2F;Xmla.js:5217</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5285"><code>..&#x2F;src&#x2F;Xmla.js:5285</code></a>
         
         </p>
 
@@ -1938,6 +1956,7 @@ A fieldDef describes a field (column). It has the following properties:</p>
     <div class="description">
         <p>Retrieves the index of a field by name.
 Field indexes start at 0.</p>
+
     </div>
 
     
@@ -1956,6 +1975,7 @@ Field indexes start at 0.</p>
 
                     <div class="param-description">
                         <p>The name of the field for which you want to retrieve the index.</p>
+
                     </div>
 
                     
@@ -1974,7 +1994,8 @@ Field indexes start at 0.</p>
                     
                         <span class="type">Int</span>:
                     
-                    The ordinal position (starting at 0) of the field that matches the argument.
+                    <p>The ordinal position (starting at 0) of the field that matches the argument.</p>
+
                 
             </div>
         </div>
@@ -2030,7 +2051,7 @@ Field indexes start at 0.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5227"><code>src&#x2F;Xmla.js:5227</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5295"><code>..&#x2F;src&#x2F;Xmla.js:5295</code></a>
         
         </p>
 
@@ -2043,6 +2064,7 @@ Field indexes start at 0.</p>
     <div class="description">
         <p>Retrieves the name of a field by field Index.
 Field indexes start at 0.</p>
+
     </div>
 
     
@@ -2061,6 +2083,7 @@ Field indexes start at 0.</p>
 
                     <div class="param-description">
                         <p>The name of the field for which you want to retrieve the index.</p>
+
                     </div>
 
                     
@@ -2079,7 +2102,8 @@ Field indexes start at 0.</p>
                     
                         <span class="type">Int</span>:
                     
-                    The ordinal position (starting at 0) of the field that matches the argument.
+                    <p>The ordinal position (starting at 0) of the field that matches the argument.</p>
+
                 
             </div>
         </div>
@@ -2135,7 +2159,7 @@ Field indexes start at 0.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5244"><code>src&#x2F;Xmla.js:5244</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5312"><code>..&#x2F;src&#x2F;Xmla.js:5312</code></a>
         
         </p>
 
@@ -2147,6 +2171,7 @@ Field indexes start at 0.</p>
 
     <div class="description">
         <p>Retrieves a value from the current row for the field having the name specified by the argument.</p>
+
     </div>
 
     
@@ -2165,6 +2190,7 @@ Field indexes start at 0.</p>
 
                     <div class="param-description">
                         <p>The name or the index of the field for which you want to retrieve the value.</p>
+
                     </div>
 
                     
@@ -2183,7 +2209,8 @@ Field indexes start at 0.</p>
                     
                         <span class="type">Array | Boolean | Float | Int | String</span>:
                     
-                    From the current row, the value of the field that matches the argument.
+                    <p>From the current row, the value of the field that matches the argument.</p>
+
                 
             </div>
         </div>
@@ -2229,7 +2256,7 @@ Field indexes start at 0.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5078"><code>src&#x2F;Xmla.js:5078</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5146"><code>..&#x2F;src&#x2F;Xmla.js:5146</code></a>
         
         </p>
 
@@ -2242,6 +2269,7 @@ Field indexes start at 0.</p>
     <div class="description">
         <p>Retrieve an array of field names.
 The position of the names in the array corresponds to the column order of the rowset.</p>
+
     </div>
 
     
@@ -2255,7 +2283,8 @@ The position of the names in the array corresponds to the column order of the ro
                     
                         <span class="type">string</span>:
                     
-                    An (ordered) array of field names.
+                    <p>An (ordered) array of field names.</p>
+
                 
             </div>
         </div>
@@ -2301,7 +2330,7 @@ The position of the names in the array corresponds to the column order of the ro
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5061"><code>src&#x2F;Xmla.js:5061</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5129"><code>..&#x2F;src&#x2F;Xmla.js:5129</code></a>
         
         </p>
 
@@ -2316,6 +2345,7 @@ The position of the names in the array corresponds to the column order of the ro
 The position of the <code>fieldDef</code> objects in the array corresponds to the column order of the rowset.
 For a description of the <code>fieldDef</code> object, see the
 <code><a href="#method_fieldDef">fieldDef()</a></code> method.</p>
+
     </div>
 
     
@@ -2329,7 +2359,8 @@ For a description of the <code>fieldDef</code> object, see the
                     
                         <span class="type">fieldDef</span>:
                     
-                    An (ordered) array of field definition objects.
+                    <p>An (ordered) array of field definition objects.</p>
+
                 
             </div>
         </div>
@@ -2375,7 +2406,7 @@ For a description of the <code>fieldDef</code> object, see the
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5051"><code>src&#x2F;Xmla.js:5051</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5119"><code>..&#x2F;src&#x2F;Xmla.js:5119</code></a>
         
         </p>
 
@@ -2388,6 +2419,7 @@ For a description of the <code>fieldDef</code> object, see the
     <div class="description">
         <p>Indicates the type of rowset. In most cases, this will be identical to the <code>requestType</code> value that was used in the
 <code>Discover</code> request</p>
+
     </div>
 
     
@@ -2399,7 +2431,8 @@ For a description of the <code>fieldDef</code> object, see the
             <div class="returns-description">
                 
                     
-                    <code>int</code> One of the <code>DISCOVER<em>XXX</code>, <code>DBSCHEMA</em>XXX</code> or <code>MDSCHEMA_XXX</code> constants
+                    <p><code>int</code> One of the <code>DISCOVER_XXX</code>, <code>DBSCHEMA_XXX</code> or <code>MDSCHEMA_XXX</code> constants</p>
+
                 
             </div>
         </div>
@@ -2445,7 +2478,7 @@ For a description of the <code>fieldDef</code> object, see the
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5090"><code>src&#x2F;Xmla.js:5090</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5158"><code>..&#x2F;src&#x2F;Xmla.js:5158</code></a>
         
         </p>
 
@@ -2466,6 +2499,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
 &nbsp;    rowsete.nextRow();
 &nbsp;}
  </pre></p>
+
     </div>
 
     
@@ -2479,7 +2513,8 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
                     
                         <span class="type">Bool</span>:
                     
-                    true in case there are more rows to traverse. false if all rows have been traversed.
+                    <p>true in case there are more rows to traverse. false if all rows have been traversed.</p>
+
                 
             </div>
         </div>
@@ -2495,6 +2530,12 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
     
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>key</code>
+                    
+                </li>
             
                 <li class="arg">
                     
@@ -2535,7 +2576,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5451"><code>src&#x2F;Xmla.js:5451</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5519"><code>..&#x2F;src&#x2F;Xmla.js:5519</code></a>
         
         </p>
 
@@ -2547,6 +2588,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
 
     <div class="description">
         <p>Fetch all rows as an object, store them as proprties in an object (which acts as map).</p>
+
     </div>
 
     
@@ -2554,6 +2596,22 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
             <h4>Parameters:</h4>
 
             <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">key</code>
+                        <span class="type">String | Array</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.</p>
+
+                    </div>
+
+                    
+                </li>
             
                 <li class="param">
                     
@@ -2565,6 +2623,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
 
                     <div class="param-description">
                         <p>OPTIONAL. The object that is used as map. Rows are added as properties to this map. If not specified, a new object is created</p>
+
                     </div>
 
                     
@@ -2650,7 +2709,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5423"><code>src&#x2F;Xmla.js:5423</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5491"><code>..&#x2F;src&#x2F;Xmla.js:5491</code></a>
         
         </p>
 
@@ -2663,6 +2722,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
     <div class="description">
         <p>Fetch all row as an object, store it in nested objects according to values in the column identified by the key argument.
 This method should typically not be called directly, rather it is a helper method for <code><a href="#method_mapAllAsObject">mapAllAsObject()</a></code>.</p>
+
     </div>
 
     
@@ -2729,7 +2789,8 @@ This method should typically not be called directly, rather it is a helper metho
                     
                         <span class="type">Object</span>:
                     
-                    a tree using column values as branch names, and storing a row or an array of rows at the leaves.
+                    <p>a tree using column values as branch names, and storing a row or an array of rows at the leaves.</p>
+
                 
             </div>
         </div>
@@ -2771,7 +2832,7 @@ This method should typically not be called directly, rather it is a helper metho
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5120"><code>src&#x2F;Xmla.js:5120</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5188"><code>..&#x2F;src&#x2F;Xmla.js:5188</code></a>
         
         </p>
 
@@ -2784,6 +2845,7 @@ This method should typically not be called directly, rather it is a helper metho
     <div class="description">
         <p>This method is deprecated and may be removed in the future.
 Use <code><a href="#method_nextRow">nextRow()</a></code> instead.</p>
+
     </div>
 
     
@@ -2826,7 +2888,7 @@ Use <code><a href="#method_nextRow">nextRow()</a></code> instead.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5107"><code>src&#x2F;Xmla.js:5107</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5175"><code>..&#x2F;src&#x2F;Xmla.js:5175</code></a>
         
         </p>
 
@@ -2841,6 +2903,7 @@ Use <code><a href="#method_nextRow">nextRow()</a></code> instead.</p>
 You can use this method together with the
 <code><a href="#method_next">hasMoreRows()</a></code> method
 to drive a <code>while</code> loop to traverse all rows in the rowset.</p>
+
     </div>
 
     
@@ -2887,7 +2950,7 @@ to drive a <code>while</code> loop to traverse all rows in the rowset.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5272"><code>src&#x2F;Xmla.js:5272</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5340"><code>..&#x2F;src&#x2F;Xmla.js:5340</code></a>
         
         </p>
 
@@ -2906,6 +2969,7 @@ If you just want to obtain the results as arrays, see
 <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>
 and
 <code><a href="#method_fetchAllAsArray">fetchAllAsArray()</a></code>.</p>
+
     </div>
 
     
@@ -2964,7 +3028,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5317"><code>src&#x2F;Xmla.js:5317</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5385"><code>..&#x2F;src&#x2F;Xmla.js:5385</code></a>
         
         </p>
 
@@ -2983,6 +3047,7 @@ If you just want to obtain the results as objects, see
 <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>
 and
 <code><a href="#method_fetchAllAsObject">fetchAllAsObject()</a></code>.</p>
+
     </div>
 
     
@@ -3037,7 +3102,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5182"><code>src&#x2F;Xmla.js:5182</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5250"><code>..&#x2F;src&#x2F;Xmla.js:5250</code></a>
         
         </p>
 
@@ -3049,6 +3114,7 @@ and
 
     <div class="description">
         <p>Resets the internal row pointer so the resultset can be traversed again.</p>
+
     </div>
 
     
@@ -3095,7 +3161,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l5173"><code>src&#x2F;Xmla.js:5173</code></a>
+        <a href="../files/.._src_Xmla.js.html#l5241"><code>..&#x2F;src&#x2F;Xmla.js:5241</code></a>
         
         </p>
 
@@ -3107,6 +3173,7 @@ and
 
     <div class="description">
         <p>Returns the number of rows in the set.</p>
+
     </div>
 
     
@@ -3118,7 +3185,8 @@ and
             <div class="returns-description">
                 
                     
-                    int
+                    <p>int</p>
+
                 
             </div>
         </div>
@@ -3163,7 +3231,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4532"><code>src&#x2F;Xmla.js:4532</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4604"><code>..&#x2F;src&#x2F;Xmla.js:4604</code></a>
         
         </p>
 
@@ -3173,13 +3241,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;6&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 6</p>
     
 
     
@@ -3215,7 +3284,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4652"><code>src&#x2F;Xmla.js:4652</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4724"><code>..&#x2F;src&#x2F;Xmla.js:4724</code></a>
         
         </p>
 
@@ -3225,13 +3294,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;16&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 16</p>
     
 
     
@@ -3267,7 +3337,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4616"><code>src&#x2F;Xmla.js:4616</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4688"><code>..&#x2F;src&#x2F;Xmla.js:4688</code></a>
         
         </p>
 
@@ -3277,13 +3347,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;13&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 13</p>
     
 
     
@@ -3319,7 +3390,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4592"><code>src&#x2F;Xmla.js:4592</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4664"><code>..&#x2F;src&#x2F;Xmla.js:4664</code></a>
         
         </p>
 
@@ -3329,13 +3400,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;11&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 11</p>
     
 
     
@@ -3371,7 +3443,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4544"><code>src&#x2F;Xmla.js:4544</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4616"><code>..&#x2F;src&#x2F;Xmla.js:4616</code></a>
         
         </p>
 
@@ -3381,13 +3453,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;7&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 7</p>
     
 
     
@@ -3423,7 +3496,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4664"><code>src&#x2F;Xmla.js:4664</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4736"><code>..&#x2F;src&#x2F;Xmla.js:4736</code></a>
         
         </p>
 
@@ -3433,13 +3506,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;17&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 17</p>
     
 
     
@@ -3475,7 +3549,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4496"><code>src&#x2F;Xmla.js:4496</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4568"><code>..&#x2F;src&#x2F;Xmla.js:4568</code></a>
         
         </p>
 
@@ -3485,13 +3559,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;2&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 2</p>
     
 
     
@@ -3527,7 +3602,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4640"><code>src&#x2F;Xmla.js:4640</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4712"><code>..&#x2F;src&#x2F;Xmla.js:4712</code></a>
         
         </p>
 
@@ -3537,13 +3612,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;15&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 15</p>
     
 
     
@@ -3579,7 +3655,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4508"><code>src&#x2F;Xmla.js:4508</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4580"><code>..&#x2F;src&#x2F;Xmla.js:4580</code></a>
         
         </p>
 
@@ -3589,13 +3665,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;3&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 3</p>
     
 
     
@@ -3631,7 +3708,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4556"><code>src&#x2F;Xmla.js:4556</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4628"><code>..&#x2F;src&#x2F;Xmla.js:4628</code></a>
         
         </p>
 
@@ -3641,13 +3718,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;8&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 8</p>
     
 
     
@@ -3683,7 +3761,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4628"><code>src&#x2F;Xmla.js:4628</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4700"><code>..&#x2F;src&#x2F;Xmla.js:4700</code></a>
         
         </p>
 
@@ -3693,13 +3771,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;14&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 14</p>
     
 
     
@@ -3735,7 +3814,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4520"><code>src&#x2F;Xmla.js:4520</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4592"><code>..&#x2F;src&#x2F;Xmla.js:4592</code></a>
         
         </p>
 
@@ -3745,13 +3824,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;5&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 5</p>
     
 
     
@@ -3787,7 +3867,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4604"><code>src&#x2F;Xmla.js:4604</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4676"><code>..&#x2F;src&#x2F;Xmla.js:4676</code></a>
         
         </p>
 
@@ -3797,13 +3877,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;12&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 12</p>
     
 
     
@@ -3839,7 +3920,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4568"><code>src&#x2F;Xmla.js:4568</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4640"><code>..&#x2F;src&#x2F;Xmla.js:4640</code></a>
         
         </p>
 
@@ -3849,13 +3930,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;9&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 9</p>
     
 
     
@@ -3891,7 +3973,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4484"><code>src&#x2F;Xmla.js:4484</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4556"><code>..&#x2F;src&#x2F;Xmla.js:4556</code></a>
         
         </p>
 
@@ -3901,13 +3983,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;1&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 1</p>
     
 
     
@@ -3943,7 +4026,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4472"><code>src&#x2F;Xmla.js:4472</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4544"><code>..&#x2F;src&#x2F;Xmla.js:4544</code></a>
         
         </p>
 
@@ -3953,13 +4036,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;0&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 0</p>
     
 
     
@@ -3995,7 +4079,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4580"><code>src&#x2F;Xmla.js:4580</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4652"><code>..&#x2F;src&#x2F;Xmla.js:4652</code></a>
         
         </p>
 
@@ -4005,13 +4089,14 @@ and
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>DIMENSION<em>TYPE</code> column that appears in the
-<code>MDSCHEMA</em>DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
+        <p>A possible value for the <code>DIMENSION_TYPE</code> column that appears in the
+<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href="Xmla.html#method_discoverMDDimensions">discoverMDDimensions()</a></code>) and
 <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowsets.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;10&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 10</p>
     
 
     
@@ -4047,7 +4132,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4677"><code>src&#x2F;Xmla.js:4677</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4749"><code>..&#x2F;src&#x2F;Xmla.js:4749</code></a>
         
         </p>
 
@@ -4059,10 +4144,11 @@ and
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
    <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;0&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 0</p>
     
 
     
@@ -4098,7 +4184,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4707"><code>src&#x2F;Xmla.js:4707</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4779"><code>..&#x2F;src&#x2F;Xmla.js:4779</code></a>
         
         </p>
 
@@ -4110,10 +4196,11 @@ and
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
    <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;3&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 3</p>
     
 
     
@@ -4149,7 +4236,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4687"><code>src&#x2F;Xmla.js:4687</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4759"><code>..&#x2F;src&#x2F;Xmla.js:4759</code></a>
         
         </p>
 
@@ -4161,10 +4248,11 @@ and
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
    <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;1&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 1</p>
     
 
     
@@ -4200,7 +4288,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4697"><code>src&#x2F;Xmla.js:4697</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4769"><code>..&#x2F;src&#x2F;Xmla.js:4769</code></a>
         
         </p>
 
@@ -4212,10 +4300,11 @@ and
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
    <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;2&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 2</p>
     
 
     
@@ -4251,7 +4340,7 @@ and
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4729"><code>src&#x2F;Xmla.js:4729</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4801"><code>..&#x2F;src&#x2F;Xmla.js:4801</code></a>
         
         </p>
 
@@ -4261,13 +4350,14 @@ and
     </div>
 
     <div class="description">
-        <p>A  bitmap value for the <code>HIERARCHY<em>ORIGIN</code> column of the
-   <code>MDSCHEMA</em>HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+        <p>A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the
+   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 identifies attribute hierarchies.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;2&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 2</p>
     
 
     
@@ -4303,7 +4393,7 @@ identifies attribute hierarchies.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4740"><code>src&#x2F;Xmla.js:4740</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4812"><code>..&#x2F;src&#x2F;Xmla.js:4812</code></a>
         
         </p>
 
@@ -4313,13 +4403,14 @@ identifies attribute hierarchies.</p>
     </div>
 
     <div class="description">
-        <p>A  bitmap value for the <code>HIERARCHY<em>ORIGIN</code> column of the
-   <code>MDSCHEMA</em>HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+        <p>A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the
+   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 identifies attributes with no attribute hierarchies.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;4&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 4</p>
     
 
     
@@ -4355,7 +4446,7 @@ identifies attributes with no attribute hierarchies.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4718"><code>src&#x2F;Xmla.js:4718</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4790"><code>..&#x2F;src&#x2F;Xmla.js:4790</code></a>
         
         </p>
 
@@ -4365,13 +4456,14 @@ identifies attributes with no attribute hierarchies.</p>
     </div>
 
     <div class="description">
-        <p>A  bitmap value for the <code>HIERARCHY<em>ORIGIN</code> column of the
-   <code>MDSCHEMA</em>HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+        <p>A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the
+   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 Identifies user defined hierarchies.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;1&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 1</p>
     
 
     
@@ -4407,7 +4499,7 @@ Identifies user defined hierarchies.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4763"><code>src&#x2F;Xmla.js:4763</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4835"><code>..&#x2F;src&#x2F;Xmla.js:4835</code></a>
         
         </p>
 
@@ -4417,13 +4509,14 @@ Identifies user defined hierarchies.</p>
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>MEMBER<em>TYPE</code> column of the
-<code>MDSCHEMA</em>MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+        <p>A possible value for the <code>MEMBER_TYPE</code> column of the
+<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
 indicating an all member.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;2&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 2</p>
     
 
     
@@ -4459,7 +4552,7 @@ indicating an all member.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4774"><code>src&#x2F;Xmla.js:4774</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4846"><code>..&#x2F;src&#x2F;Xmla.js:4846</code></a>
         
         </p>
 
@@ -4469,13 +4562,14 @@ indicating an all member.</p>
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>MEMBER<em>TYPE</code> column of the
-<code>MDSCHEMA</em>MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+        <p>A possible value for the <code>MEMBER_TYPE</code> column of the
+<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
 indicating a formula member.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;3&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 3</p>
     
 
     
@@ -4511,7 +4605,7 @@ indicating a formula member.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4785"><code>src&#x2F;Xmla.js:4785</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4857"><code>..&#x2F;src&#x2F;Xmla.js:4857</code></a>
         
         </p>
 
@@ -4521,13 +4615,14 @@ indicating a formula member.</p>
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>MEMBER<em>TYPE</code> column of the
-<code>MDSCHEMA</em>MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+        <p>A possible value for the <code>MEMBER_TYPE</code> column of the
+<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
 indicating a measure member.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;4&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 4</p>
     
 
     
@@ -4563,7 +4658,7 @@ indicating a measure member.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4752"><code>src&#x2F;Xmla.js:4752</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4824"><code>..&#x2F;src&#x2F;Xmla.js:4824</code></a>
         
         </p>
 
@@ -4573,13 +4668,14 @@ indicating a measure member.</p>
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>MEMBER<em>TYPE</code> column of the
-<code>MDSCHEMA</em>MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+        <p>A possible value for the <code>MEMBER_TYPE</code> column of the
+<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
 indicating a regular member.</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;1&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 1</p>
     
 
     
@@ -4615,7 +4711,7 @@ indicating a regular member.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;src_Xmla.js.html#l4796"><code>src&#x2F;Xmla.js:4796</code></a>
+        <a href="../files/.._src_Xmla.js.html#l4868"><code>..&#x2F;src&#x2F;Xmla.js:4868</code></a>
         
         </p>
 
@@ -4625,13 +4721,14 @@ indicating a regular member.</p>
     </div>
 
     <div class="description">
-        <p>A possible value for the <code>MEMBER<em>TYPE</code> column of the
-<code>MDSCHEMA</em>MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
+        <p>A possible value for the <code>MEMBER_TYPE</code> column of the
+<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMembers">discoverMDMembers()</a></code>),
 indicating a member of unknown type</p>
+
     </div>
 
     
-        <p><strong>Default:</strong> &lt;code&gt;0&lt;&#x2F;code&gt;</p>
+        <p><strong>Default:</strong> 0</p>
     
 
     
@@ -4655,13 +4752,13 @@ indicating a member of unknown type</p>
         </div>
     </div>
 </div>
-<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
 <script>prettyPrint();</script>
-<script src="..&#x2F;assets/js/yui-prettify.js"></script>
-<script src="..&#x2F;assets/../api.js"></script>
-<script src="..&#x2F;assets/js/api-filter.js"></script>
-<script src="..&#x2F;assets/js/api-list.js"></script>
-<script src="..&#x2F;assets/js/api-search.js"></script>
-<script src="..&#x2F;assets/js/apidocs.js"></script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
 </body>
 </html>
