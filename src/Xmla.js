@@ -475,38 +475,21 @@ function _xjs(xml) {
       ns = namespaces.pop();
   }
   function unescapeEntities(text) {
-    var t = "", match, value, i = 0, re = /&((#x([\dA-Fa-f]+))|(\w+));/g;
-    while (match = re.exec(text)) {
-      t += text.substr(i, match.index - i);
-      if (value = match[3]){
-        t += String.fromCharCode(parseInt(value, 16));
+    return text.replace(/&((\w+)|#(x?)([0-9a-fA-F]+));/g, function(match, g1, g2, g3, g4, idx, str){
+      if (g2) {
+        var v = ({
+          lt: "<",
+          gt: ">",
+          amp: "&",
+          apos: "'",
+          quot: "\""
+        })[g2];
+        if (!v) throw "Illegal named entity: " + g2;
       }
-      else
-      if (value = match[4]){
-        switch (value) {
-          case "lt":
-            t += "<";
-            break;
-          case "gt":
-            t += ">";
-            break;
-          case "amp":
-            t += "&";
-            break;
-          case "apos":
-            t += "'";
-            break;
-          case "quot":
-            t += "\"";
-            break;
-          default:
-            throw "Don't recognize named entity " + value;
-        }
+      else {
+        return String.fromCharCode(g4, g3 ? 16: 10);
       }
-      i = re.lastIndex;
-    }
-    t += text.substr(i);
-    return t;
+    });
   }
   while (match = re.exec(xml)) {
       node = null;
