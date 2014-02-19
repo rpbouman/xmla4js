@@ -198,7 +198,7 @@ function _ajax(options){
     args = ["POST", options.url, options.async];
     if (options.username && options.password) args = args.concat([options.username, options.password]);
     //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
-    if (!(window && window.document) || (options.async !== false)) xhr.timeout = options.timeout;
+    if (!(window && window.document) || (!options.async)) xhr.timeout = options.timeout;
     xhr.open.apply(xhr, args);
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
@@ -6678,7 +6678,7 @@ Xmla.Dataset.Cellset.prototype = {
 */
     reset: function(idx){
         this._idx = idx ? idx : 0;
-        this._getCellNode();
+        if (this.hasMoreCells()) this._getCellNode();
     },
 /**
 *   Check if there are cells to iterate through.
