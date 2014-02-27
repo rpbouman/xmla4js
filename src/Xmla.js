@@ -197,9 +197,11 @@ function _ajax(options){
     xhr = _createXhr();
     args = ["POST", options.url, options.async];
     if (options.username && options.password) args = args.concat([options.username, options.password]);
-    //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
-    if (!(window && window.document) || (!options.async)) xhr.timeout = options.timeout;
     xhr.open.apply(xhr, args);
+    //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
+    if (!_isUnd(options.requestTimeout) && (options.async || !(window && window.document))) {
+      xhr.timeout = options.requestTimeout;
+    }
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
@@ -254,7 +256,7 @@ function _getElements(parent, list, criteria){
 
 var _getElementsByTagName = function(node, tagName){
     var func;
-    if (node.getElementsByTagName) {
+    if ("getElementsByTagName" in node) {
         func = function(node, tagName) {
             return node.getElementsByTagName(tagName);
         };
@@ -275,13 +277,13 @@ var _getElementsByTagName = function(node, tagName){
 
 var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
     var func;
-    if (node.getElementsByTagNameNS) {
+    if ("getElementsByTagNameNS" in node) {
         func = function(node, ns, prefix, tagName) {
             return node.getElementsByTagNameNS(ns, tagName);
         };
     }
     else
-    if (node.getElementsByTagName) {
+    if ("getElementsByTagName" in node) {
         func = function(node, ns, prefix, tagName){
             return node.getElementsByTagName((prefix ? prefix + ":" : "") + tagName);
         };
@@ -309,13 +311,13 @@ var _getElementsByTagNameNS = function(node, ns, prefix, tagName){
 
 var _getAttributeNS = function(element, ns, prefix, attributeName) {
     var func;
-    if (element.getAttributeNS) {
+    if ("getAttributeNS" in element) {
         func = function(element, ns, prefix, attributeName){
             return element.getAttributeNS(ns, attributeName);
         };
     }
     else
-    if (element.getAttribute) {
+    if ("getAttribute" in element) {
         func = function(element, ns, prefix, attributeName){
             return element.getAttribute((prefix ? prefix + ":" : "") + attributeName);
         };
@@ -336,7 +338,7 @@ var _getAttributeNS = function(element, ns, prefix, attributeName) {
 
 var _getAttribute = function(node, name){
     var func;
-    if (node.getAttribute) {
+    if ("getAttribute" in node) {
         func = function(node, name){
             return node.getAttribute(name);
         };
@@ -362,25 +364,25 @@ function _getElementText(el){
     //We then overwrite the original _getElementText
     //to use the optimized one in any subsequent calls
     var func;
-    if (!_isUnd(el.innerText)) {         //ie
-        func = function(el){
-            return el.innerText;
-        };
-    }
-    else
-    if (!_isUnd(el.textContent)) {       //ff, chrome
+    if ("textContent" in el) {       //ff, chrome
         func = function(el){
             return el.textContent;
         };
     }
     else
-    if (!_isUnd(el.nodeTypedValue)) {    //ie8
+    if ("nodeTypedValue" in el) {    //ie8
         func = function(el){
             return el.nodeTypedValue;
         };
     }
     else
-    if (el.normalize){
+    if ("innerText" in el) {         //ie
+        func = function(el){
+            return el.innerText;
+        };
+    }
+    else
+    if ("normalize" in el){
         func = function(el) {
             el.normalize();
             if (el.firstChild){
@@ -2004,6 +2006,7 @@ Xmla.prototype = {
         }
         options.properties = _applyProps(options.properties, this.options.properties, false);
         options.restrictions = _applyProps(options.restrictions, this.options.restrictions, false);
+        delete options.exception;
 
         var soapMessage = this.getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
@@ -2291,7 +2294,13 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
         var request = _applyProps(options, {
             method: Xmla.METHOD_DISCOVER
         }, true);
-        if (!request.requestType) request.requestType = this.options.requestType;
+        if (!request.requestType) {
+          request.requestType = this.options.requestType;
+        }
+        if (!request.properties) {
+          request.properties = {};
+        }
+        request.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
         return this.request(request);
     },
 /**
@@ -6749,19 +6758,26 @@ Xmla.Dataset.Cellset.prototype = {
         var text, type, valueConverter,
             valueEl = _getElementsByTagNameNS(
               this._cellNode, _xmlnsDataset, "", propertyName
-            )[0];
-        text = _getElementValue(valueEl);
-        valueConverter = this._cellProperties[propertyName];
-        if (!valueConverter) {
-            type = _getAttributeNS(
-                valueEl,
-                _xmlnsSchemaInstance,
-                _xmlnsSchemaInstancePrefix,
-                "type"
-            );
-            valueConverter = _getValueConverter(type);
+            ), value;
+        if (valueEl.length) {
+          valueEl = valueEl[0];
+          text = _getElementValue(valueEl);
+          valueConverter = this._cellProperties[propertyName];
+          if (!valueConverter) {
+              type = _getAttributeNS(
+                  valueEl,
+                  _xmlnsSchemaInstance,
+                  _xmlnsSchemaInstancePrefix,
+                  "type"
+              );
+              valueConverter = _getValueConverter(type);
+          }
+          value = valueConverter(text);
         }
-        return valueConverter(text);
+        else {
+          value = null;
+        }
+        return value;
     },
 /**
 *   Returns the ordinal number of the current cell.
