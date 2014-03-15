@@ -4886,6 +4886,194 @@ Xmla.Rowset.MDMEMBER_TYPE_MEASURE = 4;
 */
 Xmla.Rowset.MDMEMBER_TYPE_UNKNOWN = 0;
 
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from SUM.
+*   @property MDMEASURE_AGGR_SUM
+*   @static
+*   @final
+*   @type int
+*   @default 1
+*/
+Xmla.Rowset.MDMEASURE_AGGR_SUM = 1;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from COUNT.
+*   @property MDMEASURE_AGGR_COUNT
+*   @static
+*   @final
+*   @type int
+*   @default 2
+*/
+Xmla.Rowset.MDMEASURE_AGGR_COUNT = 2;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from MIN.
+*   @property MDMEASURE_AGGR_MIN
+*   @static
+*   @final
+*   @type int
+*   @default 3
+*/
+Xmla.Rowset.MDMEASURE_AGGR_MIN = 3;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from MAX.
+*   @property MDMEASURE_AGGR_MAX
+*   @static
+*   @final
+*   @type int
+*   @default 4
+*/
+Xmla.Rowset.MDMEASURE_AGGR_MAX = 4;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from AVG.
+*   @property MDMEASURE_AGGR_AVG
+*   @static
+*   @final
+*   @type int
+*   @default 5
+*/
+Xmla.Rowset.MDMEASURE_AGGR_AVG = 5;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from VAR.
+*   @property MDMEASURE_AGGR_VAR
+*   @static
+*   @final
+*   @type int
+*   @default 6
+*/
+Xmla.Rowset.MDMEASURE_AGGR_VAR = 6;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from STDEV.
+*   @property MDMEASURE_AGGR_STD
+*   @static
+*   @final
+*   @type int
+*   @default 7
+*/
+Xmla.Rowset.MDMEASURE_AGGR_STD = 7;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from DISTINCT COUNT.
+*   @property MDMEASURE_AGGR_DST
+*   @static
+*   @final
+*   @type int
+*   @default 8
+*/
+Xmla.Rowset.MDMEASURE_AGGR_DST = 8;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from NONE.
+*   @property MDMEASURE_AGGR_NONE
+*   @static
+*   @final
+*   @type int
+*   @default 9
+*/
+Xmla.Rowset.MDMEASURE_AGGR_NONE = 9;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from AVERAGEOFCHILDREN.
+*   @property MDMEASURE_AGGR_AVGCHILDREN
+*   @static
+*   @final
+*   @type int
+*   @default 10
+*/
+Xmla.Rowset.MDMEASURE_AGGR_AVGCHILDREN = 10;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from FIRSTCHILD.
+*   @property MDMEASURE_AGGR_FIRSTCHILD
+*   @static
+*   @final
+*   @type int
+*   @default 11
+*/
+Xmla.Rowset.MDMEASURE_AGGR_FIRSTCHILD = 11;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from LASTCHILD.
+*   @property MDMEASURE_AGGR_LASTCHILD
+*   @static
+*   @final
+*   @type int
+*   @default 12
+*/
+Xmla.Rowset.MDMEASURE_AGGR_LASTCHILD = 12;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from FIRSTNONEMPTY.
+*   @property MDMEASURE_AGGR_FIRSTNONEMPTY
+*   @static
+*   @final
+*   @type int
+*   @default 13
+*/
+Xmla.Rowset.MDMEASURE_AGGR_FIRSTNONEMPTY = 13;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from LASTNONEMPTY.
+*   @property MDMEASURE_AGGR_LASTNONEMPTY
+*   @static
+*   @final
+*   @type int
+*   @default 14
+*/
+Xmla.Rowset.MDMEASURE_AGGR_LASTNONEMPTY = 14;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*   identifies that the measure aggregates from BYACCOUNT.
+*   @property MDMEASURE_AGGR_BYACCOUNT
+*   @static
+*   @final
+*   @type int
+*   @default 15
+*/
+Xmla.Rowset.MDMEASURE_AGGR_BYACCOUNT = 15;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*    identifies that the measure was derived from a formula that was not any single function above.
+*   @property MDMEASURE_AGGR_CALCULATED
+*   @static
+*   @final
+*   @type int
+*   @default 127
+*/
+Xmla.Rowset.MDMEASURE_AGGR_CALCULATED = 127;
+/**
+*   A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
+*   <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
+*    identifies that the measure was derived from an unknown aggregation function or formula.
+*   @property MDMEASURE_AGGR_UNKNOWN
+*   @static
+*   @final
+*   @type int
+*   @default 0
+*/
+Xmla.Rowset.MDMEASURE_AGGR_UNKNOWN = 0;
+
 Xmla.Rowset.KEYS = {};
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_CATALOGS] = ["CATALOG_NAME"];
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_COLUMNS] = ["TABLE_CATALOG", "TABLE_SCHEMA", "TABLE_NAME", "COLUMN_NAME"];

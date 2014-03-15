@@ -1,6 +1,6 @@
 {
   "name": "xmla4js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Javascript interface for XML for Analysis",
   "main": "Xmla.js",
   "directories": {
@@ -20,18 +20,34 @@
     "bi",
     "business",
     "intelligence",
-	"soap",
-	"OLAP",
-	"query"
+    "soap",
+    "OLAP",
+    "query",
+    "analytics",
+    "XML/A",
+    "analysis",
+    "pivot table",
+    "data",
+    "multidimensional",
+    "data warehouse",
+    "business intelligence"
   ],
+  bugs: {
+    url: "https://github.com/rpbouman/xmla4js/issues",
+    email: "roland.bouman@gmail.com"
+  },
   "author": {
     "name": "Roland Bouman"
   },
   "contributors": [
     {
+      "name": "Andy Grohe",
+      "email": "agrohe@pentaho.com"
+    },
+    {
       "name": "Joel Latino",
       "email": "jlatino@sapo.pt"
     }
   ],
-  "license": "LGPL"
+  "license": "Apache-2.0"
 }
