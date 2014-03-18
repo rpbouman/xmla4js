@@ -6414,6 +6414,18 @@ Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 65536;
 Xmla.Dataset.Axis.MDDISPINFO_SAME_PARENT_AS_PREV = 131072;
 
 Xmla.Dataset.Axis.prototype = {
+/**
+*   The 0-based id of the axis.
+*   @property id
+*   @type int
+*/
+    id: -1,
+/**
+*   The name of the axis.
+*   @property name
+*   @type string
+*/
+    name: null,
     _dataset: null,
     _tuples: null,
     _members: null,
