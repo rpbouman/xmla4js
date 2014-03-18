@@ -115,19 +115,19 @@
 
     Include this in your web-pages for debug and development purposes only.
     For production purposes, consider using the minified/obfuscated versions in the /js directory.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+    
+    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    
 */
 /**
 *
@@ -4554,7 +4554,6 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   Invokes the &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt; method using
 *   &lt;code&gt;&lt;a href=&quot;#property_MDSCHEMA_PROPERTIES&quot;&gt;&lt;/a&gt;&lt;/code&gt; as value for the &lt;code&gt;requestType&lt;/code&gt;,
 *   and retrieves the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; schema rowset.
-*   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
 *       &lt;tr&gt;
@@ -4563,6 +4562,182 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Description&lt;/th&gt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the database.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;SCHEMA_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the schema to which this property belongs. NULL if the provider does not support schemas.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;CUBE_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the cube.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;DIMENSION_UNIQUE_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The unique name of the dimension. For providers that generate unique names by qualification, each component of this name is delimited.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;HIERARCHY_UNIQUE_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The unique name of the hierarchy. For providers that generate unique names by qualification, each component of this name is delimited.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;LEVEL_UNIQUE_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The unique name of the level to which this property belongs. If the provider does not support named levels, it should return the DIMENSION_UNIQUE_NAME value for this field. For providers that generate unique names by qualification, each component of this name is delimited.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;MEMBER_UNIQUE_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The unique name of the member to which the property belongs. Used for data stores that do not support named levels or have properties on a member-by-member basis. If the property applies to all members in a level, this column is NULL. For providers that generate unique names by qualification, each component of this name is delimited.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_TYPE&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;A bitmap that specifies the type of the property:
+*             &lt;dl&gt;
+*               &lt;dt&gt;MDPROP_MEMBER (1)&lt;/dt&gt;&lt;dd&gt;identifies a property of a member. This property can be used in the DIMENSION PROPERTIES clause of the SELECT statement.&lt;/dd&gt;
+*               &lt;dt&gt;MDPROP_CELL (2)&lt;/dt&gt;&lt;dd&gt;identifies a property of a cell. This property can be used in the CELL PROPERTIES clause that occurs at the end of the SELECT statement.&lt;/dd&gt;
+*               &lt;dt&gt;MDPROP_SYSTEM (4)&lt;/dt&gt;&lt;dd&gt;identifies an internal property.&lt;/dd&gt;
+*               &lt;dt&gt;MDPROP_BLOB (8)&lt;/dt&gt;&lt;dd&gt;identifies a property which contains a binary large object (blob).&lt;/dd&gt;
+*             &lt;/dl&gt;
+*           &lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the property. If the key for the property is the same as the name for the property, PROPERTY_NAME will be blank.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_CAPTION&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;A label or caption associated with the property, used primarily for display purposes. Returns PROPERTY_NAME if a caption does not exist.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;DATA_TYPE&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The data type of the property.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;CHARACTER_MAXIMUM_LENGTH&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The maximum possible length of the property, if it is a character, binary, or bit type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;CHARACTER_OCTET_LENGTH&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The maximum possible length (in bytes) of the property, if it is a character or binary type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;NUMERIC_PRECISION&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The maximum precision of the property, if it is a numeric data type. Returns NULL for all other data types.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;NUMERIC_SCALE&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The number of digits to the right of the decimal point, if it is a DBTYPE_NUMERIC or DBTYPE_DECIMAL type. Returns NULL for all other data types.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;DESCRIPTION&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;A human readable description of the property. NULL if no description exists.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_CONTENT_TYPE&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The type of the property. Can be one of the following enumerations:
+*           &lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;SQL_COLUMN_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the property used in SQL queries from the cube dimension or database dDimension.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;LANGUAGE&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;The translation expressed as an LCID. Only valid for property translations.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_ORIGIN&lt;/td&gt;
+*           &lt;td&gt;int&lt;/td&gt;
+*           &lt;td&gt;Identifies the type of hierarchy that the property applies to:&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_ATTRIBUTE_HIERARCHY_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the attribute hierarchy sourcing this property.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_CARDINALITY&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The cardinality of the property. Possible values include the following strings: ONE or MANY&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;MIME_TYPE&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The mime type for binary large objects (BLOBs).&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;PROPERTY_IS_VISIBLE&lt;/td&gt;
+*           &lt;td&gt;boolean&lt;/td&gt;
+*           &lt;td&gt;A Boolean that indicates whether the property is visible. TRUE if the property is visible; otherwise, FALSE.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *   &lt;/table&gt;
 *   @method discoverMDProperties
@@ -6249,7 +6424,8 @@ Xmla.Dataset.prototype = {
     },
 /**
 *   Reset this object so it can be used again.
-*   @reset
+*   @method reset
+*   @return void
 */
     reset: function(){
       if (this._cellset) this._cellset.reset();
@@ -6263,6 +6439,7 @@ Xmla.Dataset.prototype = {
 /**
 *   Cleanup this Dataset object.
 *   @method close
+*   @return void
 */
     close: function(){
         if (this._slicer) this._slicer.close();

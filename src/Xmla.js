@@ -4454,7 +4454,6 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   Invokes the <code><a href="#method_discover">discover()</a></code> method using
 *   <code><a href="#property_MDSCHEMA_PROPERTIES"></a></code> as value for the <code>requestType</code>,
 *   and retrieves the <code>MDSCHEMA_PROPERTIES</code> schema rowset.
-*   ...todo...
 *   The rowset has the following columns:
 *   <table border="1" class="schema-rowset">
 *       <tr>
@@ -4463,6 +4462,182 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <th>Description</th>
 *           <th>Restriction</th>
 *           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>The name of the database.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>The name of the schema to which this property belongs. NULL if the provider does not support schemas.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>The name of the cube.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSION_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the dimension. For providers that generate unique names by qualification, each component of this name is delimited.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>HIERARCHY_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the hierarchy. For providers that generate unique names by qualification, each component of this name is delimited.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>LEVEL_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the level to which this property belongs. If the provider does not support named levels, it should return the DIMENSION_UNIQUE_NAME value for this field. For providers that generate unique names by qualification, each component of this name is delimited.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>MEMBER_UNIQUE_NAME</td>
+*           <td>string</td>
+*           <td>The unique name of the member to which the property belongs. Used for data stores that do not support named levels or have properties on a member-by-member basis. If the property applies to all members in a level, this column is NULL. For providers that generate unique names by qualification, each component of this name is delimited.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_TYPE</td>
+*           <td>int</td>
+*           <td>A bitmap that specifies the type of the property:
+*             <dl>
+*               <dt>MDPROP_MEMBER (1)</dt><dd>identifies a property of a member. This property can be used in the DIMENSION PROPERTIES clause of the SELECT statement.</dd>
+*               <dt>MDPROP_CELL (2)</dt><dd>identifies a property of a cell. This property can be used in the CELL PROPERTIES clause that occurs at the end of the SELECT statement.</dd>
+*               <dt>MDPROP_SYSTEM (4)</dt><dd>identifies an internal property.</dd>
+*               <dt>MDPROP_BLOB (8)</dt><dd>identifies a property which contains a binary large object (blob).</dd>
+*             </dl>
+*           </td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_NAME</td>
+*           <td>string</td>
+*           <td>The name of the property. If the key for the property is the same as the name for the property, PROPERTY_NAME will be blank.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_CAPTION</td>
+*           <td>string</td>
+*           <td>A label or caption associated with the property, used primarily for display purposes. Returns PROPERTY_NAME if a caption does not exist.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DATA_TYPE</td>
+*           <td>int</td>
+*           <td>The data type of the property.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CHARACTER_MAXIMUM_LENGTH</td>
+*           <td>int</td>
+*           <td>The maximum possible length of the property, if it is a character, binary, or bit type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CHARACTER_OCTET_LENGTH</td>
+*           <td>int</td>
+*           <td>The maximum possible length (in bytes) of the property, if it is a character or binary type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>NUMERIC_PRECISION</td>
+*           <td>int</td>
+*           <td>The maximum precision of the property, if it is a numeric data type. Returns NULL for all other data types.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>NUMERIC_SCALE</td>
+*           <td>int</td>
+*           <td>The number of digits to the right of the decimal point, if it is a DBTYPE_NUMERIC or DBTYPE_DECIMAL type. Returns NULL for all other data types.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td>A human readable description of the property. NULL if no description exists.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_CONTENT_TYPE</td>
+*           <td>int</td>
+*           <td>The type of the property. Can be one of the following enumerations:
+*           </td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>SQL_COLUMN_NAME</td>
+*           <td>string</td>
+*           <td>The name of the property used in SQL queries from the cube dimension or database dDimension.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>LANGUAGE</td>
+*           <td>int</td>
+*           <td>The translation expressed as an LCID. Only valid for property translations.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_ORIGIN</td>
+*           <td>int</td>
+*           <td>Identifies the type of hierarchy that the property applies to:</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_ATTRIBUTE_HIERARCHY_NAME</td>
+*           <td>string</td>
+*           <td>The name of the attribute hierarchy sourcing this property.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_CARDINALITY</td>
+*           <td>string</td>
+*           <td>The cardinality of the property. Possible values include the following strings: ONE or MANY</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>MIME_TYPE</td>
+*           <td>string</td>
+*           <td>The mime type for binary large objects (BLOBs).</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>PROPERTY_IS_VISIBLE</td>
+*           <td>boolean</td>
+*           <td>A Boolean that indicates whether the property is visible. TRUE if the property is visible; otherwise, FALSE.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
 *       </tr>
 *   </table>
 *   @method discoverMDProperties
@@ -6149,7 +6324,8 @@ Xmla.Dataset.prototype = {
     },
 /**
 *   Reset this object so it can be used again.
-*   @reset
+*   @method reset
+*   @return void
 */
     reset: function(){
       if (this._cellset) this._cellset.reset();
@@ -6163,6 +6339,7 @@ Xmla.Dataset.prototype = {
 /**
 *   Cleanup this Dataset object.
 *   @method close
+*   @return void
 */
     close: function(){
         if (this._slicer) this._slicer.close();
