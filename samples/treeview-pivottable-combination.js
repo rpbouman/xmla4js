@@ -2552,6 +2552,10 @@ function execute(mdx) {
         },
         callback: function() {
             queryDesigner.busy(false);
+        },
+        properties: {
+          Format: "Multidimensional",
+          AxisFormat: "TupleFormat"
         }
     });
 }
