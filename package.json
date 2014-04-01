@@ -32,9 +32,9 @@
     "data warehouse",
     "business intelligence"
   ],
-  bugs: {
-    url: "https://github.com/rpbouman/xmla4js/issues",
-    email: "roland.bouman@gmail.com"
+  "bugs": {
+    "url": "https://github.com/rpbouman/xmla4js/issues",
+    "email": "roland.bouman@gmail.com"
   },
   "author": {
     "name": "Roland Bouman"
