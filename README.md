@@ -21,3 +21,9 @@ For effective usage of Xmla4js, some background knowledge of the XML/A protocol 
 ![YUI Chart Wizard Small](https://raw.github.com/latinojoel/xmla4js/master/samples/yui-chart-wizard-small.png)
 
 For more advanced scenario's, full API documentation is available based on the the YUI Doc system.
+
+Notice
+======
+This project used to live on google code here: https://code.google.com/p/xmla4js/
+As part of the move to github, the license changed from LGPL 3.0 to Apache 2.0
+Should you be using an older, LGPL licensed version of the code and you would like to use an Apache 2.0 licensed version then I would encourage you to use the newer version from github. This is AFAIK completely backwards compatible with the old version from google code. If you would like me to grant you the Apache 2.0  license for the older versions, please email me at roland.bouman@gmail.com.
