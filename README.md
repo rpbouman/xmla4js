@@ -26,4 +26,4 @@ Notice
 ======
 This project used to live on google code here: https://code.google.com/p/xmla4js/
 As part of the move to github, the license changed from LGPL 3.0 to Apache 2.0
-Should you be using an older, LGPL licensed version of the code and you would like to use an Apache 2.0 licensed version then I would encourage you to use the newer version from github. This is AFAIK completely backwards compatible with the old version from google code. If you would like me to grant you the Apache 2.0  license for the older versions, please email me at roland.bouman@gmail.com.
+Should you be using an older, LGPL 3.0 licensed version of the code and you would like to use an Apache 2.0 licensed version then I would encourage you to use the newer version from github. This version is AFAIK functionally completely backwards compatible with the old version from google code. If you would like me to grant you the Apache 2.0  license for the older versions, please email me at roland.bouman@gmail.com.
