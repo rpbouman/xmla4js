@@ -5387,6 +5387,62 @@ The rowset has the following columns:</p>
         <th>Restriction</th>
         <th>Nullable</th>
     </tr>
+    <tr>
+        <td>CATALOG_NAME</td>
+        <td>string</td>
+        <td>The name of the catalog to which this set belongs.</td>
+        <td>Yes</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>SCHEMA_NAME</td>
+        <td>string</td>
+        <td>The name of the schema to which this property belongs. NULL if the provider does not support schemas.</td>
+        <td>Yes</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td>CUBE_NAME</td>
+        <td>string</td>
+        <td>The name of the cube to which the set belongs. This column always contains a value and can never be null.</td>
+        <td>Yes</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>SET_NAME</td>
+        <td>string</td>
+        <td>The name of the set.</td>
+        <td>Yes</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>SCOPE</td>
+        <td>string</td>
+        <td>The scope of the set.</td>
+        <td>Yes</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>DESCRIPTION</td>
+        <td>string</td>
+        <td></td>
+        <td>No</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td>EXPRESSION</td>
+        <td>string</td>
+        <td>The expression for this set.</td>
+        <td>No</td>
+        <td>No</td>
+    </tr>
+    <tr>
+        <td>DIMENSIONS</td>
+        <td>string</td>
+        <td>A comma separated list of dimensions used by this set.</td>
+        <td>No</td>
+        <td>Yes</td>
+    </tr>
 </table>
     </div>
 

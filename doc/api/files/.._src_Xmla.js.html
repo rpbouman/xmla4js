@@ -115,19 +115,19 @@
 
     Include this in your web-pages for debug and development purposes only.
     For production purposes, consider using the minified/obfuscated versions in the /js directory.
-    
+
     Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    
+
         http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
+
 */
 /**
 *
@@ -4764,6 +4764,62 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the catalog to which this set belongs.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;SCHEMA_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the schema to which this property belongs. NULL if the provider does not support schemas.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;CUBE_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the cube to which the set belongs. This column always contains a value and can never be null.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;SET_NAME&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The name of the set.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;SCOPE&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The scope of the set.&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;DESCRIPTION&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;EXPRESSION&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;The expression for this set.&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*           &lt;td&gt;DIMENSIONS&lt;/td&gt;
+*           &lt;td&gt;string&lt;/td&gt;
+*           &lt;td&gt;A comma separated list of dimensions used by this set.&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
 *   &lt;/table&gt;
 *   @method discoverMDSets
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; request.
@@ -6514,6 +6570,18 @@ Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 65536;
 Xmla.Dataset.Axis.MDDISPINFO_SAME_PARENT_AS_PREV = 131072;
 
 Xmla.Dataset.Axis.prototype = {
+/**
+*   The 0-based id of the axis.
+*   @property id
+*   @type int
+*/
+    id: -1,
+/**
+*   The name of the axis.
+*   @property name
+*   @type string
+*/
+    name: null,
     _dataset: null,
     _tuples: null,
     _members: null,

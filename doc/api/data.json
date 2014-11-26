@@ -34,7 +34,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "../src/Xmla.js",
-            "line": 7345,
+            "line": 7413,
             "description": "This is xmla4js - a stand-alone javascript library for working with \"XML for Analysis\".\n  XML for Analysis (XML/A) is a vendor-neutral industry-standard protocol for OLAP services over HTTP.\n  Xmla4js is cross-browser and node.js compatible and enables web-browser-based analytical business intelligence applications.\n  Xmla4js can be loaded as a common js or amd module.",
             "title": "Xmla"
         }
@@ -72,7 +72,7 @@
             "module": "xmla",
             "namespace": "",
             "file": "../src/Xmla.js",
-            "line": 4692,
+            "line": 4748,
             "description": "<p>\nThis class implements an XML/A Rowset object.\n</p>\n<p>\nYou do not need to instantiate objects of this class yourself.\nRather, the <code><a href=\"Xmla.html#class_Xmla\">Xmla</a></code> class will instantiate this class to convey the result of any of the various <code>discoverXXX()</code> methods\n(see <code><a href=\"Xmla.html#method_discover\">discover()</a></code>).\nIn addition, this class is also used to instantiate a Resultset for the\n<code><a name=\"Xmla.html#method_execute\">execute()</code> method in case the\n<code>Format</code> property is set to <code>Tabular</code>\n(see <code><a name=\"Xmla.html#property_OPTION_FORMAT\">OPTION_FORMAT</a></code> and <code><a name=\"Xmla.html#property_OPTION_FORMAT_TABULAR\">OPTION_FORMAT_TABULAR</a></code>).\nThe <code><a href=\"Xmla.html#method_request\">request()</a></code> method itself will also return an instance of this class in case the <code>method</code> is used to do a\n<code>Discover</code> request, or in case it is used to do a <code>Execute</code> request and the <code>Format</code> property is set to <code>Tabular</code>.\n</p>\n<p>\nAn instance of the <code>Xmla.Rowset</code> class is returned immediately as return value from the <code>disoverXXX()</code> or <code>execute()</code> method when doing a synchronous request.\nIn addition, the rowset is available in the eventdata passed to any registered listeners\n(see <code><a href=\"Xmla.html#method_addListener\">addListener()</a></code>).\nNote that for asynchronous requests, the only way to obtain the returned <code>Rowset</code> instance is through the listeners.\n</p>",
             "is_constructor": 1,
             "params": [
@@ -104,7 +104,7 @@
             "module": "xmla",
             "namespace": "",
             "file": "../src/Xmla.js",
-            "line": 5914,
+            "line": 5970,
             "description": "<p>\nThis class implements an XML/A multidimensional Dataset object.\n</p>\n<p>\nYou do not need to instantiate objects of this class yourself.\nRather, the <code><a href=\"Xmla.html#class_Xmla\">Xmla</a></code> class will instantiate this class\nto convey the result of the <code>executeMultiDimensional</code> method\n(see <code><a href=\"Xmla.html#method_executeMultiDimensional\">executeMultiDimensional()</a></code>),\nand possibly the <code>execute</code> method.\n(Note that the <code><a name=\"Xmla.html#method_execute\">execute()</code> instantiates either the\n<code><a href=\"Xmla.html#class_Xmla.Rowset\">Xmla.Rowset</a></code> or the <code><a href=\"Xmla.html#class_Xmla.Rowset\">Xmla.Dataset</a></code> class\ndepending on the value of the <code>Format</code> property in the options passed to the <code><a href=\"Xmla.html#method_execute\">execute()</a></code> method.)\n</p>\n<p>\nAn instance of the <code>Xmla.Dataset</code> class may be returned immediately as return value from these methods when doing a synchronous request.\nIn addition, the <code>Xmla.Dataset</code> object is available in the eventdata passed to any registered listeners\n(see <code><a href=\"Xmla.html#method_addListener\">addListener()</a></code>).\n</p>",
             "is_constructor": 1,
             "params": [
@@ -126,7 +126,7 @@
             "module": "xmla",
             "namespace": "",
             "file": "../src/Xmla.js",
-            "line": 6358,
+            "line": 6414,
             "description": "<p>\nThis class implements an Axis object.\n</p>\n<p>\nYou do not need to instantiate objects of this class yourself.\nRather, the <code><a href=\"Xmla.Dataset.html#class_Xmla.Dataset\">Xmla.Dataset</a></code> class creates instances of this class to represent the axes of an MDX query.\n(see <code><a href=\"Xmla.Dataset.html#method_getAxis\">getAxis()</a></code>.)",
             "is_constructor": 1
         },
@@ -141,7 +141,7 @@
             "module": "xmla",
             "namespace": "",
             "file": "../src/Xmla.js",
-            "line": 6939,
+            "line": 7007,
             "description": "<p>\nThis class implements a Cellset object.\n</p>\n<p>\nYou do not need to instantiate objects of this class yourself.\nRather, the <code><a href=\"Xmla.Dataset.html#class_Xmla.Dataset\">Xmla.Dataset</a></code> class creates instances of this class to represent the cells (the value of the measures) of an MDX query.\n(see <code><a href=\"Xmla.Dataset.html#method_getCellset\">getCellset()</a></code>.)",
             "is_constructor": 1
         },
@@ -156,7 +156,7 @@
             "module": "xmla",
             "namespace": "",
             "file": "../src/Xmla.js",
-            "line": 7345,
+            "line": 7413,
             "description": "<p>\nThis class is used to indicate an runtime errors occurring in any of the methods of the xmla4js classes.\n</p>\n<p>\nYou do not need to instantiate objects of this class yourself.\nRather, instances of this class are created and thrown at runtime whenever an error occurs.\nThe purpose is to provide a clean and clear way for applications that use xmla4js to recognize and handle Xmla4js specific runtime errors.\n</p>\n<p>\nTo handle Xmla4js errors, you can use a <code>try...catch</code> block like this:\n</p>\n<pre>\n&nbsp;try {\n&nbsp;    ...general xmla4js work...\n&nbsp;} catch (exception) {\n&nbsp;    if (exception instanceof Xmla.Exception) {\n&nbsp;        ...use exception.code, exception.message and exception.data to handle the exception.\n&nbsp;    } else {\n&nbsp;        ...handle other errors...\n&nbsp;    }\n&nbsp;}\n</pre>",
             "is_constructor": 1
         }
@@ -1479,7 +1479,7 @@
         {
             "file": "../src/Xmla.js",
             "line": 4653,
-            "description": "Invokes the <code><a href=\"#method_discover\">discover()</a></code> method using\n<code><a href=\"#property_MDSCHEMA_SETS\"></a></code> as value for the <code>requestType</code>,\nand retrieves the <code>MDSCHEMA_SETS</code> schema rowset.\n...todo...\nThe rowset has the following columns:\n<table border=\"1\" class=\"schema-rowset\">\n    <tr>\n        <th>Column Name</th>\n        <th>Type</th>\n        <th>Description</th>\n        <th>Restriction</th>\n        <th>Nullable</th>\n    </tr>\n</table>",
+            "description": "Invokes the <code><a href=\"#method_discover\">discover()</a></code> method using\n<code><a href=\"#property_MDSCHEMA_SETS\"></a></code> as value for the <code>requestType</code>,\nand retrieves the <code>MDSCHEMA_SETS</code> schema rowset.\n...todo...\nThe rowset has the following columns:\n<table border=\"1\" class=\"schema-rowset\">\n    <tr>\n        <th>Column Name</th>\n        <th>Type</th>\n        <th>Description</th>\n        <th>Restriction</th>\n        <th>Nullable</th>\n    </tr>\n    <tr>\n        <td>CATALOG_NAME</td>\n        <td>string</td>\n        <td>The name of the catalog to which this set belongs.</td>\n        <td>Yes</td>\n        <td>No</td>\n    </tr>\n    <tr>\n        <td>SCHEMA_NAME</td>\n        <td>string</td>\n        <td>The name of the schema to which this property belongs. NULL if the provider does not support schemas.</td>\n        <td>Yes</td>\n        <td>Yes</td>\n    </tr>\n    <tr>\n        <td>CUBE_NAME</td>\n        <td>string</td>\n        <td>The name of the cube to which the set belongs. This column always contains a value and can never be null.</td>\n        <td>Yes</td>\n        <td>No</td>\n    </tr>\n    <tr>\n        <td>SET_NAME</td>\n        <td>string</td>\n        <td>The name of the set.</td>\n        <td>Yes</td>\n        <td>No</td>\n    </tr>\n    <tr>\n        <td>SCOPE</td>\n        <td>string</td>\n        <td>The scope of the set.</td>\n        <td>Yes</td>\n        <td>No</td>\n    </tr>\n    <tr>\n        <td>DESCRIPTION</td>\n        <td>string</td>\n        <td></td>\n        <td>No</td>\n        <td>Yes</td>\n    </tr>\n    <tr>\n        <td>EXPRESSION</td>\n        <td>string</td>\n        <td>The expression for this set.</td>\n        <td>No</td>\n        <td>No</td>\n    </tr>\n    <tr>\n        <td>DIMENSIONS</td>\n        <td>string</td>\n        <td>A comma separated list of dimensions used by this set.</td>\n        <td>No</td>\n        <td>Yes</td>\n    </tr>\n</table>",
             "itemtype": "method",
             "name": "discoverMDSets",
             "params": [
@@ -1498,7 +1498,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4728,
+            "line": 4784,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_UNKNOWN",
@@ -1511,7 +1511,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4740,
+            "line": 4796,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_TIME",
@@ -1524,7 +1524,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4752,
+            "line": 4808,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_MEASURE",
@@ -1537,7 +1537,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4764,
+            "line": 4820,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_OTHER",
@@ -1550,7 +1550,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4776,
+            "line": 4832,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_QUANTITATIVE",
@@ -1563,7 +1563,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4788,
+            "line": 4844,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_ACCOUNTS",
@@ -1576,7 +1576,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4800,
+            "line": 4856,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_CUSTOMERS",
@@ -1589,7 +1589,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4812,
+            "line": 4868,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_PRODUCTS",
@@ -1602,7 +1602,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4824,
+            "line": 4880,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_SCENARIO",
@@ -1615,7 +1615,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4836,
+            "line": 4892,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_UTILIY",
@@ -1628,7 +1628,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4848,
+            "line": 4904,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_CURRENCY",
@@ -1641,7 +1641,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4860,
+            "line": 4916,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_RATES",
@@ -1654,7 +1654,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4872,
+            "line": 4928,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_CHANNEL",
@@ -1667,7 +1667,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4884,
+            "line": 4940,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_PROMOTION",
@@ -1680,7 +1680,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4896,
+            "line": 4952,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_ORGANIZATION",
@@ -1693,7 +1693,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4908,
+            "line": 4964,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_BILL_OF_MATERIALS",
@@ -1706,7 +1706,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4920,
+            "line": 4976,
             "description": "A possible value for the <code>DIMENSION_TYPE</code> column that appears in the\n<code>MDSCHEMA_DIMENSIONS</code> (See: <code><a href=\"Xmla.html#method_discoverMDDimensions\">discoverMDDimensions()</a></code>) and\n<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowsets.",
             "itemtype": "property",
             "name": "MD_DIMTYPE_GEOGRAPHY",
@@ -1719,7 +1719,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4933,
+            "line": 4989,
             "description": "A possible value for the <code>STRUCTURE</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.",
             "itemtype": "property",
             "name": "MD_STRUCTURE_FULLYBALANCED",
@@ -1732,7 +1732,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4943,
+            "line": 4999,
             "description": "A possible value for the <code>STRUCTURE</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.",
             "itemtype": "property",
             "name": "MD_STRUCTURE_RAGGEDBALANCED",
@@ -1745,7 +1745,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4953,
+            "line": 5009,
             "description": "A possible value for the <code>STRUCTURE</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.",
             "itemtype": "property",
             "name": "MD_STRUCTURE_UNBALANCED",
@@ -1758,7 +1758,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4963,
+            "line": 5019,
             "description": "A possible value for the <code>STRUCTURE</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.",
             "itemtype": "property",
             "name": "MD_STRUCTURE_NETWORK",
@@ -1771,7 +1771,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4974,
+            "line": 5030,
             "description": "A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.\nIdentifies user defined hierarchies.",
             "itemtype": "property",
             "name": "MD_USER_DEFINED",
@@ -1784,7 +1784,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4985,
+            "line": 5041,
             "description": "A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.\nidentifies attribute hierarchies.",
             "itemtype": "property",
             "name": "MD_SYSTEM_ENABLED",
@@ -1797,7 +1797,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 4996,
+            "line": 5052,
             "description": "A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the\n   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href=\"Xmla.html#method_discoverMDHierarchies\">discoverMDHierarchies()</a></code>)rowset.\nidentifies attributes with no attribute hierarchies.",
             "itemtype": "property",
             "name": "MD_SYSTEM_INTERNAL",
@@ -1810,7 +1810,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5008,
+            "line": 5064,
             "description": "A possible value for the <code>MEMBER_TYPE</code> column of the\n<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMembers\">discoverMDMembers()</a></code>),\nindicating a regular member.",
             "itemtype": "property",
             "name": "MDMEMBER_TYPE_REGULAR",
@@ -1823,7 +1823,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5019,
+            "line": 5075,
             "description": "A possible value for the <code>MEMBER_TYPE</code> column of the\n<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMembers\">discoverMDMembers()</a></code>),\nindicating an all member.",
             "itemtype": "property",
             "name": "MDMEMBER_TYPE_ALL",
@@ -1836,7 +1836,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5030,
+            "line": 5086,
             "description": "A possible value for the <code>MEMBER_TYPE</code> column of the\n<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMembers\">discoverMDMembers()</a></code>),\nindicating a formula member.",
             "itemtype": "property",
             "name": "MDMEMBER_TYPE_FORMULA",
@@ -1849,7 +1849,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5041,
+            "line": 5097,
             "description": "A possible value for the <code>MEMBER_TYPE</code> column of the\n<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMembers\">discoverMDMembers()</a></code>),\nindicating a measure member.",
             "itemtype": "property",
             "name": "MDMEMBER_TYPE_MEASURE",
@@ -1862,7 +1862,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5052,
+            "line": 5108,
             "description": "A possible value for the <code>MEMBER_TYPE</code> column of the\n<code>MDSCHEMA_MEMBERS</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMembers\">discoverMDMembers()</a></code>),\nindicating a member of unknown type",
             "itemtype": "property",
             "name": "MDMEMBER_TYPE_UNKNOWN",
@@ -1875,7 +1875,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5064,
+            "line": 5120,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from SUM.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_SUM",
@@ -1888,7 +1888,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5075,
+            "line": 5131,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from COUNT.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_COUNT",
@@ -1901,7 +1901,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5086,
+            "line": 5142,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from MIN.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_MIN",
@@ -1914,7 +1914,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5097,
+            "line": 5153,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from MAX.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_MAX",
@@ -1927,7 +1927,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5108,
+            "line": 5164,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from AVG.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_AVG",
@@ -1940,7 +1940,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5119,
+            "line": 5175,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from VAR.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_VAR",
@@ -1953,7 +1953,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5130,
+            "line": 5186,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from STDEV.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_STD",
@@ -1966,7 +1966,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5141,
+            "line": 5197,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from DISTINCT COUNT.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_DST",
@@ -1979,7 +1979,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5152,
+            "line": 5208,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from NONE.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_NONE",
@@ -1992,7 +1992,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5163,
+            "line": 5219,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from AVERAGEOFCHILDREN.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_AVGCHILDREN",
@@ -2005,7 +2005,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5174,
+            "line": 5230,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from FIRSTCHILD.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_FIRSTCHILD",
@@ -2018,7 +2018,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5185,
+            "line": 5241,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from LASTCHILD.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_LASTCHILD",
@@ -2031,7 +2031,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5196,
+            "line": 5252,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from FIRSTNONEMPTY.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_FIRSTNONEMPTY",
@@ -2044,7 +2044,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5207,
+            "line": 5263,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from LASTNONEMPTY.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_LASTNONEMPTY",
@@ -2057,7 +2057,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5218,
+            "line": 5274,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\nidentifies that the measure aggregates from BYACCOUNT.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_BYACCOUNT",
@@ -2070,7 +2070,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5229,
+            "line": 5285,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\n identifies that the measure was derived from a formula that was not any single function above.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_CALCULATED",
@@ -2083,7 +2083,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5240,
+            "line": 5296,
             "description": "A possible value for the <code>MEASURE_AGGREGATOR</code> column of the\n<code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href=\"Xmla.html#method_discoverMDMeasures\">discoverMDMeasures()</a></code>),\n identifies that the measure was derived from an unknown aggregation function or formula.",
             "itemtype": "property",
             "name": "MDMEASURE_AGGR_UNKNOWN",
@@ -2096,7 +2096,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5491,
+            "line": 5547,
             "description": "Indicates the type of rowset. In most cases, this will be identical to the <code>requestType</code> value that was used in the\n<code>Discover</code> request",
             "itemtype": "method",
             "name": "getType",
@@ -2108,7 +2108,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5501,
+            "line": 5557,
             "description": "Retrieve an array of <code>fieldDef</code> objects that describes the fields of the rows in this rowset.\nThe position of the <code>fieldDef</code> objects in the array corresponds to the column order of the rowset.\nFor a description of the <code>fieldDef</code> object, see the\n<code><a href=\"#method_fieldDef\">fieldDef()</a></code> method.",
             "itemtype": "method",
             "name": "getFields",
@@ -2121,7 +2121,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5518,
+            "line": 5574,
             "description": "Retrieve an array of field names.\nThe position of the names in the array corresponds to the column order of the rowset.",
             "itemtype": "method",
             "name": "getFieldNames",
@@ -2134,7 +2134,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5530,
+            "line": 5586,
             "description": "Indicates wheter the rowset can still be traversed.\nYou can use this method together with the\n<code><a href=\"#method_nextRow\">nextRow()</a></code> method\nto drive a <code>while</code> loop to traverse all rows in the rowset, like so:\n <pre>\n&nbsp;while(rowset.hasMoreRows()){\n&nbsp;    ...process row...\n&nbsp;    rowsete.nextRow();\n&nbsp;}\n </pre>",
             "itemtype": "method",
             "name": "hasMoreRows",
@@ -2147,7 +2147,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5547,
+            "line": 5603,
             "description": "Moves the internal row index to the next row.\nYou can use this method together with the\n<code><a href=\"#method_next\">hasMoreRows()</a></code> method\nto drive a <code>while</code> loop to traverse all rows in the rowset.",
             "itemtype": "method",
             "name": "nextRow",
@@ -2156,7 +2156,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5560,
+            "line": 5616,
             "description": "This method is deprecated and may be removed in the future.\nUse <code><a href=\"#method_nextRow\">nextRow()</a></code> instead.",
             "itemtype": "method",
             "name": "next",
@@ -2165,7 +2165,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5568,
+            "line": 5624,
             "description": "<p>Walks through all rows, and calls the callback function for each row.</p>\n\n<p>The callback function gets passed an object that represents the row.\nThe keys of the row object are the column names, and the values are the respective column values.</p>\n<p>The scope for calling the callback can be passed  as the second argument to this method.\nIf the scope is not defined (or if it is <code>null</code>), the Rowset's <code>this</code> pointer is used instead.</p>\n<p>You can pass additional data to the callback by passing in a third argument. This is then passed as is as second argument to the callback.</p>\n\n<p>The <code>eachRow</code> method will iterate untill the callback returns <code>false</code>, or until all rows have been traversed.\nIf the callback returns <code>false</code>, iteration is aborted and <code>eachRow</code> as a whole returns <code>false</code> too.\nIf iteration is not aborted, then eachRow returns <code>true</code>.</p>",
             "itemtype": "method",
             "name": "eachRow",
@@ -2195,7 +2195,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5601,
+            "line": 5657,
             "description": "Gets the value of the internal row index.\nNote that no check is performed to ensure this points to a valid row:\nyou should call this function only when it is safe to do so.\nThis can be determined by calling <code><a href=\"method_hasMoreRows\">hasMoreRows()</a></code>.",
             "itemtype": "method",
             "name": "curr",
@@ -2207,7 +2207,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5613,
+            "line": 5669,
             "description": "Returns the number of rows in the set.",
             "itemtype": "method",
             "name": "rowCount",
@@ -2219,7 +2219,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5622,
+            "line": 5678,
             "description": "Resets the internal row pointer so the resultset can be traversed again.",
             "itemtype": "method",
             "name": "reset",
@@ -2228,7 +2228,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5631,
+            "line": 5687,
             "description": "Retrieves a <code>fieldDef</code> object by name.\nA fieldDef describes a field (column). It has the following properties:\n<dl>\n    <dt>label</dt><dd>string. This is the human readable name for this field. You should use this name for display purposes and for building restrictions. This is also the name used for matching againstt the <code>name</code> argument passed to the <code>fieldDef()</code> method.</dd>\n    <dt>name</dt><dd>string. This is the (possibly escaped) name of the field as it appears in the XML document</dd>\n    <dt>index</dt><dd>int. The ordinal position of this field. Fields are numbered starting from 0.</dd>\n    <dt>type</dt><dd>string. The name of the XML data type for the values that appear in this column</dd>\n    <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. \"0\" means the field is optional.</dd>\n    <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. \"unbounded\" means there is no declared limit.</dd>\n    <dt>getter</dt><dd>function. This function is used to extract a value from the XML document for this field.</dd>\n</dl>",
             "itemtype": "method",
             "name": "fieldDef",
@@ -2248,7 +2248,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5657,
+            "line": 5713,
             "description": "Retrieves the index of a field by name.\nField indexes start at 0.",
             "itemtype": "method",
             "name": "fieldIndex",
@@ -2268,7 +2268,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5667,
+            "line": 5723,
             "description": "Retrieves the name of a field by field Index.\nField indexes start at 0.",
             "itemtype": "method",
             "name": "fieldName",
@@ -2288,7 +2288,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5684,
+            "line": 5740,
             "description": "Retrieves a value from the current row for the field having the name specified by the argument.",
             "itemtype": "method",
             "name": "fieldVal",
@@ -2308,7 +2308,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5694,
+            "line": 5750,
             "description": "Returns the number of fields in this rowset.",
             "itemtype": "method",
             "name": "fieldCount",
@@ -2321,7 +2321,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5702,
+            "line": 5758,
             "description": "Releases references to the DomDocument passed to the Rowset constructor.\nThis should facilitate automatic garbage collection by the browser.",
             "itemtype": "method",
             "name": "close",
@@ -2330,7 +2330,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5712,
+            "line": 5768,
             "description": "Reads the current row and returns the result as a new array.\nThis method does not advance the internal row pointer, and does not check if there is a valid row.\nThis method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the\n<code><a href=\"#method_fetchCustom\">fetchCustom()</a></code> method.\nIf you just want to obtain the results as arrays, see\n<code><a href=\"#method_fetchAsArray\">fetchAsArray()</a></code>\nand\n<code><a href=\"#method_fetchAllAsArray\">fetchAllAsArray()</a></code>.",
             "itemtype": "method",
             "name": "readAsArray",
@@ -2343,7 +2343,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5735,
+            "line": 5791,
             "description": "Fetch all values from all fields from the current row, and return it in an array.\nThe position of the values in the array corresponds to the column order of the rowset.\nThe internal row pointer is also increased so the next call will read the next row.\nThe method returns false when there are no more rows to traverse.\nYou can use this method to drive a loop to travere all rows in the Rowset:\n<pre>\nwhile (rowArray = rowset.fetchAsArray()){\n&nbsp;   ...process array...\n}\n</pre>",
             "itemtype": "method",
             "name": "fetchAsArray",
@@ -2356,7 +2356,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5757,
+            "line": 5813,
             "description": "Reads the current row and returns the result as a new object.\nThis method does not advance the internal row pointer, and does not check if there is a valid row.\nThis method exists mainly as a convience in case you want to use a custom way to extract data from the resultset using the\n<code><a href=\"#method_fetchCustom\">fetchCustom()</a></code> method.\nIf you just want to obtain the results as objects, see\n<code><a href=\"#method_fetchAsObject\">fetchAsObject()</a></code>\nand\n<code><a href=\"#method_fetchAllAsObject\">fetchAllAsObject()</a></code>.",
             "itemtype": "method",
             "name": "readAsObject",
@@ -2369,7 +2369,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5780,
+            "line": 5836,
             "description": "Fetch all values from all fields from the current row, and return it in an Object literal.\nThe property names of the returned object correspond to the fieldName (actually the fieldLabel), and the field value is assigned to its respective property.\nThe internal row pointer is also increased so the next call will read the next row.\nThe method returns false when there are no more rows to traverse.\nYou can use this method to drive a loop to travere all rows in the Rowset:\n<pre>\nwhile (rowObject = rowset.fetchAsObject()){\n&nbsp;   ...process object...\n}\n</pre>",
             "itemtype": "method",
             "name": "fetchAsObject",
@@ -2382,7 +2382,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5802,
+            "line": 5858,
             "description": "Fetch the values using a custom callback function.\nIf there are rows to fetch, the custom function is called in scope of the rowset, so you can use <code>this</code> inside the custom function to refer to the rowset object.\nThen, the internal row pointer is increased so the next call will read the next row.\nThe method returns whatever object or value is returned by the custom function, or false when there are no more rows to traverse.",
             "itemtype": "method",
             "name": "fetchCustom",
@@ -2407,7 +2407,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5822,
+            "line": 5878,
             "description": "Fetch all values from all fields from all rows, and return it as an array of arrays.\nSee <code><a href=\"#method_fetchAsArray\">fetchAsArray()</a></code>.",
             "itemtype": "method",
             "name": "fetchAllAsArray",
@@ -2427,7 +2427,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5835,
+            "line": 5891,
             "description": "Fetch all values from all fields from all rows, and return it as an array of objects.\nSee <code><a href=\"#method_fetchAsObject\">fetchAsObject()</a></code>.",
             "itemtype": "method",
             "name": "fetchAllAsObject",
@@ -2447,7 +2447,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5848,
+            "line": 5904,
             "description": "Fetch all rows using a custom function, and return the return values as an array.\nSee <code><a href=\"#method_fetchCustom\">fetchCustom()</a></code>.",
             "itemtype": "method",
             "name": "fetchAllCustom",
@@ -2477,7 +2477,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5863,
+            "line": 5919,
             "description": "Fetch all row as an object, store it in nested objects according to values in the column identified by the key argument.\nThis method should typically not be called directly, rather it is a helper method for <code><a href=\"#method_mapAllAsObject\">mapAllAsObject()</a></code>.",
             "itemtype": "method",
             "name": "mapAsObject",
@@ -2504,7 +2504,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5891,
+            "line": 5947,
             "description": "Fetch all rows as an object, store them as proprties in an object (which acts as map).",
             "itemtype": "method",
             "name": "mapAllAsObject",
@@ -2529,7 +2529,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5943,
+            "line": 5999,
             "description": "Can be used as argument for <code><a href=\"#method_getAxis\">getAxis()</a></code> to get the first axis (the column axis).\nAlternatively you can simply call <code><a href=\"#method_getColumnAxis\">getColumnAxis()</a></code>",
             "itemtype": "property",
             "name": "AXIS_COLUMNS",
@@ -2542,7 +2542,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5953,
+            "line": 6009,
             "description": "Can be used as argument for <code><a href=\"#method_getAxis\">getAxis()</a></code> to get the second axis (the row axis).\nAlternatively you can simply call <code><a href=\"#method_getRowAxis\">getRowAxis()</a></code>",
             "itemtype": "property",
             "name": "AXIS_ROWS",
@@ -2555,7 +2555,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5963,
+            "line": 6019,
             "description": "Can be used as argument for <code><a href=\"#method_getAxis\">getAxis()</a></code> to get the third axis (the page axis).\nAlternatively you can simply call <code><a href=\"#method_getPageAxis\">getPageAxis()</a></code>",
             "itemtype": "property",
             "name": "AXIS_PAGES",
@@ -2568,7 +2568,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5973,
+            "line": 6029,
             "description": "Can be used as argument for <code><a href=\"#method_getAxis\">getAxis()</a></code> to get the fourth axis (the section axis).\nAlternatively you can simply call <code><a href=\"#method_getSectionAxis\">getSectionAxis()</a></code>",
             "itemtype": "property",
             "name": "AXIS_SECTIONS",
@@ -2581,7 +2581,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5983,
+            "line": 6039,
             "description": "Can be used as argument for <code><a href=\"#method_getAxis\">getAxis()</a></code> to get the fifth axis (the chapters axis).\nAlternatively you can simply call <code><a href=\"#method_getChapterAxis\">getChapterAxis()</a></code>",
             "itemtype": "property",
             "name": "AXIS_CHAPTERS",
@@ -2594,7 +2594,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 5993,
+            "line": 6049,
             "description": "Can be used as argument for <code><a href=\"#method_getAxis\">getAxis()</a></code> to get the slicer axis\n(the axis that appears in the <code>WHERE</code> clause of an MDX-<code>SELECT</code> statement).\nAlternatively you can simply call <code><a href=\"#method_getSlicerAxis\">getSlicerAxis()</a></code>",
             "itemtype": "property",
             "name": "AXIS_SLICER",
@@ -2607,7 +2607,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6077,
+            "line": 6133,
             "description": "Get the number of proper axes in this Dataset. This is the number of axes that appears in the <code>SELECT</code> list, and excludes the slicer axis.",
             "itemtype": "method",
             "name": "axisCount",
@@ -2620,7 +2620,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6097,
+            "line": 6153,
             "description": "Get the axis specified by the argument index or name.\nIf the axis does not exist, an <code>INVALID_AXIS</code> exception is thrown.\nTo prevent an exception from being thrown, you should call the <code><a href=\"#method_hasAxis\">hasAxis()</a></code> method to determine if the axis exists.\nAlternatively, you can call <code><a href=\"#method_axisCount\">axisCount()</a></code>, and use an integer argument between zero (inclusive) and axis count (exclusive).",
             "itemtype": "method",
             "name": "getAxis",
@@ -2640,7 +2640,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6117,
+            "line": 6173,
             "description": "Determine if the axis specified by the argument exists.",
             "itemtype": "method",
             "name": "hasAxis",
@@ -2660,7 +2660,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6127,
+            "line": 6183,
             "description": "Get the Column axis. This is the first axis, and has ordinal 0. If the column axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.\nTo prevent an exception from being thrown, you should call the <code><a href=\"#method_hasColumnAxis\">hasColumnAxis()</a></code> method to determine if the axis exists.",
             "itemtype": "method",
             "name": "getColumnAxis",
@@ -2673,7 +2673,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6136,
+            "line": 6192,
             "description": "Determine if the column axis exists.",
             "itemtype": "method",
             "name": "hasColumnAxis",
@@ -2686,7 +2686,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6144,
+            "line": 6200,
             "description": "Get the Row axis. This is the second axis, and has ordinal 1. If the row axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.\nTo prevent an exception from being thrown, you should call the <code><a href=\"#method_hasRowAxis\">hasRowAxis()</a></code> method to determine if the axis exists.",
             "itemtype": "method",
             "name": "getRowAxis",
@@ -2699,7 +2699,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6153,
+            "line": 6209,
             "description": "Determine if the row axis exists.",
             "itemtype": "method",
             "name": "hasRowAxis",
@@ -2712,7 +2712,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6161,
+            "line": 6217,
             "description": "Get the Page axis. This is the third axis, and has ordinal 2. If the page axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.\nTo prevent an exception from being thrown, you should call the <code><a href=\"#method_hasPageAxis\">hasPageAxis()</a></code> method to determine if the axis exists.",
             "itemtype": "method",
             "name": "getPageAxis",
@@ -2725,7 +2725,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6170,
+            "line": 6226,
             "description": "Determine if the page axis exists.",
             "itemtype": "method",
             "name": "hasPageAxis",
@@ -2738,7 +2738,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6178,
+            "line": 6234,
             "description": "Get the Section axis. This is the fourth axis, and has ordinal 3. If the section axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.\nTo prevent an exception from being thrown, you should call the <code><a href=\"#method_hasPageAxis\">hasSectionAxis()</a></code> method to determine if the axis exists.",
             "itemtype": "method",
             "name": "getSectionAxis",
@@ -2751,7 +2751,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6187,
+            "line": 6243,
             "description": "Determine if the section axis exists.",
             "itemtype": "method",
             "name": "hasSectionAxis",
@@ -2764,7 +2764,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6195,
+            "line": 6251,
             "description": "Get the Chapter axis. This is the fifth axis, and has ordinal 4. If the chapter axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.\nTo prevent an exception from being thrown, you should call the <code><a href=\"#method_hasChapterAxis\">hasChapterAxis()</a></code> method to determine if the axis exists.",
             "itemtype": "method",
             "name": "getChapterAxis",
@@ -2777,7 +2777,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6204,
+            "line": 6260,
             "description": "Determine if the chapter axis exists.",
             "itemtype": "method",
             "name": "hasChapterAxis",
@@ -2790,7 +2790,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6212,
+            "line": 6268,
             "description": "Get the Slicer axis. This is the axis that appears in the <code>WHERE</code> clause of the MDX statement.",
             "itemtype": "method",
             "name": "getSlicerAxis",
@@ -2803,7 +2803,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6220,
+            "line": 6276,
             "description": "Determine if the slicer axis exists.",
             "itemtype": "method",
             "name": "hasSlicerAxis",
@@ -2816,7 +2816,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6228,
+            "line": 6284,
             "description": "Get the Cellset object.",
             "itemtype": "method",
             "name": "getCellset",
@@ -2829,7 +2829,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6236,
+            "line": 6292,
             "description": "<p>Calculate the cellset ordinal for the argument tuple indexes.</p>\n<p>This method accepts a variable number of tuple indexes. One integer argument must be passed for each proper axis (excluding the slicer axis).\nEach integer arguments represent the index of a tuple on the respective axis.</p>\n<p>The arguments must be specified by descending axis order. So if the data set has two axes (a row and a column axis),\nthis method expects the tuple index of a tuple on the row axis first, and after that, the tuple index on the column axis.</p>\n<p>The method returns an integer that represents the ordinal of the cell identified by the tuples specified by the tuple index arguments.\nOne could use this ordinal as argument to the <code><a href=\"Xmla.Dataset.Cellset.html#method_getByOrdinal\">getByOrdinal()</a></code> method of this Dataset's <code><a href=\"Xmla.Dataset.Cellset.html#class_Cellset\">Cellset</a></code>.</p>\n<p>Instead of calling this method and passing the result into the Cellsets <code><a href=\"Xmla.Dataset.Cellset.html#method_getByOrdinal\">getByOrdinal()</a></code> method,\nyou can call the <code><a href=\"Xmla.Dataset.Cellset.html#method_getByTupleIndexes\">getByTupleIndexes()</a></code> method  of this Dataset's <code><a href=\"Xmla.Dataset.Cellset.html#class_Cellset\">Cellset</a></code>.</p>",
             "itemtype": "method",
             "name": "cellOrdinalForTupleIndexes",
@@ -2849,7 +2849,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6253,
+            "line": 6309,
             "description": "Gets all of the XML data into one JS object. The object consists of the following members:\n<ul>\n <li><code>axes</code>: An array of objects that represent the query axes (but not the slicer axis).\n Each axis has a <code>positions</code> member which is an array of tuples, and a <code>hierarchies</code> member, which is an array of hierarchies.</li>\n <li><code>slicerAxis</code>: An object that represents the slicer axis, or null if there is no slicer axis.</li>\n <li><code>cells</code>: An array of cell objects, representing the cellset.</li>\n</ul>",
             "itemtype": "method",
             "name": "fetchAsObject",
@@ -2862,7 +2862,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6325,
+            "line": 6381,
             "description": "Reset this object so it can be used again.",
             "itemtype": "method",
             "name": "reset",
@@ -2874,7 +2874,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6339,
+            "line": 6395,
             "description": "Cleanup this Dataset object.",
             "itemtype": "method",
             "name": "close",
@@ -2886,7 +2886,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6384,
+            "line": 6440,
             "description": "A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.\nBitwise AND-ing this mask to the member's <code>DisplayInfo</code> property returns an estimate of the number of children of this member.",
             "itemtype": "property",
             "name": "MDDISPINFO_CHILDREN_CARDINALITY",
@@ -2899,7 +2899,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6394,
+            "line": 6450,
             "description": "A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.\nIf this bit is set, it means the member is drilled down.\nThis is the case whenever at least one child of this member appears on the axis immediately following this member.",
             "itemtype": "property",
             "name": "MDDISPINFO_DRILLED_DOWN",
@@ -2912,7 +2912,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6405,
+            "line": 6461,
             "description": "A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.\nIf this bit is set, it means this member has the same parent as the member immediately preceding this member.",
             "itemtype": "property",
             "name": "MDDISPINFO_SAME_PARENT_AS_PREV",
@@ -2925,7 +2925,27 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6520,
+            "line": 6473,
+            "description": "The 0-based id of the axis.",
+            "itemtype": "property",
+            "name": "id",
+            "type": "int",
+            "class": "Xmla.Dataset.Axis",
+            "module": "xmla"
+        },
+        {
+            "file": "../src/Xmla.js",
+            "line": 6479,
+            "description": "The name of the axis.",
+            "itemtype": "property",
+            "name": "name",
+            "type": "string",
+            "class": "Xmla.Dataset.Axis",
+            "module": "xmla"
+        },
+        {
+            "file": "../src/Xmla.js",
+            "line": 6588,
             "description": "Resets this axis object.\nThis resets internal counters for iterating through the hierarchies and tuples of this Axis object.\nWhen using hierarchy and tuple iterators to traverse the entire axis, you typically won't need to call this method yourself.",
             "itemtype": "method",
             "name": "reset",
@@ -2934,7 +2954,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6531,
+            "line": 6599,
             "description": "Checks if there are more hierarchies to iterate through.\nYou can use this method along with the <code><a href=\"#method_nextHierarchy\">nextHierarchy()</a></code> method to drive a loop\nto iterate through the hierarchies contained in this axis object.",
             "itemtype": "method",
             "name": "hasMoreHierarchies",
@@ -2947,7 +2967,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6541,
+            "line": 6609,
             "description": "Moves the internal hierarchy pointer forward.\nYou can use this method along with the <code><a href=\"#method_hasMoreHierarchies\">hasMoreHierarchies()</a></code> method to drive a loop\nto iterate through the hierarchies contained in this axis object.",
             "itemtype": "method",
             "name": "nextHierarchy",
@@ -2960,7 +2980,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6551,
+            "line": 6619,
             "description": "<p>Calls a callback function for each hierarchy in this Axis object.</p>\n<p>The callback function is passed an object that represents the current hierarchy. This object has the following structure:</p><ul>\n  <li><code>index</code> <code>int</code> The ordinal identifying this hierarchy</li>\n  <li><code>name</code> <code>string</code> The name of this hierarchy</li>\n</ul>\n<p>The callback may return <code>false</code> to abort iteration. If the callback does not return <code>false</code>, iteration will resume until all hierarchies are traversed.</p>",
             "params": [
                 {
@@ -2990,7 +3010,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6579,
+            "line": 6647,
             "description": "Checks if there are more tuples to iterate through.\nYou can use this method along with the <code><a href=\"#method_nextTuple\">nextTuple()</a></code> method to drive a loop\nto iterate through the tuples contained in this axis object.",
             "itemtype": "method",
             "name": "hasMoreTuples",
@@ -3003,7 +3023,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6589,
+            "line": 6657,
             "description": "Moves the internal tuple pointer forward.\nYou can use this method along with the <code><a href=\"#method_nextTuple\">nextTuple()</a></code> method to drive a loop\nto iterate through the tuples contained in this axis object.",
             "itemtype": "method",
             "name": "nextTuple",
@@ -3016,7 +3036,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6601,
+            "line": 6669,
             "description": "Gets the number of tuples in this axis object.",
             "itemtype": "method",
             "name": "tupleCount",
@@ -3029,7 +3049,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6609,
+            "line": 6677,
             "description": "Returns the current value of the tuple pointer.",
             "itemtype": "method",
             "name": "tupleIndex",
@@ -3042,7 +3062,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6617,
+            "line": 6685,
             "description": "Get the current tuple as an object. The tuple object has the following structure: <ul>\n    <li><code>index</code> <code>int</code>: the ordinal of this tuple within its axis</li>\n    <li><code>hierarchies</code> <code>object</code>: A map of members using hierarchy names as keys, and member objects as values</li>\n    <li><code>members</code> <code>array</code>: An array of members in order of hierarchy order.</li>\n</ul>",
             "itemtype": "method",
             "name": "getTuple",
@@ -3055,7 +3075,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6638,
+            "line": 6706,
             "description": "<p>Calls a callback function for each tuple in this Axis object.</p>\n<p>The callback function is passed an object that represents the current tuple. (see <code><a href=\"#method_getTuple\">getTuple()</a></code> for a description of the tuple format.)</p>\n<p>The callback may return <code>false</code> to abort iteration. If the callback does not return <code>false</code>, iteration will resume until all tuples are traversed.</p>",
             "params": [
                 {
@@ -3085,7 +3105,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6664,
+            "line": 6732,
             "description": "Returns the hierarchies of this Axis object.",
             "itemtype": "method",
             "name": "getHierarchies",
@@ -3098,7 +3118,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6672,
+            "line": 6740,
             "description": "Returns the names of the hierarchies of this Axis object.",
             "itemtype": "method",
             "name": "getHierarchyNames",
@@ -3111,7 +3131,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6682,
+            "line": 6750,
             "description": "Gets the number of hierarchies in this axis object.",
             "itemtype": "method",
             "name": "hierarchyCount",
@@ -3124,7 +3144,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6690,
+            "line": 6758,
             "description": "Gets the index of the hierarchy identified by the specified name, or the index of the current hierarchy (in case the name argument is omitted).",
             "itemtype": "method",
             "name": "hierarchyIndex",
@@ -3144,7 +3164,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6707,
+            "line": 6775,
             "description": "Gets the name of the hierarchy identified by the specified index, or the name of the current hierarchy (in case the index argument is omitted).",
             "itemtype": "method",
             "name": "hierarchyName",
@@ -3164,7 +3184,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6725,
+            "line": 6793,
             "description": "Gets the hierarchy identified by the specified index or hierarchyName, or the current hierarchy (in case the argument is omitted).\nThe hierarchy is returned as an object with the following properties:<ul>\n  <li>index {int} Integer indicating the ordinal position of this hiearchy within the axis.</li>\n  <li>name {string} String that holds the name of this hierarchy.</li>\n</ul>\nIn addition, the XML/A specification suggests the following standard properties:<ul>\n  <li>UName {string} the unique name of this hierarchy</li>\n  <li>Caption {string} the human friendly name for this hierarchy</li>\n  <li>LName {string} the level name</li>\n  <li>LNum {int} the level number</li>\n  <li>DisplayInfo {int} displayinfo</li>\n</ul>",
             "itemtype": "method",
             "name": "hierarchy",
@@ -3184,7 +3204,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6766,
+            "line": 6834,
             "description": "Gets the member for the specified hierarchy from the current tuple. The member has the following structure: <ul>\n  <li><code>index</code> - <code>int</code></li>\n  <li><code>hierarchy</code> - <code>string</code>. Name of the hiearchy to which this member belongs.</li>\n  <li><code>UName</code> - <code>string</code>. Unique name of this member.</li>\n  <li><code>Caption</code> - <code>string</code>. Human friendly name for this member.</li>\n  <li><code>LName</code> - <code>string</code>. Name of the level to which this member belongs.</li>\n  <li><code>LNum</code> - <code>int</code>. Number of the level to which this member belongs. Typically, the top-level is level 0, its children are level 1 and so on.</li>\n  <li><code>DisplayInfo</code> - <code>int</code>. A 4 byte value. The 2 least significant bytes form a 16 bit integer that conveys the number of children of this member.\n  The remaining two most significant bytes form a 16 bit bitfield.\n  </li>\n</ul>\n<p>\nThe <code>index</code> and <code>hierarchy</code> properties are non standard and always added by Xmla4js.\nThe properties <code>UName</code>, <code>Caption</code>, <code>LName</code> and <code>LNum</code> are defined by the XML/A standard, and should always be present.\nThe property <code>DisplayInfo</code> is non-standard, but often available.\nOther properties may be present depending on the specific XML/A provider.\n</p>",
             "itemtype": "method",
             "name": "member",
@@ -3204,7 +3224,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6831,
+            "line": 6899,
             "description": "Check if the member has the specified property.\nXML/A defines these standard properties:<ul>\n  <li><code>UName</code></li>\n  <li><code>Caption</code></li>\n  <li><code>LName</code></li>\n  <li><code>LNum</code></li>\n  <li><code>DisplayInfo</code></li>\n</ul>\nThe XML/A provider may return specific additional properties.",
             "itemtype": "method",
             "name": "hasMemberProperty",
@@ -3224,7 +3244,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6848,
+            "line": 6916,
             "description": "Gets the current tuple as an array of members.\nFor a description of the structure of the member elements, see <code><a href=\"#method_member\">member()</a></code>.",
             "itemtype": "method",
             "name": "readAsArray",
@@ -3244,7 +3264,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6861,
+            "line": 6929,
             "description": "Gets the current tuple as an object.\nThe object's keys are the hierarchy names, and the members of the current tuple are used as values for the keys.\nFor a description of the structure of the member elements, see <code><a href=\"#method_member\">member()</a></code>.",
             "itemtype": "method",
             "name": "readAsObject",
@@ -3264,7 +3284,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6875,
+            "line": 6943,
             "description": "Gets the current tuple as an array of members and advances the internal tuple pointer.\nFor a description of the structure of the member elements, see <code><a href=\"#method_member\">member()</a></code>.",
             "itemtype": "method",
             "name": "fetchAsArray",
@@ -3284,7 +3304,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6890,
+            "line": 6958,
             "description": "Gets the current tuple as an object and advances the current tuple pointer.\nThe object's keys are the hierarchy names, and the members of the current tuple are used as values for the keys.\nFor a description of the structure of the member elements, see <code><a href=\"#method_member\">member()</a></code>.",
             "itemtype": "method",
             "name": "fetchAsObject",
@@ -3304,7 +3324,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6906,
+            "line": 6974,
             "description": "Fetches all tuples and returns them as an array of arrays.\nEach element of the returned array is an array of member objects.\nFor a description of the structure of the member elements, see <code><a href=\"#method_member\">member()</a></code>.",
             "itemtype": "method",
             "name": "fetchAllAsArray",
@@ -3324,7 +3344,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 6921,
+            "line": 6989,
             "description": "Fetches all tuples and returns them as an array of objects.\nEach element of the returned array is a tuple object.\nThe object's keys are the hierarchy names, and the members of the current tuple are used as values for the keys.\nFor a description of the structure of the member elements, see <code><a href=\"#method_member\">member()</a></code>.",
             "itemtype": "method",
             "name": "fetchAllAsObject",
@@ -3344,7 +3364,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7036,
+            "line": 7104,
             "description": "Returns the number of cells contained in this cellset.\nThis is the number of cells that is actually present in the cellset - not the number of logical cells.\nThe nuber of logical cells can be be calculated by multiplying the tuple counts of all axes of the data set.\nThe XML/A provider will typically not return empty cells, hence, the cellCount may be less than the logical cell count.",
             "itemtype": "method",
             "name": "cellCount",
@@ -3357,7 +3377,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7047,
+            "line": 7115,
             "description": "Resets the internal cell pointer to the argument, or to 0 if the argument is omitted.\nNormally, you shouldn't have to call this method yourself.",
             "itemtype": "method",
             "name": "reset",
@@ -3373,7 +3393,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7057,
+            "line": 7125,
             "description": "Check if there are cells to iterate through.",
             "itemtype": "method",
             "name": "hasMoreCells",
@@ -3386,7 +3406,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7065,
+            "line": 7133,
             "description": "Advance to the next (physical) cell.\nNote that this method may appear to be skipping cells. This happens when the XML/A provider omits empty cells in the response.",
             "itemtype": "method",
             "name": "nextCell",
@@ -3399,7 +3419,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7082,
+            "line": 7150,
             "description": "Returns the internal cell pointer. This is the fysical cell pointer.\nTo get the logical cell pointer, see <code><a href=\"#method_cellOrdinal\">cellOrdinal()</a></code>",
             "itemtype": "method",
             "name": "curr",
@@ -3412,7 +3432,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7091,
+            "line": 7159,
             "description": "Check if the cell has the specified property.\nXML/A defines these standard properties:<ul>\n  <li><code>Value</code></li>\n  <li><code>FmtValue</code></li>\n  <li><code>ForeColor</code></li>\n  <li><code>BackColor</code></li>\n</ul>\nWhether all these properties are returned depends on the XML/A provider and on the query.\nThe XML/A provider may return specific additional properties.",
             "itemtype": "method",
             "name": "hasCellProperty",
@@ -3432,7 +3452,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7108,
+            "line": 7176,
             "description": "Return the value of the current property of the current cell.\nXML/A defines these standard properties:<ul>\n  <li><code>Value</code></li>\n  <li><code>FmtValue</code></li>\n  <li><code>ForeColor</code></li>\n  <li><code>BackColor</code></li>\n</ul>\nWhether all these properties are returned depends on the XML/A provider and on the query.\nThe XML/A provider may return specific additional properties.",
             "itemtype": "method",
             "name": "cellProperty",
@@ -3452,7 +3472,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7147,
+            "line": 7215,
             "description": "Returns the ordinal number of the current cell.\nThe ordinal is the logical cell pointer, which may be different than the physical cell pointer.\nTo get the physical cell pointer, see <code><a href=\"#method_curr\">curr()</a></code>",
             "itemtype": "method",
             "name": "cellOrdinal",
@@ -3465,7 +3485,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7208,
+            "line": 7276,
             "description": "Reads the current cell into the specified object.",
             "itemtype": "method",
             "name": "readCell",
@@ -3485,7 +3505,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7218,
+            "line": 7286,
             "description": "Iterate through each cell.",
             "itemtype": "method",
             "name": "eachCell",
@@ -3515,7 +3535,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7241,
+            "line": 7309,
             "description": "Get a cell by its physical index.\nThis method should typically not be called by clients.\nInstead, they should use <code><a href=\"#method_getByOrdinal\">getByOrdinal()</a></code>",
             "itemtype": "method",
             "name": "getByIndex",
@@ -3540,7 +3560,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7254,
+            "line": 7322,
             "description": "Get a cell by its logical index.",
             "itemtype": "method",
             "name": "getByOrdinal",
@@ -3565,7 +3585,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7273,
+            "line": 7341,
             "description": "Get the physical cell index for the specified ordinal number.\nThis method is useful to calculate boundaries to retrieve a range of cells.",
             "itemtype": "method",
             "name": "indexForOrdinal",
@@ -3585,7 +3605,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7293,
+            "line": 7361,
             "description": "Get a range of cells withing the range that fits the specified ordinals.\nThis method is useful to grab a slice of cells for a subset of the axes.\n(You can use <code><a href=\"#method_cellOrdinalForTupleIndexes\">cellOrdinalForTupleIndexes</a></code> to calculate ordinals in terms of tuple indexes.)\nThe returned range only contains cells that actually exist so the ordinal of adjacent cells may have gaps,",
             "itemtype": "method",
             "name": "fetchRangeAsArray",
@@ -3610,7 +3630,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7315,
+            "line": 7383,
             "description": "Calculate the ordinal based on the specified tuple indexes.",
             "itemtype": "method",
             "name": "cellOrdinalForTupleIndexes",
@@ -3630,7 +3650,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7324,
+            "line": 7392,
             "description": "Get the cell corresponding to the specified tuple indexes.",
             "itemtype": "method",
             "name": "getByTupleIndexes",
@@ -3650,7 +3670,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7333,
+            "line": 7401,
             "description": "Close this cellset.",
             "itemtype": "method",
             "name": "close",
@@ -3659,7 +3679,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7383,
+            "line": 7451,
             "description": "Can appear as value for the <code><a href=\"#property_type\">type</a></code> property of instances of the <code><a href=\"#class_Xmla.Exception\">Xmla.Exception</a></code> class,\nand indicates that this <code>Xmla.Exception</code> signals a warning.",
             "itemtype": "property",
             "name": "TYPE_WARNING",
@@ -3672,7 +3692,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7394,
+            "line": 7462,
             "description": "Can appear as value for the <code><a href=\"#property_type\">type</a></code> property of instances of the <code><a href=\"#class_Xmla.Exception\">Xmla.Exception</a></code> class,\nand indicates that this <code>Xmla.Exception</code> signals an error.",
             "itemtype": "property",
             "name": "TYPE_ERROR",
@@ -3685,7 +3705,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7408,
+            "line": 7476,
             "description": "Exception code indicating a <code>requestType</code> option was expected but ommitted.",
             "itemtype": "property",
             "name": "MISSING_REQUEST_TYPE_CDE",
@@ -3698,7 +3718,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7422,
+            "line": 7490,
             "description": "Exception code indicating a <code>statement</code> option was expected but ommitted.",
             "itemtype": "property",
             "name": "MISSING_STATEMENT_CDE",
@@ -3711,7 +3731,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7437,
+            "line": 7505,
             "description": "Exception code indicating a <code>url</code> option was expected but ommitted.",
             "itemtype": "property",
             "name": "MISSING_URL_CDE",
@@ -3724,7 +3744,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7452,
+            "line": 7520,
             "description": "Exception code indicating a <code>events</code> were expected but ommitted.",
             "itemtype": "property",
             "name": "NO_EVENTS_SPECIFIED_CDE",
@@ -3737,7 +3757,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7467,
+            "line": 7535,
             "description": "Exception code indicating a <code>events</code> were specifeid in the wrong format.",
             "itemtype": "property",
             "name": "WRONG_EVENTS_FORMAT_CDE",
@@ -3750,7 +3770,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7482,
+            "line": 7550,
             "description": "Exception code indicating that the event name was unrecognized.",
             "itemtype": "property",
             "name": "UNKNOWN_EVENT_CDE",
@@ -3763,7 +3783,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7496,
+            "line": 7564,
             "description": "Exception code indicating that no proper handler was passed for the events.",
             "itemtype": "property",
             "name": "INVALID_EVENT_HANDLER_CDE",
@@ -3776,7 +3796,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7510,
+            "line": 7578,
             "description": "Exception code indicating that the rrepsonse could not be parsed",
             "itemtype": "property",
             "name": "ERROR_PARSING_RESPONSE_CDE",
@@ -3789,7 +3809,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7524,
+            "line": 7592,
             "description": "Exception code indicating the field name is not valid.",
             "itemtype": "property",
             "name": "INVALID_FIELD_CDE",
@@ -3802,7 +3822,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7539,
+            "line": 7607,
             "description": "Exception code indicating a general XMLHttpRequest error.\nIf this error occurs, the data object of the exception will have these members:\n<ul>\n    <li>request: the options that make up the original HTTP request</li>\n    <li>status: the HTTP status code</li>\n    <li>statusText: the HTTP status text</li>\n</ul>",
             "itemtype": "property",
             "name": "HTTP_ERROR_CDE",
@@ -3815,7 +3835,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7559,
+            "line": 7627,
             "description": "Exception code indicating the hierarchy name is not valid.",
             "itemtype": "property",
             "name": "INVALID_HIERARCHY_CDE",
@@ -3828,7 +3848,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7574,
+            "line": 7642,
             "description": "Exception code indicating a problem reading a member property",
             "itemtype": "property",
             "name": "UNEXPECTED_ERROR_READING_MEMBER_CDE",
@@ -3841,7 +3861,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7589,
+            "line": 7657,
             "description": "Exception code indicating the requested axis does not exist",
             "itemtype": "property",
             "name": "INVALID_AXIS",
@@ -3854,7 +3874,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7604,
+            "line": 7672,
             "description": "Exception code indicating illegal number of axis arguments",
             "itemtype": "property",
             "name": "ILLEGAL_ARGUMENT",
@@ -3867,7 +3887,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7619,
+            "line": 7687,
             "description": "Exception code indicating that we couldn't instantiate a xml http request object",
             "itemtype": "property",
             "name": "ERROR_INSTANTIATING_XMLHTTPREQUEST",
@@ -3880,7 +3900,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7646,
+            "line": 7714,
             "description": "This propery indicates what kind of exception occurred. It can have one of the following values: <dl>\n    <dt><code><a href=\"property_TYPE_WARNING\">TYPE_WARNING</a></code></dt><dd>Indicates a warning</dd>\n    <dt><code><a href=\"property_TYPE_ERROR\">TYPE_ERROR</a></code></dt><dd>Indicates an error</dd>\n</dl>",
             "itemtype": "property",
             "name": "type",
@@ -3891,7 +3911,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7656,
+            "line": 7724,
             "description": "A code that can be used to identify this particular kind of exception.",
             "itemtype": "property",
             "name": "code",
@@ -3902,7 +3922,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7663,
+            "line": 7731,
             "description": "A human readable message that describes the nature of the error or warning.",
             "itemtype": "property",
             "name": "message",
@@ -3913,7 +3933,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7670,
+            "line": 7738,
             "description": "A name that indicates in what component (on the client or server side) this error or warning occurred.",
             "itemtype": "property",
             "name": "source",
@@ -3924,7 +3944,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7677,
+            "line": 7745,
             "description": "A path or url that points to a document that contains more information about this error.",
             "itemtype": "property",
             "name": "helpfile",
@@ -3935,7 +3955,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7684,
+            "line": 7752,
             "description": "Additional data captured when the exception was instantiated.\nThe type of information stored here is dependent upon the nature of the error.",
             "itemtype": "property",
             "name": "data",
@@ -3946,7 +3966,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7695,
+            "line": 7763,
             "description": "A reference to the built-in <code>arguments</code> array of the function that is throwing the exception\nThis can be used to get a \"stack trace\"",
             "itemtype": "property",
             "name": "args",
@@ -3956,7 +3976,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7702,
+            "line": 7770,
             "description": "Returns a string representing this exception",
             "itemtype": "method",
             "name": "toString",
@@ -3968,7 +3988,7 @@
         },
         {
             "file": "../src/Xmla.js",
-            "line": 7710,
+            "line": 7778,
             "description": "Get a stack trace.",
             "itemtype": "method",
             "name": "getStackTrace",
