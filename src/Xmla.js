@@ -15,19 +15,19 @@
 
     Include this in your web-pages for debug and development purposes only.
     For production purposes, consider using the minified/obfuscated versions in the /js directory.
-    
+
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    
+
         http://www.apache.org/licenses/LICENSE-2.0
-    
+
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
+
 */
 /**
 *
@@ -4663,6 +4663,62 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <th>Description</th>
 *           <th>Restriction</th>
 *           <th>Nullable</th>
+*       </tr>
+*       <tr>
+*           <td>CATALOG_NAME</td>
+*           <td>string</td>
+*           <td>The name of the catalog to which this set belongs.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCHEMA_NAME</td>
+*           <td>string</td>
+*           <td>The name of the schema to which this property belongs. NULL if the provider does not support schemas.</td>
+*           <td>Yes</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>CUBE_NAME</td>
+*           <td>string</td>
+*           <td>The name of the cube to which the set belongs. This column always contains a value and can never be null.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SET_NAME</td>
+*           <td>string</td>
+*           <td>The name of the set.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>SCOPE</td>
+*           <td>string</td>
+*           <td>The scope of the set.</td>
+*           <td>Yes</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DESCRIPTION</td>
+*           <td>string</td>
+*           <td></td>
+*           <td>No</td>
+*           <td>Yes</td>
+*       </tr>
+*       <tr>
+*           <td>EXPRESSION</td>
+*           <td>string</td>
+*           <td>The expression for this set.</td>
+*           <td>No</td>
+*           <td>No</td>
+*       </tr>
+*       <tr>
+*           <td>DIMENSIONS</td>
+*           <td>string</td>
+*           <td>A comma separated list of dimensions used by this set.</td>
+*           <td>No</td>
+*           <td>Yes</td>
 *       </tr>
 *   </table>
 *   @method discoverMDSets
