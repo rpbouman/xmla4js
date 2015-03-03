@@ -6431,11 +6431,71 @@ Xmla.Dataset.Axis = function(_dataset, _axisInfoNode, _axisNode, name, id){
     return this;
 }
 
+/**
+*   The name of the standard member property that contains the unique name for this member.
+*   See <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms725398%28v=vs.85%29.aspx">Ole DB standard</a> for more information.
+*   @property MEMBER_UNIQUE_NAME
+*   @static
+*   @final
+*   @type string
+*   @default Uname
+*/
 Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME = "UName";
+/**
+*   The name of the standard member property that contains the caption for this member.
+*   See <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms725398%28v=vs.85%29.aspx">Ole DB standard</a> for more information.
+*   @property MEMBER_CAPTION
+*   @static
+*   @final
+*   @type string
+*   @default Caption
+*/
 Xmla.Dataset.Axis.MEMBER_CAPTION = "Caption";
+/**
+*   The name of the standard member property that contains the name of the level for this member.
+*   See <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms725398%28v=vs.85%29.aspx">Ole DB standard</a> for more information.
+*   @property MEMBER_LEVEL_NAME
+*   @static
+*   @final
+*   @type string
+*   @default LName
+*/
 Xmla.Dataset.Axis.MEMBER_LEVEL_NAME = "LName";
+/**
+*   The name of the standard member property that contains the number of the level for this member.
+*   See <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms725398%28v=vs.85%29.aspx">Ole DB standard</a> for more information.
+*   @property MEMBER_LEVEL_NUMBER
+*   @static
+*   @final
+*   @type string
+*   @default LNum
+*/
 Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER = "LNum";
+/**
+*   The name of the member property that contains displayinfo for this member.
+*   See <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms725398%28v=vs.85%29.aspx">Ole DB standard</a> for more information.
+*   @property MEMBER_DISPLAY_INFO
+*   @static
+*   @final
+*   @type string
+*   @default LNum
+*/
 Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO = "DisplayInfo";
+/**
+*   The default mem ber properties for members
+*   See <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms725398%28v=vs.85%29.aspx">Ole DB standard</a> for more information.
+*   @property DefaultMemberProperties
+*   @static
+*   @final
+*   @type array
+*/
+Xmla.Dataset.Axis.DefaultMemberProperties = [
+  Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME,
+  Xmla.Dataset.Axis.MEMBER_CAPTION,
+  Xmla.Dataset.Axis.MEMBER_LEVEL_NAME,
+  Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER,
+  Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO
+];
 
 /**
 *   A constant that can be used as a bitmask for a member's <code>DisplayInfo</code> property.
@@ -6527,7 +6587,9 @@ Xmla.Dataset.Axis.prototype = {
                 //of the property if it does not exist in a particular member
                 nodeName = propertyNode.nodeName;
                 properties[nodeName] = null;
-                if (memberProperties[nodeName]) continue;
+                if (memberProperties[nodeName]) {
+                  continue;
+                }
                 type = _getAttribute(propertyNode, "type");
                 memberProperties[nodeName] = {
                     converter: _typeConverterMap[type],
@@ -6854,7 +6916,9 @@ Xmla.Dataset.Axis.prototype = {
 *   @return {object} The member of the current tuple that belongs to the specified hierarchy, If the argument is omitted the member that belongs current hierarchy is retrieved from the current tuple.
 */
     member: function(hierarchyIndexOrName){
-        if (_isUnd(hierarchyIndexOrName)) index = this._hierarchyIndex;
+        if (_isUnd(hierarchyIndexOrName)) {
+          index = this._hierarchyIndex;
+        }
         var index, hierarchyName;
         switch(typeof(hierarchyIndexOrName)){
             case "string":
