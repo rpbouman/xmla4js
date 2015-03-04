@@ -101,7 +101,9 @@ if (typeof(require)==="function") _createXhr = function(){
             }
             options.method = "POST";//method;
             options.headers = {};
-            if (username) options.headers.Authorization = "Basic " + (new Buffer(username + ":" + (password || ""))).toString("base64");
+            if (username) {
+              options.headers.Authorization = "Basic " + (new Buffer(username + ":" + (password || ""))).toString("base64");
+            }
             this.options = options;
             this.changeStatus(-1, 1);
         },
@@ -196,7 +198,9 @@ function _ajax(options){
 
     xhr = _createXhr();
     args = ["POST", options.url, options.async];
-    if (options.username && options.password) args = args.concat([options.username, options.password]);
+    if (options.username && options.password) {
+      args = args.concat([options.username, options.password]);
+    }
     xhr.open.apply(xhr, args);
     //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
     if (!_isUnd(options.requestTimeout) && (options.async || !(window && window.document))) {
@@ -2025,9 +2029,15 @@ Xmla.prototype = {
                         },
             url: options.url
         };
-        if (options.username) ajaxOptions.username = options.username;
-        if (options.password) ajaxOptions.password = options.password;
-        if (options.headers) ajaxOptions.headers = options.headers;
+        if (options.username) {
+          ajaxOptions.username = options.username;
+        }
+        if (options.password) {
+          ajaxOptions.password = options.password;
+        }
+        if (options.headers) {
+          ajaxOptions.headers = options.headers;
+        }
 
         if (this._fireEvent(Xmla.EVENT_REQUEST, options, true) && (
             (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
@@ -6515,7 +6525,7 @@ Xmla.Dataset.Axis.MDDISPINFO_CHILDREN_CARDINALITY = 65535;
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default <code>65536</code>
 */
 Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 65536;
 /**
@@ -6525,7 +6535,7 @@ Xmla.Dataset.Axis.MDDISPINFO_DRILLED_DOWN = 65536;
 *   @static
 *   @final
 *   @type int
-*   @default <code>1</code>
+*   @default <code>131072</code>
 */
 Xmla.Dataset.Axis.MDDISPINFO_SAME_PARENT_AS_PREV = 131072;
 
@@ -6762,7 +6772,9 @@ Xmla.Dataset.Axis.prototype = {
                 members: members
             }
         ;
-        for (i=0; i < n; i++) members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
+        for (i=0; i < n; i++) {
+          members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
+        }
         return tuple;
     },
 /**
