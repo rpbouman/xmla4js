@@ -1,11 +1,15 @@
 xmla4js
 =======
 
-Xmla4js is a standalone javascript library that provides basic XML for Analysis (XML/A) capabilities, allowing javascript developers to access data and metadata from OLAP provides for use in rich (web) applications. Xmla4js can be used inside a webpage or in a server environment like node.js
+Xmla4js is a standalone javascript library that provides basic XML for Analysis (XML/A) capabilities, allowing javascript developers to access data and metadata from OLAP provides for use in rich (web) applications.
 
+xmla4js is XML/A for javascript
+===============================
 XML/A is an industry standard protocol to communicate with OLAP servers over HTTP. It defines a SOAP webservice that allows clients to obtain metadata and to execute MDX (multi-dimensional expressions) queries. XML is used as the data exchange format.
 
 Xmla4js handles all details of the SOAP protocol by offering a comprehensive JavaScript API. However, Xmla4js still allows you complete control over the request and response. Xmla4js does not unnecessarily lock down or abstract away the XML/A semantics itself.
+
+Xmla4js can be used inside any webbrowser that supports javascript, or in a server environment like node.js
 
 Features
 ========
@@ -20,7 +24,9 @@ For effective usage of Xmla4js, some background knowledge of the XML/A protocol 
 ![Pivot Table Small](https://raw.github.com/latinojoel/xmla4js/master/samples/pivot-table-small.png)
 ![YUI Chart Wizard Small](https://raw.github.com/latinojoel/xmla4js/master/samples/yui-chart-wizard-small.png)
 
-For more advanced scenario's, full API documentation is available based on the the YUI Doc system.
+API documentation
+=================
+For more advanced scenario's, full API documentation is available based on the the YUI Doc system. You can find the documentation in the doc/api directory/index.html.
 
 Notice
 ======
