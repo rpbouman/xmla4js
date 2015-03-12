@@ -173,10 +173,14 @@ function _ajax(options){
             handlerCalled = true;
             switch (xhr.readyState){
                 case 0:
-                    if (_isFun(options.aborted)) options.aborted(xhr);
+                    if (_isFun(options.aborted)) {
+                      options.aborted(xhr);
+                    }
                     break;
                 case 4:
-                    if (xhr.status === 200) options.complete(xhr)
+                    if (xhr.status === 200) {
+                      options.complete(xhr)
+                    }
                     else {
                         var err = Xmla.Exception._newError(
                                 "HTTP_ERROR",
@@ -209,9 +213,15 @@ function _ajax(options){
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
-    if (headers = options.headers) for (header in headers) xhr.setRequestHeader(header, headers[header]);
+    if (headers = options.headers) {
+      for (header in headers) {
+        xhr.setRequestHeader(header, headers[header]);
+      }
+    }
     xhr.send(options.data);
-    if (!options.async && !handlerCalled) handler.call(xhr);
+    if (!options.async && !handlerCalled) {
+      handler.call(xhr);
+    }
     return xhr;
 };
 
@@ -1557,7 +1567,9 @@ Xmla.prototype = {
 *   @return {DOMDocument}
 */
     getResponseXML: function(){
-        if (_isObj(this.responseXML)) return this.responseXML;
+        if (_isObj(this.responseXML)) {
+          return this.responseXML;
+        }
         return (this.responseXML = _xjs(this.responseText));
     },
 /**
@@ -2052,7 +2064,9 @@ Xmla.prototype = {
     },
     _requestSuccess: function(request) {
         var xhr = request.xhr, response;
-        if (request.forceResponseXMLEmulation !== true) this.responseXML = xhr.responseXML;
+        if (request.forceResponseXMLEmulation !== true) {
+          this.responseXML = xhr.responseXML;
+        }
         this.responseText = xhr.responseText;
 
         var method = request.method;
@@ -4037,14 +4051,30 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *       <tr>
 *           <td>CUSTOM_ROLLUP_SETTINGS</td>
 *           <td>int</td>
-*           <td>A bitmap that specifies the custom rollup options: MDLEVELS_CUSTOM_ROLLUP_EXPRESSION (0x01) indicates an expression exists for this level. (Deprecated) MDLEVELS_CUSTOM_ROLLUP_COLUMN (0x02) indicates that there is a custom rollup column for this level. MDLEVELS_SKIPPED_LEVELS (0x04) indicates that there is a skipped level associated with members of this level.MDLEVELS_CUSTOM_MEMBER_PROPERTIES (0x08) indicates that members of the level have custom member properties. MDLEVELS_UNARY_OPERATOR (0x10) indicates that members on the level have unary operators.</td>
+*           <td>A bitmap that specifies the custom rollup options:
+*             <ul>
+*               <li>MDLEVELS_CUSTOM_ROLLUP_EXPRESSION (0x01) indicates an expression exists for this level. (Deprecated)</li>
+*               <li>MDLEVELS_CUSTOM_ROLLUP_COLUMN (0x02) indicates that there is a custom rollup column for this level.</li>
+*               <li>MDLEVELS_SKIPPED_LEVELS (0x04) indicates that there is a skipped level associated with members of this level.</li>
+*               <li>MDLEVELS_CUSTOM_MEMBER_PROPERTIES (0x08) indicates that members of the level have custom member properties.</li>
+*               <li>MDLEVELS_UNARY_OPERATOR (0x10) indicates that members on the level have unary operators.</li>
+*             </ul>
+*           </td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>LEVEL_UNIQUE_SETTINGS</td>
 *           <td>int</td>
-*           <td>A bitmap that specifies which columns contain unique values, if the level only has members with unique names or keys. The Msmd.h file defines the following bit value constants for this bitmap: MDDIMENSIONS_MEMBER_KEY_UNIQUE (1) MDDIMENSIONS_MEMBER_NAME_UNIQUE (2)The key is always unique in Microsoft SQL Server 2005 Analysis Services (SSAS). The name will be unique if the setting on the attribute is UniqueInDimension or UniqueInAttribute</td>
+*           <td>A bitmap that specifies which columns contain unique values, if the level only has members with unique names or keys.
+*               The Msmd.h file defines the following bit value constants for this bitmap:
+*             <ul>
+*               <li>MDDIMENSIONS_MEMBER_KEY_UNIQUE (1)</li>
+*               <li>MDDIMENSIONS_MEMBER_NAME_UNIQUE (2)</li>
+*             </ul>
+*               The key is always unique in Microsoft SQL Server 2005 Analysis Services (SSAS).
+*               The name will be unique if the setting on the attribute is UniqueInDimension or UniqueInAttribute
+*           </td>
 *           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
@@ -4784,6 +4814,9 @@ function _getComplexType(node, name){
 *   @param {Xmla} xmla The Xmla instance that created this Rowset. This is mainly used to allow the Rowset to access the options passed to the Xmla constructor.
 */
 Xmla.Rowset = function (node, requestType, xmla){
+    if (typeof(node) === "string"){
+      node = _xjs(node);
+    }
     this._node = node;
     this._type = requestType;
     this._xmla = xmla;
@@ -6002,6 +6035,9 @@ while (rowObject = rowset.fetchAsObject()){
 *   @param {DOMDocument} doc The responseXML result returned by server in response to a <code>Execute</code> request.
 */
 Xmla.Dataset = function(doc){
+    if (typeof(doc) === "string") {
+      doc = _xjs(doc);
+    }
     this._initDataset(doc);
     return this;
 }
