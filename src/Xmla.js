@@ -500,7 +500,12 @@ function _xjs(xml) {
           apos: "'",
           quot: "\""
         })[g2];
-        if (!v) throw "Illegal named entity: " + g2;
+        if (v) {
+          return v;
+        }
+        else {
+          throw "Illegal named entity: " + g2;
+        }
       }
       else {
         return String.fromCharCode(g4, g3 ? 16: 10);
