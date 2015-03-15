@@ -7464,14 +7464,22 @@ Xmla.Dataset.Cellset.prototype = {
  */
     indexForOrdinal: function(ordinal){
         var index = ordinal, cellOrdinal, node;
-        while(true) {
+        while(index >= 0) {
             node = this._cellNodes[index];
-            if (!node) node = this._cellNodes[this._cellNodes.length - 1];
+            if (!node) {
+              node = this._cellNodes[this._cellNodes.length - 1];
+            }
             cellOrdinal = this._getCellOrdinal(node);
-            if (cellOrdinal === ordinal) return index;
+            if (cellOrdinal === ordinal) {
+              return index;
+            }
             else
-            if (cellOrdinal > ordinal) index--;
-            else return -1;
+            if (cellOrdinal > ordinal) {
+              index--;
+            }
+            else {
+              return -1;
+            }
         }
         return null;
     },
