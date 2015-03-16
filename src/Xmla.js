@@ -7463,10 +7463,20 @@ Xmla.Dataset.Cellset.prototype = {
  *  @return {int} The physical index.
  */
     indexForOrdinal: function(ordinal){
-        var index = ordinal, cellOrdinal, node;
+        var index = ordinal,    //the index can at most be ordinal; less if there are missing (empty) cells
+            cellOrdinal, node
+        ;
         while(index >= 0) {
+            //get the node at the current index
             node = this._cellNodes[index];
+            //if we don't have a node here, it means there is at least one empty cell,
+            //iow there are less cells than theoretically possible cell ordinals.
             if (!node) {
+              //if we don't have any cells at all, we bail out
+              if (this._cellNodes.length === 0) {
+                return -1;
+              }
+              //start scanning from the end of the collection of cells
               node = this._cellNodes[this._cellNodes.length - 1];
             }
             cellOrdinal = this._getCellOrdinal(node);
