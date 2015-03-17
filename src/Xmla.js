@@ -6412,7 +6412,9 @@ Xmla.Dataset.prototype = {
           cell = cellset.readCell();
           if (idx == cell.ordinal) {
             cells.push(cell);
-            cellset.nextCell();
+            if (cellset.nextCell() === -1) {
+              break;
+            }
           } else {
             //console.debug('skipping: '+idx+':'+cell.ordinal);
             cells.push({Value:null, FmtValue:null, FormatString: null, ordinal:idx });
@@ -6830,14 +6832,22 @@ Xmla.Dataset.Axis.prototype = {
 */
     eachTuple: function(callback, scope, args){
         var mArgs = [null];
-        if (!scope) scope = this;
+        if (!scope) {
+          scope = this;
+        }
         if (args) {
-            if (_isArr(args)) mArgs.concat(args)
-            else mArgs.push(args);
+            if (_isArr(args)) {
+              mArgs.concat(args)
+            }
+            else {
+              mArgs.push(args);
+            }
         }
         while (this.hasMoreTuples()){
             mArgs[0] = this.getTuple();
-            if (callback.apply(scope, mArgs) === false) return false;
+            if (callback.apply(scope, mArgs) === false) {
+              return false;
+            }
             this.nextTuple();
         }
         this._tupleIndex = 0;
@@ -7339,42 +7349,6 @@ Xmla.Dataset.Cellset.prototype = {
     cellOrdinal: function() {
         return this._cellOrd;
     },
-/*
- *  TODO: check with andy if we can remove these.
- *  These methods only work for 2 dimensional sets.
- *  IMO now that we have methods to compute the ordinal based on tuple indexes, we don't need this anymore.
- *
-    fetchAsArrayOfValues: function(){
-        var colArray = [];
-
-        for (var c=0, cols=this._dataset.getAxis(Xmla.Dataset.AXIS_COLUMNS).numTuples;c<cols;c++){
-            colArray[colArray.length] = this.cellValue();
-            this.nextCell();
-        }
-        return colArray;
-    },
-    fetchAllAsArrayOfValues: function(){
-        var row, rows=[];
-        while((row = this.fetchAsArrayOfValues()) && (this.hasMoreCells())){
-            rows.push(row);
-        }
-        return rows;
-    },
-    eachRow: function(rowCallback, scope, args){
-        if (_isUnd(scope)) scope = this;
-        var mArgs = [null];
-        if (!_isUnd(args)) {
-            if (!_isArr(args)) args = [args];
-            mArgs = mArgs.concat(args);
-        }
-        var row, rows=[];
-        while((row = this.fetchAsArrayOfValues()) && (this.hasMoreCells())){
-            mArgs[0] = row;
-            if (rowCallback.apply(scope, mArgs)===false) return false;
-        }
-        return true;
-    },
-*/
     _readCell: function(node, object){
         var p, cellProp, cellProperty;
         for (p in this._cellProperties){
@@ -7397,7 +7371,9 @@ Xmla.Dataset.Cellset.prototype = {
 *   @return {object} An object that represents the current cell.
 */
     readCell: function(object) {
-        if (!object) object = {};
+        if (!object) {
+          object = {};
+        }
         return this._readCell(this._cellNode, object);
     },
 /**
@@ -7410,15 +7386,22 @@ Xmla.Dataset.Cellset.prototype = {
 */
     eachCell: function(callback, scope, args) {
         var mArgs = [null];
-        if (!scope) scope = this;
+        if (!scope) {
+          scope = this;
+        }
         if (args) {
-            if (!_isArr(args)) args = [args];
+            if (!_isArr(args)) {
+              args = [args];
+            }
             mArgs = mArgs.concat(args);
         }
-        while (this.hasMoreCells()){
-            this.nextCell();
+        var ord;
+        while (ord !== -1 && this.hasMoreCells()){
+            ord = this.nextCell();
             mArgs[0] = this.readCell();
-            if (callback.apply(scope, mArgs)===false) return false;
+            if (callback.apply(scope, mArgs)===false) {
+              return false;
+            }
         }
         this._idx = 0;
         return true;
