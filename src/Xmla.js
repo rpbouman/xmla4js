@@ -6410,7 +6410,7 @@ Xmla.Dataset.prototype = {
       cellset = this.getCellset();
       for (i = 0, n = tuples; i < n; i++){
           cell = cellset.readCell();
-          if (idx == cell.ordinal) {
+          if (idx === cell.ordinal) {
             cells.push(cell);
             if (cellset.nextCell() === -1) {
               break;
@@ -7247,7 +7247,9 @@ Xmla.Dataset.Cellset.prototype = {
 */
     reset: function(idx){
         this._idx = idx ? idx : 0;
-        if (this.hasMoreCells()) this._getCellNode();
+        if (this.hasMoreCells()) {
+          this._getCellNode();
+        }
     },
 /**
 *   Check if there are cells to iterate through.
