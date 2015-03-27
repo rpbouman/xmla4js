@@ -4017,6 +4017,18 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>int</td>
 *           <td>Type of the level:
 *                <ul>
+*                   <li>MDLEVEL_TYPE_REGULAR (0x0000)</li>
+*                   <li>MDLEVEL_TYPE_ALL (0x0001)</li>
+*                   <li>MDLEVEL_TYPE_TIME_YEARS (0x0014)</li>
+*                   <li>MDLEVEL_TYPE_TIME_HALF_YEAR (0x0024)</li>
+*                   <li>MDLEVEL_TYPE_TIME_QUARTERS (0x0044)</li>
+*                   <li>MDLEVEL_TYPE_TIME_MONTHS (0x0084)</li>
+*                   <li>MDLEVEL_TYPE_TIME_WEEKS (0x0104)</li>
+*                   <li>MDLEVEL_TYPE_TIME_DAYS (0x0204)</li>
+*                   <li>MDLEVEL_TYPE_TIME_HOURS (0x0304)</li>
+*                   <li>MDLEVEL_TYPE_TIME_MINUTES (0x0404)</li>
+*                   <li>MDLEVEL_TYPE_TIME_SECONDS (0x0804)</li>
+*                   <li>MDLEVEL_TYPE_TIME_UNDEFINED (0x1004)</li>
 *                   <li>MDLEVEL_TYPE_GEO_CONTINENT (0x2001)</li>
 *                   <li>MDLEVEL_TYPE_GEO_REGION (0x2002)</li>
 *                   <li>MDLEVEL_TYPE_GEO_COUNTRY (0x2003)</li>
@@ -4044,6 +4056,13 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *                   <li>MDLEVEL_TYPE_REPRESENTATIVE (0x1062)</li>
 *                   <li>MDLEVEL_TYPE_PROMOTION (0x1071)</li>
 *                </ul>
+*               Some of the OLE DB for OLAP values are as flags, and do not become values of the enumeration:
+*               <ul>
+*                   <li>MDLEVEL_TYPE_UNKNOWN (0x0000) signals that no other flags are set.</li>
+*                   <li>MDLEVEL_TYPE_CALCULATED (0x0002) indicates that the level is calculated.</li>
+*                   <li>MDLEVEL_TYPE_TIME (0x0004) indicates that the level is time-related.</li>
+*                   <li>MDLEVEL_TYPE_RESERVED1 (0x0008) is reserved for future use.</li>
+*               </ul>
 *           <td>No</td>
 *           <td>Yes</td>
 *       <tr>
