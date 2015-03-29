@@ -6302,24 +6302,7 @@ Xmla.Dataset.prototype = {
         return this.hasAxis(Xmla.Dataset.AXIS_PAGES);
     },
 /**
-*   Get the Section axis. This is the fourth axis, and has ordinal 3. If the section axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.
-*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasPageAxis">hasSectionAxis()</a></code> method to determine if the axis exists.
-*   @method getSectionAxis
-*   @return {Xmla.Dataset.Axis} The section <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object.
-*/
-    getSectionAxis: function(){
-        return this.getAxis(Xmla.Dataset.AXIS_SECTIONS);
-    },
-/**
-*   Determine if the section axis exists.
-*   @method hasSectionAxis
-*   @return {boolean} <code>true</code> if the section axis exists, <code>false</code> if it doesn't exist.
-*/
-    hasSectionAxis: function(){
-        return this.hasAxis(Xmla.Dataset.AXIS_SECTIONS);
-    },
-/**
-*   Get the Chapter axis. This is the fifth axis, and has ordinal 4. If the chapter axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.
+*   Get the Chapter axis. This is the fourth axis, and has ordinal 3. If the chapter axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.
 *   To prevent an exception from being thrown, you should call the <code><a href="#method_hasChapterAxis">hasChapterAxis()</a></code> method to determine if the axis exists.
 *   @method getChapterAxis
 *   @return {Xmla.Dataset.Axis} The chapter <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object.
@@ -6334,6 +6317,23 @@ Xmla.Dataset.prototype = {
 */
     hasChapterAxis: function(){
         return this.hasAxis(Xmla.Dataset.AXIS_CHAPTERS);
+    },
+/**
+*   Get the Section axis. This is the fifth axis, and has ordinal 4. If the section axis doesn't exist, an <code>INVALID_AXIS</code> exception is thrown.
+*   To prevent an exception from being thrown, you should call the <code><a href="#method_hasPageAxis">hasSectionAxis()</a></code> method to determine if the axis exists.
+*   @method getSectionAxis
+*   @return {Xmla.Dataset.Axis} The section <code><a href="Xmla.Dataset.Axis.html#class_Axis">Xmla.Dataset.Axis</a></code> object.
+*/
+    getSectionAxis: function(){
+        return this.getAxis(Xmla.Dataset.AXIS_SECTIONS);
+    },
+/**
+*   Determine if the section axis exists.
+*   @method hasSectionAxis
+*   @return {boolean} <code>true</code> if the section axis exists, <code>false</code> if it doesn't exist.
+*/
+    hasSectionAxis: function(){
+        return this.hasAxis(Xmla.Dataset.AXIS_SECTIONS);
     },
 /**
 *   Get the Slicer axis. This is the axis that appears in the <code>WHERE</code> clause of the MDX statement.
