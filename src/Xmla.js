@@ -7216,7 +7216,9 @@ Xmla.Dataset.Cellset.prototype = {
             //find the xsd:element node that describes this property
             for (j = 0; j < numCellSchemaElements; j++) {
                 cellSchemaElement = cellSchemaElements[j];
-                if (_getAttribute(cellSchemaElement, "name") !== propertyNodeTagName) continue;
+                if (_getAttribute(cellSchemaElement, "name") !== propertyNodeTagName) {
+                  continue;
+                }
                 type = _getAttribute(cellSchemaElement, "type");
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
                 this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
@@ -7240,7 +7242,9 @@ Xmla.Dataset.Cellset.prototype = {
     },
     _getCellNode: function(index){
     //console.debug(index);
-        if (!_isUnd(index)) this._idx = index;
+        if (!_isUnd(index)) {
+          this._idx = index;
+        }
         this._cellNode = this._cellNodes[this._idx];
         this._cellOrd = this._getCellOrdinal(this._cellNode);
     },
@@ -7376,11 +7380,20 @@ Xmla.Dataset.Cellset.prototype = {
             cellProp = _getElementsByTagNameNS(
                 node, _xmlnsDataset, "", p
             )[0];
-            if (!cellProp) continue;
+            if (!cellProp) {
+              continue;
+            }
             cellProperty = this._cellProperties[p];
-            if (cellProperty) object[p] = cellProperty(_getElementText(cellProp));
-            else if (p === "Value") object[p] = _getElementValue(cellProp);
-            else object[p] = _getElementText(cellProp);
+            if (cellProperty) {
+              object[p] = cellProperty(_getElementText(cellProp));
+            }
+            else
+            if (p === "Value") {
+              object[p] = _getElementValue(cellProp);
+            }
+            else {
+              object[p] = _getElementText(cellProp);
+            }
         }
         object.ordinal = this._getCellOrdinal(node);
         return object;
