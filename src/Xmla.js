@@ -6470,9 +6470,13 @@ Xmla.Dataset.prototype = {
 *   @return void
 */
     close: function(){
-        if (this._slicer) this._slicer.close();
+        if (this._slicer) {
+          this._slicer.close();
+        }
         var i, n = this._numAxes;
-        for (i = 0; i < n; i++) this.getAxis(i).close();
+        for (i = 0; i < n; i++) {
+          this.getAxis(i).close();
+        }
         this._cellset.close();
         this._cellset = null;
         this._root = null;
