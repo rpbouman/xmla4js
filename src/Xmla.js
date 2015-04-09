@@ -1284,7 +1284,7 @@ Xmla.PROP_DATASOURCEINFO = "DataSourceInfo";
 *   The XML/A <code>Catalog</code> spefifies where to look for cubes that are referenced in th MDX statment.
 *   Valid values for the <code>Catalog</code> should be obtained
 *   by querying the <code>CATALOG_NAME</code> of the <code>DBSCHEMA_CATALOGS</code>
-*   rowset (see <code><a href="method_discoverCatalogs">discoverCatalogs()</a></code>).
+*   rowset (see <code><a href="method_discoverDBCatalogs">discoverDBCatalogs()</a></code>).
 *
 *   @property PROP_Catalog
 *   @static
