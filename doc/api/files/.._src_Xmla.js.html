@@ -1685,7 +1685,7 @@ Xmla.prototype = {
 *    For example, if you plan to do a series of requests pertaining to one particular datasource,
 *    you can set the mandatory options like url, async, datasource and catalog just once:
 *    &lt;pre&gt;
-&amp;nbsp;   xml.setOptions({
+&amp;nbsp;   xmla.setOptions({
 &amp;nbsp;       url: &quot;http://localhost:8080/pentaho/Xmla&quot;,
 &amp;nbsp;       async: true,
 &amp;nbsp;       properties: {
@@ -2437,6 +2437,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   and retrieves the &lt;code&gt;DISCOVER_DATASOURCES&lt;/code&gt; schema rowset.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2444,6 +2445,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;
 *               DataSourceName
@@ -2576,6 +2579,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *               No
 *           &lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *
 *   @method discoverDataSources
@@ -2594,6 +2598,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   This rowset provides information on the properties that are supported by the XML/A provider.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2601,6 +2606,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;
 *               PropertyName
@@ -2708,6 +2715,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *               Yes
 *           &lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *
 *   @method discoverProperties
@@ -2726,6 +2734,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   This rowset lists all possible request types supported by this provider.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2733,6 +2742,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;SchemaName&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -2754,6 +2765,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *
 *   @method discoverSchemaRowsets
@@ -2772,6 +2784,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   This rowset lists the names, data types, and enumeration values of enumerators supported by the XMLA Provider for a specific data source.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2779,6 +2792,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;EnumName&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -2821,6 +2836,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *
 *   @method discoverEnumerators
@@ -2839,6 +2855,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   This rowset is a list of reserved words for this XML/A provider.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2846,6 +2863,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;Keyword&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -2853,6 +2872,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;Yes (array)&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *
 *   @method discoverKeywords
@@ -2871,6 +2891,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   This rowset is a list of reserved words for this XML/A provider.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2878,6 +2899,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LiteralName&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -2913,6 +2936,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *
 *   @method discoverLiterals
@@ -2931,6 +2955,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   and retrieves the &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; schema rowset.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2938,6 +2963,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -2966,6 +2993,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverDBCatalogs
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_CATALOGS&lt;/code&gt; request.
@@ -2984,6 +3012,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   Provides column information for all columns meeting the provided restriction criteria.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -2991,6 +3020,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *        &lt;tr&gt;
 *            &lt;td&gt;TABLE_CATALOG&lt;/td&gt;
 *            &lt;td&gt;string&lt;/td&gt;
@@ -3194,6 +3225,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *            &lt;td&gt;Yes&lt;/td&gt;
 *            &lt;td&gt;No&lt;/td&gt;
 *        &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *    The rowset is sorted on TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME.
 *   @method discoverDBColumns
@@ -3213,6 +3245,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3220,6 +3253,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *        &lt;tr&gt;
 *            &lt;td&gt;TYPE_NAME&lt;/td&gt;
 *            &lt;td&gt;string&lt;/td&gt;
@@ -3367,6 +3402,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *            &lt;td&gt;false&lt;/td&gt;
 *            &lt;td&gt;true&lt;/td&gt;
 *        &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *    &lt;/table&gt;
 *   @method discoverDBProviderTypes
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_PROVIDER_TYPES&lt;/code&gt; request.
@@ -3385,6 +3421,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3392,6 +3429,9 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverDBSchemata
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_SCHEMATA&lt;/code&gt; request.
@@ -3410,6 +3450,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3417,6 +3458,9 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverDBTables
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_TABLES&lt;/code&gt; request.
@@ -3435,6 +3479,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3442,6 +3487,9 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverDBTablesInfo
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;DBSCHEMA_TABLES_INFO&lt;/code&gt; request.
@@ -3464,6 +3512,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3471,6 +3520,9 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDActions
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_ACTIONS&lt;/code&gt; request.
@@ -3489,6 +3541,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3496,6 +3549,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -3622,6 +3677,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDCubes
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_CUBES&lt;/code&gt; request.
@@ -3640,6 +3696,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3647,6 +3704,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -3786,6 +3845,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDDimensions
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_DIMENSIONS&lt;/code&gt; request.
@@ -3804,6 +3864,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3811,6 +3872,9 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDFunctions
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_FUNCTIONS&lt;/code&gt; request.
@@ -3829,6 +3893,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -3836,6 +3901,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -4011,6 +4078,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDHierarchies
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_HIERARCHIES&lt;/code&gt; request.
@@ -4028,6 +4096,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   and retrieves the &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; schema rowset.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -4035,6 +4104,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -4272,6 +4343,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDLevels
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_LEVELS&lt;/code&gt; request.
@@ -4290,6 +4362,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -4297,6 +4370,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -4349,14 +4424,55 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_AGGREGATOR&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
-*           &lt;td&gt;An enumeration that indicates how the measure was derived. See http://msdn.microsoft.com/en-us/library/ms126250.aspx&lt;/td&gt;
+*           &lt;td&gt;An enumeration that indicates how the measure was derived. See &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/ms126250.aspx&quot; target=&quot;msdn&quot;&gt;http://msdn.microsoft.com/en-us/library/ms126250.aspx&lt;/a&gt;&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DATA_TYPE&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
-*           &lt;td&gt;The data type of the measure. See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx&lt;/td&gt;
+*           &lt;td&gt;The data type of the measure. Valid values are:
+*             &lt;dl&gt;
+*               &lt;dt&gt;DBTYPE_EMPTY&lt;/dt&gt;&lt;dd&gt;0&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_NULL&lt;/dt&gt;&lt;dd&gt;1&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_I2&lt;/dt&gt;&lt;dd&gt;2&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_I4&lt;/dt&gt;&lt;dd&gt;3&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_R4&lt;/dt&gt;&lt;dd&gt;4&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_R8&lt;/dt&gt;&lt;dd&gt;5&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_CY&lt;/dt&gt;&lt;dd&gt;6&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_DATE&lt;/dt&gt;&lt;dd&gt;7&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_BSTR&lt;/dt&gt;&lt;dd&gt;8&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_IDISPATCH&lt;/dt&gt;&lt;dd&gt;9&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_ERROR&lt;/dt&gt;&lt;dd&gt;10&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_BOOL&lt;/dt&gt;&lt;dd&gt;11&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_VARIANT&lt;/dt&gt;&lt;dd&gt;12&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_IUNKNOWN&lt;/dt&gt;&lt;dd&gt;13&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_DECIMAL&lt;/dt&gt;&lt;dd&gt;14&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_UI1&lt;/dt&gt;&lt;dd&gt;17&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_ARRAY&lt;/dt&gt;&lt;dd&gt;0x2000&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_BYREF&lt;/dt&gt;&lt;dd&gt;0x4000&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_I1&lt;/dt&gt;&lt;dd&gt;16&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_UI2&lt;/dt&gt;&lt;dd&gt;18&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_UI4&lt;/dt&gt;&lt;dd&gt;19&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_I8&lt;/dt&gt;&lt;dd&gt;20&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_UI8&lt;/dt&gt;&lt;dd&gt;21&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_GUID&lt;/dt&gt;&lt;dd&gt;72&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_VECTOR&lt;/dt&gt;&lt;dd&gt;0x1000&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_FILETIME&lt;/dt&gt;&lt;dd&gt;64&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_RESERVED&lt;/dt&gt;&lt;dd&gt;0x8000&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_BYTES&lt;/dt&gt;&lt;dd&gt;128&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_STR&lt;/dt&gt;&lt;dd&gt;129&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_WSTR&lt;/dt&gt;&lt;dd&gt;130&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_NUMERIC&lt;/dt&gt;&lt;dd&gt;131&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_UDT&lt;/dt&gt;&lt;dd&gt;132&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_DBDATE&lt;/dt&gt;&lt;dd&gt;133&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_DBTIME&lt;/dt&gt;&lt;dd&gt;134&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_DBTIMESTAMP&lt;/dt&gt;&lt;dd&gt;135&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_HCHAPTER&lt;/dt&gt;&lt;dd&gt;136&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_PROPVARIANT&lt;/dt&gt;&lt;dd&gt;138&lt;/dd&gt;
+*               &lt;dt&gt;DBTYPE_VARNUMERIC&lt;/dt&gt;&lt;dd&gt;139&lt;/dd&gt;
+*             &lt;/dl&gt;
+*            See: &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx&quot; target=&quot;msdn&quot;&gt;http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx&lt;/a&gt;&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
@@ -4444,6 +4560,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDMeasures
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_MEASURES&lt;/code&gt; request.
@@ -4461,6 +4578,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   and retrieves the &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; schema rowset.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -4468,6 +4586,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -4603,6 +4723,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDMembers
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_MEMBERS&lt;/code&gt; request.
@@ -4620,6 +4741,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   and retrieves the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; schema rowset.
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -4627,6 +4749,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -4803,6 +4927,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDProperties
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; request.
@@ -4821,6 +4946,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   ...todo...
 *   The rowset has the following columns:
 *   &lt;table border=&quot;1&quot; class=&quot;schema-rowset&quot;&gt;
+*     &lt;thead&gt;
 *       &lt;tr&gt;
 *           &lt;th&gt;Column Name&lt;/th&gt;
 *           &lt;th&gt;Type&lt;/th&gt;
@@ -4828,6 +4954,8 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;th&gt;Restriction&lt;/th&gt;
 *           &lt;th&gt;Nullable&lt;/th&gt;
 *       &lt;/tr&gt;
+*     &lt;/thead&gt;
+*     &lt;tbody&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
@@ -4884,6 +5012,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
+*     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDSets
 *   @param {Object} options An object whose properties convey the options for the XML/A a &lt;code&gt;MDSCHEMA_SETS&lt;/code&gt; request.
