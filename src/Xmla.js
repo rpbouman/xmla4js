@@ -3774,6 +3774,99 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *       </tr>
 *     </thead>
 *     <tbody>
+*       <tr>
+*         <td>FUNCTION_NAME</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>The name of the function.</td>
+*         <td>Yes</td>
+*         <td>Yes</td>
+*       </tr>
+*       <tr>
+*         <td>DESCRIPTION</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>A description of the function.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>PARAMETER_LIST</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>A comma delimited list of parameters formatted as in Microsoft Visual Basic. For example, a parameter might be Name as String.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>RETURN_TYPE</td>
+*         <td>DBTYPE_I4</td>
+*         <td>The VARTYPE of the return data type of the function.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>ORIGIN</td>
+*         <td>DBTYPE_I4</td>
+*         <td>The origin of the function:
+*           <ol>
+*             <li>for MDX functions.</li>
+*             <li>for user-defined functions.</li>
+*           </ol>
+*         </td>
+*         <td>Yes</td>
+*         <td>Yes</td>
+*       </tr>
+*       <tr>
+*         <td>INTERFACE_NAME</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>The name of the interface for user-defined functions. The group name for Multidimensional Expressions (MDX) functions.</td>
+*         <td>Yes</td>
+*         <td>Yes</td>
+*       </tr>
+*       <tr>
+*         <td>LIBRARY_NAME</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>The name of the type library for user-defined functions. NULL for MDX functions.</td>
+*         <td>Yes</td>
+*         <td>Yes</td>
+*       </tr>
+*       <tr>
+*         <td>DLL_NAME</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>(Optional) The name of the assembly that implements the user-defined function. Returns VT_NULL for MDX functions.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>HELP_FILE</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>(Optional) The name of the file that contains the help documentation for the user-defined function.</td>
+*         <td>Returns VT_NULL for MDX functions.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>HELP_CONTEXT</td>
+*         <td>DBTYPE_I4</td>
+*         <td>(Optional) Returns the Help context ID for this function.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>OBJECT</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>
+*           (Optional) The generic name of the object class to which a property applies. For example, the rowset corresponding to the <level_name>.Members function returns "Level".
+*            Returns VT_NULL for user-defined functions, or non-property MDX functions.
+*         </td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
+*       <tr>
+*         <td>CAPTION</td>
+*         <td>DBTYPE_WSTR</td>
+*         <td>The display caption for the function.</td>
+*         <td>No</td>
+*         <td>No</td>
+*       </tr>
 *     </tbody>
 *   </table>
 *   @method discoverMDFunctions
