@@ -2139,8 +2139,18 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, request);
                     break;
             }
-            if (request.success) request.success.call(request.scope ? request.scope : null, this, request, response);
-            if (request.callback) request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_SUCCESS, this, request, response);
+            if (request.success) {
+              request.success.call(
+                request.scope ? request.scope : null,
+                this, request, response
+              );
+            }
+            if (request.callback) {
+              request.callback.call(
+                request.scope ? request.scope : null,
+                Xmla.EVENT_SUCCESS, this, request, response
+              );
+            }
             this._fireEvent(Xmla.EVENT_SUCCESS, request);
         }
     },
