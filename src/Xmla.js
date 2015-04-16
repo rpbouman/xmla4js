@@ -1,6 +1,6 @@
 /*
-    Copyright 2009,2010,2011 Roland Bouman
-    contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
+    Copyright 2009 - 2015 Roland Bouman
+    contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ https://github.com/rpbouman/xmla4js
     twitter: @rolandbouman
 
     This is xmla4js - a stand-alone javascript library for working with "XML for Analysis".
