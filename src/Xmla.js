@@ -3928,7 +3928,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>No</td>
 *       </tr>
 *       <tr>
-*           <td>DIMENSION_UNIQE_NAME</td>
+*           <td>DIMENSION_UNIQUE_NAME</td>
 *           <td>string</td>
 *           <td>Unique name for this dimension.</td>
 *           <td>Yes</td>
@@ -3994,7 +3994,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
 *           <td>A Human-readable description of the dimension.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
@@ -4064,7 +4064,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>HIERARCHY_ORIGIN</td>
 *           <td></td>
 *           <td></td>
-*           <td>Tes</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
