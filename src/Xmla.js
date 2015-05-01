@@ -3577,14 +3577,14 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>BASE_CUBE_NAME</td>
 *           <td>string</td>
 *           <td>Name of the source cube (if this cube is a perspective cube).</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>ANNOTATIONS</td>
 *           <td>string</td>
 *           <td>Notes in xml format</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *     </tbody>
