@@ -4828,49 +4828,49 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>PROPERTY_CAPTION</td>
 *           <td>string</td>
 *           <td>A label or caption associated with the property, used primarily for display purposes. Returns PROPERTY_NAME if a caption does not exist.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>DATA_TYPE</td>
 *           <td>int</td>
 *           <td>The data type of the property.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>CHARACTER_MAXIMUM_LENGTH</td>
 *           <td>int</td>
 *           <td>The maximum possible length of the property, if it is a character, binary, or bit type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>CHARACTER_OCTET_LENGTH</td>
 *           <td>int</td>
 *           <td>The maximum possible length (in bytes) of the property, if it is a character or binary type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>NUMERIC_PRECISION</td>
 *           <td>int</td>
 *           <td>The maximum precision of the property, if it is a numeric data type. Returns NULL for all other data types.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>NUMERIC_SCALE</td>
 *           <td>int</td>
 *           <td>The number of digits to the right of the decimal point, if it is a DBTYPE_NUMERIC or DBTYPE_DECIMAL type. Returns NULL for all other data types.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
 *           <td>A human readable description of the property. NULL if no description exists.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
@@ -4885,14 +4885,14 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>SQL_COLUMN_NAME</td>
 *           <td>string</td>
 *           <td>The name of the property used in SQL queries from the cube dimension or database dDimension.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>LANGUAGE</td>
 *           <td>int</td>
 *           <td>The translation expressed as an LCID. Only valid for property translations.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
@@ -4906,28 +4906,28 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>PROPERTY_ATTRIBUTE_HIERARCHY_NAME</td>
 *           <td>string</td>
 *           <td>The name of the attribute hierarchy sourcing this property.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>PROPERTY_CARDINALITY</td>
 *           <td>string</td>
 *           <td>The cardinality of the property. Possible values include the following strings: ONE or MANY</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>MIME_TYPE</td>
 *           <td>string</td>
 *           <td>The mime type for binary large objects (BLOBs).</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>PROPERTY_IS_VISIBLE</td>
 *           <td>boolean</td>
 *           <td>A Boolean that indicates whether the property is visible. TRUE if the property is visible; otherwise, FALSE.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>Yes</td>
 *       </tr>
 *     </tbody>
