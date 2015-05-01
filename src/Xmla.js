@@ -3486,98 +3486,98 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>CUBE_TYPE</td>
 *           <td>string</td>
 *           <td>Type of the cube.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>CUBE_GUID</td>
 *           <td>string</td>
 *           <td>Not supported</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>CREATED_ON</td>
 *           <td>Date</td>
 *           <td>Not supported</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>LAST_SCHEMA_UPDATE</td>
 *           <td>Date</td>
 *           <td>The time that the cube was last processed.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>SCHEMA_UPDATED_BY</td>
 *           <td>string</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>LAST_DATA_UPDATE</td>
 *           <td>Date</td>
 *           <td>The time that the cube was last processed.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DATA_UPDATED_BY</td>
 *           <td>string</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
 *           <td>A Human-readable description of the cube.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>IS_DRILLTHROUGH_ENABLED</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>IS_LINKABLE</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>IS_WRITE_ENABLED</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>IS_SQL_ENABLED</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>CUBE_CAPTION</td>
 *           <td>string</td>
 *           <td>Caption for this cube.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>BASE_CUBE_NAME</td>
 *           <td>string</td>
 *           <td>Name of the source cube (if this cube is a perspective cube).</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
@@ -3645,7 +3645,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>No</td>
 *       </tr>
 *       <tr>
-*           <td>DIMENSION_UNIQE_NAME</td>
+*           <td>DIMENSION_UNIQUE_NAME</td>
 *           <td>string</td>
 *           <td>Unique name for this dimension.</td>
 *           <td>Yes</td>
@@ -3717,42 +3717,42 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
 *           <td>A Human-readable description of the dimension.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>IS_VIRTUAL</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>IS_READWRITE</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DIMENSION_UNIQUE_SETTINGS</td>
 *           <td></td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DIMENSION_MASTER_UNIQUE_NAME</td>
 *           <td></td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
-*           <td>IS_VISIBLE</td>
+*           <td>DIMENSION_IS_VISIBLE</td>
 *           <td>boolean</td>
 *           <td></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *     </tbody>
@@ -3942,7 +3942,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>No</td>
 *       </tr>
 *       <tr>
-*           <td>HIERARCHY_UNIQE_NAME</td>
+*           <td>HIERARCHY_UNIQUE_NAME</td>
 *           <td>string</td>
 *           <td>Unique name for this hierarchy.</td>
 *           <td>Yes</td>
@@ -4064,7 +4064,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>HIERARCHY_ORIGIN</td>
 *           <td></td>
 *           <td></td>
-*           <td>No</td>
+*           <td>Tes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
@@ -4113,49 +4113,49 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>CATALOG_NAME</td>
 *           <td>string</td>
 *           <td>The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>SCHEMA_NAME</td>
 *           <td>string</td>
 *           <td>The name of the schema to which this level belongs. NULL if the provider does not support schemas.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>CUBE_NAME</td>
 *           <td>string</td>
 *           <td>The name of the cube to which this level belongs.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>DIMENSION_UNIQUE_NAME</td>
 *           <td>string</td>
 *           <td>The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>HIERARCHY_UNIQUE_NAME</td>
 *           <td>string</td>
 *           <td>The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>LEVEL_NAME</td>
 *           <td>string</td>
 *           <td>The name of the level.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
 *           <td>LEVEL_UNIQUE_NAME</td>
 *           <td>string</td>
 *           <td>The properly escaped unique name of the level.</td>
-*           <td>No</td>
+*           <td>Yes</td>
 *           <td>Yes</td>
 *       </tr>
 *       <tr>
@@ -4414,21 +4414,21 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>MEASURE_CAPTION</td>
 *           <td>string</td>
 *           <td>A label or caption associated with the measure. Used primarily for display purposes. If a caption does not exist, MEASURE_NAME is returned.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_GUID</td>
 *           <td>string</td>
 *           <td>Not supported.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_AGGREGATOR</td>
 *           <td>int</td>
 *           <td>An enumeration that indicates how the measure was derived. See <a href="http://msdn.microsoft.com/en-us/library/ms126250.aspx" target="msdn">http://msdn.microsoft.com/en-us/library/ms126250.aspx</a></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
@@ -4476,70 +4476,70 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *               <dt>DBTYPE_VARNUMERIC</dt><dd>139</dd>
 *             </dl>
 *            See: <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx" target="msdn">http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx</a></td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>NUMERIC_PRECISION</td>
 *           <td>int</td>
 *           <td>The maximum precision of the property if the measure object's data type is exact numeric. NULL for all other property types.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>NUMERIC_SCALE</td>
 *           <td>int</td>
 *           <td>The number of digits to the right of the decimal point if the measure object's type indicator is DBTYPE_NUMERIC or DBTYPE_DECIMAL. Otherwise, this value is NULL.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_UNITS</td>
 *           <td>int</td>
 *           <td>Not supported.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
 *           <td>A human-readable description of the measure. NULL if no description exists.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>EXPRESSION</td>
 *           <td>string</td>
 *           <td>An expression for the member.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_IS_VISIBLE</td>
 *           <td>boolean</td>
 *           <td>A Boolean that always returns True. If the measure is not visible, it will not be included in the schema rowset.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>LEVELS_LIST</td>
 *           <td>string</td>
 *           <td>A string that always returns NULL.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_NAME_SQL_COLUMN_NAME</td>
 *           <td>string</td>
 *           <td>The name of the column in the SQL query that corresponds to the measure's name.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEASURE_UNQUALIFIED_CAPTION</td>
 *           <td>string</td>
 *           <td>The name of the measure, not qualified with the measure group name.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
@@ -4553,14 +4553,14 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>MEASURE_DISPLAY_FOLDER</td>
 *           <td>string</td>
 *           <td>The path to be used when displaying the measure in the user interface. Folder names will be separated by a semicolon. Nested folders are indicated by a backslash (\).</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DEFAULT_FORMAT_STRING</td>
 *           <td>string</td>
 *           <td>The default format string for the measure.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *     </tbody>
@@ -4644,7 +4644,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>MEMBER_ORDINAL</td>
 *           <td>int</td>
 *           <td>Deprecated: always 0</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
@@ -4681,49 +4681,49 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>MEMBER_GUID</td>
 *           <td>string</td>
 *           <td>The guid of this member</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEMBER_CAPTION</td>
 *           <td>string</td>
 *           <td>A label or caption associated with the member. Used primarily for display purposes. If a caption does not exist, MEMBER_NAME is returned.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>CHILDREN_CARDINALITY</td>
 *           <td>int</td>
 *           <td>The number of childrend for this member</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>PARENT_LEVEL</td>
 *           <td>int</td>
 *           <td>The distance of the member's parent from the root level of the hierarchy. The root level is zero (0).</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>DESCRIPTION</td>
 *           <td>string</td>
 *           <td>This column always returns a NULL value. This column exists for backwards compatibility</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>EXPRESSION</td>
 *           <td>string</td>
 *           <td>The expression for calculations, if the member is of type MDMEMBER_TYPE_FORMULA.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *       <tr>
 *           <td>MEMBER_KEY</td>
 *           <td>string</td>
 *           <td>The value of the member's key column. Returns NULL if the member has a composite key.</td>
-*           <td>Yes</td>
+*           <td>No</td>
 *           <td>No</td>
 *       </tr>
 *     </tbody>
