@@ -218,10 +218,11 @@
                     success: function(xmla, request, response){
                         response.eachRow(function(row){
                             var url = row["URL"] || document.getElementById("url").value,
-                                dataSourceInfo = row["DataSourceInfo"]
+                                dataSourceInfo = row["DataSourceInfo"],
+                                dataSourceName = row["DataSourceName"],
                             ;
                             getTree().appendChild(new TreeNode({
-                                title: dataSourceInfo,
+                                title: dataSourceInfo || dataSourceName,
                                 className: request.requestType,
                                 loadChildren: function() {
                                     node = this;

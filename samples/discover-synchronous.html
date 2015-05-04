@@ -191,7 +191,7 @@
                 while (rowset.hasMoreRows()) {
                     dataSourceInfo = rowset.fieldVal("DataSourceInfo");
                     dataSourceName = rowset.fieldVal("DataSourceName");
-                    id = dataSourceInfo;
+                    id = dataSourceInfo || dataSourceName;
                     if (rowset.fieldVal("URL")) {
                         url = rowset.fieldVal("URL");
                     }
