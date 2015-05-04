@@ -198,6 +198,7 @@
                     loader = "discoverCatalogs("
                     +   "\"" + url + "\""
                     + ", \"" + dataSourceInfo + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -214,8 +215,8 @@
             function discoverCatalogs(
                 url
             ,   dataSourceInfo
+            ,   parent
             ){
-                var parent = dataSourceInfo;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
 
