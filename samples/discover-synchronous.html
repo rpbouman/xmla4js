@@ -237,6 +237,7 @@
                     +   "\"" + url + "\""
                     + ", \"" + dataSourceInfo + "\""
                     + ", \"" + catalogName + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -254,10 +255,8 @@
                 url
             ,   dataSourceInfo
             ,   catalogName
+            ,   parent
             ){
-                var parent = dataSourceInfo
-                + "#" + catalogName
-                ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
                 properties[Xmla.PROP_CATALOG] = catalogName;
@@ -285,6 +284,7 @@
                     + ", \"" + dataSourceInfo + "\""
                     + ", \"" + catalogName + "\""
                     + ", \"" + cubeName + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -303,11 +303,8 @@
             ,   dataSourceInfo
             ,   catalogName
             ,   cubeName
+            ,   parent
             ){
-                var parent = dataSourceInfo
-                + "#" + catalogName
-                + "#" + cubeName
-                ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
                 properties[Xmla.PROP_CATALOG] = catalogName;
@@ -338,6 +335,7 @@
                     + ", \"" + catalogName + "\""
                     + ", \"" + cubeName + "\""
                     + ", \"" + dimensionUniqueName + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -357,12 +355,8 @@
             ,   catalogName
             ,   cubeName
             ,   dimensionUniqueName
+            ,   parent
             ){
-                var parent = dataSourceInfo
-                + "#" + catalogName
-                + "#" + cubeName
-                + "#" + dimensionUniqueName
-                ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
                 properties[Xmla.PROP_CATALOG] = catalogName;
@@ -395,6 +389,7 @@
                     + ", \"" + cubeName + "\""
                     + ", \"" + dimensionUniqueName + "\""
                     + ", \"" + hierarchyUniqueName + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -415,13 +410,8 @@
             ,   cubeName
             ,   dimensionUniqueName
             ,   hierarchyUniqueName
+            ,   parent
             ){
-                var parent = dataSourceInfo
-                + "#" + catalogName
-                + "#" + cubeName
-                + "#" + dimensionUniqueName
-                + "#" + hierarchyUniqueName
-                ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
                 properties[Xmla.PROP_CATALOG] = catalogName;
@@ -456,6 +446,7 @@
                     + ", \"" + dimensionUniqueName + "\""
                     + ", \"" + hierarchyUniqueName + "\""
                     + ", \"" + levelNumber + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -477,14 +468,8 @@
             ,   dimensionUniqueName
             ,   hierarchyUniqueName
             ,   levelNumber
+            ,   parent
             ){
-                var parent = dataSourceInfo
-                + "#" + catalogName
-                + "#" + cubeName
-                + "#" + dimensionUniqueName
-                + "#" + hierarchyUniqueName
-                + "#" + levelNumber
-                ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
                 properties[Xmla.PROP_CATALOG] = catalogName;
@@ -521,6 +506,7 @@
                     + ", \"" + hierarchyUniqueName + "\""
                     + ", \"" + levelNumber + "\""
                     + ", \"" + memberUniqueName + "\""
+                    + ", \"" + id + "\""
                     + ")"
                     ;
                     createTreeNode({
@@ -543,15 +529,8 @@
             ,   hierarchyUniqueName
             ,   levelNumber
             ,   memberUniqueName
+            ,   parent
             ){
-                var parent = dataSourceInfo
-                + "#" + catalogName
-                + "#" + cubeName
-                + "#" + dimensionUniqueName
-                + "#" + hierarchyUniqueName
-                + "#" + levelNumber
-                + "#" + memberUniqueName
-                ;
                 var properties = {};
                 properties[Xmla.PROP_DATASOURCEINFO] = dataSourceInfo;
                 properties[Xmla.PROP_CATALOG] = catalogName;
