@@ -508,7 +508,7 @@ function _xjs(xml) {
         }
       }
       else {
-        return String.fromCharCode(g4, g3 ? 16: 10);
+        return String.fromCharCode(parseInt(g4, g3 ? 16: 10));
       }
     });
   }
