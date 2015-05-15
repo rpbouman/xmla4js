@@ -6921,8 +6921,8 @@ Xmla.Dataset.Axis.prototype = {
             ),
             numHierarchies = hierarchyInfoNodes.length,
             i, j, hierarchyInfoNode, hierarchyName,
-            properties, numPropertyNodes, propertyNodes, propertyNode,
-            nodeName, type, memberProperties = this._memberProperties,
+            hierarchyDef, properties, numPropertyNodes, propertyNodes, propertyNode,
+            nodeName, type, memberProperty, memberProperties = this._memberProperties,
             converter
         ;
         this._hierarchyDefs = {};
@@ -6934,34 +6934,34 @@ Xmla.Dataset.Axis.prototype = {
             hierarchyName = _getAttribute(hierarchyInfoNode, "name");
             this._hierarchyOrder[i] = hierarchyName;
             this._hierarchyIndexes[hierarchyName] = i;
-            properties = {
+            hierarchyDef = {
                 index: i,
-                name: hierarchyName
+                name: hierarchyName,
+                properties: properties = {}
             };
             propertyNodes = _getElementsByTagNameNS(hierarchyInfoNode, _xmlnsDataset, "", "*");
             numPropertyNodes = propertyNodes.length;
             for (j = 0; j < numPropertyNodes; j++) {
                 propertyNode = propertyNodes[j];
-                //TODO: we're assigning null but I think we should grab a value if it exits
-                //If I recall the XML/A spec correctly, this value represents the default value
-                //of the property if it does not exist in a particular member
                 nodeName = propertyNode.nodeName;
-                properties[nodeName] = null;
-                if (memberProperties[nodeName]) {
-                  continue;
-                }
                 //note: MSAS doesn't seem to include a type for custom properties
                 type = _getAttribute(propertyNode, "type");
+                if (!type) {
+                  memberProperty = memberProperties[nodeName];
+                  if (memberProperty) {
+                    type = memberProperty.type;
+                  }
+                }
                 converter = _typeConverterMap[type];
                 if (!converter){
                   converter = _textConverter;
                 }
-                memberProperties[nodeName] = {
+                properties[nodeName] = {
                     converter: converter,
                     name: _decodeXmlaTagName(nodeName)
                 };
             }
-            this._hierarchyDefs[hierarchyName] = properties;
+            this._hierarchyDefs[hierarchyName] = hierarchyDef;
         }
     },
     _initMembers: function(){
@@ -6984,6 +6984,7 @@ Xmla.Dataset.Axis.prototype = {
             type = _getAttribute(memberSchemaElement, "type");
             name = _getAttribute(memberSchemaElement, "name");
             memberProperties[name] = {
+                type: type,
                 converter: _typeConverterMap[type],
                 name: _decodeXmlaTagName(name)
             };
@@ -7319,18 +7320,21 @@ Xmla.Dataset.Axis.prototype = {
             childNodes = memberNode.childNodes,
             i, n = childNodes.length,
             hierarchyName = this.hierarchyName(index),
+            hierarchyDef = this._hierarchyDefs[hierarchyName],
+            properties = hierarchyDef.properties,
             property,
             member = {
                 index: index,
                 hierarchy: hierarchyName
             },
             el,
-            memberProperties = this._memberProperties,
             valueConverter
         ;
         for (i = 0; i < n; i++) {
             el = childNodes[i];
-            if (el.nodeType !== 1 || (!(property = memberProperties[el.nodeName]))) continue;
+            if (el.nodeType !== 1 || (!(property = properties[el.nodeName]))) {
+              continue;
+            }
             member[property.name] = property.converter(_getElementText(el));
         }
         return member;
