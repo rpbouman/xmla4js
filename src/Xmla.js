@@ -2063,8 +2063,12 @@ Xmla.prototype = {
         return this.response;
     },
     _requestError: function(options, exception) {
-        if (options.error) options.error.call(options.scope ? options.scope : null, this, options, exception);
-        if (options.callback) options.callback.call(options.scope ? options.scope : null, Xmla.EVENT_ERROR, this, options, exception);
+        if (options.error) {
+          options.error.call(options.scope ? options.scope : null, this, options, exception);
+        }
+        if (options.callback) {
+          options.callback.call(options.scope ? options.scope : null, Xmla.EVENT_ERROR, this, options, exception);
+        }
         this._fireEvent(Xmla.EVENT_ERROR, options);
     },
     _requestSuccess: function(request) {
@@ -5603,6 +5607,53 @@ Xmla.Rowset.MDMEASURE_AGGR_CALCULATED = 127;
 *   @default 0
 */
 Xmla.Rowset.MDMEASURE_AGGR_UNKNOWN = 0;
+
+/**
+*   Field in the bitmap value of <code>PROPERTY_TYPE</code> column of the <code>MDSCHEMA_PROPERTIES</code> rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies a property of a member.
+*   If set it means this property can be used in the DIMENSION PROPERTIES clause of the SELECT statement.
+*   @property MDPROP_MEMBER
+*   @static
+*   @final
+*   @type int
+*   @default 1
+*/
+Xmla.Rowset.MDPROP_MEMBER = 1;
+/**
+*   Field in the bitmap value of <code>PROPERTY_TYPE</code> column of the <code>MDSCHEMA_PROPERTIES</code> rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies a property of a cell.
+*   If set, it means this property can be used in the CELL PROPERTIES clause that occurs at the end of the SELECT statement.
+*   @property MDPROP_CELL
+*   @static
+*   @final
+*   @type int
+*   @default 2
+*/
+Xmla.Rowset.MDPROP_CELL = 2;
+/**
+*   Field in the bitmap value of <code>PROPERTY_TYPE</code> column of the <code>MDSCHEMA_PROPERTIES</code> rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies an internal property.
+*   @property MDPROP_SYSTEM
+*   @static
+*   @final
+*   @type int
+*   @default 4
+*/
+Xmla.Rowset.MDPROP_SYSTEM = 4;
+/**
+*   Field in the bitmap value of <code>PROPERTY_TYPE</code> column of the <code>MDSCHEMA_PROPERTIES</code> rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies an internal property.
+*   @property MDPROP_BLOB
+*   @static
+*   @final
+*   @type int
+*   @default 8
+*/
+Xmla.Rowset.MDPROP_BLOB = 8;
 
 Xmla.Rowset.KEYS = {};
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_CATALOGS] = ["CATALOG_NAME"];
