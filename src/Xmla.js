@@ -5823,17 +5823,29 @@ Xmla.Rowset.prototype = {
                     fieldName==="Restrictions"
                 ) type = "Restrictions";
                 minOccurs = _getAttribute(seqChild, "minOccurs");
-                if (minOccurs) minOccurs = parseInt(minOccurs, 10);
-                else minOccurs = 1;
+                if (minOccurs) {
+                  minOccurs = parseInt(minOccurs, 10);
+                }
+                else {
+                  minOccurs = 1;
+                }
                 maxOccurs = _getAttribute(seqChild, "maxOccurs");
                 if (maxOccurs) {
-                    if (maxOccurs === "unbounded") maxOccurs = Infinity;
-                    else minOccurs=parseInt(maxOccurs,10);
+                    if (maxOccurs === "unbounded") {
+                      maxOccurs = Infinity;
+                    }
+                    else {
+                      minOccurs=parseInt(maxOccurs,10);
+                    }
                 }
-                else maxOccurs = 1;
+                else {
+                  maxOccurs = 1;
+                }
                 valueConverter = _getValueConverter(type);
                 getter = this._createFieldGetter(fieldName, valueConverter, minOccurs, maxOccurs);
-                if (addFieldGetters) this[_getterNameForColumnName(fieldName)] = getter;
+                if (addFieldGetters) {
+                  this[_getterNameForColumnName(fieldName)] = getter;
+                }
                 this.fields[fieldLabel] = {
                     name: fieldName,
                     label: fieldLabel,
@@ -5861,7 +5873,16 @@ Xmla.Rowset.prototype = {
             if(minOccurs===1)
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
-                    return valueConverter(_getElementText(els[0]));
+                    if (els.length) {
+                      return valueConverter(_getElementText(els[0]));
+                    }
+                    else {
+                      //SAP doesn't know how to send XML that is valid according to their XML Schema
+                      if (typeof(console.error) !== "undefined") {
+                        console.error("Field \"" + fieldName + "\" is supposed to be present in the rowset but isn't. Are you running on SAP / HANA?");
+                      }
+                      return null;
+                    }
                 };
             else
             if (minOccurs === 0)
@@ -8254,7 +8275,8 @@ if (typeof(define)==="function" && define.amd) {
       return Xmla;
   });
 }
-else window.Xmla = Xmla;
-
+else {
+  window.Xmla = Xmla;
+}
 return Xmla;
 })(typeof exports === "undefined" ? window : exports);

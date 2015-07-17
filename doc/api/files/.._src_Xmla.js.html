@@ -99,8 +99,8 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 /*
-    Copyright 2009,2010,2011 Roland Bouman
-    contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ http://code.google.com/p/xmla4js
+    Copyright 2009 - 2015 Roland Bouman
+    contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ https://github.com/rpbouman/xmla4js
     twitter: @rolandbouman
 
     This is xmla4js - a stand-alone javascript library for working with &quot;XML for Analysis&quot;.
@@ -608,7 +608,7 @@ function _xjs(xml) {
         }
       }
       else {
-        return String.fromCharCode(g4, g3 ? 16: 10);
+        return String.fromCharCode(parseInt(g4, g3 ? 16: 10));
       }
     });
   }
@@ -2163,8 +2163,12 @@ Xmla.prototype = {
         return this.response;
     },
     _requestError: function(options, exception) {
-        if (options.error) options.error.call(options.scope ? options.scope : null, this, options, exception);
-        if (options.callback) options.callback.call(options.scope ? options.scope : null, Xmla.EVENT_ERROR, this, options, exception);
+        if (options.error) {
+          options.error.call(options.scope ? options.scope : null, this, options, exception);
+        }
+        if (options.callback) {
+          options.callback.call(options.scope ? options.scope : null, Xmla.EVENT_ERROR, this, options, exception);
+        }
         this._fireEvent(Xmla.EVENT_ERROR, options);
     },
     _requestSuccess: function(request) {
@@ -2239,8 +2243,18 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_EXECUTE_SUCCESS, request);
                     break;
             }
-            if (request.success) request.success.call(request.scope ? request.scope : null, this, request, response);
-            if (request.callback) request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_SUCCESS, this, request, response);
+            if (request.success) {
+              request.success.call(
+                request.scope ? request.scope : null,
+                this, request, response
+              );
+            }
+            if (request.callback) {
+              request.callback.call(
+                request.scope ? request.scope : null,
+                Xmla.EVENT_SUCCESS, this, request, response
+              );
+            }
             this._fireEvent(Xmla.EVENT_SUCCESS, request);
         }
     },
@@ -3576,91 +3590,91 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;CUBE_TYPE&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Type of the cube.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CUBE_GUID&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Not supported&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CREATED_ON&lt;/td&gt;
 *           &lt;td&gt;Date&lt;/td&gt;
 *           &lt;td&gt;Not supported&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LAST_SCHEMA_UPDATE&lt;/td&gt;
 *           &lt;td&gt;Date&lt;/td&gt;
 *           &lt;td&gt;The time that the cube was last processed.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;SCHEMA_UPDATED_BY&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LAST_DATA_UPDATE&lt;/td&gt;
 *           &lt;td&gt;Date&lt;/td&gt;
 *           &lt;td&gt;The time that the cube was last processed.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DATA_UPDATED_BY&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DESCRIPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A Human-readable description of the cube.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;IS_DRILLTHROUGH_ENABLED&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;IS_LINKABLE&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;IS_WRITE_ENABLED&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;IS_SQL_ENABLED&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CUBE_CAPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Caption for this cube.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -3674,7 +3688,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;ANNOTATIONS&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Notes in xml format&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *     &lt;/tbody&gt;
@@ -3735,7 +3749,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
-*           &lt;td&gt;DIMENSION_UNIQE_NAME&lt;/td&gt;
+*           &lt;td&gt;DIMENSION_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Unique name for this dimension.&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
@@ -3807,42 +3821,42 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;DESCRIPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A Human-readable description of the dimension.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;IS_VIRTUAL&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;IS_READWRITE&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DIMENSION_UNIQUE_SETTINGS&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DIMENSION_MASTER_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
-*           &lt;td&gt;IS_VISIBLE&lt;/td&gt;
+*           &lt;td&gt;DIMENSION_IS_VISIBLE&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *     &lt;/tbody&gt;
@@ -3874,6 +3888,99 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *       &lt;/tr&gt;
 *     &lt;/thead&gt;
 *     &lt;tbody&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;FUNCTION_NAME&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;The name of the function.&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;DESCRIPTION&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;A description of the function.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;PARAMETER_LIST&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;A comma delimited list of parameters formatted as in Microsoft Visual Basic. For example, a parameter might be Name as String.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;RETURN_TYPE&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_I4&lt;/td&gt;
+*         &lt;td&gt;The VARTYPE of the return data type of the function.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;ORIGIN&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_I4&lt;/td&gt;
+*         &lt;td&gt;The origin of the function:
+*           &lt;ol&gt;
+*             &lt;li&gt;for MDX functions.&lt;/li&gt;
+*             &lt;li&gt;for user-defined functions.&lt;/li&gt;
+*           &lt;/ol&gt;
+*         &lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;INTERFACE_NAME&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;The name of the interface for user-defined functions. The group name for Multidimensional Expressions (MDX) functions.&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;LIBRARY_NAME&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;The name of the type library for user-defined functions. NULL for MDX functions.&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*         &lt;td&gt;Yes&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;DLL_NAME&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;(Optional) The name of the assembly that implements the user-defined function. Returns VT_NULL for MDX functions.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;HELP_FILE&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;(Optional) The name of the file that contains the help documentation for the user-defined function.&lt;/td&gt;
+*         &lt;td&gt;Returns VT_NULL for MDX functions.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;HELP_CONTEXT&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_I4&lt;/td&gt;
+*         &lt;td&gt;(Optional) Returns the Help context ID for this function.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;OBJECT&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;
+*           (Optional) The generic name of the object class to which a property applies. For example, the rowset corresponding to the &lt;level_name&gt;.Members function returns &quot;Level&quot;.
+*            Returns VT_NULL for user-defined functions, or non-property MDX functions.
+*         &lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
+*       &lt;tr&gt;
+*         &lt;td&gt;CAPTION&lt;/td&gt;
+*         &lt;td&gt;DBTYPE_WSTR&lt;/td&gt;
+*         &lt;td&gt;The display caption for the function.&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*         &lt;td&gt;No&lt;/td&gt;
+*       &lt;/tr&gt;
 *     &lt;/tbody&gt;
 *   &lt;/table&gt;
 *   @method discoverMDFunctions
@@ -3925,7 +4032,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
-*           &lt;td&gt;DIMENSION_UNIQE_NAME&lt;/td&gt;
+*           &lt;td&gt;DIMENSION_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Unique name for this dimension.&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
@@ -3939,7 +4046,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
-*           &lt;td&gt;HIERARCHY_UNIQE_NAME&lt;/td&gt;
+*           &lt;td&gt;HIERARCHY_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Unique name for this hierarchy.&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
@@ -3991,7 +4098,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;DESCRIPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A Human-readable description of the dimension.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4061,7 +4168,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;HIERARCHY_ORIGIN&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
 *           &lt;td&gt;&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4110,49 +4217,49 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;CATALOG_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the catalog to which this level belongs. NULL if the provider does not support catalogs.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;SCHEMA_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the schema to which this level belongs. NULL if the provider does not support schemas.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CUBE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the cube to which this level belongs.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DIMENSION_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The unique name of the dimension to which this level belongs. For providers that generate unique names by qualification, each component of this name is delimited.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;HIERARCHY_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The unique name of the hierarchy. If the level belongs to more than one hierarchy, there is one row for each hierarchy to which it belongs. For providers that generate unique names by qualification, each component of this name is delimited.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LEVEL_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the level.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LEVEL_UNIQUE_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The properly escaped unique name of the level.&lt;/td&gt;
-*           &lt;td&gt;No&lt;/td&gt;
+*           &lt;td&gt;Yes&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4411,21 +4518,21 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;MEASURE_CAPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A label or caption associated with the measure. Used primarily for display purposes. If a caption does not exist, MEASURE_NAME is returned.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_GUID&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;Not supported.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_AGGREGATOR&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;An enumeration that indicates how the measure was derived. See &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/ms126250.aspx&quot; target=&quot;msdn&quot;&gt;http://msdn.microsoft.com/en-us/library/ms126250.aspx&lt;/a&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4473,70 +4580,70 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *               &lt;dt&gt;DBTYPE_VARNUMERIC&lt;/dt&gt;&lt;dd&gt;139&lt;/dd&gt;
 *             &lt;/dl&gt;
 *            See: &lt;a href=&quot;http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx&quot; target=&quot;msdn&quot;&gt;http://msdn.microsoft.com/en-us/library/windows/desktop/ms711251(v=vs.85).aspx&lt;/a&gt;&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;NUMERIC_PRECISION&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The maximum precision of the property if the measure object&#x27;s data type is exact numeric. NULL for all other property types.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;NUMERIC_SCALE&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The number of digits to the right of the decimal point if the measure object&#x27;s type indicator is DBTYPE_NUMERIC or DBTYPE_DECIMAL. Otherwise, this value is NULL.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_UNITS&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;Not supported.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DESCRIPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A human-readable description of the measure. NULL if no description exists.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;EXPRESSION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;An expression for the member.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_IS_VISIBLE&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;A Boolean that always returns True. If the measure is not visible, it will not be included in the schema rowset.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LEVELS_LIST&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A string that always returns NULL.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_NAME_SQL_COLUMN_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the column in the SQL query that corresponds to the measure&#x27;s name.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEASURE_UNQUALIFIED_CAPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the measure, not qualified with the measure group name.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4550,14 +4657,14 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;MEASURE_DISPLAY_FOLDER&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The path to be used when displaying the measure in the user interface. Folder names will be separated by a semicolon. Nested folders are indicated by a backslash (\).&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DEFAULT_FORMAT_STRING&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The default format string for the measure.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *     &lt;/tbody&gt;
@@ -4641,7 +4748,7 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;MEMBER_ORDINAL&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;Deprecated: always 0&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4678,49 +4785,49 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;MEMBER_GUID&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The guid of this member&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEMBER_CAPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A label or caption associated with the member. Used primarily for display purposes. If a caption does not exist, MEMBER_NAME is returned.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CHILDREN_CARDINALITY&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The number of childrend for this member&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;PARENT_LEVEL&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The distance of the member&#x27;s parent from the root level of the hierarchy. The root level is zero (0).&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DESCRIPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;This column always returns a NULL value. This column exists for backwards compatibility&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;EXPRESSION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The expression for calculations, if the member is of type MDMEMBER_TYPE_FORMULA.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MEMBER_KEY&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The value of the member&#x27;s key column. Returns NULL if the member has a composite key.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;No&lt;/td&gt;
 *       &lt;/tr&gt;
 *     &lt;/tbody&gt;
@@ -4825,49 +4932,49 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;PROPERTY_CAPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A label or caption associated with the property, used primarily for display purposes. Returns PROPERTY_NAME if a caption does not exist.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DATA_TYPE&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The data type of the property.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CHARACTER_MAXIMUM_LENGTH&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The maximum possible length of the property, if it is a character, binary, or bit type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;CHARACTER_OCTET_LENGTH&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The maximum possible length (in bytes) of the property, if it is a character or binary type. Zero indicates there is no defined maximum length. Returns NULL for all other data types.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;NUMERIC_PRECISION&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The maximum precision of the property, if it is a numeric data type. Returns NULL for all other data types.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;NUMERIC_SCALE&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The number of digits to the right of the decimal point, if it is a DBTYPE_NUMERIC or DBTYPE_DECIMAL type. Returns NULL for all other data types.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;DESCRIPTION&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;A human readable description of the property. NULL if no description exists.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4882,14 +4989,14 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;SQL_COLUMN_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the property used in SQL queries from the cube dimension or database dDimension.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;LANGUAGE&lt;/td&gt;
 *           &lt;td&gt;int&lt;/td&gt;
 *           &lt;td&gt;The translation expressed as an LCID. Only valid for property translations.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
@@ -4903,28 +5010,28 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *           &lt;td&gt;PROPERTY_ATTRIBUTE_HIERARCHY_NAME&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The name of the attribute hierarchy sourcing this property.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;PROPERTY_CARDINALITY&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The cardinality of the property. Possible values include the following strings: ONE or MANY&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;MIME_TYPE&lt;/td&gt;
 *           &lt;td&gt;string&lt;/td&gt;
 *           &lt;td&gt;The mime type for binary large objects (BLOBs).&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *       &lt;tr&gt;
 *           &lt;td&gt;PROPERTY_IS_VISIBLE&lt;/td&gt;
 *           &lt;td&gt;boolean&lt;/td&gt;
 *           &lt;td&gt;A Boolean that indicates whether the property is visible. TRUE if the property is visible; otherwise, FALSE.&lt;/td&gt;
-*           &lt;td&gt;Yes&lt;/td&gt;
+*           &lt;td&gt;No&lt;/td&gt;
 *           &lt;td&gt;Yes&lt;/td&gt;
 *       &lt;/tr&gt;
 *     &lt;/tbody&gt;
@@ -5601,6 +5708,53 @@ Xmla.Rowset.MDMEASURE_AGGR_CALCULATED = 127;
 */
 Xmla.Rowset.MDMEASURE_AGGR_UNKNOWN = 0;
 
+/**
+*   Field in the bitmap value of &lt;code&gt;PROPERTY_TYPE&lt;/code&gt; column of the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies a property of a member.
+*   If set it means this property can be used in the DIMENSION PROPERTIES clause of the SELECT statement.
+*   @property MDPROP_MEMBER
+*   @static
+*   @final
+*   @type int
+*   @default 1
+*/
+Xmla.Rowset.MDPROP_MEMBER = 1;
+/**
+*   Field in the bitmap value of &lt;code&gt;PROPERTY_TYPE&lt;/code&gt; column of the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies a property of a cell.
+*   If set, it means this property can be used in the CELL PROPERTIES clause that occurs at the end of the SELECT statement.
+*   @property MDPROP_CELL
+*   @static
+*   @final
+*   @type int
+*   @default 2
+*/
+Xmla.Rowset.MDPROP_CELL = 2;
+/**
+*   Field in the bitmap value of &lt;code&gt;PROPERTY_TYPE&lt;/code&gt; column of the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies an internal property.
+*   @property MDPROP_SYSTEM
+*   @static
+*   @final
+*   @type int
+*   @default 4
+*/
+Xmla.Rowset.MDPROP_SYSTEM = 4;
+/**
+*   Field in the bitmap value of &lt;code&gt;PROPERTY_TYPE&lt;/code&gt; column of the &lt;code&gt;MDSCHEMA_PROPERTIES&lt;/code&gt; rowset.
+*   see: https://msdn.microsoft.com/en-us/library/ms126309.aspx
+*   Identifies an internal property.
+*   @property MDPROP_BLOB
+*   @static
+*   @final
+*   @type int
+*   @default 8
+*/
+Xmla.Rowset.MDPROP_BLOB = 8;
+
 Xmla.Rowset.KEYS = {};
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_CATALOGS] = [&quot;CATALOG_NAME&quot;];
 Xmla.Rowset.KEYS[Xmla.DBSCHEMA_COLUMNS] = [&quot;TABLE_CATALOG&quot;, &quot;TABLE_SCHEMA&quot;, &quot;TABLE_NAME&quot;, &quot;COLUMN_NAME&quot;];
@@ -5769,17 +5923,29 @@ Xmla.Rowset.prototype = {
                     fieldName===&quot;Restrictions&quot;
                 ) type = &quot;Restrictions&quot;;
                 minOccurs = _getAttribute(seqChild, &quot;minOccurs&quot;);
-                if (minOccurs) minOccurs = parseInt(minOccurs, 10);
-                else minOccurs = 1;
+                if (minOccurs) {
+                  minOccurs = parseInt(minOccurs, 10);
+                }
+                else {
+                  minOccurs = 1;
+                }
                 maxOccurs = _getAttribute(seqChild, &quot;maxOccurs&quot;);
                 if (maxOccurs) {
-                    if (maxOccurs === &quot;unbounded&quot;) maxOccurs = Infinity;
-                    else minOccurs=parseInt(maxOccurs,10);
+                    if (maxOccurs === &quot;unbounded&quot;) {
+                      maxOccurs = Infinity;
+                    }
+                    else {
+                      minOccurs=parseInt(maxOccurs,10);
+                    }
                 }
-                else maxOccurs = 1;
+                else {
+                  maxOccurs = 1;
+                }
                 valueConverter = _getValueConverter(type);
                 getter = this._createFieldGetter(fieldName, valueConverter, minOccurs, maxOccurs);
-                if (addFieldGetters) this[_getterNameForColumnName(fieldName)] = getter;
+                if (addFieldGetters) {
+                  this[_getterNameForColumnName(fieldName)] = getter;
+                }
                 this.fields[fieldLabel] = {
                     name: fieldName,
                     label: fieldLabel,
@@ -5807,7 +5973,16 @@ Xmla.Rowset.prototype = {
             if(minOccurs===1)
                 getter = function(){
                     var els = _getElementsByTagNameNS (this._row, _xmlnsRowset, null, fieldName);
-                    return valueConverter(_getElementText(els[0]));
+                    if (els.length) {
+                      return valueConverter(_getElementText(els[0]));
+                    }
+                    else {
+                      //SAP doesn&#x27;t know how to send XML that is valid according to their XML Schema
+                      if (typeof(console.error) !== &quot;undefined&quot;) {
+                        console.error(&quot;Field \&quot;&quot; + fieldName + &quot;\&quot; is supposed to be present in the rowset but isn&#x27;t. Are you running on SAP / HANA?&quot;);
+                      }
+                      return null;
+                    }
                 };
             else
             if (minOccurs === 0)
@@ -6867,8 +7042,9 @@ Xmla.Dataset.Axis.prototype = {
             ),
             numHierarchies = hierarchyInfoNodes.length,
             i, j, hierarchyInfoNode, hierarchyName,
-            properties, numPropertyNodes, propertyNodes, propertyNode,
-            nodeName, type, memberProperties = this._memberProperties
+            hierarchyDef, properties, numPropertyNodes, propertyNodes, propertyNode,
+            nodeName, type, memberProperty, memberProperties = this._memberProperties,
+            converter
         ;
         this._hierarchyDefs = {};
         this._hierarchyOrder = [];
@@ -6879,29 +7055,34 @@ Xmla.Dataset.Axis.prototype = {
             hierarchyName = _getAttribute(hierarchyInfoNode, &quot;name&quot;);
             this._hierarchyOrder[i] = hierarchyName;
             this._hierarchyIndexes[hierarchyName] = i;
-            properties = {
+            hierarchyDef = {
                 index: i,
-                name: hierarchyName
+                name: hierarchyName,
+                properties: properties = {}
             };
             propertyNodes = _getElementsByTagNameNS(hierarchyInfoNode, _xmlnsDataset, &quot;&quot;, &quot;*&quot;);
             numPropertyNodes = propertyNodes.length;
             for (j = 0; j &lt; numPropertyNodes; j++) {
                 propertyNode = propertyNodes[j];
-                //TODO: we&#x27;re assigning null but I think we should grab a value if it exits
-                //If I recall the XML/A spec correctly, this value represents the default value
-                //of the property if it does not exist in a particular member
                 nodeName = propertyNode.nodeName;
-                properties[nodeName] = null;
-                if (memberProperties[nodeName]) {
-                  continue;
-                }
+                //note: MSAS doesn&#x27;t seem to include a type for custom properties
                 type = _getAttribute(propertyNode, &quot;type&quot;);
-                memberProperties[nodeName] = {
-                    converter: _typeConverterMap[type],
+                if (!type) {
+                  memberProperty = memberProperties[nodeName];
+                  if (memberProperty) {
+                    type = memberProperty.type;
+                  }
+                }
+                converter = _typeConverterMap[type];
+                if (!converter){
+                  converter = _textConverter;
+                }
+                properties[nodeName] = {
+                    converter: converter,
                     name: _decodeXmlaTagName(nodeName)
                 };
             }
-            this._hierarchyDefs[hierarchyName] = properties;
+            this._hierarchyDefs[hierarchyName] = hierarchyDef;
         }
     },
     _initMembers: function(){
@@ -6924,6 +7105,7 @@ Xmla.Dataset.Axis.prototype = {
             type = _getAttribute(memberSchemaElement, &quot;type&quot;);
             name = _getAttribute(memberSchemaElement, &quot;name&quot;);
             memberProperties[name] = {
+                type: type,
                 converter: _typeConverterMap[type],
                 name: _decodeXmlaTagName(name)
             };
@@ -7259,18 +7441,21 @@ Xmla.Dataset.Axis.prototype = {
             childNodes = memberNode.childNodes,
             i, n = childNodes.length,
             hierarchyName = this.hierarchyName(index),
+            hierarchyDef = this._hierarchyDefs[hierarchyName],
+            properties = hierarchyDef.properties,
             property,
             member = {
                 index: index,
                 hierarchy: hierarchyName
             },
             el,
-            memberProperties = this._memberProperties,
             valueConverter
         ;
         for (i = 0; i &lt; n; i++) {
             el = childNodes[i];
-            if (el.nodeType !== 1 || (!(property = memberProperties[el.nodeName]))) continue;
+            if (el.nodeType !== 1 || (!(property = properties[el.nodeName]))) {
+              continue;
+            }
             member[property.name] = property.converter(_getElementText(el));
         }
         return member;
@@ -8190,8 +8375,9 @@ if (typeof(define)===&quot;function&quot; &amp;&amp; define.amd) {
       return Xmla;
   });
 }
-else window.Xmla = Xmla;
-
+else {
+  window.Xmla = Xmla;
+}
 return Xmla;
 })(typeof exports === &quot;undefined&quot; ? window : exports);
 

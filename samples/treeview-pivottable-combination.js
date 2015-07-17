@@ -547,26 +547,26 @@ TreeNode.lookup = function(el){
 
 //scrollbar dimensions:
 cEl("div", {
-	id: "_scrollbars1",
-	style: 	{
-		"background-color": "blue",
-		position: "absolute",
-		overflow: "auto",
-		width: "50px",
-		height: "50px",
-		left: "-50px",
-		top: "-50px"
-	}
+  id: "_scrollbars1",
+  style:  {
+    "background-color": "blue",
+    position: "absolute",
+    overflow: "auto",
+    width: "50px",
+    height: "50px",
+    left: "-50px",
+    top: "-50px"
+  }
 }, cEl("div", {
-	id: "_scrollbars2",
-	style: {
-		"background-color": "red",
-		position: "absolute",
-		left: "0px",
-		top: "0px",
-		width: "100px",
-		height: "100px"
-	}
+  id: "_scrollbars2",
+  style: {
+    "background-color": "red",
+    position: "absolute",
+    left: "0px",
+    top: "0px",
+    width: "100px",
+    height: "100px"
+  }
 }), body);
 var _scrollbars1 = gEl("_scrollbars1");
 var scrollbarWidth = (_scrollbars1.offsetWidth - _scrollbars1.clientWidth) + 2;
@@ -1371,15 +1371,15 @@ var PivotTable;
             pages.style.height = pagesTable.clientHeight + ((pagesTable.clientWidth > (container.parentNode.clientWidth + 5)) ? 16 : 0) + "px";
         }
 
-		//put the column axis table right beneath the pages axis table
+    //put the column axis table right beneath the pages axis table
         cols.style.top = pagesTableHeight + "px";
 
-		rows.style.width = rowsTableWidth + "px";
+    rows.style.width = rowsTableWidth + "px";
         cells.style.left = cols.style.left = rows.style.width;
-        
+
         rows.style.top = (pagesTableHeight + colsTable.clientHeight) + "px";
         cells.style.top = rows.style.top;
-        
+
         cols.style.height = colsTable.clientHeight + "px";
 
         width = Math.min(container.parentNode.clientWidth - scrollbarWidth, rowsTableWidth + colsTable.clientWidth);
@@ -2291,7 +2291,7 @@ function discoverClicked(){
                                             id: req.requestType + ":" + row.CATALOG_NAME + "." + row.CUBE_NAME,
                                             parentTreeNode: req.nodeId,
                                             customClass: req.requestType,
-                                            title: row.CUBE_CAPTION,
+                                            title: row.CUBE_CAPTION || row.CUBE_NAME,
                                             tooltip: row.DESCRIPTION,
                                             state: TreeNode.states.leaf,
                                             metadata: row,
