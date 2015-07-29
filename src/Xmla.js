@@ -545,7 +545,7 @@ function _xjs(xml) {
                           value: unescapeEntities(value)
                       };
                       nsUri = (pfx === "") ? "" : ns[pfx];
-                      if (typeof(nsUri) === "undefined") {
+                      if (_isUnd(nsUri)) {
                           throw "Unrecognized namespace with prefix \"" + prefix + "\"";
                       }
                       att.namespaceURI = nsUri;
@@ -561,7 +561,7 @@ function _xjs(xml) {
           prefix = match[4] || "";
           node.prefix = prefix;
           nsUri = ns[prefix];
-          if (typeof(nsUri) === "undefined") {
+          if (_isUnd(nsUri)) {
               throw "Unrecognized namespace with prefix \"" + prefix + "\"";
           }
           node.namespaceURI = nsUri;
@@ -5878,7 +5878,7 @@ Xmla.Rowset.prototype = {
                     }
                     else {
                       //SAP doesn't know how to send XML that is valid according to their XML Schema
-                      if (typeof(console.error) !== "undefined") {
+                      if (!_isUnd(console.error)) {
                         console.error("Field \"" + fieldName + "\" is supposed to be present in the rowset but isn't. Are you running on SAP / HANA?");
                       }
                       return null;
@@ -7798,22 +7798,14 @@ Xmla.Dataset.Cellset.prototype = {
  *  @return {int} The physical index.
  */
     indexForOrdinal: function(ordinal){
-        var index = ordinal,    //the index can at most be ordinal; less if there are missing (empty) cells
+        var cellNodes = this._cellNodes,
+            n = cellNodes.length,
+            index = Math.min(ordinal, n-1),
             cellOrdinal, node
         ;
         while(index >= 0) {
             //get the node at the current index
-            node = this._cellNodes[index];
-            //if we don't have a node here, it means there is at least one empty cell,
-            //iow there are less cells than theoretically possible cell ordinals.
-            if (!node) {
-              //if we don't have any cells at all, we bail out
-              if (this._cellNodes.length === 0) {
-                return -1;
-              }
-              //start scanning from the end of the collection of cells
-              node = this._cellNodes[this._cellNodes.length - 1];
-            }
+            node = cellNodes[index];
             cellOrdinal = this._getCellOrdinal(node);
             if (cellOrdinal === ordinal) {
               return index;
@@ -7826,10 +7818,10 @@ Xmla.Dataset.Cellset.prototype = {
               return -1;
             }
         }
-        return null;
+        return -1;
     },
 /**
- *  Get a range of cells withing the range that fits the specified ordinals.
+ *  Get a range of cells that fits the specified ordinals.
  *  This method is useful to grab a slice of cells for a subset of the axes.
  *  (You can use <code><a href="#method_cellOrdinalForTupleIndexes">cellOrdinalForTupleIndexes</a></code> to calculate ordinals in terms of tuple indexes.)
  *  The returned range only contains cells that actually exist so the ordinal of adjacent cells may have gaps,
@@ -7839,14 +7831,61 @@ Xmla.Dataset.Cellset.prototype = {
  * @return {[object]} - An array of cells that fit the specified range.
  */
     fetchRangeAsArray: function(from, to){
-        var range = [], cellNodes = this._cellNodes;
-        from = this.indexForOrdinal(from);
-        if (from === -1) return range;
-        to = this.indexForOrdinal(to);
-        if (to === -1) to = cellNodes.length -1;
-        to = Math.min(to, cellNodes.length - 1);
-        for (var i = from; i <= to; i++){
-            range.push(this._readCell(cellNodes[i], {}));
+        var range = [], cellNodes = this._cellNodes, n = cellNodes.length;
+        if (n === 0) {
+          return range;
+        }
+
+        var cellNode, ordinal;
+        if (_isUnd(to) || to === -1) {
+          to = this._getCellOrdinal(cellNodes[n-1]);
+        }
+        if (_isUnd(from) || from === -1) {
+          from = this._getCellOrdinal(cellNodes[0]);
+        }
+
+        //start at to (or at end of array of cells in case empty cells exist)
+        var toIndex = Math.min(to, n - 1);
+        while (toIndex >= 0) {
+          cellNode = cellNodes[toIndex];
+          ordinal = this._getCellOrdinal(cellNode);
+          if (ordinal <= to) {
+            break;
+          }
+          toIndex -= 1;
+        }
+
+        if (toIndex === -1) {
+          //Would be very strange to arrive here.
+          return range;
+        }
+
+        if (ordinal < from) {
+          //The ordinal closest to "to" lies before "from" -> no cells are in range.
+          return range;
+        }
+
+        var fromIndex = Math.min(toIndex, from);
+        while (fromIndex >= 0) {
+          cellNode = cellNodes[fromIndex];
+          ordinal = this._getCellOrdinal(cellNode);
+          if (ordinal <= from) {
+            if (ordinal < from) {
+              fromIndex += 1;
+            }
+            break;
+          }
+          fromIndex -= 1;
+        }
+
+        if (fromIndex === -1) {
+          fromIndex = 0;
+        }
+
+        var index;
+        for (index = fromIndex; index <= toIndex; index++) {
+          cellNode = cellNodes[index];
+          range.push(this._readCell(cellNode, {}));
         }
         return range;
     },
