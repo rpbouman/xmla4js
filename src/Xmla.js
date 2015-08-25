@@ -2059,7 +2059,9 @@ Xmla.prototype = {
         if (this._fireEvent(Xmla.EVENT_REQUEST, options, true) && (
             (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
             (options.method == Xmla.METHOD_EXECUTE  && this._fireEvent(Xmla.EVENT_EXECUTE, options)))
-        ) myXhr = _ajax(ajaxOptions);
+        ) {
+          myXhr = _ajax(ajaxOptions);
+        }
         return this.response;
     },
     _requestError: function(options, exception) {
@@ -2086,13 +2088,17 @@ Xmla.prototype = {
             if (soapFault.length) {
                 //TODO: extract error info
                 soapFault = soapFault[0];
+                var faultActor = _getElementsByTagName(soapFault, "faultactor")[0].childNodes[0].data;
+                var faultCode = _getElementsByTagName(soapFault, "faultcode")[0].childNodes[0].data;
+                var faultString = _getElementsByTagName(soapFault, "faultstring")[0].childNodes[0].data;
+                var detailData, detail = _getElementsByTagName(soapFault, "detail")[0];
+
                 request.exception = new Xmla.Exception(
                     Xmla.Exception.TYPE_ERROR,
-                    _getElementsByTagName(soapFault, "faultcode")[0].childNodes[0].data,
-                    _getElementsByTagName(soapFault, "faultstring")[0].childNodes[0].data,
-                    null,
-                    "_requestSuccess",
-                    request
+                    faultCode, faultString,
+                    null, "_requestSuccess",
+                    request, null,
+                    null, faultActor
                 );
             }
             else {
@@ -2130,8 +2136,12 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_EXECUTE_ERROR, request);
                     break;
             }
-            if (request.error) request.error.call(request.scope ? request.scope : null, this, request, request.exception);
-            if (request.callback) request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_ERROR, this, request, request.exception);
+            if (request.error) {
+              request.error.call(request.scope ? request.scope : null, this, request, request.exception);
+            }
+            if (request.callback) {
+              request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_ERROR, this, request, request.exception);
+            }
             this._fireEvent(Xmla.EVENT_ERROR, request);
         }
         else {
@@ -7946,7 +7956,7 @@ Xmla.Dataset.Cellset.prototype = {
 *   @class Xmla.Exception
 *   @constructor
 */
-Xmla.Exception = function(type, code, message, helpfile, source, data, args){
+Xmla.Exception = function(type, code, message, helpfile, source, data, args, detail, actor){
     this.type = type;
     this.code = code;
     this.message = message;
@@ -7954,6 +7964,8 @@ Xmla.Exception = function(type, code, message, helpfile, source, data, args){
     this.helpfile = helpfile;
     this.data = data;
     this.args = args;
+    this.detail = detail;
+    this.actor = actor;
     return this;
 };
 
@@ -8282,7 +8294,11 @@ Xmla.Exception.prototype = {
 *   @return a string representing this exception
 */
     toString: function(){
-        return this.type + " " + this.code + ": " + this.message + " (source: " + this.source  + ")";
+        var string =  this.type + " " +
+                      this.code + ": " + this.message +
+                      " (source: " + this.source  + ", " +
+                      " actor: " + this.actor + ")";
+        return string;
     },
 /**
  *  Get a stack trace.
