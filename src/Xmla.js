@@ -276,14 +276,30 @@ var _getElementsByTagName = function(node, tagName){
         };
     }
     else {
+        var checkCriteria = function(node){
+          if (node.nodeType !== 1) {
+            return false;
+          }
+          var nodePrefix = (node.namespaceURI === "" ? "" : node.prefix);
+          if (nodePrefix) {
+            nodePrefix += ":";
+          }
+          var nodeName = nodePrefix + tagName;
+          return nodeName === tagName;
+        };
         func = function(node, tagName){
-            var list = [],
-                criteria = tagName === "*" ? null : function(node){
-                    return (node.nodeType === 1 && ((node.namespaceURI === "" ? "" : node.prefix + ":") + node.nodeName) === tagName);
-                }
-            ;
-            _getElements(node, list, criteria);
-            return list;
+          var criteria;
+          if (tagName === "*") {
+            criteria = null;
+          }
+          else {
+            criteria = checkCriteria;
+          }
+
+          var list = [];
+          _getElements(node, list, criteria);
+
+          return list;
         };
     }
     return (_getElementsByTagName = func)(node, tagName);
@@ -2088,16 +2104,23 @@ Xmla.prototype = {
             if (soapFault.length) {
                 //TODO: extract error info
                 soapFault = soapFault[0];
-                var faultActor = _getElementsByTagName(soapFault, "faultactor");
-                if (faultActor) {
-                  faultActor = _getElementText(faultActor);
+
+                //Get faultactor, faultstring and faultcode elements
+                //These really should not be namespaced,
+                //but SAP HANA puts them in the SOAP envelope namespace
+                //Since only these (and detail) elements can occur in SOAP:Fault,
+                //we simply read the childNodes directly instead of using _getElementByTagName
+                var fields = {}, faultActor, faultString, faultCode;
+                var i, childNodes = soapFault.childNodes, n = childNodes.length, childNode;
+                for (i = 0; i < n; i++){
+                  childNode = childNodes[i];
+                  if (childNode.nodeType === 1) {
+                    fields[childNode.nodeName] = _getElementText(childNode);
+                  }
                 }
-                else {
-                  faultActor = null;
-                }
-                var faultCode = _getElementsByTagName(soapFault, "faultcode")[0].childNodes[0].data;
-                var faultString = _getElementsByTagName(soapFault, "faultstring")[0].childNodes[0].data;
-                //var detailData, detail = _getElementsByTagName(soapFault, "detail");
+                faultActor = fields.fieldactor;
+                faultString = fields.faultstring;
+                faultCode = fields.faultCode;
 
                 request.exception = new Xmla.Exception(
                     Xmla.Exception.TYPE_ERROR,
