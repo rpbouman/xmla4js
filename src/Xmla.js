@@ -2088,10 +2088,16 @@ Xmla.prototype = {
             if (soapFault.length) {
                 //TODO: extract error info
                 soapFault = soapFault[0];
-                var faultActor = _getElementsByTagName(soapFault, "faultactor")[0].childNodes[0].data;
+                var faultActor = _getElementsByTagName(soapFault, "faultactor");
+                if (faultActor) {
+                  faultActor = _getElementText(faultActor);
+                }
+                else {
+                  faultActor = null;
+                }
                 var faultCode = _getElementsByTagName(soapFault, "faultcode")[0].childNodes[0].data;
                 var faultString = _getElementsByTagName(soapFault, "faultstring")[0].childNodes[0].data;
-                var detailData, detail = _getElementsByTagName(soapFault, "detail")[0];
+                //var detailData, detail = _getElementsByTagName(soapFault, "detail");
 
                 request.exception = new Xmla.Exception(
                     Xmla.Exception.TYPE_ERROR,
