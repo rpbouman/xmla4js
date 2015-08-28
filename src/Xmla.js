@@ -244,6 +244,10 @@ function _isObj(arg) {
     return arg && typeof(arg)==="object";
 };
 function _xmlEncode(value){
+    if (value === null) {
+      value = "";
+    }
+    else
     if (_isStr(value)) {
         value = value.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
