@@ -244,14 +244,20 @@ function _isObj(arg) {
     return arg && typeof(arg)==="object";
 };
 function _xmlEncode(value){
-    if (value === null) {
+  var value;
+  switch (typeof(value)) {
+    case "string":
+      value = value.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      break;
+    case "undefined":
       value = "";
-    }
-    else
-    if (_isStr(value)) {
-        value = value.replace(/\&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-    return value;
+      break;
+    case "object":
+      if (value === null) {
+        value = "";
+      }
+  }
+  return value;
 };
 
 function _decodeXmlaTagName(tagName) {
