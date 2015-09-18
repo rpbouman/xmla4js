@@ -59,6 +59,7 @@ var Xmla,
 ;
 
 var _createXhr;
+
 if (window.XMLHttpRequest) _createXhr = function(){
     return new window.XMLHttpRequest();
 }
@@ -83,7 +84,9 @@ if (typeof(require)==="function") _createXhr = function(){
                 this.onreadystatechange.call(this, this);
             }
         },
-        open: function(method, url, async, username, password){
+        open: function(method, url, async
+            //, username, password
+        ){
             if (async !== true) {
                 throw "Synchronous mode not supported in this environment."
             }
@@ -101,9 +104,9 @@ if (typeof(require)==="function") _createXhr = function(){
             }
             options.method = "POST";//method;
             options.headers = {};
-            if (username) {
-              options.headers.Authorization = "Basic " + (new Buffer(username + ":" + (password || ""))).toString("base64");
-            }
+            //if (username) {
+            //  options.headers.Authorization = "Basic " + window.btoa(username + ":" + (password || ""));
+            //}
             this.options = options;
             this.changeStatus(-1, 1);
         },
@@ -201,11 +204,12 @@ function _ajax(options){
         };
 
     xhr = _createXhr();
-    args = ["POST", options.url, options.async];
-    if (options.username && options.password) {
-      args = args.concat([options.username, options.password]);
-    }
-    xhr.open.apply(xhr, args);
+    //args = ["POST", options.url, options.async];
+    //if (options.username && options.password) {
+    //  args = args.concat([options.username, options.password]);
+    //}
+    //xhr.open.apply(xhr, args);
+    xhr.open("POST", options.url, options.async);
     //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
     if (!_isUnd(options.requestTimeout) && (options.async || !(window && window.document))) {
       xhr.timeout = options.requestTimeout;
@@ -213,6 +217,9 @@ function _ajax(options){
     xhr.onreadystatechange = handler;
     xhr.setRequestHeader("Accept", "text/xml, application/xml, application/soap+xml");
     xhr.setRequestHeader("Content-Type", "text/xml");
+    if (options.username) {
+        xhr.setRequestHeader("Authorization", "Basic " + window.btoa(options.username + ":" + (options.password || "")));
+    }
     if (headers = options.headers) {
       for (header in headers) {
         xhr.setRequestHeader(header, headers[header]);

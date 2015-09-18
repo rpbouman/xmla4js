@@ -1181,12 +1181,13 @@ var QueryDesignerAxis;
     getMdx: function() {
         var hierarchies = this.hierarchies, i, n = hierarchies.length,
             hierarchy, hierarchyName, minLevel, maxLevel,
-            setDefs = this.setDefs, setDef, member, members,
+            setDefs = this.setDefs, setDef, member, members, drilldownLevel,
             mdx = "";
         ;
         for (i = 0; i < n; i++) {
             minLevel = null, maxLevel = null;
             hierarchy = hierarchies[i];
+            drilldownLevel = hierarchy.drilldownLevel;
             hierarchyName = this.getHierarchyName(hierarchy);
             setDef = setDefs[hierarchyName];
             for (j = 0, m = setDef.length, members = ""; j < m; j++) {
@@ -1195,6 +1196,9 @@ var QueryDesignerAxis;
             }
             setDef = "{" + members + "}";
             if (hierarchyName !== "Measures") {
+                if (drilldownLevel) {
+                    setDef = "DrilldownLevel(" + setDef + ")";
+                }
                 setDef = "Hierarchize(" + setDef + ")";
             }
             mdx = mdx ? "CrossJoin(" + mdx + ", " + setDef + ")" : setDef;
@@ -2045,11 +2049,15 @@ var Menu;
 }).prototype = {
     init: function(){
         var conf = this.conf,
-            items = conf.items
+            items = conf.items,
+            popUpSource = conf.popUpSource
         ;
         listen(this.getContainer(), "click", this.containerClicked, this);
         if (iFun(conf.checkShowMenu)){
             this.checkShowMenu = conf.checkShowMenu;
+        }
+        if (iFun(conf.menuClicked)){
+            this.menuClicked = conf.menuClicked;
         }
         this.createDom();
         if (items) this.addItems();
@@ -2167,13 +2175,31 @@ var log = new Log({
     }),
     queryDesignerMenu = new Menu({
         container: "workarea",
+        popUpSource: null,
         items: [
             {text: "Drill up"},
             {text: "Drill down"}
         ],
+        menuClicked: function(event) {
+            var drillSource = null;
+            if (this.popUpSource.id) {
+                drillSource = queryDesigner.cube.hierarchies[this.popUpSource.id.replace('.[All]','')];
+            }
+            if (drillSource) {
+                if (drillSource.drilldownLevel) {
+                    drillSource.drilldownLevel = false;
+                } else {
+                    drillSource.drilldownLevel = true;
+                }
+            }
+            queryDesigner.queryChanged(queryDesigner);
+        },
         checkShowMenu: function(event) {
-            var target = event.getTarget();
-            return (QueryDesignerAxis.lookup(target)) ? true : false;
+            var res = (QueryDesignerAxis.lookup(target)) ? true : false;
+            if (res) {
+                this.popUpSource = event.getTarget();
+            }
+            return res;
         }
     });
     cubeMetaData = null;

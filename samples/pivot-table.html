@@ -279,11 +279,16 @@
                 }
                 var size, options = config.options;
                 if (options instanceof Array){
-                    for (var option, text = "", i=0; i<options.length; i++){
+                    for (var option, text = "", value = "", i=0; i<options.length; i++){
                         option = document.createElement("OPTION");
-                        text = options[i][config.text];
+                        if (config.uniqueText) {
+                            value = options[i][config.uniqueText];
+                        } else {
+                            text = options[i][config.text];
+                        }
+                        value = text;
                         option.innerHTML = text;
-                        option.value = text;
+                        option.value = value;
                         config.select.appendChild(option);
                     }
                     size = options.length;
@@ -293,12 +298,30 @@
                     size = 0
                     for (var p in options) {
                         if (options.hasOwnProperty(p)){
-                            option = document.createElement("OPTION");
-                            option.innerHTML = p;
-                            option.value = p;
-                            config.select.appendChild(option);
+                            if (options[p] instanceof Array) {
+                                for (var option, text = "", value = "", i=0; i<options[p].length; i++){
+                                    option = document.createElement("OPTION");
+                                    if (config.uniqueText) {
+                                        text = options[p][i][config.uniqueText];
+                                    } else {
+                                        text = options[p][i][config.text];
+                                    }
+                                    value = text;
+                                    option.innerHTML = text;
+                                    option.value = value;
+                                    config.options[value] = options[p][i];
+                                    config.select.appendChild(option);
+                                    size++
+                                }
+                            } else
+                            if (options[p] instanceof Object) {
+                                option = document.createElement("OPTION");
+                                option.innerHTML = p;
+                                option.value = p;
+                                config.select.appendChild(option);
+                                size++
+                            }
                         }
-                        size++
                     }
                 }
                 //setting the size is the only way I could get IE8 to behave.
@@ -401,6 +424,7 @@
                     select: select_hierarchies_slicer,
                     options: hierarchies,
                     text: "HIERARCHY_NAME",
+                    uniqueText: "HIERARCHY_UNIQUE_NAME",
                     choices: ["columns", "rows", "slicer"],
                     checked: "rows"
                 });
@@ -408,41 +432,40 @@
             }
 
             function getMDXSet(select_hierarchies) {
-                var hierarchy, tail = "", mdx = "";
+                var hierarchy, tail = "",
+                        mdx = "";
 
-                for (var i=0; i<select_hierarchies.length; i++){
+                for (var i = 0; i < select_hierarchies.length; i++) {
                     hierarchy = hierarchies[select_hierarchies.options[i].value];
-          if (i) {
-            mdx += ", ";
-          }
-                    if (select_hierarchies.length - i > 1){
+                    if (i) {
+                        mdx += ", ";
+                    }
+                    if (select_hierarchies.length - i > 1) {
                         mdx += "CrossJoin(";
-            tail += ")";
+                        tail += ")";
                     }
-                    if (hierarchy["DIMENSION_TYPE"]==Xmla.Rowset.MD_DIMTYPE_MEASURE) {
-            if (select_measures_used.options.length > 1) {
-              mdx += "union(";
-              for (var j=0; j<select_measures_used.length; j++){
-                if (j >0){
-                  mdx += ",";
-                }
-                mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
-                  ".[" + select_measures_used.options[j].value +"])}";
-              }
-              mdx += ")";
-            }
-            else {
-              mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
-                    ".[" + select_measures_used.options[0].value +"])}";
-            }
-                    }
-                    else {
+                    if (hierarchy["DIMENSION_TYPE"] && hierarchy["DIMENSION_TYPE"] == Xmla.Rowset.MD_DIMTYPE_MEASURE) {
+                        if (select_measures_used.options.length > 1) {
+                            mdx += "union(";
+                            for (var j = 0; j < select_measures_used.length; j++) {
+                                if (j > 0) {
+                                    mdx += ",";
+                                }
+                                mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+                                ".[" + select_measures_used.options[j].value + "])}";
+                            }
+                            mdx += ")";
+                        } else {
+                            mdx += "{([" + hierarchy["HIERARCHY_NAME"] + "]" +
+                            ".[" + select_measures_used.options[0].value + "])}";
+                        }
+                    } else {
                         mdx += "{(" + hierarchy["DEFAULT_MEMBER"] + ")}";
                     }
                 }
-        if (i>1) {
-          mdx += tail;
-        }
+                if (i > 1) {
+                    mdx += tail;
+                }
                 return mdx;
             }
 
@@ -795,7 +818,11 @@
                                 numChildNodes = childNodes.length; l<numChildNodes; l++
                             ){
                                 childNode = childNodes.item(l);
-                                member[childNode.tagName] = childNode.firstChild.data;
+                                if (childNode.firstChild) {
+                                    member[childNode.tagName] = childNode.firstChild.data;
+                                } else {
+                                    member[childNode.tagName] = null;
+                                }
                             }
                             tuple.members.push(member);
                         }

@@ -195,7 +195,7 @@
                 xmla                        = new Xmla({async: true}),
                 dataSource;
 
-                YAHOO.widget.Chart.SWFURL   =  "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf";
+                YAHOO.widget.Chart.SWFURL   =  "https://cdnjs.cloudflare.com/ajax/libs/yui/2.9.0/charts/assets/charts.swf";
 
             /*
             *   Functions to populate objects with data from xmla
@@ -278,7 +278,7 @@
                 var restrictions = {};
                 restrictions["CUBE_NAME"] = getSelectValue(select_cube);
                 xmla.discoverMDHierarchies({
-                    url: datasource.URL,
+                    url: datasource.URL ? datasource.URL: url.value,
                     properties: properties,
                     restrictions: restrictions
                 });
@@ -330,7 +330,7 @@
                 );
             }
 
-            function renderYUIChart(xmlaRowset, yuiDataSource){
+            function renderYUIChart(xmlaRowset, yuiDataSource) {
                 var chartType = getSelectValue(select_chart_type);
                 var fieldNames = xmlaRowset.getFieldNames();
                 var _constructor = YAHOO.widget[chartType];
@@ -338,7 +338,7 @@
                 var config = {
                     series: [],
                     style: {
-                        legend: {display: "right" }
+                        legend: {display: "right"}
                     }
                 }
                 var seriesObject, bar;
@@ -349,27 +349,27 @@
                     case "ColumnChart":
                     case "StackedColumnChart":
                     case "LineChart":
-                        for (var i=0, num = select_measures.length; i<num; i++){
-                            if (select_measures[i].selected){
+                        for (var i = 0, num = select_measures.length; i < num; i++) {
+                            if (select_measures[i].selected) {
                                 metric = fieldNames[fieldNames.length - (config.series.length + 1)];
                                 seriesObject = {displayName: metric};
-                                seriesObject[bar?"xField":"yField"] = metric;
+                                seriesObject[bar ? "xField" : "yField"] = metric;
                                 config.series.push(seriesObject);
-                                config[bar?"yField":"xField"] = fieldNames[fieldNames.length - (config.series.length+1)];
+                                config[bar ? "yField" : "xField"] = fieldNames[fieldNames.length - (config.series.length + 1)];
                             }
                         }
                         break;
                     case "PieChart":
-                        config.dataField = fieldNames[fieldNames.length -1];
+                        config.dataField = fieldNames[fieldNames.length - 1];
                         config.categoryField = fieldNames[0];
                         config.series.push({});
                         break;
                 }
 
                 var yuiChart = new _constructor(
-                    "section_chart",
-                    yuiDataSource,
-                    config
+                        "section_chart",
+                        yuiDataSource,
+                        config
                 );
             }
 
@@ -464,7 +464,7 @@
                 properties[Xmla.PROP_DATASOURCEINFO] = datasource[Xmla.PROP_DATASOURCEINFO];
 
                 xmla.discoverDBCatalogs({
-                    url: datasource.URL,
+                    url: datasource.URL? datasource.URL : url.value,
                     properties: properties
                 });
             }
@@ -480,7 +480,7 @@
                 properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
 
                 xmla.discoverMDCubes({
-                    url: datasource.URL,
+                    url: datasource.URL ? datasource.URL : url.value,
                     properties: properties
                 });
             }
@@ -499,7 +499,7 @@
                 restrictions["CUBE_NAME"] = getSelectValue(select_cube);
 
                 xmla.discoverMDMeasures({
-                    url: datasource.URL,
+                    url: datasource.URL? datasource.URL : url.value,
                     properties: properties,
                     restrictions: restrictions
                 });
@@ -537,7 +537,7 @@
                 properties[Xmla.PROP_CATALOG] = getSelectValue(select_catalog);
                 properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
                 xmla.execute({
-                    url: datasource.URL,
+                    url: datasource.URL ? datasource.URL : url.value,
                     properties: properties,
                     statement: mdx
                 });
