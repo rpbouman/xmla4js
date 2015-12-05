@@ -2130,7 +2130,7 @@ Xmla.prototype = {
                 }
                 faultActor = fields.fieldactor;
                 faultString = fields.faultstring;
-                faultCode = fields.faultCode;
+                faultCode = fields.faultcode;
 
                 request.exception = new Xmla.Exception(
                     Xmla.Exception.TYPE_ERROR,
