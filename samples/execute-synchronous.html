@@ -82,10 +82,11 @@
         </fieldset>
         <fieldset>
             <legend>MDX Statement:</legend>
-            <textarea id="textarea_statement">select NON EMPTY Crossjoin({[Measures].[Actual]}, Union({[Region].[All Regions]}, [Region].[All Regions].Children)) ON COLUMNS,
-  NON EMPTY Crossjoin(Hierarchize(Union({[Department].[All Departments]}, [Department].[All Departments].Children)), {[Positions].[All Positions]}) ON ROWS
-from [Quadrant Analysis]
-</textarea>
+            <textarea id="textarea_statement"></textarea>
+            <script src="defaultMDX.js"></script>
+            <script>
+              document.getElementById("textarea_statement").value = mdx;
+            </script>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>

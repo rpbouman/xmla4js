@@ -87,9 +87,11 @@
         </fieldset>
         <fieldset>
             <legend>MDX Statement:</legend>
-            <textarea id="textarea_statement">SELECT {([Measures].[Actual])} ON COLUMNS
-,{([Region].[All Regions])} ON ROWS
-FROM [Quadrant Analysis]</textarea>
+            <textarea id="textarea_statement"></textarea>
+            <script src="defaultMDX.js"></script>
+            <script>
+              document.getElementById("textarea_statement").value = mdx;
+            </script>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>

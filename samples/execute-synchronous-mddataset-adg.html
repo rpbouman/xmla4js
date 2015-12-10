@@ -82,42 +82,11 @@
         </fieldset>
         <fieldset>
             <legend>MDX Statement:</legend>
-            <textarea id="textarea_statement">
-select NON EMPTY
-    Crossjoin(
-        Hierarchize(
-            Union(
-                {[Region].[All Regions]},
-                [Region].[All Regions].Children
-            )
-        ),
-        {[Measures].[Actual], [Measures].[Budget], [Measures].[Variance]}
-    ) ON COLUMNS,
-NON EMPTY
-    Hierarchize(
-        Union(
-            Union(
-                Crossjoin(
-                    {[Positions].[All Positions]},
-                    {[Department].[All Departments]}
-                ),
-                Crossjoin(
-                    {[Positions].[All Positions]},
-                    [Department].[All Departments].Children)
-                ),
-                Union(
-                    Crossjoin([Positions].[All Positions].Children,
-                    {[Department].[All Departments]}
-                ),
-                Crossjoin(
-                    [Positions].[All Positions].Children,
-                    [Department].[All Departments].Children
-                )
-            )
-        )
-    ) ON ROWS
-from [Quadrant Analysis]
-            </textarea>
+            <textarea id="textarea_statement"></textarea>
+            <script src="defaultMDX.js"></script>
+            <script>
+              document.getElementById("textarea_statement").value = mdx;
+            </script>
             <label>Format:</label>
             <select id="select_format" name="select_fomat"></select>
             <label>Axis Format:</label>
