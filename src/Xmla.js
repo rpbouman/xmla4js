@@ -188,7 +188,8 @@ function _ajax(options){
                                 {
                                     request: options,
                                     status: this.status,
-                                    statusText: this.statusText
+                                    statusText: this.statusText,
+                                    xhr: xhr
                                 }
                             )
                         //console.log(err);
@@ -2078,9 +2079,15 @@ Xmla.prototype = {
         if (options.password) {
           ajaxOptions.password = options.password;
         }
-        if (options.headers) {
-          ajaxOptions.headers = options.headers;
+        
+        var headers = {};
+        if (this.options.headers) {
+          headers = _applyProps(headers, this.options.headers);
         }
+        if (options.headers) {
+          headers = _applyProps(headers, options.headers, true);
+        }
+        ajaxOptions.headers = headers;
 
         if (this._fireEvent(Xmla.EVENT_REQUEST, options, true) && (
             (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
