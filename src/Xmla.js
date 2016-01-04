@@ -2106,6 +2106,59 @@ Xmla.prototype = {
         }
         this._fireEvent(Xmla.EVENT_ERROR, options);
     },
+    //https://msdn.microsoft.com/en-us/library/ms187142.aspx#handling_soap_faults
+    _parseSoapFault: function(soapFault){
+      //Get faultactor, faultstring, faultcode and detail elements
+      function _parseSoapFaultDetail(detailNode){
+        var errors = [];
+        var i, childNodes = detailNode.childNodes, n = childNodes.length, childNode;
+        for (i = 0; i < n; i++) {
+          childNode = childNodes[i];
+          if (childNode.nodeType !== 1) {
+            continue;
+          }
+          switch (childNode.nodeName){
+            case "Error":
+              errors.push({
+                ErrorCode: _getAttribute(childNode, "ErrorCode"),
+                Description: _getAttribute(childNode, "Description"),
+                Source: _getAttribute(childNode, "Source"),
+                HelpFile: _getAttribute(childNode, "HelpFile")
+              });
+              break;
+            default:
+          }
+        }
+        return errors;
+      }
+
+      var fields = {}, field, nodeName;
+      var i, childNodes = soapFault.childNodes, n = childNodes.length, childNode;
+      for (i = 0; i < n; i++){
+        childNode = childNodes[i];
+        if (childNode.nodeType !== 1) {
+          continue;
+        }
+        nodeName = childNode.nodeName;
+        switch (nodeName) {
+          case "faultactor":
+          case "faultstring":
+          case "faultcode":
+            field = _getElementText(childNode);
+            break;
+          case "detail":
+            field = _parseSoapFaultDetail(childNode);
+            break;
+          default:
+            field = null;
+            break;
+        }
+        if (field) {
+          fields[nodeName] = field;
+        }
+      }
+      return fields;
+    },
     _requestSuccess: function(request) {
         var xhr = request.xhr, response;
         if (request.forceResponseXMLEmulation !== true) {
@@ -2121,30 +2174,14 @@ Xmla.prototype = {
             if (soapFault.length) {
                 //TODO: extract error info
                 soapFault = soapFault[0];
-
-                //Get faultactor, faultstring and faultcode elements
-                //These really should not be namespaced,
-                //but SAP HANA puts them in the SOAP envelope namespace
-                //Since only these (and detail) elements can occur in SOAP:Fault,
-                //we simply read the childNodes directly instead of using _getElementByTagName
-                var fields = {}, faultActor, faultString, faultCode;
-                var i, childNodes = soapFault.childNodes, n = childNodes.length, childNode;
-                for (i = 0; i < n; i++){
-                  childNode = childNodes[i];
-                  if (childNode.nodeType === 1) {
-                    fields[childNode.nodeName] = _getElementText(childNode);
-                  }
-                }
-                faultActor = fields.fieldactor;
-                faultString = fields.faultstring;
-                faultCode = fields.faultcode;
-
+                soapFault = this._parseSoapFault(soapFault);
+                //type, code, message, helpfile, source, data, args, detail, actor
                 request.exception = new Xmla.Exception(
                     Xmla.Exception.TYPE_ERROR,
-                    faultCode, faultString,
+                    soapFault.faultcode, soapFault.faultstring,
                     null, "_requestSuccess",
                     request, null,
-                    null, faultActor
+                    soapFault.detail, soapFault.faultactor
                 );
             }
             else {
