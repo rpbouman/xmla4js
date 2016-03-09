@@ -7043,6 +7043,7 @@ Xmla.Dataset.Axis.prototype = {
         this._hierarchyOrder = [];
         this._hierarchyIndexes = {};
         this.numHierarchies = numHierarchies;
+        var propertyTagName, propertyName;
         for (i = 0; i < numHierarchies; i++){
             hierarchyInfoNode = hierarchyInfoNodes[i];
             hierarchyName = _getAttribute(hierarchyInfoNode, "name");
@@ -7070,9 +7071,31 @@ Xmla.Dataset.Axis.prototype = {
                 if (!converter){
                   converter = _textConverter;
                 }
+                propertyTagName = _decodeXmlaTagName(nodeName);
+                switch (propertyTagName) {
+                  case Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME:
+                  case Xmla.Dataset.Axis.MEMBER_CAPTION:
+                  case Xmla.Dataset.Axis.MEMBER_LEVEL_NAME:
+                  case Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER:
+                  case Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO:
+                    //map default properties with their tagName (Standard) 
+                    propertyName = propertyTagName;
+                    break;
+                  default:
+                    //map non-default properties by unqualified property name.
+                    propertyName = _getAttribute(propertyNode, "name");
+                    if (propertyName) {
+                      propertyName = propertyName.split(".");
+                      propertyName = propertyName[propertyName.length - 1];
+                      if (propertyName.charAt(0) === "[" && propertyName.charAt(propertyName.length -1) === "]") {
+                        propertyName = propertyName.substr(1, propertyName.length - 2);
+                      }
+                    }
+                }
                 properties[nodeName] = {
                     converter: converter,
-                    name: _decodeXmlaTagName(nodeName)
+                    name: propertyTagName,
+                    propertyName: propertyName
                 };
             }
             this._hierarchyDefs[hierarchyName] = hierarchyDef;
@@ -7121,7 +7144,9 @@ Xmla.Dataset.Axis.prototype = {
         this._members = null;
     },
     _getMembers: function(){
-        if (!this.hasMoreTuples()) return null;
+        if (!this.hasMoreTuples()) {
+          return null;
+        }
         return _getElementsByTagNameNS(
             this._tuples[this._tupleIndex],
             _xmlnsDataset, "", "Member"
@@ -7235,7 +7260,7 @@ Xmla.Dataset.Axis.prototype = {
 */
     getTuple: function() {
         var i, n = this.numHierarchies,
-            hierarchies = {}, members = [],
+            hierarchies = {}, member, members = [],
             tuple = {
                 index: this._tupleIndex,
                 hierarchies: hierarchies,
@@ -7243,7 +7268,9 @@ Xmla.Dataset.Axis.prototype = {
             }
         ;
         for (i=0; i < n; i++) {
-          members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
+          member = this._member(i);
+          hierarchies[this._hierarchyOrder[i]] = member;
+          members.push(member);
         }
         return tuple;
     },
@@ -7446,10 +7473,14 @@ Xmla.Dataset.Axis.prototype = {
         ;
         for (i = 0; i < n; i++) {
             el = childNodes[i];
-            if (el.nodeType !== 1 || (!(property = properties[el.nodeName]))) {
+            if (el.nodeType !== 1) {
               continue;
             }
-            member[property.name] = property.converter(_getElementText(el));
+            property = properties[el.nodeName];
+            if (!property) {
+              continue;
+            }
+            member[property.propertyName || property.name] = property.converter(_getElementText(el));
         }
         return member;
     },
