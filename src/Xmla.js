@@ -7066,6 +7066,13 @@ Xmla.Dataset.Axis.prototype = {
                   if (memberProperty) {
                     type = memberProperty.type;
                   }
+                  else {
+                    switch (nodeName) {                      
+                      case Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER:
+                      case Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO:
+                        type = "xsd:int";
+                    }
+                  }
                 }
                 converter = _typeConverterMap[type];
                 if (!converter){
@@ -7113,7 +7120,15 @@ Xmla.Dataset.Axis.prototype = {
                 "Xmla.DataSet.Axis",
                 root
             )._throw();
-        memberSchema = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence")[0],
+        memberSchema = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "sequence");
+        if (!memberSchema.length) {
+          //Jedox does not specify content of members.
+          if (!_isUnd(console.error)) {
+            console.error("MemberType in schema does not define any child elements. Are you running on Jedox/Palo?");
+          }
+          return;
+        }
+        memberSchema = memberSchema[0];
         memberSchemaElements = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, "element");
         numMemberSchemaElements = memberSchemaElements.length;
         for (i = 0; i < numMemberSchemaElements; i++) {
