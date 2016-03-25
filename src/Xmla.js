@@ -2056,6 +2056,14 @@ Xmla.prototype = {
         options.restrictions = _applyProps(options.restrictions, this.options.restrictions, false);
         delete options.exception;
 
+        if (
+          !this._fireEvent(Xmla.EVENT_REQUEST, options, true) ||
+          (options.method == Xmla.METHOD_DISCOVER && !this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
+          (options.method == Xmla.METHOD_EXECUTE  && !this._fireEvent(Xmla.EVENT_EXECUTE,  options))
+        ){
+          return false;
+        }
+
         var soapMessage = this.getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
         var myXhr;
@@ -2089,12 +2097,7 @@ Xmla.prototype = {
         }
         ajaxOptions.headers = headers;
 
-        if (this._fireEvent(Xmla.EVENT_REQUEST, options, true) && (
-            (options.method == Xmla.METHOD_DISCOVER && this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
-            (options.method == Xmla.METHOD_EXECUTE  && this._fireEvent(Xmla.EVENT_EXECUTE, options)))
-        ) {
-          myXhr = _ajax(ajaxOptions);
-        }
+        myXhr = _ajax(ajaxOptions);
         return this.response;
     },
     _requestError: function(options, exception) {
@@ -2313,8 +2316,12 @@ Xmla.prototype = {
             options.properties = properties;
         }
         _applyProps(properties, this.options.properties, false)
-        if (!properties[Xmla.PROP_CONTENT]) properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
-        if (!properties[Xmla.PROP_FORMAT]) options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        if (!properties[Xmla.PROP_CONTENT]) {
+          properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
+        }
+        if (!properties[Xmla.PROP_FORMAT]) {
+          options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        }
         var request = _applyProps(options, {
             method: Xmla.METHOD_EXECUTE
         }, true);
@@ -2327,7 +2334,9 @@ Xmla.prototype = {
 *   @return {Xmla.Rowset} The result of the invoking the XML/A <code>Execute</code> method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a <code>Xmla.Rowset</code> that represents the multi-dimensional result set of the MDX query.
 */
     executeTabular: function(options){
-        if (!options.properties) options.properties = {};
+        if (!options.properties) {
+          options.properties = {};
+        }
         options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
         return this.execute(options);
     },
@@ -2338,7 +2347,9 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *   @param {Object} options An object whose properties convey the options for the XML/A <code>Execute</code> request.
 */
     executeMultiDimensional: function(options){
-        if (!options.properties) options.properties = {};
+        if (!options.properties) {
+          options.properties = {};
+        }
         options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
         return this.execute(options);
     },
