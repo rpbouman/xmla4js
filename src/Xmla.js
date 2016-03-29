@@ -6505,25 +6505,25 @@ Xmla.Dataset.AXIS_ROWS = 1;
 */
 Xmla.Dataset.AXIS_PAGES = 2;
 /**
-*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the fifth axis (the chapters axis).
-*   Alternatively you can simply call <code><a href="#method_getChapterAxis">getChapterAxis()</a></code>
-*   @property AXIS_CHAPTERS
-*   @static
-*   @final
-*   @type int
-*   @default <code>3</code>
-*/
-Xmla.Dataset.AXIS_CHAPTERS = 3;
-/**
 *   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the fourth axis (the section axis).
 *   Alternatively you can simply call <code><a href="#method_getSectionAxis">getSectionAxis()</a></code>
 *   @property AXIS_SECTIONS
 *   @static
 *   @final
 *   @type int
+*   @default <code>3</code>
+*/
+Xmla.Dataset.AXIS_SECTIONS = 3;
+/**
+*   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the fifth axis (the chapters axis).
+*   Alternatively you can simply call <code><a href="#method_getChapterAxis">getChapterAxis()</a></code>
+*   @property AXIS_CHAPTERS
+*   @static
+*   @final
+*   @type int
 *   @default <code>4</code>
 */
-Xmla.Dataset.AXIS_SECTIONS = 4;
+Xmla.Dataset.AXIS_CHAPTERS = 4;
 /**
 *   Can be used as argument for <code><a href="#method_getAxis">getAxis()</a></code> to get the slicer axis
 *   (the axis that appears in the <code>WHERE</code> clause of an MDX-<code>SELECT</code> statement).
