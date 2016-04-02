@@ -330,7 +330,7 @@ http.createServer(function (request, response) {
                 if (typeof(query.mdx) !== "undefined") {
                     xmlaRequest.method = X.METHOD_EXECUTE;
                     xmlaRequest.statement = query.mdx;
-                    properties[X.PROP_FORMAT] = query.resultformat || (contentType === "text/csv" ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
+                    properties[X.PROP_FORMAT] = query.resultformat || (outputHandler === toCsv ? Xmla.PROP_FORMAT_TABULAR : X.PROP_FORMAT_MULTIDIMENSIONAL)
                 }
             }
             restrictions[discoverRequestTypes[3].key] = properties[discoverRequestTypes[3].property] = decodedFragments[3];
