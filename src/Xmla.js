@@ -1599,10 +1599,12 @@ Xmla.prototype = {
 *   @return {DOMDocument}
 */
     getResponseXML: function(){
-        if (_isObj(this.responseXML)) {
+        if (_isObj(this.responseXML) && this.responseText === this._responseTextForResponseXML) {
           return this.responseXML;
         }
-        return (this.responseXML = _xjs(this.responseText));
+        this.responseXML = _xjs(this.responseText);
+        this._responseTextForResponseXML = this.responseText;
+        return this.responseXML;
     },
 /**
 *    This method can be used to set a number of default options for the Xmla instance.
