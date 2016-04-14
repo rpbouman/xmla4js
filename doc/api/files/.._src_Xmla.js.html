@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>../src/Xmla.js</title>
+    <title>..\src\Xmla.js</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
-    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <link rel="icon" href="../assets/favicon.ico">
     <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
@@ -14,9 +14,7 @@
 <div id="doc">
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
-            
-                <h1><img src="../assets/css/logo.png" title=""></h1>
-            
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
             <em>API Docs for: </em>
@@ -27,74 +25,64 @@
         <div class="yui3-u-1-4">
             <div id="docs-sidebar" class="sidebar apidocs">
                 <div id="api-list">
-    <h2 class="off-left">APIs</h2>
-    <div id="api-tabview" class="tabview">
-        <ul class="tabs">
-            <li><a href="#api-classes">Classes</a></li>
-            <li><a href="#api-modules">Modules</a></li>
-        </ul>
-
-        <div id="api-tabview-filter">
-            <input type="search" id="api-filter" placeholder="Type to filter APIs">
-        </div>
-
-        <div id="api-tabview-panel">
-            <ul id="api-classes" class="apis classes">
-            
-                <li><a href="../classes/Xmla.html">Xmla</a></li>
-            
-                <li><a href="../classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
-            
-                <li><a href="../classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
-            
-                <li><a href="../classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
-            
-                <li><a href="../classes/Xmla.Exception.html">Xmla.Exception</a></li>
-            
-                <li><a href="../classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
-            
-            </ul>
-
-            <ul id="api-modules" class="apis modules">
-            
-                <li><a href="../modules/xmla.html">xmla</a></li>
-            
-            </ul>
-        </div>
-    </div>
-</div>
-
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Xmla.html">Xmla</a></li>
+                                <li><a href="../classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
+                                <li><a href="../classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
+                                <li><a href="../classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
+                                <li><a href="../classes/Xmla.Exception.html">Xmla.Exception</a></li>
+                                <li><a href="../classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/xmla.html">xmla</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="yui3-u-3-4">
                 <div id="api-options">
-        Show:
-        <label for="api-show-inherited">
-            <input type="checkbox" id="api-show-inherited" checked>
-            Inherited
-        </label>
-
-        <label for="api-show-protected">
-            <input type="checkbox" id="api-show-protected">
-            Protected
-        </label>
-
-        <label for="api-show-private">
-            <input type="checkbox" id="api-show-private">
-            Private
-        </label>
-        <label for="api-show-deprecated">
-            <input type="checkbox" id="api-show-deprecated">
-            Deprecated
-        </label>
-
-    </div>
-
-
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: ../src/Xmla.js</h1>
+<h1 class="file-heading">File: ..\src\Xmla.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -288,7 +276,8 @@ function _ajax(options){
                                 {
                                     request: options,
                                     status: this.status,
-                                    statusText: this.statusText
+                                    statusText: this.statusText,
+                                    xhr: xhr
                                 }
                             )
                         //console.log(err);
@@ -344,10 +333,20 @@ function _isObj(arg) {
     return arg &amp;&amp; typeof(arg)===&quot;object&quot;;
 };
 function _xmlEncode(value){
-    if (_isStr(value)) {
-        value = value.replace(/\&amp;/g, &quot;&amp;amp;&quot;).replace(/&lt;/g, &quot;&amp;lt;&quot;).replace(/&gt;/g, &quot;&amp;gt;&quot;);
-    }
-    return value;
+  var value;
+  switch (typeof(value)) {
+    case &quot;string&quot;:
+      value = value.replace(/\&amp;/g, &quot;&amp;amp;&quot;).replace(/&lt;/g, &quot;&amp;lt;&quot;).replace(/&gt;/g, &quot;&amp;gt;&quot;);
+      break;
+    case &quot;undefined&quot;:
+      value = &quot;&quot;;
+      break;
+    case &quot;object&quot;:
+      if (value === null) {
+        value = &quot;&quot;;
+      }
+  }
+  return value;
 };
 
 function _decodeXmlaTagName(tagName) {
@@ -376,14 +375,30 @@ var _getElementsByTagName = function(node, tagName){
         };
     }
     else {
+        var checkCriteria = function(node){
+          if (node.nodeType !== 1) {
+            return false;
+          }
+          var nodePrefix = (node.namespaceURI === &quot;&quot; ? &quot;&quot; : node.prefix);
+          if (nodePrefix) {
+            nodePrefix += &quot;:&quot;;
+          }
+          var nodeName = nodePrefix + tagName;
+          return nodeName === tagName;
+        };
         func = function(node, tagName){
-            var list = [],
-                criteria = tagName === &quot;*&quot; ? null : function(node){
-                    return (node.nodeType === 1 &amp;&amp; ((node.namespaceURI === &quot;&quot; ? &quot;&quot; : node.prefix + &quot;:&quot;) + node.nodeName) === tagName);
-                }
-            ;
-            _getElements(node, list, criteria);
-            return list;
+          var criteria;
+          if (tagName === &quot;*&quot;) {
+            criteria = null;
+          }
+          else {
+            criteria = checkCriteria;
+          }
+
+          var list = [];
+          _getElements(node, list, criteria);
+
+          return list;
         };
     }
     return (_getElementsByTagName = func)(node, tagName);
@@ -645,7 +660,7 @@ function _xjs(xml) {
                           value: unescapeEntities(value)
                       };
                       nsUri = (pfx === &quot;&quot;) ? &quot;&quot; : ns[pfx];
-                      if (typeof(nsUri) === &quot;undefined&quot;) {
+                      if (_isUnd(nsUri)) {
                           throw &quot;Unrecognized namespace with prefix \&quot;&quot; + prefix + &quot;\&quot;&quot;;
                       }
                       att.namespaceURI = nsUri;
@@ -661,7 +676,7 @@ function _xjs(xml) {
           prefix = match[4] || &quot;&quot;;
           node.prefix = prefix;
           nsUri = ns[prefix];
-          if (typeof(nsUri) === &quot;undefined&quot;) {
+          if (_isUnd(nsUri)) {
               throw &quot;Unrecognized namespace with prefix \&quot;&quot; + prefix + &quot;\&quot;&quot;;
           }
           node.namespaceURI = nsUri;
@@ -1672,10 +1687,12 @@ Xmla.prototype = {
 *   @return {DOMDocument}
 */
     getResponseXML: function(){
-        if (_isObj(this.responseXML)) {
+        if (_isObj(this.responseXML) &amp;&amp; this.responseText === this._responseTextForResponseXML) {
           return this.responseXML;
         }
-        return (this.responseXML = _xjs(this.responseText));
+        this.responseXML = _xjs(this.responseText);
+        this._responseTextForResponseXML = this.responseText;
+        return this.responseXML;
     },
 /**
 *    This method can be used to set a number of default options for the Xmla instance.
@@ -2129,6 +2146,14 @@ Xmla.prototype = {
         options.restrictions = _applyProps(options.restrictions, this.options.restrictions, false);
         delete options.exception;
 
+        if (
+          !this._fireEvent(Xmla.EVENT_REQUEST, options, true) ||
+          (options.method == Xmla.METHOD_DISCOVER &amp;&amp; !this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
+          (options.method == Xmla.METHOD_EXECUTE  &amp;&amp; !this._fireEvent(Xmla.EVENT_EXECUTE,  options))
+        ){
+          return false;
+        }
+
         var soapMessage = this.getXmlaSoapMessage(options);
         this.soapMessage = soapMessage;
         var myXhr;
@@ -2152,14 +2177,17 @@ Xmla.prototype = {
         if (options.password) {
           ajaxOptions.password = options.password;
         }
-        if (options.headers) {
-          ajaxOptions.headers = options.headers;
+        
+        var headers = {};
+        if (this.options.headers) {
+          headers = _applyProps(headers, this.options.headers);
         }
+        if (options.headers) {
+          headers = _applyProps(headers, options.headers, true);
+        }
+        ajaxOptions.headers = headers;
 
-        if (this._fireEvent(Xmla.EVENT_REQUEST, options, true) &amp;&amp; (
-            (options.method == Xmla.METHOD_DISCOVER &amp;&amp; this._fireEvent(Xmla.EVENT_DISCOVER, options)) ||
-            (options.method == Xmla.METHOD_EXECUTE  &amp;&amp; this._fireEvent(Xmla.EVENT_EXECUTE, options)))
-        ) myXhr = _ajax(ajaxOptions);
+        myXhr = _ajax(ajaxOptions);
         return this.response;
     },
     _requestError: function(options, exception) {
@@ -2170,6 +2198,59 @@ Xmla.prototype = {
           options.callback.call(options.scope ? options.scope : null, Xmla.EVENT_ERROR, this, options, exception);
         }
         this._fireEvent(Xmla.EVENT_ERROR, options);
+    },
+    //https://msdn.microsoft.com/en-us/library/ms187142.aspx#handling_soap_faults
+    _parseSoapFault: function(soapFault){
+      //Get faultactor, faultstring, faultcode and detail elements
+      function _parseSoapFaultDetail(detailNode){
+        var errors = [];
+        var i, childNodes = detailNode.childNodes, n = childNodes.length, childNode;
+        for (i = 0; i &lt; n; i++) {
+          childNode = childNodes[i];
+          if (childNode.nodeType !== 1) {
+            continue;
+          }
+          switch (childNode.nodeName){
+            case &quot;Error&quot;:
+              errors.push({
+                ErrorCode: _getAttribute(childNode, &quot;ErrorCode&quot;),
+                Description: _getAttribute(childNode, &quot;Description&quot;),
+                Source: _getAttribute(childNode, &quot;Source&quot;),
+                HelpFile: _getAttribute(childNode, &quot;HelpFile&quot;)
+              });
+              break;
+            default:
+          }
+        }
+        return errors;
+      }
+
+      var fields = {}, field, nodeName;
+      var i, childNodes = soapFault.childNodes, n = childNodes.length, childNode;
+      for (i = 0; i &lt; n; i++){
+        childNode = childNodes[i];
+        if (childNode.nodeType !== 1) {
+          continue;
+        }
+        nodeName = childNode.nodeName;
+        switch (nodeName) {
+          case &quot;faultactor&quot;:
+          case &quot;faultstring&quot;:
+          case &quot;faultcode&quot;:
+            field = _getElementText(childNode);
+            break;
+          case &quot;detail&quot;:
+            field = _parseSoapFaultDetail(childNode);
+            break;
+          default:
+            field = null;
+            break;
+        }
+        if (field) {
+          fields[nodeName] = field;
+        }
+      }
+      return fields;
     },
     _requestSuccess: function(request) {
         var xhr = request.xhr, response;
@@ -2186,13 +2267,14 @@ Xmla.prototype = {
             if (soapFault.length) {
                 //TODO: extract error info
                 soapFault = soapFault[0];
+                soapFault = this._parseSoapFault(soapFault);
+                //type, code, message, helpfile, source, data, args, detail, actor
                 request.exception = new Xmla.Exception(
                     Xmla.Exception.TYPE_ERROR,
-                    _getElementsByTagName(soapFault, &quot;faultcode&quot;)[0].childNodes[0].data,
-                    _getElementsByTagName(soapFault, &quot;faultstring&quot;)[0].childNodes[0].data,
-                    null,
-                    &quot;_requestSuccess&quot;,
-                    request
+                    soapFault.faultcode, soapFault.faultstring,
+                    null, &quot;_requestSuccess&quot;,
+                    request, null,
+                    soapFault.detail, soapFault.faultactor
                 );
             }
             else {
@@ -2230,8 +2312,12 @@ Xmla.prototype = {
                     this._fireEvent(Xmla.EVENT_EXECUTE_ERROR, request);
                     break;
             }
-            if (request.error) request.error.call(request.scope ? request.scope : null, this, request, request.exception);
-            if (request.callback) request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_ERROR, this, request, request.exception);
+            if (request.error) {
+              request.error.call(request.scope ? request.scope : null, this, request, request.exception);
+            }
+            if (request.callback) {
+              request.callback.call(request.scope ? request.scope : null, Xmla.EVENT_ERROR, this, request, request.exception);
+            }
             this._fireEvent(Xmla.EVENT_ERROR, request);
         }
         else {
@@ -2320,8 +2406,12 @@ Xmla.prototype = {
             options.properties = properties;
         }
         _applyProps(properties, this.options.properties, false)
-        if (!properties[Xmla.PROP_CONTENT]) properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
-        if (!properties[Xmla.PROP_FORMAT]) options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        if (!properties[Xmla.PROP_CONTENT]) {
+          properties[Xmla.PROP_CONTENT] = Xmla.PROP_CONTENT_SCHEMADATA;
+        }
+        if (!properties[Xmla.PROP_FORMAT]) {
+          options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
+        }
         var request = _applyProps(options, {
             method: Xmla.METHOD_EXECUTE
         }, true);
@@ -2334,7 +2424,9 @@ Xmla.prototype = {
 *   @return {Xmla.Rowset} The result of the invoking the XML/A &lt;code&gt;Execute&lt;/code&gt; method. For an asynchronous request, the return value is not defined. For synchronous requests, an instance of a &lt;code&gt;Xmla.Rowset&lt;/code&gt; that represents the multi-dimensional result set of the MDX query.
 */
     executeTabular: function(options){
-        if (!options.properties) options.properties = {};
+        if (!options.properties) {
+          options.properties = {};
+        }
         options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_TABULAR;
         return this.execute(options);
     },
@@ -2345,7 +2437,9 @@ and  &lt;code&gt;&lt;a href=&quot;#property_responseXML&quot;&gt;responseXML&lt;
 *   @param {Object} options An object whose properties convey the options for the XML/A &lt;code&gt;Execute&lt;/code&gt; request.
 */
     executeMultiDimensional: function(options){
-        if (!options.properties) options.properties = {};
+        if (!options.properties) {
+          options.properties = {};
+        }
         options.properties[Xmla.PROP_FORMAT] = Xmla.PROP_FORMAT_MULTIDIMENSIONAL;
         return this.execute(options);
     },
@@ -5978,7 +6072,7 @@ Xmla.Rowset.prototype = {
                     }
                     else {
                       //SAP doesn&#x27;t know how to send XML that is valid according to their XML Schema
-                      if (typeof(console.error) !== &quot;undefined&quot;) {
+                      if (!_isUnd(console.error)) {
                         console.error(&quot;Field \&quot;&quot; + fieldName + &quot;\&quot; is supposed to be present in the rowset but isn&#x27;t. Are you running on SAP / HANA?&quot;);
                       }
                       return null;
@@ -6501,25 +6595,25 @@ Xmla.Dataset.AXIS_ROWS = 1;
 */
 Xmla.Dataset.AXIS_PAGES = 2;
 /**
-*   Can be used as argument for &lt;code&gt;&lt;a href=&quot;#method_getAxis&quot;&gt;getAxis()&lt;/a&gt;&lt;/code&gt; to get the fifth axis (the chapters axis).
-*   Alternatively you can simply call &lt;code&gt;&lt;a href=&quot;#method_getChapterAxis&quot;&gt;getChapterAxis()&lt;/a&gt;&lt;/code&gt;
-*   @property AXIS_CHAPTERS
-*   @static
-*   @final
-*   @type int
-*   @default &lt;code&gt;3&lt;/code&gt;
-*/
-Xmla.Dataset.AXIS_CHAPTERS = 3;
-/**
 *   Can be used as argument for &lt;code&gt;&lt;a href=&quot;#method_getAxis&quot;&gt;getAxis()&lt;/a&gt;&lt;/code&gt; to get the fourth axis (the section axis).
 *   Alternatively you can simply call &lt;code&gt;&lt;a href=&quot;#method_getSectionAxis&quot;&gt;getSectionAxis()&lt;/a&gt;&lt;/code&gt;
 *   @property AXIS_SECTIONS
 *   @static
 *   @final
 *   @type int
+*   @default &lt;code&gt;3&lt;/code&gt;
+*/
+Xmla.Dataset.AXIS_SECTIONS = 3;
+/**
+*   Can be used as argument for &lt;code&gt;&lt;a href=&quot;#method_getAxis&quot;&gt;getAxis()&lt;/a&gt;&lt;/code&gt; to get the fifth axis (the chapters axis).
+*   Alternatively you can simply call &lt;code&gt;&lt;a href=&quot;#method_getChapterAxis&quot;&gt;getChapterAxis()&lt;/a&gt;&lt;/code&gt;
+*   @property AXIS_CHAPTERS
+*   @static
+*   @final
+*   @type int
 *   @default &lt;code&gt;4&lt;/code&gt;
 */
-Xmla.Dataset.AXIS_SECTIONS = 4;
+Xmla.Dataset.AXIS_CHAPTERS = 4;
 /**
 *   Can be used as argument for &lt;code&gt;&lt;a href=&quot;#method_getAxis&quot;&gt;getAxis()&lt;/a&gt;&lt;/code&gt; to get the slicer axis
 *   (the axis that appears in the &lt;code&gt;WHERE&lt;/code&gt; clause of an MDX-&lt;code&gt;SELECT&lt;/code&gt; statement).
@@ -7050,6 +7144,7 @@ Xmla.Dataset.Axis.prototype = {
         this._hierarchyOrder = [];
         this._hierarchyIndexes = {};
         this.numHierarchies = numHierarchies;
+        var propertyTagName, propertyName;
         for (i = 0; i &lt; numHierarchies; i++){
             hierarchyInfoNode = hierarchyInfoNodes[i];
             hierarchyName = _getAttribute(hierarchyInfoNode, &quot;name&quot;);
@@ -7072,14 +7167,43 @@ Xmla.Dataset.Axis.prototype = {
                   if (memberProperty) {
                     type = memberProperty.type;
                   }
+                  else {
+                    switch (nodeName) {                      
+                      case Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER:
+                      case Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO:
+                        type = &quot;xsd:int&quot;;
+                    }
+                  }
                 }
                 converter = _typeConverterMap[type];
                 if (!converter){
                   converter = _textConverter;
                 }
+                propertyTagName = _decodeXmlaTagName(nodeName);
+                switch (propertyTagName) {
+                  case Xmla.Dataset.Axis.MEMBER_UNIQUE_NAME:
+                  case Xmla.Dataset.Axis.MEMBER_CAPTION:
+                  case Xmla.Dataset.Axis.MEMBER_LEVEL_NAME:
+                  case Xmla.Dataset.Axis.MEMBER_LEVEL_NUMBER:
+                  case Xmla.Dataset.Axis.MEMBER_DISPLAY_INFO:
+                    //map default properties with their tagName (Standard) 
+                    propertyName = propertyTagName;
+                    break;
+                  default:
+                    //map non-default properties by unqualified property name.
+                    propertyName = _getAttribute(propertyNode, &quot;name&quot;);
+                    if (propertyName) {
+                      propertyName = propertyName.split(&quot;.&quot;);
+                      propertyName = propertyName[propertyName.length - 1];
+                      if (propertyName.charAt(0) === &quot;[&quot; &amp;&amp; propertyName.charAt(propertyName.length -1) === &quot;]&quot;) {
+                        propertyName = propertyName.substr(1, propertyName.length - 2);
+                      }
+                    }
+                }
                 properties[nodeName] = {
                     converter: converter,
-                    name: _decodeXmlaTagName(nodeName)
+                    name: propertyTagName,
+                    propertyName: propertyName
                 };
             }
             this._hierarchyDefs[hierarchyName] = hierarchyDef;
@@ -7097,7 +7221,15 @@ Xmla.Dataset.Axis.prototype = {
                 &quot;Xmla.DataSet.Axis&quot;,
                 root
             )._throw();
-        memberSchema = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, &quot;sequence&quot;)[0],
+        memberSchema = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, &quot;sequence&quot;);
+        if (!memberSchema.length) {
+          //Jedox does not specify content of members.
+          if (!_isUnd(console.error)) {
+            console.error(&quot;MemberType in schema does not define any child elements. Are you running on Jedox/Palo?&quot;);
+          }
+          return;
+        }
+        memberSchema = memberSchema[0];
         memberSchemaElements = _getElementsByTagNameNS(memberSchema, _xmlnsSchema, _xmlnsSchemaPrefix, &quot;element&quot;);
         numMemberSchemaElements = memberSchemaElements.length;
         for (i = 0; i &lt; numMemberSchemaElements; i++) {
@@ -7128,7 +7260,9 @@ Xmla.Dataset.Axis.prototype = {
         this._members = null;
     },
     _getMembers: function(){
-        if (!this.hasMoreTuples()) return null;
+        if (!this.hasMoreTuples()) {
+          return null;
+        }
         return _getElementsByTagNameNS(
             this._tuples[this._tupleIndex],
             _xmlnsDataset, &quot;&quot;, &quot;Member&quot;
@@ -7242,7 +7376,7 @@ Xmla.Dataset.Axis.prototype = {
 */
     getTuple: function() {
         var i, n = this.numHierarchies,
-            hierarchies = {}, members = [],
+            hierarchies = {}, member, members = [],
             tuple = {
                 index: this._tupleIndex,
                 hierarchies: hierarchies,
@@ -7250,7 +7384,9 @@ Xmla.Dataset.Axis.prototype = {
             }
         ;
         for (i=0; i &lt; n; i++) {
-          members.push(hierarchies[this._hierarchyOrder[i]] = this._member(i));
+          member = this._member(i);
+          hierarchies[this._hierarchyOrder[i]] = member;
+          members.push(member);
         }
         return tuple;
     },
@@ -7453,10 +7589,14 @@ Xmla.Dataset.Axis.prototype = {
         ;
         for (i = 0; i &lt; n; i++) {
             el = childNodes[i];
-            if (el.nodeType !== 1 || (!(property = properties[el.nodeName]))) {
+            if (el.nodeType !== 1) {
               continue;
             }
-            member[property.name] = property.converter(_getElementText(el));
+            property = properties[el.nodeName];
+            if (!property) {
+              continue;
+            }
+            member[property.propertyName || property.name] = property.converter(_getElementText(el));
         }
         return member;
     },
@@ -7898,22 +8038,14 @@ Xmla.Dataset.Cellset.prototype = {
  *  @return {int} The physical index.
  */
     indexForOrdinal: function(ordinal){
-        var index = ordinal,    //the index can at most be ordinal; less if there are missing (empty) cells
+        var cellNodes = this._cellNodes,
+            n = cellNodes.length,
+            index = Math.min(ordinal, n-1),
             cellOrdinal, node
         ;
         while(index &gt;= 0) {
             //get the node at the current index
-            node = this._cellNodes[index];
-            //if we don&#x27;t have a node here, it means there is at least one empty cell,
-            //iow there are less cells than theoretically possible cell ordinals.
-            if (!node) {
-              //if we don&#x27;t have any cells at all, we bail out
-              if (this._cellNodes.length === 0) {
-                return -1;
-              }
-              //start scanning from the end of the collection of cells
-              node = this._cellNodes[this._cellNodes.length - 1];
-            }
+            node = cellNodes[index];
             cellOrdinal = this._getCellOrdinal(node);
             if (cellOrdinal === ordinal) {
               return index;
@@ -7926,10 +8058,10 @@ Xmla.Dataset.Cellset.prototype = {
               return -1;
             }
         }
-        return null;
+        return -1;
     },
 /**
- *  Get a range of cells withing the range that fits the specified ordinals.
+ *  Get a range of cells that fits the specified ordinals.
  *  This method is useful to grab a slice of cells for a subset of the axes.
  *  (You can use &lt;code&gt;&lt;a href=&quot;#method_cellOrdinalForTupleIndexes&quot;&gt;cellOrdinalForTupleIndexes&lt;/a&gt;&lt;/code&gt; to calculate ordinals in terms of tuple indexes.)
  *  The returned range only contains cells that actually exist so the ordinal of adjacent cells may have gaps,
@@ -7939,14 +8071,61 @@ Xmla.Dataset.Cellset.prototype = {
  * @return {[object]} - An array of cells that fit the specified range.
  */
     fetchRangeAsArray: function(from, to){
-        var range = [], cellNodes = this._cellNodes;
-        from = this.indexForOrdinal(from);
-        if (from === -1) return range;
-        to = this.indexForOrdinal(to);
-        if (to === -1) to = cellNodes.length -1;
-        to = Math.min(to, cellNodes.length - 1);
-        for (var i = from; i &lt;= to; i++){
-            range.push(this._readCell(cellNodes[i], {}));
+        var range = [], cellNodes = this._cellNodes, n = cellNodes.length;
+        if (n === 0) {
+          return range;
+        }
+
+        var cellNode, ordinal;
+        if (_isUnd(to) || to === -1) {
+          to = this._getCellOrdinal(cellNodes[n-1]);
+        }
+        if (_isUnd(from) || from === -1) {
+          from = this._getCellOrdinal(cellNodes[0]);
+        }
+
+        //start at to (or at end of array of cells in case empty cells exist)
+        var toIndex = Math.min(to, n - 1);
+        while (toIndex &gt;= 0) {
+          cellNode = cellNodes[toIndex];
+          ordinal = this._getCellOrdinal(cellNode);
+          if (ordinal &lt;= to) {
+            break;
+          }
+          toIndex -= 1;
+        }
+
+        if (toIndex === -1) {
+          //Would be very strange to arrive here.
+          return range;
+        }
+
+        if (ordinal &lt; from) {
+          //The ordinal closest to &quot;to&quot; lies before &quot;from&quot; -&gt; no cells are in range.
+          return range;
+        }
+
+        var fromIndex = Math.min(toIndex, from);
+        while (fromIndex &gt;= 0) {
+          cellNode = cellNodes[fromIndex];
+          ordinal = this._getCellOrdinal(cellNode);
+          if (ordinal &lt;= from) {
+            if (ordinal &lt; from) {
+              fromIndex += 1;
+            }
+            break;
+          }
+          fromIndex -= 1;
+        }
+
+        if (fromIndex === -1) {
+          fromIndex = 0;
+        }
+
+        var index;
+        for (index = fromIndex; index &lt;= toIndex; index++) {
+          cellNode = cellNodes[index];
+          range.push(this._readCell(cellNode, {}));
         }
         return range;
     },
@@ -8007,7 +8186,7 @@ Xmla.Dataset.Cellset.prototype = {
 *   @class Xmla.Exception
 *   @constructor
 */
-Xmla.Exception = function(type, code, message, helpfile, source, data, args){
+Xmla.Exception = function(type, code, message, helpfile, source, data, args, detail, actor){
     this.type = type;
     this.code = code;
     this.message = message;
@@ -8015,6 +8194,8 @@ Xmla.Exception = function(type, code, message, helpfile, source, data, args){
     this.helpfile = helpfile;
     this.data = data;
     this.args = args;
+    this.detail = detail;
+    this.actor = actor;
     return this;
 };
 
@@ -8343,7 +8524,11 @@ Xmla.Exception.prototype = {
 *   @return a string representing this exception
 */
     toString: function(){
-        return this.type + &quot; &quot; + this.code + &quot;: &quot; + this.message + &quot; (source: &quot; + this.source  + &quot;)&quot;;
+        var string =  this.type + &quot; &quot; +
+                      this.code + &quot;: &quot; + this.message +
+                      &quot; (source: &quot; + this.source  + &quot;, &quot; +
+                      &quot; actor: &quot; + this.actor + &quot;)&quot;;
+        return string;
     },
 /**
  *  Get a stack trace.
@@ -8383,7 +8568,6 @@ return Xmla;
 
     </pre>
 </div>
-
                     </div>
                 </div>
             </div>

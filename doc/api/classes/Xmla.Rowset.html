@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
-    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <link rel="icon" href="../assets/favicon.ico">
     <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
 </head>
 <body class="yui3-skin-sam">
@@ -14,9 +14,7 @@
 <div id="doc">
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
-            
-                <h1><img src="../assets/css/logo.png" title=""></h1>
-            
+                <h1><img src="../assets/css/logo.png" title="" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
             <em>API Docs for: </em>
@@ -27,94 +25,74 @@
         <div class="yui3-u-1-4">
             <div id="docs-sidebar" class="sidebar apidocs">
                 <div id="api-list">
-    <h2 class="off-left">APIs</h2>
-    <div id="api-tabview" class="tabview">
-        <ul class="tabs">
-            <li><a href="#api-classes">Classes</a></li>
-            <li><a href="#api-modules">Modules</a></li>
-        </ul>
-
-        <div id="api-tabview-filter">
-            <input type="search" id="api-filter" placeholder="Type to filter APIs">
-        </div>
-
-        <div id="api-tabview-panel">
-            <ul id="api-classes" class="apis classes">
-            
-                <li><a href="../classes/Xmla.html">Xmla</a></li>
-            
-                <li><a href="../classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
-            
-                <li><a href="../classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
-            
-                <li><a href="../classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
-            
-                <li><a href="../classes/Xmla.Exception.html">Xmla.Exception</a></li>
-            
-                <li><a href="../classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
-            
-            </ul>
-
-            <ul id="api-modules" class="apis modules">
-            
-                <li><a href="../modules/xmla.html">xmla</a></li>
-            
-            </ul>
-        </div>
-    </div>
-</div>
-
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/Xmla.html">Xmla</a></li>
+                                <li><a href="../classes/Xmla.Dataset.html">Xmla.Dataset</a></li>
+                                <li><a href="../classes/Xmla.Dataset.Axis.html">Xmla.Dataset.Axis</a></li>
+                                <li><a href="../classes/Xmla.Dataset.Cellset.html">Xmla.Dataset.Cellset</a></li>
+                                <li><a href="../classes/Xmla.Exception.html">Xmla.Exception</a></li>
+                                <li><a href="../classes/Xmla.Rowset.html">Xmla.Rowset</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/xmla.html">xmla</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="yui3-u-3-4">
                 <div id="api-options">
-        Show:
-        <label for="api-show-inherited">
-            <input type="checkbox" id="api-show-inherited" checked>
-            Inherited
-        </label>
-
-        <label for="api-show-protected">
-            <input type="checkbox" id="api-show-protected">
-            Protected
-        </label>
-
-        <label for="api-show-private">
-            <input type="checkbox" id="api-show-private">
-            Private
-        </label>
-        <label for="api-show-deprecated">
-            <input type="checkbox" id="api-show-deprecated">
-            Deprecated
-        </label>
-
-    </div>
-
-
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Xmla.Rowset Class</h1>
+<h1>Xmla.Rowset Class</h1>
 <div class="box meta">
-    
 
-    
 
-    
         <div class="foundat">
-            Defined in: <a href="../files/.._src_Xmla.js.html#l5048"><code>..&#x2F;src&#x2F;Xmla.js:5048</code></a>
+            Defined in: <a href="../files/.._src_Xmla.js.html#l5154"><code>..\src\Xmla.js:5154</code></a>
         </div>
-    
 
-    
-        
             Module: <a href="../modules/xmla.html">xmla</a>
-        
-    
 
-    
 </div>
-
 
 
 <div class="box intro">
@@ -140,863 +118,497 @@ Note that for asynchronous requests, the only way to obtain the returned <code>R
 </p>
 </div>
 
-
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Xmla.Rowset" class="method item">
+<div id="method_Xmla.Rowset" class="method item">
     <h3 class="name"><code>Xmla.Rowset</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>node</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>requestTtype</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>xmla</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5048"><code>..&#x2F;src&#x2F;Xmla.js:5048</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5154"><code>..\src\Xmla.js:5154</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
         
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">node</code>
                         <span class="type">DOMDocument</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The responseXML result returned by server in response to a <code>Discover</code> request.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">requestTtype</code>
                         <span class="type">String</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The requestType identifying the particular schema rowset to construct. This facilitates implementing field getters for a few complex types.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">xmla</code>
                         <span class="type"><a href="../classes/Xmla.html" class="crosslink">Xmla</a></span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The Xmla instance that created this Rowset. This is mainly used to allow the Rowset to access the options passed to the Xmla constructor.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
 
-    
+
 </div>
-
     </div>
-
 
 <div id="classdocs" class="tabview">
     <ul class="api-class-tabs">
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-        
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
-        
-        
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
-        
-        
-        
     </ul>
 
     <div>
         <div id="index" class="api-class-tabpanel index">
             <h2 class="off-left">Item Index</h2>
 
-            
                 <div class="index-section methods">
                     <h3>Methods</h3>
 
                     <ul class="index-list methods">
-                        
                             <li class="index-item method">
                                 <a href="#method_close">close</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_curr">curr</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_eachRow">eachRow</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fetchAllAsArray">fetchAllAsArray</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fetchAllAsObject">fetchAllAsObject</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fetchAllCustom">fetchAllCustom</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fetchAsArray">fetchAsArray</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fetchAsObject">fetchAsObject</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fetchCustom">fetchCustom</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fieldCount">fieldCount</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fieldDef">fieldDef</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fieldIndex">fieldIndex</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fieldName">fieldName</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_fieldVal">fieldVal</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_getFieldNames">getFieldNames</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_getFields">getFields</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_getType">getType</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_hasMoreRows">hasMoreRows</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_mapAllAsObject">mapAllAsObject</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_mapAsObject">mapAsObject</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_next">next</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_nextRow">nextRow</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_readAsArray">readAsArray</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_readAsObject">readAsObject</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_reset">reset</a>
 
-                                
-                                
                             </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_rowCount">rowCount</a>
 
-                                
-                                
                             </li>
-                        
                     </ul>
                 </div>
-            
 
-            
                 <div class="index-section properties">
                     <h3>Properties</h3>
 
                     <ul class="index-list properties">
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_ACCOUNTS">MD_DIMTYPE_ACCOUNTS</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_BILL_OF_MATERIALS">MD_DIMTYPE_BILL_OF_MATERIALS</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_CHANNEL">MD_DIMTYPE_CHANNEL</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_CURRENCY">MD_DIMTYPE_CURRENCY</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_CUSTOMERS">MD_DIMTYPE_CUSTOMERS</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_GEOGRAPHY">MD_DIMTYPE_GEOGRAPHY</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_MEASURE">MD_DIMTYPE_MEASURE</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_ORGANIZATION">MD_DIMTYPE_ORGANIZATION</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_OTHER">MD_DIMTYPE_OTHER</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_PRODUCTS">MD_DIMTYPE_PRODUCTS</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_PROMOTION">MD_DIMTYPE_PROMOTION</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_QUANTITATIVE">MD_DIMTYPE_QUANTITATIVE</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_RATES">MD_DIMTYPE_RATES</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_SCENARIO">MD_DIMTYPE_SCENARIO</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_TIME">MD_DIMTYPE_TIME</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_UNKNOWN">MD_DIMTYPE_UNKNOWN</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_DIMTYPE_UTILIY">MD_DIMTYPE_UTILIY</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_STRUCTURE_FULLYBALANCED">MD_STRUCTURE_FULLYBALANCED</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_STRUCTURE_NETWORK">MD_STRUCTURE_NETWORK</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_STRUCTURE_RAGGEDBALANCED">MD_STRUCTURE_RAGGEDBALANCED</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_STRUCTURE_UNBALANCED">MD_STRUCTURE_UNBALANCED</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_SYSTEM_ENABLED">MD_SYSTEM_ENABLED</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_SYSTEM_INTERNAL">MD_SYSTEM_INTERNAL</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MD_USER_DEFINED">MD_USER_DEFINED</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_AVG">MDMEASURE_AGGR_AVG</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_AVGCHILDREN">MDMEASURE_AGGR_AVGCHILDREN</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_BYACCOUNT">MDMEASURE_AGGR_BYACCOUNT</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_CALCULATED">MDMEASURE_AGGR_CALCULATED</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_COUNT">MDMEASURE_AGGR_COUNT</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_DST">MDMEASURE_AGGR_DST</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_FIRSTCHILD">MDMEASURE_AGGR_FIRSTCHILD</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_FIRSTNONEMPTY">MDMEASURE_AGGR_FIRSTNONEMPTY</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_LASTCHILD">MDMEASURE_AGGR_LASTCHILD</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_LASTNONEMPTY">MDMEASURE_AGGR_LASTNONEMPTY</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_MAX">MDMEASURE_AGGR_MAX</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_MIN">MDMEASURE_AGGR_MIN</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_NONE">MDMEASURE_AGGR_NONE</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_STD">MDMEASURE_AGGR_STD</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_SUM">MDMEASURE_AGGR_SUM</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_UNKNOWN">MDMEASURE_AGGR_UNKNOWN</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEASURE_AGGR_VAR">MDMEASURE_AGGR_VAR</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEMBER_TYPE_ALL">MDMEMBER_TYPE_ALL</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEMBER_TYPE_FORMULA">MDMEMBER_TYPE_FORMULA</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEMBER_TYPE_MEASURE">MDMEMBER_TYPE_MEASURE</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEMBER_TYPE_REGULAR">MDMEMBER_TYPE_REGULAR</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDMEMBER_TYPE_UNKNOWN">MDMEMBER_TYPE_UNKNOWN</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDPROP_BLOB">MDPROP_BLOB</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDPROP_CELL">MDPROP_CELL</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDPROP_MEMBER">MDPROP_MEMBER</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_MDPROP_SYSTEM">MDPROP_SYSTEM</a>
 
-                                
                                     <span class="flag static">static</span>
-                                
-                                
                             </li>
-                        
                     </ul>
                 </div>
-            
 
-            
 
-            
         </div>
 
-        
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-                
-                    <div id="method_close" class="method item">
+<div id="method_close" class="method item">
     <h3 class="name"><code>close</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6129"><code>..&#x2F;src&#x2F;Xmla.js:6129</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6235"><code>..\src\Xmla.js:6235</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1005,58 +617,33 @@ This should facilitate automatic garbage collection by the browser.</p>
 
     </div>
 
-    
 
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_curr" class="method item">
+<div id="method_curr" class="method item">
     <h3 class="name"><code>curr</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type"></span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6028"><code>..&#x2F;src&#x2F;Xmla.js:6028</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6134"><code>..\src\Xmla.js:6134</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1067,240 +654,148 @@ This can be determined by calling <code><a href="method_hasMoreRows">hasMoreRows
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                     <p>int</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_eachRow" class="method item">
+<div id="method_eachRow" class="method item">
     <h3 class="name"><code>eachRow</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>callback</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>scope</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>args</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Bool</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5995"><code>..&#x2F;src&#x2F;Xmla.js:5995</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6101"><code>..\src\Xmla.js:6101</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>Walks through all rows, and calls the callback function for each row.</p>
-
 <p>The callback function gets passed an object that represents the row.
 The keys of the row object are the column names, and the values are the respective column values.</p>
 <p>The scope for calling the callback can be passed  as the second argument to this method.
-If the scope is not defined (or if it is <code>null</code>), the Rowset&#39;s <code>this</code> pointer is used instead.</p>
+If the scope is not defined (or if it is <code>null</code>), the Rowset's <code>this</code> pointer is used instead.</p>
 <p>You can pass additional data to the callback by passing in a third argument. This is then passed as is as second argument to the callback.</p>
-
 <p>The <code>eachRow</code> method will iterate untill the callback returns <code>false</code>, or until all rows have been traversed.
 If the callback returns <code>false</code>, iteration is aborted and <code>eachRow</code> as a whole returns <code>false</code> too.
 If iteration is not aborted, then eachRow returns <code>true</code>.</p>
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">callback</code>
                         <span class="type">Function()</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>Function to be called for each row.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">scope</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>Optional. Scope in which the callback is called. Defaults to this, that is, the Rowset.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">args</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>Optional. Object that is passed as extra argument to the callback.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Bool</span>:
-                    
                     <p>true if all rows were itereated. If the callback returns false, iteration stops and false is returned.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fetchAllAsArray" class="method item">
+<div id="method_fetchAllAsArray" class="method item">
     <h3 class="name"><code>fetchAllAsArray</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>rows</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Array</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6249"><code>..&#x2F;src&#x2F;Xmla.js:6249</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6355"><code>..\src\Xmla.js:6355</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1309,104 +804,63 @@ See <code><a href="#method_fetchAsArray">fetchAsArray()</a></code>.</p>
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">rows</code>
                         <span class="type">Array</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>OPTIONAL. An array to append the rows to. If not specified, a new array is created</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Array</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fetchAllAsObject" class="method item">
+<div id="method_fetchAllAsObject" class="method item">
     <h3 class="name"><code>fetchAllAsObject</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>rows</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Array</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6262"><code>..&#x2F;src&#x2F;Xmla.js:6262</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6368"><code>..\src\Xmla.js:6368</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1415,116 +869,69 @@ See <code><a href="#method_fetchAsObject">fetchAsObject()</a></code>.</p>
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">rows</code>
                         <span class="type">Array</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>OPTIONAL. An array to append the rows to. If not specified, a new array is created</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Array</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fetchAllCustom" class="method item">
+<div id="method_fetchAllCustom" class="method item">
     <h3 class="name"><code>fetchAllCustom</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>rows</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>func</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>args</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Array</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6275"><code>..&#x2F;src&#x2F;Xmla.js:6275</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6381"><code>..\src\Xmla.js:6381</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1533,126 +940,79 @@ See <code><a href="#method_fetchCustom">fetchCustom()</a></code>.</p>
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">rows</code>
                         <span class="type">Array</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>OPTIONAL. An array to append the rows to. If not specified, a new array is created</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">func</code>
                         <span class="type">Function</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>a callback function to extract the fields.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">args</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>an object to pass data to the callback.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Array</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fetchAsArray" class="method item">
+<div id="method_fetchAsArray" class="method item">
     <h3 class="name"><code>fetchAsArray</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Array</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6162"><code>..&#x2F;src&#x2F;Xmla.js:6162</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6268"><code>..\src\Xmla.js:6268</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1668,70 +1028,40 @@ while (rowArray = rowset.fetchAsArray()){
 </pre>
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Array</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fetchAsObject" class="method item">
+<div id="method_fetchAsObject" class="method item">
     <h3 class="name"><code>fetchAsObject</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Object | Boolean</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6207"><code>..&#x2F;src&#x2F;Xmla.js:6207</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6313"><code>..\src\Xmla.js:6313</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1747,86 +1077,49 @@ while (rowObject = rowset.fetchAsObject()){
 </pre>
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Object | Boolean</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fetchCustom" class="method item">
+<div id="method_fetchCustom" class="method item">
     <h3 class="name"><code>fetchCustom</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>func</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>args</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Mixed | Boolean</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6229"><code>..&#x2F;src&#x2F;Xmla.js:6229</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6335"><code>..\src\Xmla.js:6335</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1837,110 +1130,68 @@ The method returns whatever object or value is returned by the custom function, 
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">func</code>
                         <span class="type">Function</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>a custom function to extract and return the data from the current row of the xml result.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">args</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>an object that will be passed to the function. Useful to hold any data required in addition to the rowset itself (which can be referred to as this inside the function).</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Mixed | Boolean</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fieldCount" class="method item">
+<div id="method_fieldCount" class="method item">
     <h3 class="name"><code>fieldCount</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Int</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6121"><code>..&#x2F;src&#x2F;Xmla.js:6121</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6227"><code>..\src\Xmla.js:6227</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -1948,82 +1199,48 @@ The method returns whatever object or value is returned by the custom function, 
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Int</span>:
-                    
                     <p>The number of fields in this rowset.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fieldDef" class="method item">
+<div id="method_fieldDef" class="method item">
     <h3 class="name"><code>fieldDef</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>name</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">FieldDef</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6058"><code>..&#x2F;src&#x2F;Xmla.js:6058</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6164"><code>..\src\Xmla.js:6164</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2034,112 +1251,71 @@ A fieldDef describes a field (column). It has the following properties:</p>
     <dt>name</dt><dd>string. This is the (possibly escaped) name of the field as it appears in the XML document</dd>
     <dt>index</dt><dd>int. The ordinal position of this field. Fields are numbered starting from 0.</dd>
     <dt>type</dt><dd>string. The name of the XML data type for the values that appear in this column</dd>
-    <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. &quot;0&quot; means the field is optional.</dd>
-    <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. &quot;unbounded&quot; means there is no declared limit.</dd>
+    <dt>minOccurs</dt><dd>string. The minimal number of occurrences of a value. "0" means the field is optional.</dd>
+    <dt>maxOccurs</dt><dd>string. If this is parseable as an integer, that integer specifies the number of times a value can appear in this column. "unbounded" means there is no declared limit.</dd>
     <dt>getter</dt><dd>function. This function is used to extract a value from the XML document for this field.</dd>
 </dl>
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">name</code>
                         <span class="type">String</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The name of the field to retrieve.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">FieldDef</span>:
-                    
                     <p>The <code>fieldDef</code> object that matches the argument.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fieldIndex" class="method item">
+<div id="method_fieldIndex" class="method item">
     <h3 class="name"><code>fieldIndex</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>name</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Int</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6084"><code>..&#x2F;src&#x2F;Xmla.js:6084</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6190"><code>..\src\Xmla.js:6190</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2148,106 +1324,65 @@ Field indexes start at 0.</p>
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">name</code>
                         <span class="type">String</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The name of the field for which you want to retrieve the index.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Int</span>:
-                    
                     <p>The ordinal position (starting at 0) of the field that matches the argument.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fieldName" class="method item">
+<div id="method_fieldName" class="method item">
     <h3 class="name"><code>fieldName</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>name</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Int</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6094"><code>..&#x2F;src&#x2F;Xmla.js:6094</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6200"><code>..\src\Xmla.js:6200</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2256,106 +1391,65 @@ Field indexes start at 0.</p>
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">name</code>
                         <span class="type">String</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The name of the field for which you want to retrieve the index.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Int</span>:
-                    
                     <p>The ordinal position (starting at 0) of the field that matches the argument.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_fieldVal" class="method item">
+<div id="method_fieldVal" class="method item">
     <h3 class="name"><code>fieldVal</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>name</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Array | Boolean | Float | Int | String</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6111"><code>..&#x2F;src&#x2F;Xmla.js:6111</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6217"><code>..\src\Xmla.js:6217</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2363,96 +1457,59 @@ Field indexes start at 0.</p>
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">name</code>
                         <span class="type">String | int</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>The name or the index of the field for which you want to retrieve the value.</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Array | Boolean | Float | Int | String</span>:
-                    
                     <p>From the current row, the value of the field that matches the argument.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_getFieldNames" class="method item">
+<div id="method_getFieldNames" class="method item">
     <h3 class="name"><code>getFieldNames</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">string</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5945"><code>..&#x2F;src&#x2F;Xmla.js:5945</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6051"><code>..\src\Xmla.js:6051</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2461,72 +1518,42 @@ The position of the names in the array corresponds to the column order of the ro
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">string</span>:
-                    
                     <p>An (ordered) array of field names.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_getFields" class="method item">
+<div id="method_getFields" class="method item">
     <h3 class="name"><code>getFields</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">fieldDef</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5928"><code>..&#x2F;src&#x2F;Xmla.js:5928</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6034"><code>..\src\Xmla.js:6034</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2537,72 +1564,42 @@ For a description of the <code>fieldDef</code> object, see the
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">fieldDef</span>:
-                    
                     <p>An (ordered) array of field definition objects.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_getType" class="method item">
+<div id="method_getType" class="method item">
     <h3 class="name"><code>getType</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type"></span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5918"><code>..&#x2F;src&#x2F;Xmla.js:5918</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6024"><code>..\src\Xmla.js:6024</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2611,168 +1608,101 @@ For a description of the <code>fieldDef</code> object, see the
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                     <p><code>int</code> One of the <code>DISCOVER_XXX</code>, <code>DBSCHEMA_XXX</code> or <code>MDSCHEMA_XXX</code> constants</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_hasMoreRows" class="method item">
+<div id="method_hasMoreRows" class="method item">
     <h3 class="name"><code>hasMoreRows</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Bool</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5957"><code>..&#x2F;src&#x2F;Xmla.js:5957</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6063"><code>..\src\Xmla.js:6063</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>Indicates wheter the rowset can still be traversed.
 You can use this method together with the
 <code><a href="#method_nextRow">nextRow()</a></code> method
-to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
+to drive a <code>while</code> loop to traverse all rows in the rowset, like so:</p>
  <pre>
 &nbsp;while(rowset.hasMoreRows()){
 &nbsp;    ...process row...
 &nbsp;    rowsete.nextRow();
 &nbsp;}
- </pre></p>
-
+ </pre>
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Bool</span>:
-                    
                     <p>true in case there are more rows to traverse. false if all rows have been traversed.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_mapAllAsObject" class="method item">
+<div id="method_mapAllAsObject" class="method item">
     <h3 class="name"><code>mapAllAsObject</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>key</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>map</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Object</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6318"><code>..&#x2F;src&#x2F;Xmla.js:6318</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6424"><code>..\src\Xmla.js:6424</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2780,132 +1710,80 @@ to drive a <code>while</code> loop to traverse all rows in the rowset, like so:
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">key</code>
                         <span class="type">String | Array</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>OPTIONAL. A column name or an array of column names that will be used to generate property names for the map. If not specified, the default key is used. If there is no default key, all column names will be used.</p>
 
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">map</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                         <p>OPTIONAL. The object that is used as map. Rows are added as properties to this map. If not specified, a new object is created</p>
 
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Object</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_mapAsObject" class="method item">
+<div id="method_mapAsObject" class="method item">
     <h3 class="name"><code>mapAsObject</code></h3>
 
-    
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
                 <li class="arg">
-                    
                         <code>map</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>key</code>
-                    
                 </li>
-            
                 <li class="arg">
-                    
                         <code>row</code>
-                    
                 </li>
-            
             </ul><span class="paren">)</span>
         </div>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Object</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6290"><code>..&#x2F;src&#x2F;Xmla.js:6290</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6396"><code>..\src\Xmla.js:6396</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -2914,121 +1792,75 @@ This method should typically not be called directly, rather it is a helper metho
 
     </div>
 
-    
         <div class="params">
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
                 <li class="param">
-                    
                         <code class="param-name">map</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                          
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">key</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                          
                     </div>
 
-                    
                 </li>
-            
                 <li class="param">
-                    
                         <code class="param-name">row</code>
                         <span class="type">Object</span>
-                    
 
-                    
 
                     <div class="param-description">
                          
                     </div>
 
-                    
                 </li>
-            
             </ul>
         </div>
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Object</span>:
-                    
                     <p>a tree using column values as branch names, and storing a row or an array of rows at the leaves.</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_next" class="method item">
+<div id="method_next" class="method item">
     <h3 class="name"><code>next</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5987"><code>..&#x2F;src&#x2F;Xmla.js:5987</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6093"><code>..\src\Xmla.js:6093</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3037,54 +1869,30 @@ Use <code><a href="#method_nextRow">nextRow()</a></code> instead.</p>
 
     </div>
 
-    
 
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_nextRow" class="method item">
+<div id="method_nextRow" class="method item">
     <h3 class="name"><code>nextRow</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5974"><code>..&#x2F;src&#x2F;Xmla.js:5974</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6080"><code>..\src\Xmla.js:6080</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3095,58 +1903,33 @@ to drive a <code>while</code> loop to traverse all rows in the rowset.</p>
 
     </div>
 
-    
 
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_readAsArray" class="method item">
+<div id="method_readAsArray" class="method item">
     <h3 class="name"><code>readAsArray</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Array</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6139"><code>..&#x2F;src&#x2F;Xmla.js:6139</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6245"><code>..\src\Xmla.js:6245</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3161,70 +1944,40 @@ and
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Array</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_readAsObject" class="method item">
+<div id="method_readAsObject" class="method item">
     <h3 class="name"><code>readAsObject</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type">Object</span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6184"><code>..&#x2F;src&#x2F;Xmla.js:6184</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6290"><code>..\src\Xmla.js:6290</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3239,66 +1992,37 @@ and
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                         <span class="type">Object</span>:
-                    
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_reset" class="method item">
+<div id="method_reset" class="method item">
     <h3 class="name"><code>reset</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6049"><code>..&#x2F;src&#x2F;Xmla.js:6049</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6155"><code>..\src\Xmla.js:6155</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3306,58 +2030,33 @@ and
 
     </div>
 
-    
 
-    
 
-    
+
 </div>
-
-                
-                    <div id="method_rowCount" class="method item">
+<div id="method_rowCount" class="method item">
     <h3 class="name"><code>rowCount</code></h3>
 
-    
         <span class="paren">()</span>
-    
 
-    
         <span class="returns-inline">
             <span class="type"></span>
         </span>
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l6040"><code>..&#x2F;src&#x2F;Xmla.js:6040</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l6146"><code>..\src\Xmla.js:6146</code></a>
         </p>
 
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3365,68 +2064,40 @@ and
 
     </div>
 
-    
 
-    
         <div class="returns">
             <h4>Returns:</h4>
 
             <div class="returns-description">
-                
-                    
                     <p>int</p>
 
-                
             </div>
         </div>
-    
 
-    
+
 </div>
-
-                
             </div>
-        
 
-        
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-                
-                    <div id="property_MD_DIMTYPE_ACCOUNTS" class="property item">
+<div id="property_MD_DIMTYPE_ACCOUNTS" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_ACCOUNTS</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5147"><code>..&#x2F;src&#x2F;Xmla.js:5147</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5253"><code>..\src\Xmla.js:5253</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3436,50 +2107,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 6</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_BILL_OF_MATERIALS" class="property item">
+<div id="property_MD_DIMTYPE_BILL_OF_MATERIALS" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_BILL_OF_MATERIALS</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5267"><code>..&#x2F;src&#x2F;Xmla.js:5267</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5373"><code>..\src\Xmla.js:5373</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3489,50 +2137,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 16</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_CHANNEL" class="property item">
+<div id="property_MD_DIMTYPE_CHANNEL" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_CHANNEL</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5231"><code>..&#x2F;src&#x2F;Xmla.js:5231</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5337"><code>..\src\Xmla.js:5337</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3542,50 +2167,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 13</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_CURRENCY" class="property item">
+<div id="property_MD_DIMTYPE_CURRENCY" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_CURRENCY</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5207"><code>..&#x2F;src&#x2F;Xmla.js:5207</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5313"><code>..\src\Xmla.js:5313</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3595,50 +2197,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 11</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_CUSTOMERS" class="property item">
+<div id="property_MD_DIMTYPE_CUSTOMERS" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_CUSTOMERS</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5159"><code>..&#x2F;src&#x2F;Xmla.js:5159</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5265"><code>..\src\Xmla.js:5265</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3648,50 +2227,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 7</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_GEOGRAPHY" class="property item">
+<div id="property_MD_DIMTYPE_GEOGRAPHY" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_GEOGRAPHY</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5279"><code>..&#x2F;src&#x2F;Xmla.js:5279</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5385"><code>..\src\Xmla.js:5385</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3701,50 +2257,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 17</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_MEASURE" class="property item">
+<div id="property_MD_DIMTYPE_MEASURE" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_MEASURE</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5111"><code>..&#x2F;src&#x2F;Xmla.js:5111</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5217"><code>..\src\Xmla.js:5217</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3754,50 +2287,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 2</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_ORGANIZATION" class="property item">
+<div id="property_MD_DIMTYPE_ORGANIZATION" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_ORGANIZATION</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5255"><code>..&#x2F;src&#x2F;Xmla.js:5255</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5361"><code>..\src\Xmla.js:5361</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3807,50 +2317,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 15</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_OTHER" class="property item">
+<div id="property_MD_DIMTYPE_OTHER" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_OTHER</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5123"><code>..&#x2F;src&#x2F;Xmla.js:5123</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5229"><code>..\src\Xmla.js:5229</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3860,50 +2347,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 3</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_PRODUCTS" class="property item">
+<div id="property_MD_DIMTYPE_PRODUCTS" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_PRODUCTS</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5171"><code>..&#x2F;src&#x2F;Xmla.js:5171</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5277"><code>..\src\Xmla.js:5277</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3913,50 +2377,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 8</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_PROMOTION" class="property item">
+<div id="property_MD_DIMTYPE_PROMOTION" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_PROMOTION</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5243"><code>..&#x2F;src&#x2F;Xmla.js:5243</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5349"><code>..\src\Xmla.js:5349</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -3966,50 +2407,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 14</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_QUANTITATIVE" class="property item">
+<div id="property_MD_DIMTYPE_QUANTITATIVE" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_QUANTITATIVE</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5135"><code>..&#x2F;src&#x2F;Xmla.js:5135</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5241"><code>..\src\Xmla.js:5241</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4019,50 +2437,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 5</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_RATES" class="property item">
+<div id="property_MD_DIMTYPE_RATES" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_RATES</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5219"><code>..&#x2F;src&#x2F;Xmla.js:5219</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5325"><code>..\src\Xmla.js:5325</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4072,50 +2467,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 12</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_SCENARIO" class="property item">
+<div id="property_MD_DIMTYPE_SCENARIO" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_SCENARIO</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5183"><code>..&#x2F;src&#x2F;Xmla.js:5183</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5289"><code>..\src\Xmla.js:5289</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4125,50 +2497,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 9</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_TIME" class="property item">
+<div id="property_MD_DIMTYPE_TIME" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_TIME</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5099"><code>..&#x2F;src&#x2F;Xmla.js:5099</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5205"><code>..\src\Xmla.js:5205</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4178,50 +2527,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 1</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_UNKNOWN" class="property item">
+<div id="property_MD_DIMTYPE_UNKNOWN" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_UNKNOWN</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5087"><code>..&#x2F;src&#x2F;Xmla.js:5087</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5193"><code>..\src\Xmla.js:5193</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4231,50 +2557,27 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 0</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_DIMTYPE_UTILIY" class="property item">
+<div id="property_MD_DIMTYPE_UTILIY" class="property item">
     <h3 class="name"><code>MD_DIMTYPE_UTILIY</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5195"><code>..&#x2F;src&#x2F;Xmla.js:5195</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5301"><code>..\src\Xmla.js:5301</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4284,417 +2587,233 @@ and
 
     </div>
 
-    
         <p><strong>Default:</strong> 10</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_STRUCTURE_FULLYBALANCED" class="property item">
+<div id="property_MD_STRUCTURE_FULLYBALANCED" class="property item">
     <h3 class="name"><code>MD_STRUCTURE_FULLYBALANCED</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5292"><code>..&#x2F;src&#x2F;Xmla.js:5292</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5398"><code>..\src\Xmla.js:5398</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 0</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_STRUCTURE_NETWORK" class="property item">
+<div id="property_MD_STRUCTURE_NETWORK" class="property item">
     <h3 class="name"><code>MD_STRUCTURE_NETWORK</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5322"><code>..&#x2F;src&#x2F;Xmla.js:5322</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5428"><code>..\src\Xmla.js:5428</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 3</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_STRUCTURE_RAGGEDBALANCED" class="property item">
+<div id="property_MD_STRUCTURE_RAGGEDBALANCED" class="property item">
     <h3 class="name"><code>MD_STRUCTURE_RAGGEDBALANCED</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5302"><code>..&#x2F;src&#x2F;Xmla.js:5302</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5408"><code>..\src\Xmla.js:5408</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 1</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_STRUCTURE_UNBALANCED" class="property item">
+<div id="property_MD_STRUCTURE_UNBALANCED" class="property item">
     <h3 class="name"><code>MD_STRUCTURE_UNBALANCED</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5312"><code>..&#x2F;src&#x2F;Xmla.js:5312</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5418"><code>..\src\Xmla.js:5418</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A possible value for the <code>STRUCTURE</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 2</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_SYSTEM_ENABLED" class="property item">
+<div id="property_MD_SYSTEM_ENABLED" class="property item">
     <h3 class="name"><code>MD_SYSTEM_ENABLED</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5344"><code>..&#x2F;src&#x2F;Xmla.js:5344</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5450"><code>..\src\Xmla.js:5450</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 identifies attribute hierarchies.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 2</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_SYSTEM_INTERNAL" class="property item">
+<div id="property_MD_SYSTEM_INTERNAL" class="property item">
     <h3 class="name"><code>MD_SYSTEM_INTERNAL</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5355"><code>..&#x2F;src&#x2F;Xmla.js:5355</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5461"><code>..\src\Xmla.js:5461</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 identifies attributes with no attribute hierarchies.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 4</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MD_USER_DEFINED" class="property item">
+<div id="property_MD_USER_DEFINED" class="property item">
     <h3 class="name"><code>MD_USER_DEFINED</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5333"><code>..&#x2F;src&#x2F;Xmla.js:5333</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5439"><code>..\src\Xmla.js:5439</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A  bitmap value for the <code>HIERARCHY_ORIGIN</code> column of the
-   <code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
+<code>MDSCHEMA_HIERARCHIES</code> (See: <code><a href="Xmla.html#method_discoverMDHierarchies">discoverMDHierarchies()</a></code>)rowset.
 Identifies user defined hierarchies.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 1</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_AVG" class="property item">
+<div id="property_MDMEASURE_AGGR_AVG" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_AVG</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5467"><code>..&#x2F;src&#x2F;Xmla.js:5467</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5573"><code>..\src\Xmla.js:5573</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4704,50 +2823,27 @@ identifies that the measure aggregates from AVG.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 5</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_AVGCHILDREN" class="property item">
+<div id="property_MDMEASURE_AGGR_AVGCHILDREN" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_AVGCHILDREN</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5522"><code>..&#x2F;src&#x2F;Xmla.js:5522</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5628"><code>..\src\Xmla.js:5628</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4757,50 +2853,27 @@ identifies that the measure aggregates from AVERAGEOFCHILDREN.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 10</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_BYACCOUNT" class="property item">
+<div id="property_MDMEASURE_AGGR_BYACCOUNT" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_BYACCOUNT</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5577"><code>..&#x2F;src&#x2F;Xmla.js:5577</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5683"><code>..\src\Xmla.js:5683</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4810,103 +2883,57 @@ identifies that the measure aggregates from BYACCOUNT.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 15</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_CALCULATED" class="property item">
+<div id="property_MDMEASURE_AGGR_CALCULATED" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_CALCULATED</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5588"><code>..&#x2F;src&#x2F;Xmla.js:5588</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5694"><code>..\src\Xmla.js:5694</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
 <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
- identifies that the measure was derived from a formula that was not any single function above.</p>
+identifies that the measure was derived from a formula that was not any single function above.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 127</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_COUNT" class="property item">
+<div id="property_MDMEASURE_AGGR_COUNT" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_COUNT</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5434"><code>..&#x2F;src&#x2F;Xmla.js:5434</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5540"><code>..\src\Xmla.js:5540</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4916,50 +2943,27 @@ identifies that the measure aggregates from COUNT.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 2</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_DST" class="property item">
+<div id="property_MDMEASURE_AGGR_DST" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_DST</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5500"><code>..&#x2F;src&#x2F;Xmla.js:5500</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5606"><code>..\src\Xmla.js:5606</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -4969,50 +2973,27 @@ identifies that the measure aggregates from DISTINCT COUNT.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 8</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_FIRSTCHILD" class="property item">
+<div id="property_MDMEASURE_AGGR_FIRSTCHILD" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_FIRSTCHILD</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5533"><code>..&#x2F;src&#x2F;Xmla.js:5533</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5639"><code>..\src\Xmla.js:5639</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5022,50 +3003,27 @@ identifies that the measure aggregates from FIRSTCHILD.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 11</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_FIRSTNONEMPTY" class="property item">
+<div id="property_MDMEASURE_AGGR_FIRSTNONEMPTY" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_FIRSTNONEMPTY</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5555"><code>..&#x2F;src&#x2F;Xmla.js:5555</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5661"><code>..\src\Xmla.js:5661</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5075,50 +3033,27 @@ identifies that the measure aggregates from FIRSTNONEMPTY.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 13</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_LASTCHILD" class="property item">
+<div id="property_MDMEASURE_AGGR_LASTCHILD" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_LASTCHILD</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5544"><code>..&#x2F;src&#x2F;Xmla.js:5544</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5650"><code>..\src\Xmla.js:5650</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5128,50 +3063,27 @@ identifies that the measure aggregates from LASTCHILD.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 12</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_LASTNONEMPTY" class="property item">
+<div id="property_MDMEASURE_AGGR_LASTNONEMPTY" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_LASTNONEMPTY</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5566"><code>..&#x2F;src&#x2F;Xmla.js:5566</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5672"><code>..\src\Xmla.js:5672</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5181,50 +3093,27 @@ identifies that the measure aggregates from LASTNONEMPTY.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 14</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_MAX" class="property item">
+<div id="property_MDMEASURE_AGGR_MAX" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_MAX</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5456"><code>..&#x2F;src&#x2F;Xmla.js:5456</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5562"><code>..\src\Xmla.js:5562</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5234,50 +3123,27 @@ identifies that the measure aggregates from MAX.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 4</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_MIN" class="property item">
+<div id="property_MDMEASURE_AGGR_MIN" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_MIN</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5445"><code>..&#x2F;src&#x2F;Xmla.js:5445</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5551"><code>..\src\Xmla.js:5551</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5287,50 +3153,27 @@ identifies that the measure aggregates from MIN.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 3</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_NONE" class="property item">
+<div id="property_MDMEASURE_AGGR_NONE" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_NONE</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5511"><code>..&#x2F;src&#x2F;Xmla.js:5511</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5617"><code>..\src\Xmla.js:5617</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5340,50 +3183,27 @@ identifies that the measure aggregates from NONE.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 9</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_STD" class="property item">
+<div id="property_MDMEASURE_AGGR_STD" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_STD</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5489"><code>..&#x2F;src&#x2F;Xmla.js:5489</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5595"><code>..\src\Xmla.js:5595</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5393,50 +3213,27 @@ identifies that the measure aggregates from STDEV.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 7</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_SUM" class="property item">
+<div id="property_MDMEASURE_AGGR_SUM" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_SUM</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5423"><code>..&#x2F;src&#x2F;Xmla.js:5423</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5529"><code>..\src\Xmla.js:5529</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5446,103 +3243,57 @@ identifies that the measure aggregates from SUM.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 1</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_UNKNOWN" class="property item">
+<div id="property_MDMEASURE_AGGR_UNKNOWN" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_UNKNOWN</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5599"><code>..&#x2F;src&#x2F;Xmla.js:5599</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5705"><code>..\src\Xmla.js:5705</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
         <p>A possible value for the <code>MEASURE_AGGREGATOR</code> column of the
 <code>MDSCHEMA_MEASURES</code> rowset (see: <code><a href="Xmla.html#method_discoverMDMeasures">discoverMDMeasures()</a></code>),
- identifies that the measure was derived from an unknown aggregation function or formula.</p>
+identifies that the measure was derived from an unknown aggregation function or formula.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 0</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEASURE_AGGR_VAR" class="property item">
+<div id="property_MDMEASURE_AGGR_VAR" class="property item">
     <h3 class="name"><code>MDMEASURE_AGGR_VAR</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5478"><code>..&#x2F;src&#x2F;Xmla.js:5478</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5584"><code>..\src\Xmla.js:5584</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5552,50 +3303,27 @@ identifies that the measure aggregates from VAR.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 6</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEMBER_TYPE_ALL" class="property item">
+<div id="property_MDMEMBER_TYPE_ALL" class="property item">
     <h3 class="name"><code>MDMEMBER_TYPE_ALL</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5378"><code>..&#x2F;src&#x2F;Xmla.js:5378</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5484"><code>..\src\Xmla.js:5484</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5605,50 +3333,27 @@ indicating an all member.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 2</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEMBER_TYPE_FORMULA" class="property item">
+<div id="property_MDMEMBER_TYPE_FORMULA" class="property item">
     <h3 class="name"><code>MDMEMBER_TYPE_FORMULA</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5389"><code>..&#x2F;src&#x2F;Xmla.js:5389</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5495"><code>..\src\Xmla.js:5495</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5658,50 +3363,27 @@ indicating a formula member.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 3</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEMBER_TYPE_MEASURE" class="property item">
+<div id="property_MDMEMBER_TYPE_MEASURE" class="property item">
     <h3 class="name"><code>MDMEMBER_TYPE_MEASURE</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5400"><code>..&#x2F;src&#x2F;Xmla.js:5400</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5506"><code>..\src\Xmla.js:5506</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5711,50 +3393,27 @@ indicating a measure member.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 4</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEMBER_TYPE_REGULAR" class="property item">
+<div id="property_MDMEMBER_TYPE_REGULAR" class="property item">
     <h3 class="name"><code>MDMEMBER_TYPE_REGULAR</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5367"><code>..&#x2F;src&#x2F;Xmla.js:5367</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5473"><code>..\src\Xmla.js:5473</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5764,50 +3423,27 @@ indicating a regular member.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 1</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDMEMBER_TYPE_UNKNOWN" class="property item">
+<div id="property_MDMEMBER_TYPE_UNKNOWN" class="property item">
     <h3 class="name"><code>MDMEMBER_TYPE_UNKNOWN</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5411"><code>..&#x2F;src&#x2F;Xmla.js:5411</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5517"><code>..\src\Xmla.js:5517</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5817,50 +3453,27 @@ indicating a member of unknown type</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 0</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDPROP_BLOB" class="property item">
+<div id="property_MDPROP_BLOB" class="property item">
     <h3 class="name"><code>MDPROP_BLOB</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5646"><code>..&#x2F;src&#x2F;Xmla.js:5646</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5752"><code>..\src\Xmla.js:5752</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5870,50 +3483,27 @@ Identifies an internal property.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 8</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDPROP_CELL" class="property item">
+<div id="property_MDPROP_CELL" class="property item">
     <h3 class="name"><code>MDPROP_CELL</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5623"><code>..&#x2F;src&#x2F;Xmla.js:5623</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5729"><code>..\src\Xmla.js:5729</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5924,50 +3514,27 @@ If set, it means this property can be used in the CELL PROPERTIES clause that oc
 
     </div>
 
-    
         <p><strong>Default:</strong> 2</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDPROP_MEMBER" class="property item">
+<div id="property_MDPROP_MEMBER" class="property item">
     <h3 class="name"><code>MDPROP_MEMBER</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5611"><code>..&#x2F;src&#x2F;Xmla.js:5611</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5717"><code>..\src\Xmla.js:5717</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -5978,50 +3545,27 @@ If set it means this property can be used in the DIMENSION PROPERTIES clause of 
 
     </div>
 
-    
         <p><strong>Default:</strong> 1</p>
-    
 
-    
 
-    
 </div>
-
-                
-                    <div id="property_MDPROP_SYSTEM" class="property item">
+<div id="property_MDPROP_SYSTEM" class="property item">
     <h3 class="name"><code>MDPROP_SYSTEM</code></h3>
     <span class="type">Int</span>
 
-    
 
-    
 
-    
         <span class="flag final">final</span>
-    
 
-    
         <span class="flag static">static</span>
-    
 
     <div class="meta">
-        
-            
-                
                 <p>
-                
                 Defined in
-                
-            
-        
-        
-        <a href="../files/.._src_Xmla.js.html#l5635"><code>..&#x2F;src&#x2F;Xmla.js:5635</code></a>
-        
+        <a href="../files/.._src_Xmla.js.html#l5741"><code>..\src\Xmla.js:5741</code></a>
         </p>
 
-        
 
-        
     </div>
 
     <div class="description">
@@ -6031,25 +3575,15 @@ Identifies an internal property.</p>
 
     </div>
 
-    
         <p><strong>Default:</strong> 4</p>
-    
 
-    
 
-    
 </div>
-
-                
             </div>
-        
 
-        
 
-        
     </div>
 </div>
-
                     </div>
                 </div>
             </div>
