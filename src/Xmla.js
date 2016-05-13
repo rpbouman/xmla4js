@@ -1599,9 +1599,14 @@ Xmla.prototype = {
 *   @return {DOMDocument}
 */
     getResponseXML: function(){
-        if (_isObj(this.responseXML) && this.responseText === this._responseTextForResponseXML) {
+        if (this.forceResponseXMLEmulation !== true) {
           return this.responseXML;
         }
+        else
+        if (this.responseText === this._responseTextForResponseXML) {
+          return this.responseXML;
+        }
+        
         this.responseXML = _xjs(this.responseText);
         this._responseTextForResponseXML = this.responseText;
         return this.responseXML;
