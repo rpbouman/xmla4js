@@ -1599,11 +1599,11 @@ Xmla.prototype = {
 *   @return {DOMDocument}
 */
     getResponseXML: function(){
-        if (this.forceResponseXMLEmulation !== true) {
+        if (this.options.forceResponseXMLEmulation !== true) {
           return this.responseXML;
         }
         else
-        if (this.responseText === this._responseTextForResponseXML) {
+        if (this.responseText === this._responseTextForResponseXML && this.responseXML) {
           return this.responseXML;
         }
         
