@@ -1,5 +1,5 @@
 /*
-    Copyright 2009 - 2015 Roland Bouman
+    Copyright 2009 - 2016 Roland Bouman
     contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ https://github.com/rpbouman/xmla4js
     twitter: @rolandbouman
 
@@ -2180,6 +2180,13 @@ Xmla.prototype = {
 
         try {
             var responseXml = this.getResponseXML();
+            if (!responseXml) {
+              request.exception = new Xmla.Exception(
+                  Xmla.Exception.TYPE_ERROR,
+                  Xmla.Exception.ERROR_PARSING_RESPONSE_CDE, 
+                  "Response is not an XML document."
+              );
+            }
             var soapFault = _getElementsByTagNameNS(responseXml, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, "Fault");
             if (soapFault.length) {
                 //TODO: extract error info
@@ -6559,7 +6566,7 @@ Xmla.Dataset.prototype = {
         );
         this._initAxes();
         this._initCells();
-
+/*
         var a, i, j, func, funcBody = "", mul;
         func = "var ordinal = 0, a;" +
             "\nif (arguments.length !== " + this._numAxes + ") new Xmla.Exception._newError(\"ERROR_ILLEGAL_ARGUMENT\", \"cellOrdinalForTupleIndexes\", this)._throw();"
@@ -6572,7 +6579,8 @@ Xmla.Dataset.prototype = {
         }
         func += funcBody + "\nreturn ordinal;"
         this._cellset.cellOrdinalForTupleIndexes = this.cellOrdinalForTupleIndexes = new Function(func);
-    },
+*/
+     },
     _initRoot: function(doc){
         var root = _getElementsByTagNameNS(doc, _xmlnsDataset, "", "root");
         if (root.length) this._root = root[0];
@@ -6789,7 +6797,18 @@ Xmla.Dataset.prototype = {
 *   @return {int} The ordinal number that identifies the cell from this Dataset's <code><a href="Xmla.Dataset.Cellset.html#class_Cellset">Xmla.Dataset.Cellset</a></code> that belongs to the tuples identified by the arguments.
 */
     cellOrdinalForTupleIndexes: function() {
-        throw "Not implemented"
+      var numAxes = this._numAxes, axesOrder = this._axesOrder, i, ordinal = 0, a, arg, j, tupleCount;
+      //for each axis, in descending order
+      for (a = 0, i = numAxes - 1; i >= 0; i--, a++) {
+        arg = arguments[a];
+        tupleCount = 1;
+        //for all preceding axes, in descending order
+        for (j = i-1; j >= 0; j--) {
+          tupleCount *= axesOrder[j].tupleCount();
+        }
+        ordinal += arg * tupleCount;
+      }
+      return ordinal;
     },
 /**
  * Gets all of the XML data into one JS object. The object consists of the following members:
@@ -7685,6 +7704,12 @@ Xmla.Dataset.Cellset.prototype = {
         this._cellProperties = {};
         //examine cell property info so we can parse them
         numPropertyNodes = propertyNodes.length;
+        var me = this;
+        var makePropertyGetter = function(propertyNodeTagName){
+          me["cell" + propertyNodeTagName] = function(){
+            return this.cellProperty(propertyNodeTagName);
+          };
+        };
         for(i = 0; i < numPropertyNodes; i++) {
             propertyNode = propertyNodes[i];
             propertyNodeTagName = propertyNode.nodeName;
@@ -7696,7 +7721,8 @@ Xmla.Dataset.Cellset.prototype = {
                 }
                 type = _getAttribute(cellSchemaElement, "type");
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
-                this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
+                //this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
+                makePropertyGetter(propertyNodeTagName);
                 break;
             }
             //extra: if the schema doesn't explicitly define this property, we somehow have to
@@ -7706,7 +7732,8 @@ Xmla.Dataset.Cellset.prototype = {
                   type = (propertyNodeTagName === "Value") ? "xs:decimal" : "xs:string";
                 }
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
-                this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
+                //this["cell" + propertyNodeTagName] = new Function("return this.cellProperty(\"" + propertyNodeTagName + "\")");
+                makePropertyGetter(propertyNodeTagName);
             }
         }
         this._cellNodes = _getElementsByTagNameNS(
@@ -8053,7 +8080,7 @@ Xmla.Dataset.Cellset.prototype = {
 *   @return {int} The ordinal number for this combination of tuple indexes. This return value can be used as argument for <code><a href="#method_getByOrdinal">getByOrdinal()</a></code>
 */
     cellOrdinalForTupleIndexes: function() {
-        throw "Not implemented";
+        return this._dataset.cellOrdinalForTupleIndexes.apply(this._dataset, arguments);
     },
 /**
  *  Get the cell corresponding to the specified tuple indexes.
