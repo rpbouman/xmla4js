@@ -219,7 +219,7 @@
                         response.eachRow(function(row){
                             var url = row["URL"] || document.getElementById("url").value,
                                 dataSourceInfo = row["DataSourceInfo"],
-                                dataSourceName = row["DataSourceName"],
+                                dataSourceName = row["DataSourceName"]
                             ;
                             getTree().appendChild(new TreeNode({
                                 title: dataSourceInfo || dataSourceName,
