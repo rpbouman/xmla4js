@@ -110,7 +110,7 @@ function rAtt(e, att){
     gEl(e).removeAttribute(att);
 }
 
-function aCh(e, chs) {
+function  aCh(e, chs) {
     var m;
     e = gEl(e);
     if (!iArr(chs)){
@@ -820,7 +820,7 @@ var QueryDesignerAxis;
             c = r1.insertCell(r1.cells.length);
             c.id = hierarchyName;
             c.innerHTML = this.getHierarchyCaption(hierarchy);
-            c.className = "MDSCHEMA_HIERARCHIES";
+            c.className = this.getHierarchyClass(hierarchy);
             c = r2.insertCell(r2.cells.length);
 
             this.updateDomSetDefs(hierarchyName, c);
@@ -845,7 +845,7 @@ var QueryDesignerAxis;
             c = r.insertCell(0);
             c.id = hierarchyName;
             c.innerHTML = this.getHierarchyCaption(hierarchy);
-            c.className = "MDSCHEMA_HIERARCHIES";
+            c.className = this.getHierarchyClass(hierarchy);
 
             c = r.insertCell(1);
             this.updateDomSetDefs(hierarchyName, c);
@@ -964,6 +964,9 @@ var QueryDesignerAxis;
     },
     getHierarchyCaption: function(hierarchy) {
         return hierarchy.HIERARCHY_CAPTION ? hierarchy.HIERARCHY_CAPTION : "Measures";
+    },
+    getHierarchyClass: function(hierarchy) {
+        return hierarchy.HIERARCHY_CAPTION ? 'MDSCHEMA_HIERARCHIES' : 'th MDSCHEMA_MEMBERS';
     },
     getHierarchyName: function(hierarchy) {
         return hierarchy.HIERARCHY_UNIQUE_NAME ? hierarchy.HIERARCHY_UNIQUE_NAME : "Measures";
@@ -1181,12 +1184,13 @@ var QueryDesignerAxis;
     getMdx: function() {
         var hierarchies = this.hierarchies, i, n = hierarchies.length,
             hierarchy, hierarchyName, minLevel, maxLevel,
-            setDefs = this.setDefs, setDef, member, members,
+            setDefs = this.setDefs, setDef, member, members, drilldownLevel,
             mdx = "";
         ;
         for (i = 0; i < n; i++) {
             minLevel = null, maxLevel = null;
             hierarchy = hierarchies[i];
+            drilldownLevel = hierarchy.drilldownLevel;
             hierarchyName = this.getHierarchyName(hierarchy);
             setDef = setDefs[hierarchyName];
             for (j = 0, m = setDef.length, members = ""; j < m; j++) {
@@ -1195,9 +1199,12 @@ var QueryDesignerAxis;
             }
             setDef = "{" + members + "}";
             if (hierarchyName !== "Measures") {
+                if (drilldownLevel) {
+                    setDef = "DrilldownLevel(" + setDef + ")";
+                }
                 setDef = "Hierarchize(" + setDef + ")";
             }
-            mdx = mdx ? "CrossJoin(" + mdx + ", " + setDef + ")" : setDef;
+            mdx = mdx ? "NonEmpty(CrossJoin(" + mdx + ", " + setDef + "))" : setDef;
         }
         if (mdx.length) mdx = mdx + " ON Axis(" + this.conf.id + ")";
         return mdx;
@@ -1306,7 +1313,9 @@ var PivotTable;
         if (rowsTable) {
             rowsTable.style.top = (-cells.scrollTop) + "px";
         }
-        colsTable.style.left = (-cells.scrollLeft) + "px";
+        if (colsTable) {
+            colsTable.style.left = (-cells.scrollLeft) + "px";
+        }
     },
     getPagesDom: function(){
         return gEl(this.conf.id + "-pages");
@@ -1386,7 +1395,11 @@ var PivotTable;
         container.style.width = width + "px";
         cols.style.width = (width - rows.clientWidth) + "px";
 
-        height = Math.min(container.parentNode.clientHeight - (container.offsetTop + container.clientTop + scrollbarHeight), cellsTable.clientHeight + colsTable.clientHeight + pagesTableHeight);
+        height =
+            Math.min((container.parentNode ? container.parentNode.clientHeight : 0) -
+                (container.offsetTop + container.clientTop + scrollbarHeight),
+                (cellsTable && cellsTable.clientHeight ? cellsTable.clientHeight :0 ) +
+                (colsTable &&colsTable.clientHeight ? colsTable.clientHeight : 0) + pagesTableHeight);
         container.style.height = height + "px";
         rows.style.height = (height - (cols.clientHeight + pagesTableHeight)) + "px";
         cells.style.width = (cols.clientWidth + (cellsTable.clientHeight + colsTable.clientHeight > (height + 5) ? 16 : 0)) + "px";
@@ -1394,13 +1407,66 @@ var PivotTable;
         cells.style.overflowX = (rowsTableWidth + colsTable.clientWidth < container.parentNode.clientWidth) ? "hidden" : "auto";
         cells.style.overflowY = (rowsTableHeight + colsTable.clientHeight < (container.parentNode.clientHeight - (container.offsetTop + container.clientTop))) ? "hidden" : "auto";
     },
+    renderRowset: function (rowset) {
+        var me = this,
+            start,
+            columnNames = (rowset.getFieldNames ) ? rowset.getFieldNames() : null,
+            columns = [],
+            data = [], indexStart, indexEnd
+            ;
+            log.print("Rendering drill through data...");
+            start = (new Date()).getTime();
+        if (columnNames) {
+            columnNames.forEach(function (columnName) {
+                indexStart = columnName.lastIndexOf('[');
+                indexEnd = columnName.lastIndexOf(']');
+                if (indexStart && indexEnd && indexEnd < columnName.length && (indexStart+1) < indexEnd) {
+                    columnName = columnName.substring(indexStart+1, indexEnd);
+                    indexEnd = columnName.indexOf('.');
+                    if (columnName.startsWith('$') && indexEnd < columnName.length && indexEnd > 1) {
+                        columnName = columnName.substring(1,indexEnd);
+                    }
+                }
+                columns.push({title: columnName});
+            });
+        }
+
+        if (rowset.fetchAsArray && rowset.hasMoreRows) {
+            while (rowset.hasMoreRows()) {
+                data.push(rowset.fetchAsArray())
+            }
+
+            $('#drillthrough-datatable').DataTable( {
+                data: data,
+                columns: columns,
+                destroy: true
+            } );
+
+            $( "#drillthrough-dialog" ).dialog({
+                modal: true,
+                //draggable: false,
+                //resizable: true,
+                autoResize: true,
+                //position: ['center', 'center'],
+                show: 'blind',
+                hide: 'blind',
+                maxWidth: (window.innerWidth - 40),
+                maxHeight: (window.innerHeight - 40),
+                width: (window.innerWidth - 100) ,
+                height: (window.innerHeight - 100),
+                overflow: "scroll"
+                //dialogClass: 'ui-dialog-osx',
+            });
+            log.print("Drill through data rendered in " + ((new Date()).getTime() - start));
+        }
+    },
     renderDataset: function (dataset) {
         var me = this,
             start,
             container = me.getContainer(),
-            columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
-            rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
-            pageAxis = dataset.hasPageAxis() ? dataset.getPageAxis() : null,
+            columnAxis = (dataset.hasColumnAxis && dataset.hasColumnAxis()) ? dataset.getColumnAxis() : null,
+            rowAxis = (dataset.hasRowAxis && dataset.hasRowAxis()) ? dataset.getRowAxis() : null,
+            pageAxis = (dataset.hasPageAxis && dataset.hasPageAxis()) ? dataset.getPageAxis() : null,
             table
         ;
         if (this.dataset) this.dataset.close();
@@ -1603,12 +1669,12 @@ var PivotTable;
             ]);
         }
         var dataset = this.dataset,
-            rowAxis = dataset.hasRowAxis() ? dataset.getRowAxis() : null,
-            columnAxis = dataset.hasColumnAxis() ? dataset.getColumnAxis() : null,
+            rowAxis = (dataset.hasRowAxis && dataset.hasRowAxis()) ? dataset.getRowAxis() : null,
+            columnAxis = (dataset.hasColumnAxis && dataset.hasColumnAxis()) ? dataset.getColumnAxis() : null,
             tbody = table.tBodies[0] || cEl("TBODY", null, null, table),
             rows = tbody.rows,
             r,
-            i, n = columnAxis.tupleCount(), colTuples, colTuple,
+            i, n = (columnAxis && columnAxis.tupleCount ? columnAxis.tupleCount() : 0), colTuples, colTuple,
             j, m, rowTuples, rowTuple
         ;
         if (rowAxis) {
@@ -1636,23 +1702,23 @@ var PivotTable;
             tbody = table.tBodies[0],
             rows = tbody.rows,
             dataset = this.dataset,
-            cellset = dataset.getCellset(),
+            cellset = (dataset.getCellset ? dataset.getCellset(): null),
             cell, cells, from, to,
-            func = cellset.getByTupleIndexes,
-            columnAxis = dataset.getColumnAxis(),
-            axisCount = dataset.axisCount(),
-            i, n = columnAxis.tupleCount(), colTuples, colTuple,
+            func = (cellset ? cellset.getByTupleIndexes : null),
+            columnAxis = (dataset.getColumnAxis ? dataset.getColumnAxis() : null),
+            axisCount = (dataset.axisCount ? dataset.axisCount() : 0),
+            i, n = (columnAxis && columnAxis.tupleCount ? columnAxis.tupleCount() : 0), colTuples, colTuple,
             j, m, rowTuples, rowTuple,
             k, l,
             r, c, tds, r1, c1,
             columnsTable = this.getColumnsTableDom(),
-            columnspositioningCells = columnsTable.rows[0].cells,
+            columnspositioningCells = (columnsTable ? columnsTable.rows[0].cells: null),
             positioningCells = rows[rows.length - 1].cells;
         ;
-        if (dataset.hasPageAxis()) {
+        if (dataset.hasPageAxis && dataset.hasPageAxis()) {
             args.push(dataset.getPageAxis().tupleIndex());
         }
-        if (dataset.hasRowAxis()) {
+        if (dataset.hasRowAxis && dataset.hasRowAxis()) {
             var rowsTableDom = this.getRowsTableDom();
             m = dataset.getRowAxis().tupleCount();
 
@@ -1686,7 +1752,7 @@ var PivotTable;
             }
         }
         else
-        if (dataset.hasColumnAxis()) {
+        if (dataset.hasColumnAxis && dataset.hasColumnAxis()) {
             r = rows[0];
             from = cellset.cellOrdinalForTupleIndexes(0);
             to = cellset.cellOrdinalForTupleIndexes(n - 1);
@@ -1736,10 +1802,10 @@ var DatasetExporter;
         if (axisCount > 3) throw "Can export only upto 3 axes, this data set has " + axisCount;
         var pageAxis = (axisCount === 3 ? dataset.getPageAxis() : null),
             rowAxis = (axisCount >= 2 ? dataset.getRowAxis() : null),
-            rowTupleCount = (axisCount >= 2 ? rowAxis.tupleCount() : 0),
+            rowTupleCount = (axisCount >= 2 && rowAxis && rowAxis.tupleCount ? rowAxis.tupleCount() : 0),
             rowHierarchyCount = (rowAxis ? rowAxis.hierarchyCount() : 0),
-            columnAxis = (axisCount >= 1 ? dataset.getColumnAxis() : null),
-            columnTupleCount = columnAxis.tupleCount(),
+            columnAxis = (axisCount >= 1 && dataset.getColumnAxis ? dataset.getColumnAxis() : null),
+            columnTupleCount = (columnAxis ? columnAxis.tupleCount(): 0),
             cellset = dataset.getCellset(),
             lines = []
         ;
@@ -2045,11 +2111,15 @@ var Menu;
 }).prototype = {
     init: function(){
         var conf = this.conf,
-            items = conf.items
+            items = conf.items,
+            popUpSource = conf.popUpSource
         ;
         listen(this.getContainer(), "click", this.containerClicked, this);
         if (iFun(conf.checkShowMenu)){
             this.checkShowMenu = conf.checkShowMenu;
+        }
+        if (iFun(conf.menuClicked)){
+            this.menuClicked = conf.menuClicked;
         }
         this.createDom();
         if (items) this.addItems();
@@ -2090,7 +2160,10 @@ var Menu;
     },
     getDom: function() {
         var el = gEl(this.getId());
-        if (!el) el = this.createDom();
+        if (!el) {
+            el = this.createDom();
+            if (this.conf.items) this.addItems();
+        }
         return el;
     },
     addItem: function(conf){
@@ -2166,16 +2239,118 @@ var log = new Log({
         id: "query-results"
     }),
     queryDesignerMenu = new Menu({
-        container: "workarea",
+        container: "query-designer",
+        id: "-query-designer",
+        popUpSource: null,
         items: [
-            {text: "Drill up"},
             {text: "Drill down"}
         ],
+        menuClicked: function(event) {
+            var drillSource = null;
+            if (this.popUpSource.id) {
+                drillSource = queryDesigner.cube.hierarchies[this.popUpSource.id.replace('.[All]','')];
+            }
+            if (drillSource) {
+                if (drillSource.drilldownLevel) {
+                    drillSource.drilldownLevel = false;
+                } else {
+                    drillSource.drilldownLevel = true;
+                }
+            }
+            queryDesigner.queryChanged(queryDesigner);
+        },
         checkShowMenu: function(event) {
-            var target = event.getTarget();
-            return (QueryDesignerAxis.lookup(target)) ? true : false;
+            var res = (QueryDesignerAxis.lookup(target)) ? true : false;
+            if (res) {
+                this.popUpSource = event.getTarget();
+                var drillSource = queryDesigner.cube.hierarchies[this.popUpSource.id.replace('.[All]','')];
+                this.getDom().firstElementChild.innerText = 'Drill ' + ((drillSource && drillSource.drilldownLevel) ? 'up' : 'down');
+            }
+            return res;
         }
-    });
+    }),
+    cellPivotMenu = new Menu({
+        container: "query-results",
+        id: "-query-results",
+        popUpSource: null,
+        items: [
+            {text: "Drill through"}
+        ],
+        menuClicked: function(event) {
+            var cellIndex = this.popUpSource.cellIndex,
+                rowIndex = this.popUpSource.parentElement.rowIndex,
+                rowHeaders = document.getElementById('query-results-rows-table').children[1],
+                columnHeaders = document.getElementById('query-results-columns-table').firstElementChild.children,
+                criteria = "", candidateRow, candidateColumn, index, lastFoundIndex, calculatedIndex;
+            // collect row part of criteria
+            while (rowIndex >= 0) {
+                candidateRow = rowHeaders.children[rowIndex];
+                if (!lastFoundIndex) {
+                    lastFoundIndex = candidateRow.children.length;
+                }
+                index = lastFoundIndex -1;
+                while (index >= 0 && (index >= candidateRow.children.length
+                || !candidateRow.children[index].title)) {
+                    index--;
+                }
+                if (index >= 0) {
+                    lastFoundIndex = index;
+                    if (!candidateRow.children[index].title.endsWith('.[All]')
+                        && !candidateRow.children[index].title.endsWith('.&[]')
+                        && !candidateRow.children[index].title.startsWith('[Measures].')
+                    ) {
+                        if (criteria.length > 0) {
+                            criteria += ', ';
+                        }
+                        criteria += '{' + candidateRow.children[index].title + '}';
+                    }
+                }
+                rowIndex--;
+            }
+            // collect column part of criteria
+            for (var columnHeaderRow = columnHeaders.length -1; columnHeaderRow > 0; columnHeaderRow--) {
+                index = 0;
+                calculatedIndex = 0;
+                while (calculatedIndex < cellIndex && index < columnHeaders[columnHeaderRow].children.length) {
+                    if (columnHeaders[columnHeaderRow].children[index].getAttribute("colspan")) {
+                        calculatedIndex += columnHeaders[columnHeaderRow].children[index].getAttribute("colspan");
+                    } else {
+                        calculatedIndex++;
+                    }
+                    index++;
+                }
+                if (calculatedIndex >= cellIndex) {
+                    if (calculatedIndex > cellIndex) {
+                        index--;
+                    }
+                    if (columnHeaders[columnHeaderRow].children[index].title
+                        && !columnHeaders[columnHeaderRow].children[index].title.endsWith('.[All]')
+                        && !columnHeaders[columnHeaderRow].children[index].title.endsWith('.&[]')
+                        && !columnHeaders[columnHeaderRow].children[index].title.startsWith('[Measures].')) {
+                        if (criteria.length > 0) {
+                            criteria += ', ';
+                        }
+                        criteria += '{' + columnHeaders[columnHeaderRow].children[index].title + '}';
+                    }
+
+                }
+            }
+            var mdx = 'DRILLTHROUGH SELECT FROM [' + queryDesigner.cube.cube.CUBE_NAME + '] WHERE (' + criteria + ')';
+            executeDrillThrough(mdx);
+        },
+        checkShowMenu: function(event) {
+            var eventTarget = event.getTarget();
+            var res =  (eventTarget.nodeType == 1 && eventTarget.tagName== 'TD'
+                && eventTarget.parentElement.tagName == 'TR'
+                && eventTarget.parentElement.parentElement.tagName == 'TBODY'
+                && eventTarget.parentElement.parentElement.parentElement.tagName == 'TABLE'
+                && eventTarget.parentElement.parentElement.parentElement.id == 'query-results-cells-table') ;
+            if (res) {
+                this.popUpSource = eventTarget;
+            }
+            return res;
+        }
+    });;
     cubeMetaData = null;
 ;
 function showCube(show){
@@ -2560,7 +2735,34 @@ function execute(mdx) {
     });
 }
 
-function init() {
+    function executeDrillThrough(mdx) {
+        if (!mdx.length) {
+            return;
+        }
+        log.print("About to execute Query...");
+        var start = (new Date()).getTime();
+        xmla.execute({
+            async: true,
+            statement: mdx,
+            success: function(xmla, req, resp) {
+                log.print("Succes executing mdx in " + ((new Date()).getTime() - start) + "ms");
+                pivotTable.renderRowset(resp);
+            },
+            error: function(a, b, c) {
+                log.print("Error executing mdx in " + ((new Date()).getTime() - start) + "ms");
+                alert(c.toString());
+            },
+            callback: function() {
+                queryDesigner.busy(false);
+            },
+            properties: {
+                Format: "Tabular",
+                AxisFormat: "CustomFormat"
+            }
+        });
+    }
+
+    function init() {
     //set up listeners
     listen("discover", "click", discoverClicked);
     listen("show-mdx", "click", showMdxClicked);
