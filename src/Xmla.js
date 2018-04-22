@@ -1,5 +1,5 @@
 /*
-    Copyright 2009 - 2016 Roland Bouman
+    Copyright 2009 - 2018 Roland Bouman
     contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ https://github.com/rpbouman/xmla4js
     twitter: @rolandbouman
 
