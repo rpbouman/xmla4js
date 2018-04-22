@@ -87,7 +87,7 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 /*
-    Copyright 2009 - 2015 Roland Bouman
+    Copyright 2009 - 2016 Roland Bouman
     contact: Roland.Bouman@gmail.com ~ http://rpbouman.blogspot.com/ ~ https://github.com/rpbouman/xmla4js
     twitter: @rolandbouman
 
@@ -1245,7 +1245,7 @@ Xmla.EVENT_EXECUTE_SUCCESS = &quot;executesuccess&quot;;
 /**
 *   Indicates the &lt;code&gt;executeerror&lt;/code&gt; event.
 *   This constant can be used as en entry in the events array argument for the &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt; method.
-*   The &lt;code&gt;executeerror&lt;/code&gt; event is method-specific and fired when an error occurs while sending an &lt;code&gt;Execute&lt;/code&gt; request, or receiving a response to an &lt;code&gt;Execute&lt;/code method.
+*   The &lt;code&gt;executeerror&lt;/code&gt; event is method-specific and fired when an error occurs while sending an &lt;code&gt;Execute&lt;/code&gt; request, or receiving a response to an &lt;code&gt;Execute&lt;/code&gt; method.
 *   (see: &lt;code&gt;&lt;a href=&quot;#method_execute&quot;&gt;execute()&lt;/a&gt;&lt;/code&gt;).
 *   This is event is not cancelable.
 *
@@ -1295,7 +1295,7 @@ Xmla.EVENT_DISCOVER_SUCCESS = &quot;discoversuccess&quot;;
 *   Indicates the &lt;code&gt;discovererror&lt;/code&gt; event.
 *   This constant can be used as en entry in the events array argument for the &lt;code&gt;&lt;a href=&quot;#method_addListener&quot;&gt;addListener()&lt;/a&gt;&lt;/code&gt; method.
 *   The &lt;code&gt;discovererror&lt;/code&gt; is method-specific and fired when an error occurs while sending an &lt;code&gt;Discover&lt;/code&gt; request,
-*   or receiving a response to an &lt;code&gt;Discover&lt;/code method.
+*   or receiving a response to an &lt;code&gt;Discover&lt;/code&gt; method.
 *   (see: &lt;code&gt;&lt;a href=&quot;#method_discover&quot;&gt;discover()&lt;/a&gt;&lt;/code&gt;).
 *   This is event is not cancelable.
 *
@@ -1687,9 +1687,14 @@ Xmla.prototype = {
 *   @return {DOMDocument}
 */
     getResponseXML: function(){
-        if (_isObj(this.responseXML) &amp;&amp; this.responseText === this._responseTextForResponseXML) {
+        if (this.options.forceResponseXMLEmulation !== true) {
           return this.responseXML;
         }
+        else
+        if (this.responseText === this._responseTextForResponseXML &amp;&amp; this.responseXML) {
+          return this.responseXML;
+        }
+        
         this.responseXML = _xjs(this.responseText);
         this._responseTextForResponseXML = this.responseText;
         return this.responseXML;
@@ -2263,6 +2268,13 @@ Xmla.prototype = {
 
         try {
             var responseXml = this.getResponseXML();
+            if (!responseXml) {
+              request.exception = new Xmla.Exception(
+                  Xmla.Exception.TYPE_ERROR,
+                  Xmla.Exception.ERROR_PARSING_RESPONSE_CDE, 
+                  &quot;Response is not an XML document.&quot;
+              );
+            }
             var soapFault = _getElementsByTagNameNS(responseXml, _xmlnsSOAPenvelope, _xmlnsSOAPenvelopePrefix, &quot;Fault&quot;);
             if (soapFault.length) {
                 //TODO: extract error info
@@ -6642,7 +6654,7 @@ Xmla.Dataset.prototype = {
         );
         this._initAxes();
         this._initCells();
-
+/*
         var a, i, j, func, funcBody = &quot;&quot;, mul;
         func = &quot;var ordinal = 0, a;&quot; +
             &quot;\nif (arguments.length !== &quot; + this._numAxes + &quot;) new Xmla.Exception._newError(\&quot;ERROR_ILLEGAL_ARGUMENT\&quot;, \&quot;cellOrdinalForTupleIndexes\&quot;, this)._throw();&quot;
@@ -6655,7 +6667,8 @@ Xmla.Dataset.prototype = {
         }
         func += funcBody + &quot;\nreturn ordinal;&quot;
         this._cellset.cellOrdinalForTupleIndexes = this.cellOrdinalForTupleIndexes = new Function(func);
-    },
+*/
+     },
     _initRoot: function(doc){
         var root = _getElementsByTagNameNS(doc, _xmlnsDataset, &quot;&quot;, &quot;root&quot;);
         if (root.length) this._root = root[0];
@@ -6872,7 +6885,18 @@ Xmla.Dataset.prototype = {
 *   @return {int} The ordinal number that identifies the cell from this Dataset&#x27;s &lt;code&gt;&lt;a href=&quot;Xmla.Dataset.Cellset.html#class_Cellset&quot;&gt;Xmla.Dataset.Cellset&lt;/a&gt;&lt;/code&gt; that belongs to the tuples identified by the arguments.
 */
     cellOrdinalForTupleIndexes: function() {
-        throw &quot;Not implemented&quot;
+      var numAxes = this._numAxes, axesOrder = this._axesOrder, i, ordinal = 0, a, arg, j, tupleCount;
+      //for each axis, in descending order
+      for (a = 0, i = numAxes - 1; i &gt;= 0; i--, a++) {
+        arg = arguments[a];
+        tupleCount = 1;
+        //for all preceding axes, in descending order
+        for (j = i-1; j &gt;= 0; j--) {
+          tupleCount *= axesOrder[j].tupleCount();
+        }
+        ordinal += arg * tupleCount;
+      }
+      return ordinal;
     },
 /**
  * Gets all of the XML data into one JS object. The object consists of the following members:
@@ -7768,6 +7792,12 @@ Xmla.Dataset.Cellset.prototype = {
         this._cellProperties = {};
         //examine cell property info so we can parse them
         numPropertyNodes = propertyNodes.length;
+        var me = this;
+        var makePropertyGetter = function(propertyNodeTagName){
+          me[&quot;cell&quot; + propertyNodeTagName] = function(){
+            return this.cellProperty(propertyNodeTagName);
+          };
+        };
         for(i = 0; i &lt; numPropertyNodes; i++) {
             propertyNode = propertyNodes[i];
             propertyNodeTagName = propertyNode.nodeName;
@@ -7779,7 +7809,8 @@ Xmla.Dataset.Cellset.prototype = {
                 }
                 type = _getAttribute(cellSchemaElement, &quot;type&quot;);
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
-                this[&quot;cell&quot; + propertyNodeTagName] = new Function(&quot;return this.cellProperty(\&quot;&quot; + propertyNodeTagName + &quot;\&quot;)&quot;);
+                //this[&quot;cell&quot; + propertyNodeTagName] = new Function(&quot;return this.cellProperty(\&quot;&quot; + propertyNodeTagName + &quot;\&quot;)&quot;);
+                makePropertyGetter(propertyNodeTagName);
                 break;
             }
             //extra: if the schema doesn&#x27;t explicitly define this property, we somehow have to
@@ -7789,7 +7820,8 @@ Xmla.Dataset.Cellset.prototype = {
                   type = (propertyNodeTagName === &quot;Value&quot;) ? &quot;xs:decimal&quot; : &quot;xs:string&quot;;
                 }
                 this._cellProperties[propertyNodeTagName] = _typeConverterMap[type];
-                this[&quot;cell&quot; + propertyNodeTagName] = new Function(&quot;return this.cellProperty(\&quot;&quot; + propertyNodeTagName + &quot;\&quot;)&quot;);
+                //this[&quot;cell&quot; + propertyNodeTagName] = new Function(&quot;return this.cellProperty(\&quot;&quot; + propertyNodeTagName + &quot;\&quot;)&quot;);
+                makePropertyGetter(propertyNodeTagName);
             }
         }
         this._cellNodes = _getElementsByTagNameNS(
@@ -8136,7 +8168,7 @@ Xmla.Dataset.Cellset.prototype = {
 *   @return {int} The ordinal number for this combination of tuple indexes. This return value can be used as argument for &lt;code&gt;&lt;a href=&quot;#method_getByOrdinal&quot;&gt;getByOrdinal()&lt;/a&gt;&lt;/code&gt;
 */
     cellOrdinalForTupleIndexes: function() {
-        throw &quot;Not implemented&quot;;
+        return this._dataset.cellOrdinalForTupleIndexes.apply(this._dataset, arguments);
     },
 /**
  *  Get the cell corresponding to the specified tuple indexes.

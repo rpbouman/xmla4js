@@ -1157,7 +1157,7 @@ Xmla.EVENT_EXECUTE_SUCCESS = "executesuccess";
 /**
 *   Indicates the <code>executeerror</code> event.
 *   This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
-*   The <code>executeerror</code> event is method-specific and fired when an error occurs while sending an <code>Execute</code> request, or receiving a response to an <code>Execute</code method.
+*   The <code>executeerror</code> event is method-specific and fired when an error occurs while sending an <code>Execute</code> request, or receiving a response to an <code>Execute</code> method.
 *   (see: <code><a href="#method_execute">execute()</a></code>).
 *   This is event is not cancelable.
 *
@@ -1207,7 +1207,7 @@ Xmla.EVENT_DISCOVER_SUCCESS = "discoversuccess";
 *   Indicates the <code>discovererror</code> event.
 *   This constant can be used as en entry in the events array argument for the <code><a href="#method_addListener">addListener()</a></code> method.
 *   The <code>discovererror</code> is method-specific and fired when an error occurs while sending an <code>Discover</code> request,
-*   or receiving a response to an <code>Discover</code method.
+*   or receiving a response to an <code>Discover</code> method.
 *   (see: <code><a href="#method_discover">discover()</a></code>).
 *   This is event is not cancelable.
 *

@@ -5,7 +5,7 @@ REM see: http://developer.yahoo.com/yui/yuidoc/
 REM
 
 REM Set the XMLA_HOME variable to the directory to which you checked out the xmla4js project directory 
-SET XMLA_HOME=D:\Projects\xmla4js
+SET XMLA_HOME=C:\roland\projects\xmla4js
 
 REM Set the projectname variable 
 SET projectname=xmla4js
