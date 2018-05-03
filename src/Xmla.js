@@ -6847,7 +6847,7 @@ Xmla.Dataset.prototype = {
       }
 
         //get Slicer information
-      if (this.hasSlicerAxis) {
+      if (this.hasSlicerAxis()) {
         axis = this.getSlicerAxis();
         filterAxis =  {
           positions: axis.fetchAllAsObject(),
