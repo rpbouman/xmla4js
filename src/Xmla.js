@@ -4756,7 +4756,7 @@ and  <code><a href="#property_responseXML">responseXML</a></code> properties.
 *           <td>No</td>
 *       </tr>
 *       <tr>
-*           <td>LEVEL_NUMBERr</td>
+*           <td>LEVEL_NUMBER</td>
 *           <td>int</td>
 *           <td>Distance of this level to the root</td>
 *           <td>Yes</td>
@@ -6819,9 +6819,10 @@ Xmla.Dataset.prototype = {
  *  <li><code>cells</code>: An array of cell objects, representing the cellset.</li>
  * </ul>
  * @method fetchAsObject
+ * @param cellsetAsObject {boolean} By default, cells are returned in an array. When this flag is true, the cells are returned in an object, using the cell ordinal as key.
  * @return {Object}
  */
-    fetchAsObject: function() {
+    fetchAsObject: function(cellsetAsObject) {
       var getHierarchyArray = function(axis){
         var h = axis.getHierarchies();
         var hierarchies = [];
@@ -6861,18 +6862,23 @@ Xmla.Dataset.prototype = {
 
       //get Cellset data
       cellset = this.getCellset();
-      for (i = 0, n = tuples; i < n; i++){
-          cell = cellset.readCell();
-          if (idx === cell.ordinal) {
-            cells.push(cell);
-            if (cellset.nextCell() === -1) {
-              break;
+      if (cellsetAsObject === true) {
+        cells = cellset.fetchAllAsObject();
+      }
+      else {
+        for (i = 0, n = tuples; i < n; i++){
+            cell = cellset.readCell();
+            if (idx === cell.ordinal) {
+              cells.push(cell);
+              if (cellset.nextCell() === -1) {
+                break;
+              }
+            } else {
+              //console.debug('skipping: '+idx+':'+cell.ordinal);
+              cells.push({Value:null, FmtValue:null, FormatString: null, ordinal:idx });
             }
-          } else {
-            //console.debug('skipping: '+idx+':'+cell.ordinal);
-            cells.push({Value:null, FmtValue:null, FormatString: null, ordinal:idx });
-          }
-          idx++;
+            idx++;
+        }
       }
       //do not close, it might be used later.....
       cellset.reset();
@@ -7941,6 +7947,20 @@ Xmla.Dataset.Cellset.prototype = {
         }
         this._idx = 0;
         return true;
+    },
+/**
+ *  Iterate through each cell and return them all as a object by cell ordinal.
+*   @method fetchAllAsObject
+*   @return {object}
+*/
+    fetchAllAsObject: function(){
+      var cell, cells = {}, i = 0, count = this._cellCount;
+      for (i = 0; i < count; i++){
+        cell = this.readCell();
+        cells[cell.ordinal] = cell;
+        this.nextCell();
+      }
+      return cells;
     },
 /**
  *  Get a cell by its physical index.
