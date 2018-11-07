@@ -26,7 +26,7 @@ For effective usage of Xmla4js, some background knowledge of the XML/A protocol 
 
 API documentation
 =================
-For more advanced scenario's, full API documentation is available based on the the YUI Doc system. You can find the documentation in the doc/api directory/index.html.
+For more advanced scenarios, full API documentation is available based on the YUI Doc system. You can find the documentation in the doc/api directory/index.html.
 
 Notice
 ======
