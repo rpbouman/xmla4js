@@ -7368,8 +7368,16 @@ Xmla.Dataset.Axis.prototype = {
     },
 /**
  *  Returns the hierarchies of this Axis object.
+ *  The hierarchies are returned as an object. The keys are the hierarchy names; the values are objects representing the hierarchies.
+ *  The hierarchy object has the following properties: <ul>
+ *  <li>index {number}  index of the hierarchy in the axis.</li>
+ *  <li>name {string}  name of the hierarchy.</li>
+ *  <li>properties {object}  property definitions of the member properties of this hierarchy's members.</li>
+ *  </ul>
+ *  The properties always contain the intrinsic properties Caption, DisplayInfo, LName, LNum and UName.
+ *  If any additional properties were included (for example, by having a MDX DIMENSION PROPERTIES clause then these will be included as well.
 *   @method getHierarchies
-*   @return {array} An array of hierarchies contained in this Axis.
+*   @return {array} An object representing the hierarchies contained in this Axis.
  **/
     getHierarchies: function(){
         return this._hierarchyDefs;
