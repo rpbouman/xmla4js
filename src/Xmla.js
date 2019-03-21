@@ -178,7 +178,10 @@ function _ajax(options){
                     }
                     break;
                 case 4:
-                    if (xhr.status === 200) {
+                    //See https://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0 
+                    //Preflight request is acceptable if the HTTP status code is in the 2xx range
+                    //Specifically, Windows IIS may return a 204 rather than a 200 code to the OPTIONS request
+                    if (xhr.status >= 200 && xhr.status <= 299) {
                       options.complete(xhr)
                     }
                     else {
@@ -207,6 +210,11 @@ function _ajax(options){
       args = args.concat([options.username, options.password]);
     }
     xhr.open.apply(xhr, args);
+    
+    //It is necessary for the XML HTTP Request to send credentials when IIS is in Windows Authentication mode, with Anonymous Authentication turned off and the Access-Control-Allow-Credentials header is set
+    //See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+    xhr.withCredentials = true;
+    
     //see http://www.w3.org/TR/XMLHttpRequest/#the-timeout-attribute
     if (!_isUnd(options.requestTimeout) && (options.async || !(window && window.document))) {
       xhr.timeout = options.requestTimeout;
