@@ -7819,7 +7819,7 @@ Xmla.Dataset.Cellset.prototype = {
             return this._cellOrd;
         }
         else {
-            this._idx = 0;
+            this._idx = -1;
             return -1;
         }
     },
